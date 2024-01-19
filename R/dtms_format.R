@@ -28,7 +28,7 @@ dtms_format <- function(data, # data frame
            # If consecutive, take leading state
            to=ifelse(difz==timestep,lead(!!sym(statevar)),NA)) |>
     # Ungroup
-    ungroup |>
+    ungroup() |>
     # Drop added variables
     select(!(consec:difz))
 
