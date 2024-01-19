@@ -6,8 +6,8 @@ dtms_format <- function(data, # data frame
                         fromvar="from", # New name for variable 'statevar' (from part)
                         tovar="to", # New name for variable 'statevar' (to part)
                         timestep=NULL, # Time step size; e.g., 2 if biannual, taken from DTMS if not specified
-                        keepnames=F,
-                        verbose=T) { # Keep original names for id and time variable?
+                        keepnames=F, # Keep original names for id and time variable?
+                        verbose=T) {
 
   # Require tidy
   require(dplyr)
