@@ -14,10 +14,6 @@ dtms_last <- function(matrix,# Matrix with transition probabilities generated wi
                       total=T, # Should total risk be added?
                       rescale=T){ # Rescale probs to sum to one? If F, totals will be equivalent to lifetime risk
 
-
-  # Require package Biodem
-  require(Biodem)
-
   # Use dtms if provided
   if(!is.null(dtms) & class(dtms)[2]=="dtms") {
     if(is.null(transient)) transient <- dtms$transient
@@ -60,7 +56,7 @@ dtms_last <- function(matrix,# Matrix with transition probabilities generated wi
   ones <- matrix(data=1,nrow=nstates,ncol=nstates)
   results <- vector("list",1)
   names(results) <- "E_0"
-  results[["E_0"]] <- t(mtx.exp(P_S,tau-t+1)%*%ones) * mtx.exp(matrix,t)
+  results[["E_0"]] <- t(Biodem::mtx.exp(P_S,tau-t+1)%*%ones) * Biodem::mtx.exp(matrix,t)
   colnames(results[["E_0"]]) <- states
 
   # Loop for other E_x
@@ -72,7 +68,7 @@ dtms_last <- function(matrix,# Matrix with transition probabilities generated wi
     e <- step-0.5
     tmp <- vector("list",1)
     names(tmp) <- paste("E",step,sep="_")
-    tmp[[paste("E",step,sep="_")]] <- t(mtx.exp(matrix,e)%*%P_E%*%mtx.exp(P_S,tau-t-e)%*%ones) * mtx.exp(matrix,t)
+    tmp[[paste("E",step,sep="_")]] <- t(Biodem::mtx.exp(matrix,e)%*%P_E%*%Biodem::mtx.exp(P_S,tau-t-e)%*%ones) * Biodem::mtx.exp(matrix,t)
     colnames(tmp[[paste("E",step,sep="_")]]) <- states
     results <- c(results,tmp)
     step <- step+1

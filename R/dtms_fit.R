@@ -20,21 +20,18 @@ dtms_fit <- function(fromvar="from", # Name of variable with starting state
       controls <- paste(controls,collapse="+")
       formula <- paste(formula,controls,sep="+")
     }
-    formula <- as.formula(formula)
+    formula <- stats::as.formula(formula)
   }
 
   # Estimate
   if(method=="VGAM") {
 
-    # Get package
-    require("VGAM")
-
     # Calculate
-    dtms <- vgam(formula=formula,
-                 family=multinomial(refLevel=reference),
-                 data=data,
-                 weights=weights,
-                 ...)
+    dtms <- VGAM::vgam(formula=formula,
+                       family=VGAM::multinomial(refLevel=reference),
+                       data=data,
+                       weights=weights,
+                       ...)
   }
 
   # Return results

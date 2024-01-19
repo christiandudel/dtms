@@ -12,9 +12,6 @@ dtms_visits <- function(matrix,# Matrix with transition probabilities generated 
                         sep="_",# Separator
                         total=F) { # Should total risk be added?
 
-  # Require package Biodem
-  require(Biodem)
-
   # Use dtms if provided
   if(!is.null(dtms) & class(dtms)[2]=="dtms") {
     if(is.null(transient)) transient <- dtms$transient
@@ -82,7 +79,7 @@ dtms_visits <- function(matrix,# Matrix with transition probabilities generated 
   initial_conditions <- vector("list",t_transitions)
   for(i in t_steps) {
     initial_conditions[[i]] <- matrix(data=0,nrow=nstates,ncol=nstates)
-    initial_conditions[[i]][selectorD,selectorD] <- mtx.exp(matrix[selectorD,selectorD],(i-1))
+    initial_conditions[[i]][selectorD,selectorD] <- Biodem::mtx.exp(matrix[selectorD,selectorD],(i-1))
     rownames(initial_conditions[[i]]) <- states
     colnames(initial_conditions[[i]]) <- states
   }
@@ -96,7 +93,7 @@ dtms_visits <- function(matrix,# Matrix with transition probabilities generated 
   # Generate matrices for which k>=n+1
   kgeq <- vector("list",t_transitions)
   for(i in t_steps) {
-    kgeq[[i]] <- mtx.exp(matrix,i-1)
+    kgeq[[i]] <- Biodem::mtx.exp(matrix,i-1)
     rownames(kgeq[[i]]) <- states
     colnames(kgeq[[i]]) <- states
   }

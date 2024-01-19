@@ -10,10 +10,6 @@ dtms_matrix <- function(transient=NULL, # character vector of transient states
                         sep="_", # State/time separator
                         rescale=T) { # Rescale transition probabilities to sum to 1
 
-  # Require tidy
-  require(dplyr)
-  require(magrittr)
-
   # Use dtms if provided
   if(!is.null(dtms) & class(dtms)[2]=="dtms") {
     transient <- dtms$transient
@@ -28,10 +24,10 @@ dtms_matrix <- function(transient=NULL, # character vector of transient states
   all_states <- c(transient_states,absorbing)
 
   # Get names in probs right
-  probs <- probs %>% rename_with(~ c("from","to","P"),c(fromvar,tovar,Pvar))
+  probs <- probs  |>  dplyr::rename_with(~ c("from","to","P"),c(fromvar,tovar,Pvar))
 
   # Subset
-  probs <- probs %>% filter(from%in%transient_states & to%in%all_states)
+  probs <- probs |> dplyr::filter(from%in%transient_states & to%in%all_states)
 
   # Total number of transient and absorbing states
   s_states <- length(transient_states)
@@ -39,11 +35,11 @@ dtms_matrix <- function(transient=NULL, # character vector of transient states
   n_states <- length(all_states)
 
   # Reshape
-  Tm <- probs %>%
-    select(from,to,P) %>%
-    pivot_wider(id_cols     = c(from),
-                names_from  = to,
-                values_from = P)
+  Tm <- probs |>
+    dplyr::select(from,to,P) |>
+    tidyr::pivot_wider(id_cols     = c(from),
+                       names_from  = to,
+                       values_from = P)
 
   # Edit a bit
   Tm[is.na(Tm)] <- 0

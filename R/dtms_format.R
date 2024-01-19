@@ -9,9 +9,6 @@ dtms_format <- function(data, # data frame
                         keepnames=F, # Keep original names for id and time variable?
                         verbose=T) {
 
-  # Require tidy
-  require(dplyr)
-
   # Get timestep from dtms
   if(is.null(timestep)) {
     if(is.null(dtms)) stop("No timestep specified")
@@ -21,25 +18,25 @@ dtms_format <- function(data, # data frame
   # Rearrange data
   res <- data  |>
     # Group by person ID
-    group_by(!!sym(idvar)) |>
+    dplyr::group_by(!!dplyr::sym(idvar)) |>
     # Check if observations are consecutive
-    mutate(consec=lead(!!sym(timevar)),
-           difz = consec-!!sym(timevar),
+    dplyr::mutate(consec=dplyr::lead(!!dplyr::sym(timevar)),
+           difz = consec-!!dplyr::sym(timevar),
            # If consecutive, take leading state
-           to=ifelse(difz==timestep,lead(!!sym(statevar)),NA)) |>
+           to=ifelse(difz==timestep,dplyr::lead(!!dplyr::sym(statevar)),NA)) |>
     # Ungroup
-    ungroup() |>
+    dplyr::ungroup() |>
     # Drop added variables
-    select(!(consec:difz))
+    dplyr::select(!(consec:difz))
 
   # Rename state variable
-  res <- res |> rename_with(~ c(fromvar,tovar),c(statevar,"to"))
+  res <- res |> dplyr::rename_with(~ c(fromvar,tovar),c(statevar,"to"))
 
 
   # Change names of id and time to default
   if(!keepnames) {
-    if(timevar!='time' & !'time'%in%names(res)) res <- res |> rename('time' = timevar) else if(verbose) cat("Kept original name for time \n")
-    if(idvar!='id' & !'id'%in%names(res)) res <- res |> rename('id'   = idvar) else if(verbose) cat("Kept original name for id \n")
+    if(timevar!='time' & !'time'%in%names(res)) res <- res |> dplyr::rename('time' = timevar) else if(verbose) cat("Kept original name for time \n")
+    if(idvar!='id' & !'id'%in%names(res)) res <- res |> dplyr::rename('id'   = idvar) else if(verbose) cat("Kept original name for id \n")
   }
 
   # Return result

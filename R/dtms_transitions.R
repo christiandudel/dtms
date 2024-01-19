@@ -12,11 +12,6 @@ dtms_transitions <- function(transient=NULL,
                              tovar="to",
                              Pvar="P") {
 
-  # Require
-  require(dplyr)
-  require(magrittr)
-  require(tidyr)
-
   # Use dtms if provided
   if(!is.null(dtms) & class(dtms)[2]=="dtms") {
     if(is.null(transient)) transient <- dtms$transient
@@ -63,20 +58,20 @@ dtms_transitions <- function(transient=NULL,
   }
 
   # Predict
-  model_frame[,all_states] <- predict(model,model_frame,"response")[,all_states]
+  model_frame[,all_states] <- stats::predict(model,model_frame,"response")[,all_states]
 
   # Reshape
-  model_frame <- model_frame %>% pivot_longer(cols=all_states,
+  model_frame <- model_frame |> tidyr::pivot_longer(cols=all_states,
                                               names_to=tovar,
                                               values_to=Pvar)
 
   # Get state names right with time
-  model_frame <- model_frame %>% mutate(newfrom=ifelse(!!sym(fromvar)%in%transient,
-                                                       paste(!!sym(fromvar),!!sym(timevar),sep=sep),
-                                                       !!sym(fromvar)),
-                                        newto=ifelse(!!sym(tovar)%in%transient,
-                                                     paste(!!sym(tovar),!!sym(timevar)+timestep,sep=sep),
-                                                     !!sym(tovar)))
+  model_frame <- model_frame |> dplyr::mutate(newfrom=ifelse(!!dplyr::sym(fromvar)%in%transient,
+                                                       paste(!!dplyr::sym(fromvar),!!dplyr::sym(timevar),sep=sep),
+                                                       !!dplyr::sym(fromvar)),
+                                        newto=ifelse(!!dplyr::sym(tovar)%in%transient,
+                                                     paste(!!dplyr::sym(tovar),!!dplyr::sym(timevar)+timestep,sep=sep),
+                                                     !!dplyr::sym(tovar)))
 
   # Keep and rename variables
   model_frame <- model_frame[,c("newfrom","newto",timevar,Pvar)]

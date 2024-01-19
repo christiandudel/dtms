@@ -5,7 +5,7 @@
 \alias{simple}
 \title{simple: an artificial dataset with abstract trajectories}
 \format{
-## `simple`
+`simple`
 A data frame with 10,529 rows and 3 columns:
 \describe{
   \item{id}{Identifier of the units}

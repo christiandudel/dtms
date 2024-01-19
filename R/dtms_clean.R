@@ -7,9 +7,6 @@ dtms_clean <- function(data, # Transition format data
                        dropNA=T, # Drop gaps, last obs, ...
                        dropAbs=T) { # Drop obs starting from absorbing state
 
-  require(dplyr)
-  require(magrittr)
-
   if(dropTime) {
     whichrows <- unlist(data[,timevar])%in%dtms$time
     count <- sum(!whichrows)

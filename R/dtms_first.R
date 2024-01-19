@@ -14,9 +14,6 @@ dtms_first  <- function(matrix,# Matrix with transition probabilities generated 
                         rescale=T, # Rescale probs to sum to one? If F, totals will be equivalent to lifetime risk
                         maxiter=200) { # Maximum iterations, safeguard to avoid non-ending loop
 
-  # Require package Biodem
-  require(Biodem)
-
   # Use dtms if provided
   if(!is.null(dtms) & class(dtms)[2]=="dtms") {
     if(is.null(transient)) transient <- dtms$transient
@@ -56,11 +53,11 @@ dtms_first  <- function(matrix,# Matrix with transition probabilities generated 
   # Generate W_t_0 and W_t_0.5, initial conditions
   results <- vector("list",2)
   names(results) <- c("W_0","W_0.5")
-  results[["W_0"]] <- mtx.exp(matrix,t)
+  results[["W_0"]] <- Biodem::mtx.exp(matrix,t)
   if(t==0) {
     results[["W_0.5"]] <- matrix(data=0,ncol=nstates,nrow=nstates)
     diag(results[["W_0.5"]][!selectorU,!selectorU]) <- 1
-  } else results[["W_0.5"]] <- mtx.exp(P_E,t)
+  } else results[["W_0.5"]] <- Biodem::mtx.exp(P_E,t)
 
   # Variables
   upcoming <- 1.5
@@ -72,7 +69,7 @@ dtms_first  <- function(matrix,# Matrix with transition probabilities generated 
   while(end<5) {
     past.steps <- c(past.steps,upcoming)
     tmp <- vector("list",1)
-    tmp[[1]] <- t(mtx.exp(P_E,upcoming-0.5)%*% matrix(data=1,nrow=nstates,ncol=nstates))*results[["W_0.5"]]
+    tmp[[1]] <- t(Biodem::mtx.exp(P_E,upcoming-0.5)%*% matrix(data=1,nrow=nstates,ncol=nstates))*results[["W_0.5"]]
     names(tmp) <- paste("W",upcoming,sep="_")
     results <- c(results,tmp)
     steps <- steps+1

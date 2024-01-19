@@ -5,18 +5,17 @@
 \alias{hrs}
 \title{hrs: simulated working trajectories based on the Health and Retirement Study}
 \format{
-## `hrs`
+`hrs`
 A data frame with 250,000 rows and 4 columns:
 \describe{
   \item{ID}{Person identifier}
   \item{Gender}{Individuals' gender (0=men, 1=women)}
   \item{Age}{Age}
   \item{State}{The state occupied by an unit at a given age}
-  ...
 }
 }
 \source{
-<https://www.who.int/teams/global-tuberculosis-programme/data>
+<https://doi.org/10.1007/s13524-017-0619-6>
 }
 \usage{
 hrs
