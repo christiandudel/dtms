@@ -1,0 +1,11 @@
+Package: dtms
+Type: Package
+Title: Discrete-Time Multistate Models
+Version: 0.0.1
+Author: Christian Dudel, Peng Li
+Maintainer: Christian Dudel <dudel@demogr.mpg.de>
+Description: This package implements discrete-time multistate models with a userfriendly workflow. It also provides tools to analyze the results of multistate models.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.3.0
