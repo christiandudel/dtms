@@ -23,7 +23,7 @@ workflow. It also comes with many tools to analyze the results of multistate mod
 
 ## Installation
 
-You can install the development version of dtms like so:
+You can install the development version of dtms like this:
 
 ``` r
 library(devtools)

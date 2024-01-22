@@ -40,7 +40,7 @@ dtms <- function(transient,
                  timestep=timestep)
 
   # Assign class
-  class(result) <- "dtms"
+  class(result)[2] <- "dtms"
 
   # Return
   return(result)

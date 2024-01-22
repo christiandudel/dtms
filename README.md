@@ -12,7 +12,7 @@ results of multistate models.
 
 ## Installation
 
-You can install the development version of dtms like so:
+You can install the development version of dtms like this:
 
 ``` r
 library(devtools)
