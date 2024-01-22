@@ -6,9 +6,24 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
+## Authors
+
+Christian Dudel, <dudel@demogr.mpg.de>
+
+Peng Li, <li@demogr.mpg.de>
+
+## Overview
+
 The package dtms implements discrete-time multistate models in R with a
 user-friendly workflow. It also comes with many tools to analyze the
 results of multistate models.
+
+## Disclaimer
+
+This package is still undergoing development and many functions are
+still experimental. The content of this repository will likely change in
+the future, and functions and features might be added or removed without
+warning.
 
 ## Installation
 
