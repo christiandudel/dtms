@@ -1,3 +1,5 @@
+#' @export
+
 ### Create transition matrix without absorbing states
 
 remove_absorbing <- function(matrix) { # matrix=full transition matrix

@@ -1,3 +1,23 @@
+#' Title
+#'
+#' @param matrix
+#' @param transient
+#' @param time
+#' @param timestep
+#' @param dtms
+#' @param start_time
+#' @param start_state
+#' @param start_distr
+#' @param end_time
+#' @param sep
+#' @param correction
+#' @param total
+#' @param verbose
+#'
+#' @return
+#' @export
+#'
+#' @examples
 dtms_expectancy <- function(matrix,# Matrix with transition probabilities generated with dtms_matrix
                             transient=NULL, # Names of transient states
                             time=NULL, # Time scale

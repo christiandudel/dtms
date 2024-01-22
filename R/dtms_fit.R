@@ -1,3 +1,20 @@
+#' Title
+#'
+#' @param fromvar
+#' @param tovar
+#' @param timevar
+#' @param data
+#' @param controls
+#' @param formula
+#' @param weights
+#' @param reference
+#' @param method
+#' @param ...
+#'
+#' @return
+#' @export
+#'
+#' @examples
 dtms_fit <- function(fromvar="from", # Name of variable with starting state
                      tovar="to",   # Name of variable with receiving state
                      timevar="time", # Name of variable with time

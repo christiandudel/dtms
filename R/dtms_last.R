@@ -1,3 +1,25 @@
+#' Title
+#'
+#' @param matrix
+#' @param transient
+#' @param time
+#' @param timestep
+#' @param dtms
+#' @param risk
+#' @param risk_to
+#' @param start_time
+#' @param start_state
+#' @param start_distr
+#' @param end_time
+#' @param method
+#' @param sep
+#' @param total
+#' @param rescale
+#'
+#' @return
+#' @export
+#'
+#' @examples
 dtms_last <- function(matrix,# Matrix with transition probabilities generated with dtms_matrix
                       transient=NULL, # Names of transient states
                       time=NULL, # Time scale

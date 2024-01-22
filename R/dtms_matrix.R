@@ -1,3 +1,21 @@
+#' Title
+#'
+#' @param transient
+#' @param absorbing
+#' @param time
+#' @param dtms
+#' @param probs
+#' @param fromvar
+#' @param tovar
+#' @param Pvar
+#' @param enforcedeath
+#' @param sep
+#' @param rescale
+#'
+#' @return
+#' @export
+#'
+#' @examples
 dtms_matrix <- function(transient=NULL, # character vector of transient states
                         absorbing=NULL, # character vector of absorbing states
                         time=NULL, # Time steps

@@ -30,76 +30,95 @@ library(devtools)
 install_github("christiandudel/dtms")
 ```
 
-## Example 1
+## Example 1: Artificial data
 
-This is a very basic example.
+This is a very basic example using artificial data provided with the package. The state space consists
+of two transient states (A, B), and there is one absorbing state (X). The time scale goes from 0 to 20.
+Transition probabilities do change depending on time. 
 
-```{r example}
+```{r example1}
 ## Load package
 library(dtms)
 
 ## Define model: Absorbing and transient states, time scale
-# simple <- dtms(transient=c("A","B"),
-#                absorbing="X",
-#                time=0:20)
-# 
-# ## Quick look at data
-# simpledata
-# 
-# ## Reshape to transition format
-# estdata <- dtms_format(data=simpledata,
-#                        dtms=simple,
-#                        idvar="id",
-#                        timevar="time",
-#                        statevar="state")
-# 
-# ## Clean
-# estdata <- dtms_clean(data=estdata,
-#                       dtms=simple)
-# 
-# # Fit model 
-# fit <- dtms_fit(data=estdata)
-# 
-# ## Predict probabilities
-# probs    <- dtms_transitions(dtms=simple,
-#                              model = fit)
-# 
-# ## Get transition matrix 
-# Tp <- dtms_matrix(dtms=simple,
-#                   probs=probs)
-# 
-# ## Get starting distribution 
-# S <- dtms_start(dtms=simple,
-#                 data=estdata)
-# 
-# ## State expectancies 
-# dtms_expectancy(dtms=simple,
-#                 matrix=Tp,
-#                 start_distr=S)
-# 
-# ## Lifetime risk 
-# dtms_risk(dtms=simple,
-#           matrix=Tp,
-#           risk="A")
-# 
-# ## Distribution of visits
-# dtms_visits(dtms=simple,
-#             matrix=Tp,
-#             risk="A",
-#             start_distr=S)
-# 
-# ## First/last visit
-# dtms_first(dtms=simple,
-#            matrix=Tp,
-#            risk="A",
-#            start_distr=S)
-# 
-# dtms_last(dtms=simple,
-#           matrix=Tp,
-#           risk="A",
-#           start_distr=S,
-#           rescale=T,
-#           total=F)
+simple <- dtms(transient=c("A","B"),
+               absorbing="X",
+               time=0:20)
+
+## Quick look at data
+head(simpledata)
+
+## Reshape to transition format
+estdata <- dtms_format(data=simpledata,
+                       dtms=simple,
+                       idvar="id",
+                       timevar="time",
+                       statevar="state")
+
+## Clean
+estdata <- dtms_clean(data=estdata,
+                      dtms=simple)
+
+# Fit model 
+fit <- dtms_fit(data=estdata)
+
+## Predict probabilities
+probs    <- dtms_transitions(dtms=simple,
+                             model = fit)
+
+## Get transition matrix 
+Tp <- dtms_matrix(dtms=simple,
+                  probs=probs)
+
+## Get starting distribution 
+S <- dtms_start(dtms=simple,
+                data=estdata)
+
+## State expectancies 
+dtms_expectancy(dtms=simple,
+                matrix=Tp,
+                start_distr=S)
+
+## Lifetime risk 
+dtms_risk(dtms=simple,
+          matrix=Tp,
+          risk="A")
+
+## Distribution of visits
+dtms_visits(dtms=simple,
+            matrix=Tp,
+            risk="A",
+            start_distr=S)
+
+## First/last visit
+dtms_first(dtms=simple,
+           matrix=Tp,
+           risk="A",
+           start_distr=S)
+
+dtms_last(dtms=simple,
+          matrix=Tp,
+          risk="A",
+          start_distr=S,
+          rescale=T,
+          total=F)
 ```
 
 
+## Example 2: Simulated HRS data
+
+Here we will provide a second example based on simulated data from the Health and Retirement Study.
+
+```{r example2}
+## Load package
+library(dtms)
+
+## Define model: Absorbing and transient states, time scale
+hrs <- dtms(transient=c("Employed","Inactive","Retired"),
+               absorbing="Dead",
+               time=50:99)
+
+## Quick look at data
+head(hrsdata)
+
+```

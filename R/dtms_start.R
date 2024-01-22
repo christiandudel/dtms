@@ -1,3 +1,20 @@
+#' Title
+#'
+#' @param transient
+#' @param time
+#' @param dtms
+#' @param data
+#' @param start_time
+#' @param start_state
+#' @param fromvar
+#' @param timevar
+#' @param variables
+#' @param sep
+#'
+#' @return
+#' @export
+#'
+#' @examples
 dtms_start <- function(transient=NULL, # Names of transient states
                        time=NULL, # Time scale
                        dtms=NULL,# DTMS model

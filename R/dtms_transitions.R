@@ -1,3 +1,23 @@
+#' Title
+#'
+#' @param transient
+#' @param absorbing
+#' @param time
+#' @param dtms
+#' @param model
+#' @param constant
+#' @param varying
+#' @param sep
+#' @param timestep
+#' @param timevar
+#' @param fromvar
+#' @param tovar
+#' @param Pvar
+#'
+#' @return
+#' @export
+#'
+#' @examples
 dtms_transitions <- function(transient=NULL,
                              absorbing=NULL,
                              time=NULL,
