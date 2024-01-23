@@ -77,7 +77,7 @@ dtms_clean <- function(data,
                        fromvar="from",
                        tovar="to",
                        timevar="time",
-                       timecale=NULL,
+                       timescale=NULL,
                        absorbing=NULL,
                        dropTime=T,
                        dropNA=T,
@@ -101,7 +101,7 @@ dtms_clean <- function(data,
     data <- data[whichrows,]
     if(verbose) {
       count <- sum(!whichrows)
-      cat("Dropping ",count," rows because not in time range\n")
+      cat("Dropping ",count," rows not in time range\n")
     }
   }
 
@@ -111,7 +111,7 @@ dtms_clean <- function(data,
     data <- data[whichrows,]
     if(verbose) {
       count <- sum(!whichrows)
-      cat("Dropping ",count," rows because gap, last obs, ...\n")
+      cat("Dropping ",count," rows starting or ending in NA\n")
     }
   }
 
@@ -121,8 +121,11 @@ dtms_clean <- function(data,
     data <- data[whichrows,]
     if(verbose) {
       count <- sum(!whichrows)
-      cat("Dropping ",count," rows because starting in absorbing state\n")
+      cat("Dropping ",count," rows starting in absorbing state\n")
     }
   }
+
+  # Return
+  return(data)
 
 }

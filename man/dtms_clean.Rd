@@ -10,7 +10,7 @@ dtms_clean(
   fromvar = "from",
   tovar = "to",
   timevar = "time",
-  timecale = NULL,
+  timescale = NULL,
   absorbing = NULL,
   dropTime = T,
   dropNA = T,
@@ -29,6 +29,8 @@ dtms_clean(
 
 \item{timevar}{Character string (optional), name of the variable with the time scale.}
 
+\item{timescale}{Numeric (optional), values of the time scale.}
+
 \item{absorbing}{Character (optional), names of absorbing state.}
 
 \item{dropTime}{Logical, drop transitions with values of time not covered by the model. Default is TRUE.}
@@ -38,8 +40,6 @@ dtms_clean(
 \item{dropAbs}{Logical, drop transitions starting from absorbing states. Default is TRUE.}
 
 \item{verbose}{Logical, print how many transitions were dropped. Default is true.}
-
-\item{timescale}{Numeric (optional), values of the time scale.}
 }
 \value{
 Returns a cleaned data frame in transition format.

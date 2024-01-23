@@ -2,24 +2,60 @@
 % Please edit documentation in R/dtms_fit.R
 \name{dtms_fit}
 \alias{dtms_fit}
-\title{Title}
+\title{Estimate constrained discrete-time multistate model}
 \usage{
 dtms_fit(
-  fromvar = "from",
-  tovar = "to",
-  timevar = "time",
   data,
   controls = NULL,
   formula = NULL,
   weights = NULL,
+  fromvar = "from",
+  tovar = "to",
+  timevar = "time",
   reference = 1,
   method = "VGAM",
   ...
 )
 }
 \arguments{
-\item{...}{}
+\item{data}{Data frame, as prepared with `dtms_format` and `dtms_clean`.}
+
+\item{controls}{Character (optional), names of control variables}
+
+\item{formula}{Formula (optional). If no formula is specified, it will be build from the information specified with controls, fromvar, tovar, and timevar.}
+
+\item{weights}{Character (optional). Name of variable with survey weights.}
+
+\item{fromvar}{Character (optional), name of variable with starting state. Defaults to `from`, which is used as default in other functions of the package.}
+
+\item{tovar}{Character (optional), name of variable with receiving state. Defaults to `to`, which is used as default in other functions of the package.}
+
+\item{timevar}{Character (optional), name of variable with time scale. Defaults to `time`, which is used as default in other functions of the package.}
+
+\item{reference}{Numeric (optional). Reference level of multinomial logistic regression (VGAM)}
+
+\item{method}{Character, chooses package for multinomial logistic regression, currently only `VGAM` supported.}
+
+\item{...}{Further arguments passed to estimation functions.}
 }
 \description{
-Title
+This function estimates a constrained discrete-time multistate model
+using multinomial logistic regression.
+}
+\examples{
+## Define model: Absorbing and transient states, time scale
+simple <- dtms(transient=c("A","B"),
+               absorbing="X",
+               timescale=0:20)
+## Reshape to transition format
+estdata <- dtms_format(data=simpledata,
+                       dtms=simple,
+                       idvar="id",
+                       timevar="time",
+                       statevar="state")
+## Clean
+estdata <- dtms_clean(data=estdata,
+                      dtms=simple)
+## Fit model
+fit <- dtms_fit(data=estdata)
 }

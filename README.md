@@ -41,8 +41,8 @@ install_github("christiandudel/dtms")
 
 This is a very basic example using artificial data provided with the
 package. The state space consists of two transient states (A, B), and
-there is one absorbing state (X). The time scale goes from 0 to 20.
-Transition probabilities do change depending on time.
+one absorbing state (X). The time scale goes from 0 to 20. Transition
+probabilities do change depending on time.
 
 ``` r
 ## Load package
@@ -87,9 +87,9 @@ head(estdata)
 ## Clean
 estdata <- dtms_clean(data=estdata,
                       dtms=simple)
-#> Dropping  0  rows because not in time range
-#> Dropping  1215  rows because gap, last obs, ...
-#> Dropping  0  rows because starting in absorbing state
+#> Dropping  0  rows not in time range
+#> Dropping  1215  rows starting or ending in NA
+#> Dropping  0  rows starting in absorbing state
 
 # Fit model 
 fit <- dtms_fit(data=estdata)
