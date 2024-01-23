@@ -59,7 +59,7 @@ simple <- dtms(transient=c("A","B"),
                absorbing="X",
                timescale=0:20)
 
-## Quick look at data
+## Look at original data
 head(simpledata)
 
 ## Reshape to transition format
@@ -68,6 +68,9 @@ estdata <- dtms_format(data=simpledata,
                        idvar="id",
                        timevar="time",
                        statevar="state")
+
+## Look at reshaped data
+head(estdata)
 
 ## Clean
 estdata <- dtms_clean(data=estdata,

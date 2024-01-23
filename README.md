@@ -53,7 +53,7 @@ simple <- dtms(transient=c("A","B"),
                absorbing="X",
                timescale=0:20)
 
-## Quick look at data
+## Look at original data
 head(simpledata)
 #>   id time state
 #> 1  2    0     A
@@ -71,6 +71,18 @@ estdata <- dtms_format(data=simpledata,
                        statevar="state")
 #> Kept original name for time 
 #> Kept original name for id
+
+## Look at reshaped data
+head(estdata)
+#> # A tibble: 6 × 4
+#>      id  time from  to   
+#>   <dbl> <dbl> <chr> <chr>
+#> 1     2     0 A     B    
+#> 2     2     1 B     A    
+#> 3     2     2 A     B    
+#> 4     2     3 B     A    
+#> 5     2     4 A     A    
+#> 6     2     5 A     B
 
 ## Clean
 estdata <- dtms_clean(data=estdata,

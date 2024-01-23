@@ -21,13 +21,17 @@
 #' a data frame in transition format:
 #'
 #' \tabular{llll}{
-#' idvar \tab timevar \tab fromvar \tab tovar \cr
+#' id \tab time \tab fromvar \tab tovar \cr
 #' 1 \tab 0 \tab A \tab A \cr
 #' 1 \tab 1 \tab A \tab B \cr
 #' 1 \tab 2 \tab B \tab A \cr
 #' 2 \tab 0 \tab B \tab A \cr
 #' ... \tab ... \tab ... \tab ... \cr
 #' }
+#'
+#' By default the variable names of the ID variable and the time variable are changed to `id` and `time`, as the other
+#' functions of the package use these as default names. If renaming the variables is not possible because
+#' these variable names already appear in the data then the original names are used.
 #'
 #' `dtms_format` by default drops gaps in the data, as no transitions are observed. For instance,
 #' in the following example there is no observation at time 4, and thus no transition
@@ -45,7 +49,7 @@
 #' In this example, `dtms_format` will return the following:
 #'
 #'  \tabular{llll}{
-#' idvar \tab timevar \tab fromvar \tab tovar \cr
+#' id \tab time \tab fromvar \tab tovar \cr
 #' 1 \tab 0 \tab A \tab A \cr
 #' 1 \tab 1 \tab A \tab B \cr
 #' 1 \tab 2 \tab B \tab A \cr
@@ -54,7 +58,7 @@
 #' If `fill=T`, then `dtms_format` will return the following:
 #'
 #'  \tabular{llll}{
-#' idvar \tab timevar \tab fromvar \tab tovar \cr
+#' id \tab time \tab fromvar \tab tovar \cr
 #' 1 \tab 0 \tab A \tab A \cr
 #' 1 \tab 1 \tab A \tab B \cr
 #' 1 \tab 2 \tab B \tab A \cr
@@ -72,8 +76,8 @@
 #' @param timescale Numeric (optional), values of time scale. Needed when argument `dtms` is not specified.
 #' @param timestep Numeric (optional), step length for time scale. Needed when argument 'dtms' is not specified. Default is NULL.
 #' @param keepnames Logical, keep original names for id and time variable? Default is FALSE; i.e., not keeping original names.
-#' @param fill Logical, fill missing observations with NA? Default is FALSE.
-#' @param verbose Logical, create output to console if variable names are changed? Default is TRUE.
+#' @param fill Logical, fill implicit missings with NA? Default is FALSE.
+#' @param verbose Logical, create output to console if changing variable names is not possible? Default is TRUE.
 #'
 #' @return A data set reshaped to transition format
 #' @export
@@ -90,42 +94,55 @@
 #' timevar="time",
 #' statevar="state")
 
-dtms_format <- function(data, # data frame
-                        dtms=NULL, # DTMS object
-                        idvar="id",   # Variable name of person ID
-                        timevar="time", # Variable name of time
-                        statevar="state", # Variable name of current state
-                        fromvar="from", # New name for variable 'statevar' (from part)
-                        tovar="to", # New name for variable 'statevar' (to part)
-                        timestep=NULL, # Time step size; e.g., 2 if biannual, taken from DTMS if not specified
-                        timescale=NULL, # Values of time scale
-                        keepnames=F, # Keep original names for id and time variable?
-                        fill=F, # If there are gaps in the data, fill with missings?
+dtms_format <- function(data,
+                        dtms=NULL,
+                        idvar="id",
+                        timevar="time",
+                        statevar="state",
+                        fromvar="from",
+                        tovar="to",
+                        timestep=NULL,
+                        timescale=NULL,
+                        keepnames=F,
+                        fill=F,
                         verbose=T) {
 
   # Use dtms if provided
-  if(!is.null(dtms) & class(dtms)[2]=="dtms") {
-    if(is.null(timescale)) timescale <- dtms$timescale
-    if(is.null(timestep)) timestep <- dtms$timestep
+  if(!is.null(dtms)) {
+
+    # Check
+    proper_dtms(dtms)
+
+    # Use values
+    timescale <- dtms$timescale
+    timestep <- dtms$timestep
   }
 
   # Fill data
   if(fill) {
-    ids <- data |> dplyr::pull(!!dplyr::sym(idvar)) |> unique()
-    tmp <- expand.grid(ids,timescale)
+    # Copy time to expand (complete does not work well with sym)
+    data <- data |> dplyr::mutate(temporary_Time = !!dplyr::sym(timevar))
+    # Expand
+    data <- data |> tidyr::complete(!!dplyr::sym(idvar),temporary_Time=timescale)
+    # Drop original time var and rename
+    data <- data |>
+      dplyr::select(!(!!dplyr::sym(timevar))) |>
+      dplyr::rename_with(~ c(timevar),c("temporary_Time"))
   }
 
-  # Rearrange data
+  # Rearrange data into transition format
   res <- data  |>
-    # Sort data
+    # Sort data by ID and time
     dplyr::arrange(!!dplyr::sym(idvar),!!dplyr::sym(timevar)) |>
-    # Group by person ID
+    # Group by ID
     dplyr::group_by(!!dplyr::sym(idvar)) |>
     # Check if observations are consecutive
     dplyr::mutate(consec=dplyr::lead(!!dplyr::sym(timevar)),
-           difz = consec-!!dplyr::sym(timevar),
-           # If consecutive, take leading state
-           to=ifelse(difz==timestep,dplyr::lead(!!dplyr::sym(statevar)),NA)) |>
+                  difz  =consec-!!dplyr::sym(timevar),
+                  # If consecutive, take leading state
+                  to    =ifelse(difz==timestep,
+                            dplyr::lead(!!dplyr::sym(statevar)),
+                            NA)) |>
     # Ungroup
     dplyr::ungroup() |>
     # Drop added variables
@@ -136,8 +153,10 @@ dtms_format <- function(data, # data frame
 
   # Change names of id and time to default
   if(!keepnames) {
-    if(timevar!='time' & !'time'%in%names(res)) res <- res |> dplyr::rename('time' = timevar) else if(verbose) cat("Kept original name for time \n")
-    if(idvar!='id' & !'id'%in%names(res)) res <- res |> dplyr::rename('id'   = idvar) else if(verbose) cat("Kept original name for id \n")
+    if(timevar!='time' & !'time'%in%names(res)) res <- res |> dplyr::rename('time' = timevar) else
+      if(verbose) cat("Kept original name for time \n")
+    if(idvar!='id' & !'id'%in%names(res)) res <- res |> dplyr::rename('id'   = idvar) else
+      if(verbose) cat("Kept original name for id \n")
   }
 
   # Return result

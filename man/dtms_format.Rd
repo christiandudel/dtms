@@ -40,9 +40,9 @@ dtms_format(
 
 \item{keepnames}{Logical, keep original names for id and time variable? Default is FALSE; i.e., not keeping original names.}
 
-\item{fill}{Logical, fill missing observations with NA? Default is FALSE.}
+\item{fill}{Logical, fill implicit missings with NA? Default is FALSE.}
 
-\item{verbose}{Logical, create output to console if variable names are changed? Default is TRUE.}
+\item{verbose}{Logical, create output to console if changing variable names is not possible? Default is TRUE.}
 }
 \value{
 A data set reshaped to transition format
@@ -68,13 +68,17 @@ If it is not in long format it has to be reshaped. `dtms_format` turns this into
 a data frame in transition format:
 
 \tabular{llll}{
-idvar \tab timevar \tab fromvar \tab tovar \cr
+id \tab time \tab fromvar \tab tovar \cr
 1 \tab 0 \tab A \tab A \cr
 1 \tab 1 \tab A \tab B \cr
 1 \tab 2 \tab B \tab A \cr
 2 \tab 0 \tab B \tab A \cr
 ... \tab ... \tab ... \tab ... \cr
 }
+
+By default the variable names of the ID variable and the time variable are changed to `id` and `time`, as the other
+functions of the package use these as default names. If renaming the variables is not possible because
+these variable names already appear in the data then the original names are used.
 
 `dtms_format` by default drops gaps in the data, as no transitions are observed. For instance,
 in the following example there is no observation at time 4, and thus no transition
@@ -92,7 +96,7 @@ idvar \tab timevar \tab statevar \cr
 In this example, `dtms_format` will return the following:
 
  \tabular{llll}{
-idvar \tab timevar \tab fromvar \tab tovar \cr
+id \tab time \tab fromvar \tab tovar \cr
 1 \tab 0 \tab A \tab A \cr
 1 \tab 1 \tab A \tab B \cr
 1 \tab 2 \tab B \tab A \cr
@@ -101,7 +105,7 @@ idvar \tab timevar \tab fromvar \tab tovar \cr
 If `fill=T`, then `dtms_format` will return the following:
 
  \tabular{llll}{
-idvar \tab timevar \tab fromvar \tab tovar \cr
+id \tab time \tab fromvar \tab tovar \cr
 1 \tab 0 \tab A \tab A \cr
 1 \tab 1 \tab A \tab B \cr
 1 \tab 2 \tab B \tab A \cr
