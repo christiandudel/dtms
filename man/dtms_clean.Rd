@@ -6,13 +6,16 @@
 \usage{
 dtms_clean(
   data,
-  dtms,
+  dtms = NULL,
   fromvar = "from",
   tovar = "to",
   timevar = "time",
+  timecale = NULL,
+  absorbing = NULL,
   dropTime = T,
   dropNA = T,
-  dropAbs = T
+  dropAbs = T,
+  verbose = T
 )
 }
 \arguments{
@@ -26,30 +29,73 @@ dtms_clean(
 
 \item{timevar}{Character string (optional), name of the variable with the time scale.}
 
-\item{dropTime}{Logical, drop observations with values of time not covered by the model. Default is TRUE.}
+\item{absorbing}{Character (optional), names of absorbing state.}
 
-\item{dropNA}{Logical, drop observations with gaps, last observations, and similar. Default is TRUE.}
+\item{dropTime}{Logical, drop transitions with values of time not covered by the model. Default is TRUE.}
 
-\item{dropAbs}{Logical, drop observations starting from absorbing states. Default is TRUE.}
+\item{dropNA}{Logical, drop transitions with gaps, last observations, and similar. Default is TRUE.}
+
+\item{dropAbs}{Logical, drop transitions starting from absorbing states. Default is TRUE.}
+
+\item{verbose}{Logical, print how many transitions were dropped. Default is true.}
+
+\item{timescale}{Numeric (optional), values of the time scale.}
 }
 \value{
 Returns a cleaned data frame in transition format.
 }
 \description{
-Cleans data in transition format. It can handle gaps in sequences and final observations,
-observations not covered by the time range, and observations starting in absorbing states.
+Cleans data in transition format. It can handle issues regularly occurring
+with such data: #' transitions starting from or ending in missing states,
+observations not covered by the time range, and #' observations starting in
+absorbing states.
+}
+\details{
+Data in transition format often includes some transitions which do not
+contribute to the estimation of a multistate model. This includes
+transitions starting or ending with a missing state; transitions which
+are out of the time range of the model; and transitions starting in
+absorbing states.
+
+Transitions starting or ending with a missing state often occur for three
+reasons. First, the function `dtms_format` will always create a transition
+with a missing receiving state for the last observation of a unit, whether
+due to #' censoring or not. For instance, if t=20 is the last value of the
+time scale, and a unit is in state A at that #' time, then there will be a
+transition starting at time t=20, starting from state A, and with receiving
+state missing. These transitions can often be safely ignored, in particular
+if there is only one absorbing state. Second, if, say, for a unit the last
+observation is at time t=10 and censored after, there will be a transition
+starting at time t=10 with missing receiving state. Whether such transitions
+can be ignored depends on the censoring mechanism. If it is uninformative
+these transitions can be dropped. Third, there might be missing values in
+the sequence of states. For instance, a unit might first be in state A, then
+state B, then the state is missing, and then state is again A, giving the
+sequence A, B, NA, A. This implies a transition from B to NA, and from NA to
+A. The function `dtms_format` by default will ignore missing observations
+and will not create transitions based on them, but it will if the argument
+`fill` is set to TRUE. Creating these transitions can lead to data sets
+which are much larger than the original data. If they are created,
+`dtms_clean` can handle them.
+
+Transitions which are out of the time range can occur, for instance, when
+the researcher is interested in a shorter time frame than covered by data
+collection. In a clinical trial, the time scale could capture follow-up
+time since start of the trial in months and data might be available for 60
+months. But perhaps the researcher is only interested in the first 36 months.
 }
 \examples{
 # Define model
 simple <- dtms(transient=c("A","B"),
 absorbing="X",
 timescale=0:20)
-# Transiton format
+# Transiton format, filling implicit missings with explicit missings
 estdata <- dtms_format(data=simpledata,
 dtms=simple,
 idvar="id",
 timevar="time",
-statevar="state")
+statevar="state",
+fill=TRUE)
 # Clean data
 estdata <- dtms_clean(data=estdata,
                       dtms=simple)

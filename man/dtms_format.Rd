@@ -14,9 +14,9 @@ dtms_format(
   tovar = "to",
   timestep = NULL,
   timescale = NULL,
-  keepnames = F,
-  fill = F,
-  verbose = T
+  keepnames = FALSE,
+  fill = FALSE,
+  verbose = TRUE
 )
 }
 \arguments{
@@ -40,7 +40,7 @@ dtms_format(
 
 \item{keepnames}{Logical, keep original names for id and time variable? Default is FALSE; i.e., not keeping original names.}
 
-\item{fill}{Logical, fill implicit missings with NA? Default is FALSE.}
+\item{fill}{Logical, fill implicit missings with explicit NA? Default is FALSE.}
 
 \item{verbose}{Logical, create output to console if changing variable names is not possible? Default is TRUE.}
 }
@@ -51,38 +51,43 @@ A data set reshaped to transition format
 Takes a data frame in long format and reshapes it into transition format.
 }
 \details{
-The data frame supplied with the `data` argument has to be in long format:
+The data frame supplied with the `data` argument has to be in long format,
+where X is a time-constant covariate and Z(t) is a time-dependent covariate:
 
-\tabular{lll}{
-idvar \tab timevar \tab statevar \cr
-1 \tab 0 \tab A \cr
-1 \tab 1 \tab A \cr
-1 \tab 2 \tab B \cr
-1 \tab 3 \tab A \cr
-2 \tab 0 \tab B \cr
-2 \tab 1 \tab A \cr
-... \tab ... \tab ...
+\tabular{lllll}{
+idvar \tab timevar \tab statevar \tab X \tab Z(t) \cr
+1 \tab 0 \tab A \tab x_1 \tab z_1(0) \cr
+1 \tab 1 \tab A \tab x_1 \tab z_1(1) \cr
+1 \tab 2 \tab B \tab x_1 \tab z_1(2) \cr
+1 \tab 3 \tab A \tab x_1 \tab z_1(3) \cr
+2 \tab 0 \tab B \tab x_2 \tab z_2(0) \cr
+2 \tab 1 \tab A \tab x_2 \tab z_2(1) \cr
+... \tab ... \tab ... \tab ... \tab ...
 }
 
-If it is not in long format it has to be reshaped. `dtms_format` turns this into
-a data frame in transition format:
+If it is not in long format it has to be reshaped. `dtms_format` turns this
+into a data frame in transition format:
 
-\tabular{llll}{
-id \tab time \tab fromvar \tab tovar \cr
-1 \tab 0 \tab A \tab A \cr
-1 \tab 1 \tab A \tab B \cr
-1 \tab 2 \tab B \tab A \cr
-2 \tab 0 \tab B \tab A \cr
-... \tab ... \tab ... \tab ... \cr
+\tabular{llllll}{
+id \tab time \tab fromvar \tab tovar \tab X \tab Z(t) \cr
+1 \tab 0 \tab A \tab A \tab x_1 \tab z_1(0) \cr
+1 \tab 1 \tab A \tab B \tab x_1 \tab z_1(1)  \cr
+1 \tab 2 \tab B \tab A \tab x_1 \tab z_1(2)  \cr
+2 \tab 0 \tab B \tab A \tab x_2 \tab z_2(0)  \cr
+... \tab ... \tab ... \tab ... \tab ... \tab ...
 }
 
-By default the variable names of the ID variable and the time variable are changed to `id` and `time`, as the other
-functions of the package use these as default names. If renaming the variables is not possible because
-these variable names already appear in the data then the original names are used.
+Covariates do not need to be specified and are handled automatically. The
+transition from time t to t+1 takes covariate values from time t. By default
+the variable names of the ID variable and the time variable are changed to
+`id` and `time`, as the other functions of the package use these as default
+names. If renaming the variables is not possible because these variable
+names already appear in the data then the original names are used.
 
-`dtms_format` by default drops gaps in the data, as no transitions are observed. For instance,
-in the following example there is no observation at time 4, and thus no transition
-is observed from t=3 to t=4; and no transition from t=4 to t=5:
+`dtms_format` by default drops gaps in the data, as no transitions are
+observed. For instance, in the following example there is no observation at
+time 4, and thus no transition is observed from t=3 to t=4; and no
+transition from t=4 to t=5:
 
 \tabular{lll}{
 idvar \tab timevar \tab statevar \cr
