@@ -7,7 +7,7 @@
 dtms_expectancy(
   matrix,
   transient = NULL,
-  time = NULL,
+  timescale = NULL,
   timestep = NULL,
   dtms = NULL,
   start_time = NULL,

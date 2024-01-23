@@ -2,7 +2,7 @@
 #'
 #' @param transient
 #' @param absorbing
-#' @param time
+#' @param timescale
 #' @param dtms
 #' @param probs
 #' @param fromvar
@@ -18,7 +18,7 @@
 #' @examples
 dtms_matrix <- function(transient=NULL, # character vector of transient states
                         absorbing=NULL, # character vector of absorbing states
-                        time=NULL, # Time steps
+                        timescale=NULL, # Time steps
                         dtms=NULL, # DTMS object
                         probs, # probs frame with probabilities
                         fromvar="from", # Variable name of starting state in 'probs'
@@ -32,12 +32,12 @@ dtms_matrix <- function(transient=NULL, # character vector of transient states
   if(!is.null(dtms) & class(dtms)[2]=="dtms") {
     transient <- dtms$transient
     absorbing <- dtms$absorbing
-    time <- dtms$time
-    time <- time[-length(time)]
+    timescale <- dtms$timescale
+    timescale <- timescale[-length(timescale)]
   }
 
   # Combine states and time
-  transient_states <- levels(interaction(transient,time,sep=sep))
+  transient_states <- levels(interaction(transient,timescale,sep=sep))
   absorbing <- paste(absorbing)
   all_states <- c(transient_states,absorbing)
 
@@ -90,7 +90,7 @@ dtms_matrix <- function(transient=NULL, # character vector of transient states
 
   # Add death (the column should already be there)
   Tm <- rbind(Tm,rep(0,n_states))
-  rownames(Tm)[(s_states+1):n_states] <- absorbing # HIER WEITER => Character string?
+  rownames(Tm)[(s_states+1):n_states] <- absorbing
 
   # The dead stay dead (hopefully)
   if(a_states==1) Tm[absorbing,absorbing] <- 1
@@ -104,7 +104,7 @@ dtms_matrix <- function(transient=NULL, # character vector of transient states
 
   # Make sure everyone dies at the end
   if(enforcedeath==T) {
-    last_states <- paste(transient,max(time),sep=sep)
+    last_states <- paste(transient,max(timescale),sep=sep)
     if(length(absorbing)==1) {
       Tm[last_states,] <- 0
       Tm[last_states,absorbing] <- 1

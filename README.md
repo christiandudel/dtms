@@ -51,7 +51,7 @@ library(dtms)
 ## Define model: Absorbing and transient states, time scale
 simple <- dtms(transient=c("A","B"),
                absorbing="X",
-               time=0:20)
+               timescale=0:20)
 
 ## Quick look at data
 head(simpledata)
@@ -236,8 +236,8 @@ library(dtms)
 
 ## Define model: Absorbing and transient states, time scale
 hrs <- dtms(transient=c("Employed","Inactive","Retired"),
-               absorbing="Dead",
-               time=50:99)
+            absorbing="Dead",
+            timescale=50:99)
 
 ## Quick look at data
 head(hrsdata)

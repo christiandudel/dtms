@@ -2,7 +2,7 @@
 #'
 #' @param matrix
 #' @param transient
-#' @param time
+#' @param timescale
 #' @param dtms
 #' @param risk
 #' @param start_time
@@ -17,7 +17,7 @@
 #' @examples
 dtms_risk <- function(matrix,# Matrix with transition probabilities generated with dtms_matrix
                       transient=NULL, # Names of transient states
-                      time=NULL, # Time scale
+                      timescale=NULL, # Time scale
                       dtms=NULL,# DTMS model
                       risk, # name of state(s) for which risk is of interest
                       start_time=NULL,# Starting time, will be lowest time in 'dtms' if NULL
@@ -29,15 +29,15 @@ dtms_risk <- function(matrix,# Matrix with transition probabilities generated wi
   # Use dtms if provided
   if(!is.null(dtms) & class(dtms)[2]=="dtms") {
     if(is.null(transient)) transient <- dtms$transient
-    if(is.null(time)) {
-      time <- dtms$time
-      time <- time[-length(time)]
+    if(is.null(timescale)) {
+      timescale <- dtms$timescale
+      timescale <- timescale[-length(timescale)]
     }
   }
 
   # Starting states
   if(is.null(start_state)) {
-    starting <- levels(interaction(transient,min(time),sep=sep))
+    starting <- levels(interaction(transient,min(timescale),sep=sep))
   } else {
     starting <- levels(interaction(start_state,start_time,sep=sep))
   }

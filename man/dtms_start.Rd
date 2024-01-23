@@ -6,7 +6,7 @@
 \usage{
 dtms_start(
   transient = NULL,
-  time = NULL,
+  timescale = NULL,
   dtms = NULL,
   data,
   start_time = NULL,

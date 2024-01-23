@@ -7,7 +7,7 @@
 dtms_transitions(
   transient = NULL,
   absorbing = NULL,
-  time = NULL,
+  timescale = NULL,
   dtms = NULL,
   model,
   constant = NULL,

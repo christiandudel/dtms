@@ -7,7 +7,7 @@
 dtms_risk(
   matrix,
   transient = NULL,
-  time = NULL,
+  timescale = NULL,
   dtms = NULL,
   risk,
   start_time = NULL,

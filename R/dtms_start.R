@@ -1,7 +1,7 @@
 #' Title
 #'
 #' @param transient
-#' @param time
+#' @param timescale
 #' @param dtms
 #' @param data
 #' @param start_time
@@ -16,7 +16,7 @@
 #'
 #' @examples
 dtms_start <- function(transient=NULL, # Names of transient states
-                       time=NULL, # Time scale
+                       timescale=NULL, # Time scale
                        dtms=NULL,# DTMS model
                        data,# data frame with cleaned transition data
                        start_time=NULL,# Starting time, will be lowest time in 'dtms' if NULL
@@ -29,14 +29,14 @@ dtms_start <- function(transient=NULL, # Names of transient states
   # Use dtms if provided
   if(!is.null(dtms) & class(dtms)[2]=="dtms") {
     if(is.null(transient)) transient <- dtms$transient
-    if(is.null(time)) {
-      time <- dtms$time
-      time <- time[-length(time)]
+    if(is.null(timescale)) {
+      timescale <- dtms$timescale
+      timescale <- timescale[-length(timescale)]
     }
   }
 
   # Starting time
-  if(is.null(start_time)) start_time <- min(time)
+  if(is.null(start_time)) start_time <- min(timescale)
 
   # Starting states
   if(is.null(start_state)) {

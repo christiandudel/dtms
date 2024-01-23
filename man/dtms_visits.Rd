@@ -7,7 +7,7 @@
 dtms_visits(
   matrix,
   transient = NULL,
-  time = NULL,
+  timescale = NULL,
   timestep = NULL,
   dtms = NULL,
   risk,

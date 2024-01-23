@@ -1,28 +1,33 @@
 #' Create dtms object
 #'
+#' @description
+#' This function creates an object of class 'dtms' to be passed to other functions of the package. It provides
+#' an abstract definition of a multistate model, including the names of the transient states, the names of the
+#' absorbing states, the values the time scale can take, and the step length of the time scale.
+#'
 #' @param transient A character vector of names of the transient states in the state space
 #' @param absorbing A character vector of names of the absorbing states in the state space
-#' @param time A numeric vector with the time scale, including the starting time and the final time
-#' @param timestep Step length of the time scale, will be guessed if NULL
+#' @param timescale A numeric vector with the time scale, including the starting time and the final time
+#' @param timestep Step length of the time scale, will be guessed if NULL (default)
 #'
-#' @return Returns an object of class 'dtms' to be passed to other functions of the package
+#' @return Returns an object of class 'dtms'
 #' @export
 #'
 #' @examples
 #' dtms(transient=c("A","B"),
 #'      absorbing="X",
-#'      time=1:10)
+#'      timescale=1:10)
 
 dtms <- function(transient,
                  absorbing,
-                 time,
+                 timescale,
                  timestep=NULL) {
 
   # Guess time step?
   if(is.null(timestep)) {
 
-    # Step lengths as specified
-    step <- time |> diff() |> unique()
+    # Step lengths as specified by time scale
+    step <- timescale |> diff() |> unique()
 
     # Number of different step lengths
     nstep <- length(step)
@@ -36,7 +41,7 @@ dtms <- function(transient,
   # Combine everything in a list
   result <- list(transient=transient,
                  absorbing=absorbing,
-                 time=time,
+                 timescale=timescale,
                  timestep=timestep)
 
   # Assign class

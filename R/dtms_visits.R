@@ -2,7 +2,7 @@
 #'
 #' @param matrix
 #' @param transient
-#' @param time
+#' @param timescale
 #' @param timestep
 #' @param dtms
 #' @param risk
@@ -20,7 +20,7 @@
 #' @examples
 dtms_visits <- function(matrix,# Matrix with transition probabilities generated with dtms_matrix
                         transient=NULL, # Names of transient states
-                        time=NULL, # Time scale
+                        timescale=NULL, # Time scale
                         timestep=NULL, # Step length
                         dtms=NULL,# DTMS model
                         risk, # name of state(s) for which risk is of interest
@@ -35,16 +35,16 @@ dtms_visits <- function(matrix,# Matrix with transition probabilities generated 
   # Use dtms if provided
   if(!is.null(dtms) & class(dtms)[2]=="dtms") {
     if(is.null(transient)) transient <- dtms$transient
-    if(is.null(time)) {
-      time <- dtms$time
-      time <- time[-length(time)]
+    if(is.null(timescale)) {
+      timescale <- dtms$timescale
+      timescale <- timescale[-length(timescale)]
     }
     if(is.null(timestep)) timestep <- dtms$timestep
   }
 
   # Starting states
   if(is.null(start_state)) {
-    starting <- levels(interaction(transient,min(time),sep=sep))
+    starting <- levels(interaction(transient,min(timescale),sep=sep))
   } else {
     starting <- levels(interaction(start_state,start_time,sep=sep))
   }
@@ -87,7 +87,7 @@ dtms_visits <- function(matrix,# Matrix with transition probabilities generated 
   }
 
   # Get n
-  if(is.null(end_time)) n <- length(time) else n <- which(end_time==time)
+  if(is.null(end_time)) n <- length(timescale) else n <- which(end_time==timescale)
 
   # Time steps
   t_series <- 0:n

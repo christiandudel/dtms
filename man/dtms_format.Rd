@@ -13,14 +13,16 @@ dtms_format(
   fromvar = "from",
   tovar = "to",
   timestep = NULL,
+  timescale = NULL,
   keepnames = F,
+  fill = F,
   verbose = T
 )
 }
 \arguments{
 \item{data}{Data frame in long format.}
 
-\item{dtms}{DTMS (optional) object as created with `dtms`. Needed when argument 'timestep' is not specified. Default is NULL.}
+\item{dtms}{Object of class 'dtms' (optional) as created with `dtms`. Needed when arguments 'timestep' and/or `timescale' are not specified. Default is NULL.}
 
 \item{idvar}{Character (optional), name of variable in 'data' with unit identifier, default is 'id'.}
 
@@ -34,7 +36,11 @@ dtms_format(
 
 \item{timestep}{Numeric (optional), step length for time scale. Needed when argument 'dtms' is not specified. Default is NULL.}
 
+\item{timescale}{Numeric (optional), values of time scale. Needed when argument `dtms` is not specified.}
+
 \item{keepnames}{Logical, keep original names for id and time variable? Default is FALSE; i.e., not keeping original names.}
+
+\item{fill}{Logical, fill missing observations with NA? Default is FALSE.}
 
 \item{verbose}{Logical, create output to console if variable names are changed? Default is TRUE.}
 }
@@ -42,13 +48,72 @@ dtms_format(
 A data set reshaped to transition format
 }
 \description{
-Takes a data frame in long format and reshapes it into transition format. #'
+Takes a data frame in long format and reshapes it into transition format.
+}
+\details{
+The data frame supplied with the `data` argument has to be in long format:
+
+\tabular{lll}{
+idvar \tab timevar \tab statevar \cr
+1 \tab 0 \tab A \cr
+1 \tab 1 \tab A \cr
+1 \tab 2 \tab B \cr
+1 \tab 3 \tab A \cr
+2 \tab 0 \tab B \cr
+2 \tab 1 \tab A \cr
+... \tab ... \tab ...
+}
+
+If it is not in long format it has to be reshaped. `dtms_format` turns this into
+a data frame in transition format:
+
+\tabular{llll}{
+idvar \tab timevar \tab fromvar \tab tovar \cr
+1 \tab 0 \tab A \tab A \cr
+1 \tab 1 \tab A \tab B \cr
+1 \tab 2 \tab B \tab A \cr
+2 \tab 0 \tab B \tab A \cr
+... \tab ... \tab ... \tab ... \cr
+}
+
+`dtms_format` by default drops gaps in the data, as no transitions are observed. For instance,
+in the following example there is no observation at time 4, and thus no transition
+is observed from t=3 to t=4; and no transition from t=4 to t=5:
+
+\tabular{lll}{
+idvar \tab timevar \tab statevar \cr
+1 \tab 0 \tab A \cr
+1 \tab 1 \tab A \cr
+1 \tab 2 \tab B \cr
+1 \tab 3 \tab A \cr
+1 \tab 5 \tab A \cr
+}
+
+In this example, `dtms_format` will return the following:
+
+ \tabular{llll}{
+idvar \tab timevar \tab fromvar \tab tovar \cr
+1 \tab 0 \tab A \tab A \cr
+1 \tab 1 \tab A \tab B \cr
+1 \tab 2 \tab B \tab A \cr
+}
+
+If `fill=T`, then `dtms_format` will return the following:
+
+ \tabular{llll}{
+idvar \tab timevar \tab fromvar \tab tovar \cr
+1 \tab 0 \tab A \tab A \cr
+1 \tab 1 \tab A \tab B \cr
+1 \tab 2 \tab B \tab A \cr
+1 \tab 3 \tab A \tab NA \cr
+1 \tab 4 \tab NA \tab A \cr
+}
 }
 \examples{
 # Define model
 simple <- dtms(transient=c("A","B"),
 absorbing="X",
-time=0:20)
+timescale=0:20)
 # Transiton format
 estdata <- dtms_format(data=simpledata,
 dtms=simple,

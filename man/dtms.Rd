@@ -4,25 +4,27 @@
 \alias{dtms}
 \title{Create dtms object}
 \usage{
-dtms(transient, absorbing, time, timestep = NULL)
+dtms(transient, absorbing, timescale, timestep = NULL)
 }
 \arguments{
 \item{transient}{A character vector of names of the transient states in the state space}
 
 \item{absorbing}{A character vector of names of the absorbing states in the state space}
 
-\item{time}{A numeric vector with the time scale, including the starting time and the final time}
+\item{timescale}{A numeric vector with the time scale, including the starting time and the final time}
 
-\item{timestep}{Step length of the time scale, will be guessed if NULL}
+\item{timestep}{Step length of the time scale, will be guessed if NULL (default)}
 }
 \value{
-Returns an object of class 'dtms' to be passed to other functions of the package
+Returns an object of class 'dtms'
 }
 \description{
-Create dtms object
+This function creates an object of class 'dtms' to be passed to other functions of the package. It provides
+an abstract definition of a multistate model, including the names of the transient states, the names of the
+absorbing states, the values the time scale can take, and the step length of the time scale.
 }
 \examples{
 dtms(transient=c("A","B"),
      absorbing="X",
-     time=1:10)
+     timescale=1:10)
 }

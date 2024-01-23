@@ -2,7 +2,7 @@
 #'
 #' @param matrix
 #' @param transient
-#' @param time
+#' @param timescale
 #' @param timestep
 #' @param dtms
 #' @param risk
@@ -22,7 +22,7 @@
 #' @examples
 dtms_first  <- function(matrix,# Matrix with transition probabilities generated with dtms_matrix
                         transient=NULL, # Names of transient states
-                        time=NULL, # Time scale
+                        timescale=NULL, # Time scale
                         timestep=NULL, # Step length of the model
                         dtms=NULL,# DTMS model
                         risk, # name of state(s) for which risk is of interest
@@ -39,16 +39,16 @@ dtms_first  <- function(matrix,# Matrix with transition probabilities generated 
   # Use dtms if provided
   if(!is.null(dtms) & class(dtms)[2]=="dtms") {
     if(is.null(transient)) transient <- dtms$transient
-    if(is.null(time)) {
-      time <- dtms$time
-      time <- time[-length(time)]
+    if(is.null(timescale)) {
+      timescale <- dtms$timescale
+      timescale <- timescale[-length(timescale)]
     }
     if(is.null(timestep)) timestep <- dtms$timestep
   }
 
   # Starting states
   if(is.null(start_state)) {
-    starting <- levels(interaction(transient,min(time),sep=sep))
+    starting <- levels(interaction(transient,min(timescale),sep=sep))
   } else {
     starting <- levels(interaction(start_state,start_time,sep=sep))
   }
@@ -63,12 +63,12 @@ dtms_first  <- function(matrix,# Matrix with transition probabilities generated 
   P_E[!selectorU,!selectorU] <- matrix[!selectorU,!selectorU]
 
   # Generate t
-  if(is.null(start_time)) t <- 0 else t <- which(start_time==time)-1
+  if(is.null(start_time)) t <- 0 else t <- which(start_time==timescale)-1
 
   # Generate max
-  if(is.null(end_time)) maxtime <- length(time)-1
+  if(is.null(end_time)) maxtime <- length(timescale)-1
   if(!is.null(end_time)) if(!is.infinite(end_time))  {
-    maxtime <- which(end_time==time)-1
+    maxtime <- which(end_time==timescale)-1
     maxiter <- max(maxtime,maxiter)
   } else maxtime <- Inf
 

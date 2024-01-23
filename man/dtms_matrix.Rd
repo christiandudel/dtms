@@ -7,7 +7,7 @@
 dtms_matrix(
   transient = NULL,
   absorbing = NULL,
-  time = NULL,
+  timescale = NULL,
   dtms = NULL,
   probs,
   fromvar = "from",

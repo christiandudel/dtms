@@ -2,7 +2,7 @@
 #'
 #' @description
 #' Cleans data in transition format. It can handle gaps in sequences and final observations,
-#' observatiosn not covered by the time range, and observations starting in absorbing states.
+#' observations not covered by the time range, and observations starting in absorbing states.
 #'
 #' @param data Data frame (or similar) in transition format as created with `dtms_format`.
 #' @param dtms DTMS object as created with `dtms`
@@ -20,7 +20,7 @@
 #' # Define model
 #' simple <- dtms(transient=c("A","B"),
 #' absorbing="X",
-#' time=0:20)
+#' timescale=0:20)
 #' # Transiton format
 #' estdata <- dtms_format(data=simpledata,
 #' dtms=simple,
@@ -40,7 +40,7 @@ dtms_clean <- function(data, # Transition format data
                        dropAbs=T) { # Drop obs starting from absorbing state
 
   if(dropTime) {
-    whichrows <- unlist(data[,timevar])%in%dtms$time
+    whichrows <- unlist(data[,timevar])%in%dtms$timescale
     count <- sum(!whichrows)
     cat("Dropping ",count," rows because not in time range\n")
     data <- data[whichrows,]

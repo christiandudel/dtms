@@ -2,7 +2,7 @@
 #'
 #' @param transient
 #' @param absorbing
-#' @param time
+#' @param timescale
 #' @param dtms
 #' @param model
 #' @param constant
@@ -20,7 +20,7 @@
 #' @examples
 dtms_transitions <- function(transient=NULL,
                              absorbing=NULL,
-                             time=NULL,
+                             timescale=NULL,
                              dtms=NULL,
                              model,
                              constant=NULL,
@@ -36,9 +36,9 @@ dtms_transitions <- function(transient=NULL,
   if(!is.null(dtms) & class(dtms)[2]=="dtms") {
     if(is.null(transient)) transient <- dtms$transient
     if(is.null(absorbing)) absorbing <- dtms$absorbing
-    if(is.null(time)) {
-      time <- dtms$time
-      time <- time[-length(time)]
+    if(is.null(timescale)) {
+      timescale <- dtms$timescale
+      timescale <- timescale[-length(timescale)]
     }
     if(is.null(timestep)) {
       timestep <- dtms$timestep
@@ -50,7 +50,7 @@ dtms_transitions <- function(transient=NULL,
 
   # Create empty frame
   model_frame <- expand.grid(from=transient,
-                             time=time)
+                             time=timescale)
 
   # Get names right
   names(model_frame) <- c(fromvar,timevar)
@@ -71,8 +71,8 @@ dtms_transitions <- function(transient=NULL,
     for(var in 1:nvar) {
       varname <- names(varying)[var] # Variable name
       value <- varying[[var]] # Value
-      if(length(value)!=length(time)) stop("Wrong number of time-varying values")
-      assign_values <- match(model_frame[,timevar],time) # Match to time variable
+      if(length(value)!=length(timescale)) stop("Wrong number of time-varying values")
+      assign_values <- match(model_frame[,timevar],timescale) # Match to time variable
       model_frame[varname] <- value[assign_values] # Assign
     }
   }

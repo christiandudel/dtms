@@ -2,7 +2,7 @@
 #'
 #' @param matrix
 #' @param transient
-#' @param time
+#' @param timescale
 #' @param timestep
 #' @param dtms
 #' @param risk
@@ -22,7 +22,7 @@
 #' @examples
 dtms_last <- function(matrix,# Matrix with transition probabilities generated with dtms_matrix
                       transient=NULL, # Names of transient states
-                      time=NULL, # Time scale
+                      timescale=NULL, # Time scale
                       timestep=NULL, # Step length
                       dtms=NULL,# DTMS model
                       risk, # name of state(s) for which risk is of interest
@@ -39,16 +39,16 @@ dtms_last <- function(matrix,# Matrix with transition probabilities generated wi
   # Use dtms if provided
   if(!is.null(dtms) & class(dtms)[2]=="dtms") {
     if(is.null(transient)) transient <- dtms$transient
-    if(is.null(time)) {
-      time <- dtms$time
-      time <- time[-length(time)]
+    if(is.null(timescale)) {
+      timescale <- dtms$timescale
+      timescale <- timescale[-length(timescale)]
     }
     if(is.null(timestep)) timestep <- dtms$timestep
   }
 
   # Starting states
   if(is.null(start_state)) {
-    starting <- levels(interaction(transient,min(time),sep=sep))
+    starting <- levels(interaction(transient,min(timescale),sep=sep))
   } else {
     starting <- levels(interaction(start_state,start_time,sep=sep))
   }
@@ -62,10 +62,10 @@ dtms_last <- function(matrix,# Matrix with transition probabilities generated wi
   if(is.null(risk_to)) selectorU <- !selectorD else selectorU <- unlist(lapply(strsplit(states,sep),function(z) any(risk_to%in%z) ))
 
   # Get tau
-  if(is.null(end_time)) tau <- length(time)-1 else tau <- which(end_time==time)
+  if(is.null(end_time)) tau <- length(timescale)-1 else tau <- which(end_time==timescale)
 
   # Generate t
-  if(is.null(start_time)) t <- 0 else t <- which(start_time==time)-1
+  if(is.null(start_time)) t <- 0 else t <- which(start_time==timescale)-1
 
   # Partition transition matrix
   P_E <- matrix(data=0,nrow=nstates,ncol=nstates)

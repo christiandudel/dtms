@@ -7,7 +7,7 @@
 dtms_last(
   matrix,
   transient = NULL,
-  time = NULL,
+  timescale = NULL,
   timestep = NULL,
   dtms = NULL,
   risk,
