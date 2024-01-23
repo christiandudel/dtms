@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# dtms
+# dtms - An R package for discrete-time multistate models
 
 <!-- badges: start -->
 <!-- badges: end -->
