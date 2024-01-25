@@ -119,7 +119,7 @@ dtms_format <- function(data,
   if(!is.null(dtms)) {
 
     # Check
-    proper_dtms(dtms)
+    dtms_proper(dtms)
 
     # Use values
     timescale <- dtms$timescale

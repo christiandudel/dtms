@@ -80,7 +80,7 @@ dtms_transitions <- function(model,
   if(!is.null(dtms)) {
 
     # Check
-    proper_dtms(dtms)
+    dtms_proper(dtms)
 
     # Use values
     timescale <- dtms$timescale

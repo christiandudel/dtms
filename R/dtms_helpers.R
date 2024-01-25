@@ -1,5 +1,5 @@
 ### Create transition matrix without absorbing states
-remove_absorbing <- function(matrix) { # matrix=full transition matrix
+dtms_absorbing <- function(matrix) { # matrix=full transition matrix
 
   # Get states which are absorbing
   to_remove <- which(diag(matrix)==1)
@@ -13,7 +13,7 @@ remove_absorbing <- function(matrix) { # matrix=full transition matrix
 }
 
 ### Check if object is proper dtms object
-proper_dtms <- function(dtms) { # dtms=object to be checked
+dtms_proper <- function(dtms) { # dtms=object to be checked
 
   # Error message
   message <- "Not a proper dtms object."

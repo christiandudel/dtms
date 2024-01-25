@@ -54,7 +54,7 @@ dtms_expectancy <- function(matrix,# Matrix with transition probabilities genera
   ntransient <- length(transient)
 
   # Remove absorbing states
-  matrix <- remove_absorbing(matrix)
+  matrix <- dtms_absorbing(matrix)
 
   # Fundamental matrix
   nstates <- dim(matrix)[1]
