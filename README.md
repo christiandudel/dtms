@@ -76,7 +76,7 @@ estdata <- dtms_format(data=simpledata,
 head(estdata)
 #> # A tibble: 6 × 4
 #>      id  time from  to   
-#>   <dbl> <dbl> <chr> <chr>
+#>   <int> <dbl> <chr> <chr>
 #> 1     2     0 A     B    
 #> 2     2     1 B     A    
 #> 3     2     2 A     B    
@@ -253,13 +253,11 @@ hrs <- dtms(transient=c("Employed","Inactive","Retired"),
 
 ## Quick look at data
 head(hrsdata)
-#> # A tibble: 6 × 4
-#>      ID Gender   Age State
-#>   <dbl>  <dbl> <dbl> <chr>
-#> 1     1      1    50 <NA> 
-#> 2     1      1    51 <NA> 
-#> 3     1      1    52 <NA> 
-#> 4     1      1    53 <NA> 
-#> 5     1      1    54 <NA> 
-#> 6     1      1    55 <NA>
+#>   ID Gender Age State
+#> 1  1      1  50  <NA>
+#> 2  1      1  51  <NA>
+#> 3  1      1  52  <NA>
+#> 4  1      1  53  <NA>
+#> 5  1      1  54  <NA>
+#> 6  1      1  55  <NA>
 ```

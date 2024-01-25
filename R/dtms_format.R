@@ -125,6 +125,7 @@ dtms_format <- function(data,
 
   # Fill data
   if(fill) {
+
     # Copy time to expand (complete does not work well with sym)
     data <- data |> dplyr::mutate(temporary_Time = !!dplyr::sym(timevar))
     # Expand
