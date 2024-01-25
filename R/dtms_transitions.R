@@ -129,22 +129,25 @@ dtms_transitions <- function(model,
   model_frame[,all_states] <- stats::predict(model,model_frame,"response")[,all_states]
   } else stop("Currently only vgam is supported")
 
+  # Values of starting state
+  model_frame$from <- paste(model_frame$from,model_frame$time,sep=sep)
+
   # Reshape
-  model_frame <- model_frame |> tidyr::pivot_longer(cols=all_states,
-                                                    names_to=tovar,
-                                                    values_to=Pvar)
+  model_frame <- reshape(model_frame,
+                   varying=all_states,
+                   idvar=fromvar,
+                   timevar=tovar,
+                   times=all_states,
+                   direction="long",
+                   v.names=Pvar)
 
-  # Get state names right with time
-  model_frame <- model_frame |> dplyr::mutate(newfrom=ifelse(!!dplyr::sym(fromvar)%in%transient,
-                                                             paste(!!dplyr::sym(fromvar),!!dplyr::sym(timevar),sep=sep),
-                                                             !!dplyr::sym(fromvar)),
-                                              newto=ifelse(!!dplyr::sym(tovar)%in%transient,
-                                                           paste(!!dplyr::sym(tovar),!!dplyr::sym(timevar)+timestep,sep=sep),
-                                                           !!dplyr::sym(tovar)))
-
-  # Keep and rename variables
-  model_frame <- model_frame[,c("newfrom","newto",timevar,Pvar)]
-  names(model_frame)[1:2] <- c(fromvar,tovar)
+  # Values of receiving variable
+  rightrows <- model_frame[,tovar]%in%transient
+  oldvalues <- model_frame[rightrows,tovar]
+  timevalues <- model_frame[rightrows,timevar]+timestep
+  model_frame[rightrows,tovar] <- paste(oldvalues,
+                                        timevalues,
+                                        sep=sep)
 
   # Return
   return(model_frame)

@@ -138,4 +138,121 @@ hrs <- dtms(transient=c("Employed","Inactive","Retired"),
 ## Quick look at data
 head(hrsdata)
 
+## Reshape
+estdata <- dtms_format(data=hrsdata,
+                       dtms=hrs,
+                       idvar="ID",
+                       timevar="Age",
+                       statevar="State")
+
+## Drop dead-to-dead transitions etc
+estdata <- dtms_clean(data=estdata,
+                      dtms=hrs)
+
+## Add age squared
+estdata$time2 <- estdata$time^2
+  
+## Fit model
+fit <- dtms_fit(data=estdata,
+                controls=c("Gender","time2"))
+
+## Transition probabilities by gender
+  
+# Men
+probs_m <- dtms_transitions(dtms=hrs,
+                             model = fit,
+                             constant = list(Gender=0),
+                             varying = list(time2 = (50:98)^2))
+  
+# Women
+probs_w <- dtms_transitions(dtms=hrs,
+                            model = fit,
+                            constant = list(Gender=1),
+                            varying = list(time2 = (50:98)^2))
+ 
+## Transition matrices
+Tm <- dtms_matrix(dtms=hrs,
+                  probs=probs_m)
+  
+Tw <- dtms_matrix(dtms=hrs,
+                  probs=probs_w)
+
+## Starting distributions
+Sm <- dtms_start(dtms=hrs,
+                 data=estdata,
+                 variables=list(Gender=0))
+  
+Sw <- dtms_start(dtms=hrs,
+                 data=estdata,
+                 variables=list(Gender=1))
+  
+## State expectancies
+dtms_expectancy(dtms=hrs,
+                matrix=Tm,
+                start_distr=Sm)
+    
+dtms_expectancy(dtms=hrs,
+                matrix=Tw,
+                start_distr=Sw)
+
+## Lifetime risk of reaching retirement
+dtms_risk(dtms=hrs,
+          matrix=Tm,
+          risk="Retired",
+          start_distr=Sm)
+  
+dtms_risk(dtms=hrs,
+          matrix=Tw,
+          risk="Retired",
+          start_distr=Sw)
+  
+## Distribution of visits
+dtms_visits(dtms=hrs,
+            matrix=Tm,
+            risk="Retired",
+            start_distr=Sm)
+  
+dtms_visits(dtms=hrs,
+            matrix=Tw,
+            risk="Retired",
+            start_distr=Sw,
+            method="end")
+  
+## First visit
+dtms_first(dtms=hrs,
+           matrix=Tm,
+           risk="Retired",
+           start_distr=Sm)  
+  
+dtms_first(dtms=hrs,
+           matrix=Tw,
+           risk="Retired",
+           start_distr=Sw)  
+
+### Last exit
+  
+# Leaving employment to any state
+dtms_last(dtms=hrs,
+          matrix=Tm,
+          risk="Employed",
+          start_distr=Sm)  
+  
+dtms_last(dtms=hrs,
+          matrix=Tw,
+          risk="Employed",
+          start_distr=Sw)  
+  
+# Leaving employment for retirement
+dtms_last(dtms=hrs,
+          matrix=Tm,
+          risk="Employed",
+          risk_to="Retired",
+          start_distr=Sm)  
+  
+dtms_last(dtms=hrs,
+          matrix=Tw,
+          risk="Employed",
+          risk_to="Retired",
+          start_distr=Sw)  
+
 ```
