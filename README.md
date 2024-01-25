@@ -74,15 +74,13 @@ estdata <- dtms_format(data=simpledata,
 
 ## Look at reshaped data
 head(estdata)
-#> # A tibble: 6 × 4
-#>      id  time from  to   
-#>   <int> <dbl> <chr> <chr>
-#> 1     2     0 A     B    
-#> 2     2     1 B     A    
-#> 3     2     2 A     B    
-#> 4     2     3 B     A    
-#> 5     2     4 A     A    
-#> 6     2     5 A     B
+#>   id time from to
+#> 1  2    0    A  B
+#> 2  2    1    B  A
+#> 3  2    2    A  B
+#> 4  2    3    B  A
+#> 5  2    4    A  A
+#> 6  2    5    A  B
 
 ## Clean
 estdata <- dtms_clean(data=estdata,
@@ -240,7 +238,7 @@ dtms_last(dtms=simple,
 ## Example 2: Simulated HRS data
 
 Here we provide a second example based on simulated data from the Health
-and Retirement Study.
+and Retirement Study (HRS).
 
 ``` r
 ## Load package
