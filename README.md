@@ -239,8 +239,8 @@ dtms_last(dtms=simple,
 
 ## Example 2: Simulated HRS data
 
-Here we will provide a second example based on simulated data from the
-Health and Retirement Study.
+Here we provide a second example based on simulated data from the Health
+and Retirement Study.
 
 ``` r
 ## Load package

@@ -112,6 +112,9 @@ dtms_format <- function(data,
                         fill=FALSE,
                         verbose=TRUE) {
 
+  # Transform to data frame, e.g., if tibble
+  if(class(data)[1]!="data.frame") data <- as.data.frame(data)
+
   # Use dtms if provided
   if(!is.null(dtms)) {
 
@@ -126,46 +129,54 @@ dtms_format <- function(data,
   # Fill data
   if(fill) {
 
-    # Copy time to expand (complete does not work well with sym)
-    data <- data |> dplyr::mutate(temporary_Time = !!dplyr::sym(timevar))
-    # Expand
-    data <- data |> tidyr::complete(!!dplyr::sym(idvar),temporary_Time=timescale)
-    # Drop original time var and rename
-    data <- data |>
-      dplyr::select(!(!!dplyr::sym(timevar))) |>
-      dplyr::rename_with(~ c(timevar),c("temporary_Time"))
+    # Get ID values
+    idvalues <- data[,idvar] |> unique()
+
+    # Full data
+    fulldata <- expand.grid(timescale,idvalues,
+                            stringsAsFactors=FALSE)
+    names(fulldata) <- c(timevar,idvar)
+
+    # Merge with data
+    data <- merge(fulldata,data,
+                  by=c(idvar,timevar),
+                  all=T)
+
+    # Drop temporary data
+    rm(fulldata)
+
   }
 
-  # Rearrange data into transition format
-  res <- data  |>
-    # Sort data by ID and time
-    dplyr::arrange(!!dplyr::sym(idvar),!!dplyr::sym(timevar)) |>
-    # Group by ID
-    dplyr::group_by(!!dplyr::sym(idvar)) |>
-    # Check if observations are consecutive
-    dplyr::mutate(consec=dplyr::lead(!!dplyr::sym(timevar)),
-                  difz  =consec-!!dplyr::sym(timevar),
-                  # If consecutive, take leading state
-                  to    =ifelse(difz==timestep,
-                            dplyr::lead(!!dplyr::sym(statevar)),
-                            NA)) |>
-    # Ungroup
-    dplyr::ungroup() |>
-    # Drop added variables
-    dplyr::select(!(consec:difz))
+  # Sort data
+  dataorder <- order(data[,idvar],
+                     data[,timevar])
+  data <- data[dataorder,]
 
-  # Rename state variable
-  res <- res |> dplyr::rename_with(~ c(fromvar,tovar),c(statevar,"to"))
+  # Check if next value is valid
+  consecutive <- dtms_consecutive(data=data,
+                                  idvar=idvar,
+                                  timevar=timevar,
+                                  timestep=timestep)
 
-  # Change names of id and time to default
+  # Get next state
+  data[,tovar] <- NA
+  tovalues <- c(data[-1,statevar],NA)
+  data[consecutive,tovar] <- tovalues[consecutive]
+
+  # Rename from variable
+  data <- dtms_rename(data,statevar,fromvar)
+
+  # Change names of id and time if possible
   if(!keepnames) {
-    if(timevar!='time' & !'time'%in%names(res)) res <- res |> dplyr::rename('time' = timevar) else
+    if(timevar!='time' & !'time'%in%names(data))
+      data <- dtms_rename(data,timevar,"time") else
       if(verbose) cat("Kept original name for time \n")
-    if(idvar!='id' & !'id'%in%names(res)) res <- res |> dplyr::rename('id'   = idvar) else
+    if(idvar!='id' & !'id'%in%names(data))
+      data <- dtms_rename(data,idvar,"id") else
       if(verbose) cat("Kept original name for id \n")
   }
 
   # Return result
-  return(res)
+  return(data)
 
 }

@@ -32,3 +32,41 @@ proper_dtms <- function(dtms) { # dtms=object to be checked
   if(!is.numeric(dtms$timestep) & length(dtms$timestep)==1) stop(message)
 
 }
+
+### Check if values of time scale are consecutive
+dtms_consecutive <- function(data,idvar,timevar,timestep) {
+
+  # Make sure no missing times and ids
+  if(any(is.na(data[,timevar]))) stop("Missing values in time variable not allowed")
+  if(any(is.na(data[,idvar]))) stop("Missing values in ID variable not allowed")
+
+  # Get diff to next time step
+  consecutive <- by(data[,timevar],data[,idvar],FUN=diff)
+
+  # Add last obs
+  consecutive <- lapply(consecutive,function(x) c(x,-1))
+
+  # Unlist
+  consecutive <- unlist(consecutive)
+
+  # TRUE if equal to timestep, FALSE otherwise
+  consecutive <- consecutive==timestep
+
+  # Return
+  return(consecutive)
+
+}
+
+### Rename variables
+dtms_rename <- function(data,oldnames,newnames) {
+
+  # Which names to change?
+  changenames <- match(oldnames,names(data))
+
+  # Change names
+  names(data)[changenames] <- newnames
+
+  # Return
+  return(data)
+
+}
