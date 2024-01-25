@@ -2,14 +2,14 @@
 % Please edit documentation in R/dtms_matrix.R
 \name{dtms_matrix}
 \alias{dtms_matrix}
-\title{Title}
+\title{Creates a transition matrix from transition probabilities}
 \usage{
 dtms_matrix(
+  probs,
+  dtms = NULL,
   transient = NULL,
   absorbing = NULL,
   timescale = NULL,
-  dtms = NULL,
-  probs,
   fromvar = "from",
   tovar = "to",
   Pvar = "P",
@@ -19,8 +19,51 @@ dtms_matrix(
 )
 }
 \arguments{
-\item{rescale}{}
+\item{probs}{Data frame with transition probabilities, as created with `dtms_transitions`.}
+
+\item{dtms}{DTMS object, as created with `dtms`.}
+
+\item{transient}{Character (optional), names of transient states}
+
+\item{absorbing}{Character (optional), names of absorbing states}
+
+\item{timescale}{Numeric (optional), values of time scale}
+
+\item{fromvar}{Character, name of variable with sending state. Default is `from`, as is used per default with `dtms_transitions`.}
+
+\item{tovar}{Character, name of variable with receiving state. Default is `to`, as is used per default with `dtms_transitions`.}
+
+\item{Pvar}{Character, name of variable with transition probabilities. Default is `P`, as is used per default with `dtms_transitions`.}
+
+\item{enforcedeath}{Logical, make sure that every unit moves to absorbing state after last value of time scale. Default is TRUE.}
+
+\item{sep}{Character, separator between state name and value of time scale. Default is `_`.}
+
+\item{rescale}{Logical, rescale transition probabilities to sum to one? Default is TRUE.}
 }
 \description{
-Title
+This function creates a transiton matrix based on transition probabilities
+predicted using the function `dtms_transitions`.
+}
+\examples{
+simple <- dtms(transient=c("A","B"),
+absorbing="X",
+timescale=0:20)
+## Reshape to transition format
+estdata <- dtms_format(data=simpledata,
+                       dtms=simple,
+                       idvar="id",
+                       timevar="time",
+                       statevar="state")
+## Clean
+estdata <- dtms_clean(data=estdata,
+                      dtms=simple)
+## Fit model
+fit <- dtms_fit(data=estdata)
+## Predict probabilities
+probs    <- dtms_transitions(dtms=simple,
+                             model = fit)
+## Get transition matrix
+Tp <- dtms_matrix(dtms=simple,
+                  probs=probs)
 }

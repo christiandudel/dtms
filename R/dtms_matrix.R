@@ -1,51 +1,83 @@
-#' Title
+#' Creates a transition matrix from transition probabilities
 #'
-#' @param transient
-#' @param absorbing
-#' @param timescale
-#' @param dtms
-#' @param probs
-#' @param fromvar
-#' @param tovar
-#' @param Pvar
-#' @param enforcedeath
-#' @param sep
-#' @param rescale
+#' @description
+#' This function creates a transiton matrix based on transition probabilities
+#' predicted using the function `dtms_transitions`.
+#'
+#' @param probs Data frame with transition probabilities, as created with `dtms_transitions`.
+#' @param dtms DTMS object, as created with `dtms`.
+#' @param transient Character (optional), names of transient states
+#' @param absorbing Character (optional), names of absorbing states
+#' @param timescale Numeric (optional), values of time scale
+#' @param fromvar Character, name of variable with sending state. Default is `from`, as is used per default with `dtms_transitions`.
+#' @param tovar Character, name of variable with receiving state. Default is `to`, as is used per default with `dtms_transitions`.
+#' @param Pvar Character, name of variable with transition probabilities. Default is `P`, as is used per default with `dtms_transitions`.
+#' @param enforcedeath Logical, make sure that every unit moves to absorbing state after last value of time scale. Default is TRUE.
+#' @param sep Character, separator between state name and value of time scale. Default is `_`.
+#' @param rescale Logical, rescale transition probabilities to sum to one? Default is TRUE.
 #'
 #' @return
 #' @export
 #'
 #' @examples
-dtms_matrix <- function(transient=NULL, # character vector of transient states
-                        absorbing=NULL, # character vector of absorbing states
-                        timescale=NULL, # Time steps
-                        dtms=NULL, # DTMS object
-                        probs, # probs frame with probabilities
-                        fromvar="from", # Variable name of starting state in 'probs'
-                        tovar="to", # Variable name of receiving state in 'probs'
-                        Pvar="P", # Variable name of transition probability in 'probs'
-                        enforcedeath=T, # Make sure that at t=T everyone dies?
-                        sep="_", # State/time separator
-                        rescale=T) { # Rescale transition probabilities to sum to 1
+#' simple <- dtms(transient=c("A","B"),
+#' absorbing="X",
+#' timescale=0:20)
+#' ## Reshape to transition format
+#' estdata <- dtms_format(data=simpledata,
+#'                        dtms=simple,
+#'                        idvar="id",
+#'                        timevar="time",
+#'                        statevar="state")
+#' ## Clean
+#' estdata <- dtms_clean(data=estdata,
+#'                       dtms=simple)
+#' ## Fit model
+#' fit <- dtms_fit(data=estdata)
+#' ## Predict probabilities
+#' probs    <- dtms_transitions(dtms=simple,
+#'                              model = fit)
+#' ## Get transition matrix
+#' Tp <- dtms_matrix(dtms=simple,
+#'                   probs=probs)
+
+dtms_matrix <- function(probs,
+                        dtms=NULL,
+                        transient=NULL,
+                        absorbing=NULL,
+                        timescale=NULL,
+                        fromvar="from",
+                        tovar="to",
+                        Pvar="P",
+                        enforcedeath=T,
+                        sep="_",
+                        rescale=T) {
 
   # Use dtms if provided
-  if(!is.null(dtms) & class(dtms)[2]=="dtms") {
-    transient <- dtms$transient
-    absorbing <- dtms$absorbing
+  if(!is.null(dtms)) {
+
+    # Check
+    dtms_proper(dtms)
+
+    # Use values
     timescale <- dtms$timescale
-    timescale <- timescale[-length(timescale)]
+    absorbing <- dtms$absorbing
+    transient <- dtms$transient
   }
 
+  # Adjust time scale (transitions in the model)
+  #timescale <- timescale[-length(timescale)]
+
   # Combine states and time
-  transient_states <- levels(interaction(transient,timescale,sep=sep))
+  transient_states <- dtms_combine(transient,timescale,sep=sep)
   absorbing <- paste(absorbing)
   all_states <- c(transient_states,absorbing)
 
   # Get names in probs right
-  probs <- probs  |>  dplyr::rename_with(~ c("from","to","P"),c(fromvar,tovar,Pvar))
+  probs <- dtms_rename(probs,c(fromvar,tovar,Pvar),c("from","to","P"))
 
   # Subset
-  probs <- probs |> dplyr::filter(from%in%transient_states & to%in%all_states)
+  probs <- subset(probs,subset=from%in%transient_states & to%in%all_states)
 
   # Total number of transient and absorbing states
   s_states <- length(transient_states)
@@ -53,11 +85,10 @@ dtms_matrix <- function(transient=NULL, # character vector of transient states
   n_states <- length(all_states)
 
   # Reshape
-  Tm <- probs |>
-    dplyr::select(from,to,P) |>
-    tidyr::pivot_wider(id_cols     = c(from),
-                       names_from  = to,
-                       values_from = P)
+  Tm <- stats::reshape(probs[,c("from","to","P")],
+                  timevar="to",
+                  idvar="from",
+                  direction="wide")
 
   # Edit a bit
   Tm[is.na(Tm)] <- 0
@@ -67,6 +98,11 @@ dtms_matrix <- function(transient=NULL, # character vector of transient states
   # Generate matrix
   Tm <- as.matrix(Tm)
   rownames(Tm) <- keepnames
+
+  # Column names
+  oldnames <- strsplit(colnames(Tm),split="[.]")
+  oldnames <- lapply(oldnames,function(x) x[2])
+  colnames(Tm) <- unlist(oldnames)
 
   # Add "missing" starting states, if any
   addnames <- rownames(Tm)[!rownames(Tm)%in%colnames(Tm)]

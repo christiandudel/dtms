@@ -119,14 +119,15 @@ dtms_transitions <- function(model,
   nvar <- length(varying)
   if(nvar>0) {
     for(var in 1:nvar) {
-      # Variable name
+      # Get variable name
       varname <- names(varying)[var]
-      # Value
+      # Get values
       value <- varying[[var]]
+      # Check if enough values
       if(length(value)!=length(timescale)) stop("Wrong number of time-varying values")
       # Match to time variable
       assign_values <- match(model_frame[,timevar],timescale)
-      # Assign
+      # Assign values
       model_frame[varname] <- value[assign_values]
     }
   }
@@ -140,13 +141,13 @@ dtms_transitions <- function(model,
   model_frame$from <- paste(model_frame$from,model_frame$time,sep=sep)
 
   # Reshape
-  model_frame <- reshape(model_frame,
-                         varying=all_states,
-                         idvar=fromvar,
-                         timevar=tovar,
-                         times=all_states,
-                         direction="long",
-                         v.names=Pvar)
+  model_frame <- stats::reshape(model_frame,
+                                varying=all_states,
+                                idvar=fromvar,
+                                timevar=tovar,
+                                times=all_states,
+                                direction="long",
+                                v.names=Pvar)
 
   # Values of receiving variable
   rightrows <- model_frame[,tovar]%in%transient

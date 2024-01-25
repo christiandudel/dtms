@@ -70,3 +70,19 @@ dtms_rename <- function(data,oldnames,newnames) {
   return(data)
 
 }
+
+### Combines values; e.g., to combine state names with time scale values
+dtms_combine <- function(values1,values2,sep) {
+
+  # Generate output vector
+  output <- character(0)
+
+  # Get values
+  for(value in values1) {
+    output <- c(output,paste(value,values2,sep=sep))
+  }
+
+  # Return
+  return(output)
+
+}
