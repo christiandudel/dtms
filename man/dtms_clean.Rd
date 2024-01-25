@@ -21,7 +21,7 @@ dtms_clean(
 \arguments{
 \item{data}{Data frame (or similar) in transition format as created with `dtms_format`.}
 
-\item{dtms}{DTMS object as created with `dtms`}
+\item{dtms}{DTMS object as created with `dtms`.}
 
 \item{fromvar}{Character string (optional), name of the variable with the starting state.}
 

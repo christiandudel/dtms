@@ -1,49 +1,96 @@
-#' Title
+#' Predict transition probabilities
 #'
-#' @param transient
-#' @param absorbing
-#' @param timescale
-#' @param dtms
-#' @param model
-#' @param constant
-#' @param varying
-#' @param sep
-#' @param timestep
-#' @param timevar
-#' @param fromvar
-#' @param tovar
-#' @param Pvar
+#' @description
+#' `dtms_transitions` predicts transition probabilities based on a model
+#' estimated with `dtms_fit`.
 #'
-#' @return
+#' @details
+#' Predicted transition probabilities are returned as a data frame, and not
+#' as a transition matrix. While the latter is required for applying Markov
+#' chain methods, the data frame is more convenient for viewing and
+#' analyzing the transition probabilities themselves.
+#'
+#' Depending on the model specification, the prediction of transition
+#' probabilities will require values for predictor variables which can be
+#' specified with the arguments `constant` and `varying` for time-constant and
+#' time-varying variables, respectively. In both cases, named lists have to be
+#' used, where each entry name must correspond to a variable name in the model.
+#' For time-constant variables, each list entry is of length one and provides
+#' a value for the corresponding time-constant variable. For time-varying
+#' variables, each entry must have the length of the time scale minus one, and
+#' provide a value for each (potential) transition in the model; i.e., starting
+#' from time t=0, starting from time t=1, etc., until time t=T-1.
+#'
+#' The argument `separator` sets the separator used to create state names. State
+#' names are either a combination of the name of a transient state and a value
+#' of the time scale, or the name of an absorbing state.
+#'
+#' @param model Model for transition probabilities estimated with `dtms_fit`.
+#' @param dtms DTMS object as created with `dtms`.
+#' @param constant List (optional) with values for time-constant predictors (see details).
+#' @param varying List (optional) with values for time-varying predictors (see details).
+#' @param transient Character (optional), names of transient states in the model.
+#' @param absorbing Character (optional), names of absorbing states in the model.
+#' @param timescale Numeric (optional), values of the time scale.
+#' @param timestep Numeric (optional), step length of the time scale.
+#' @param timevar Character, name of variable with time scale in output data. Default is `time`.
+#' @param fromvar Character, name of variable with sending state in output data. Default is `from`.
+#' @param tovar Character, name of variable with receiving state in output data. Default is `to`.
+#' @param Pvar Character, name of variable with transition probabilities in output data. Default is `P`.
+#' @param sep Character, separator between state name and value of time scale. Default is `_`, see details.
+#'
+#' @return A data frame with transition probabilities.
 #' @export
 #'
 #' @examples
-dtms_transitions <- function(transient=NULL,
-                             absorbing=NULL,
-                             timescale=NULL,
+#' ## Define model: Absorbing and transient states, time scale
+#' simple <- dtms(transient=c("A","B"),
+#'                absorbing="X",
+#'                timescale=0:20)
+#' ## Reshape to transition format
+#' estdata <- dtms_format(data=simpledata,
+#'                        dtms=simple,
+#'                        idvar="id",
+#'                        timevar="time",
+#'                        statevar="state")
+#' ## Clean
+#' estdata <- dtms_clean(data=estdata,
+#'                       dtms=simple)
+#' ## Fit model
+#' fit <- dtms_fit(data=estdata)
+#' ## Predict probabilities
+#' probs    <- dtms_transitions(dtms=simple,
+#'                              model = fit)
+
+dtms_transitions <- function(model,
                              dtms=NULL,
-                             model,
                              constant=NULL,
                              varying=NULL,
-                             sep="_",
+                             transient=NULL,
+                             absorbing=NULL,
+                             timescale=NULL,
                              timestep=NULL,
                              timevar="time",
                              fromvar="from",
                              tovar="to",
-                             Pvar="P") {
+                             Pvar="P",
+                             sep="_") {
 
   # Use dtms if provided
-  if(!is.null(dtms) & class(dtms)[2]=="dtms") {
-    if(is.null(transient)) transient <- dtms$transient
-    if(is.null(absorbing)) absorbing <- dtms$absorbing
-    if(is.null(timescale)) {
-      timescale <- dtms$timescale
-      timescale <- timescale[-length(timescale)]
-    }
-    if(is.null(timestep)) {
-      timestep <- dtms$timestep
-    }
+  if(!is.null(dtms)) {
+
+    # Check
+    proper_dtms(dtms)
+
+    # Use values
+    timescale <- dtms$timescale
+    absorbing <- dtms$absorbing
+    transient <- dtms$transient
+    timestep <- dtms$timestep
   }
+
+  # Adjust time scale (transitions in the model)
+  timescale <- timescale[-length(timescale)]
 
   # Get full state space
   all_states <- paste(c(transient,absorbing))
@@ -77,21 +124,23 @@ dtms_transitions <- function(transient=NULL,
     }
   }
 
-  # Predict
+  # Predict (might need adjustment for other packages)
+  if(class(model)=="vgam") {
   model_frame[,all_states] <- stats::predict(model,model_frame,"response")[,all_states]
+  } else stop("Currently only vgam is supported")
 
   # Reshape
   model_frame <- model_frame |> tidyr::pivot_longer(cols=all_states,
-                                              names_to=tovar,
-                                              values_to=Pvar)
+                                                    names_to=tovar,
+                                                    values_to=Pvar)
 
   # Get state names right with time
   model_frame <- model_frame |> dplyr::mutate(newfrom=ifelse(!!dplyr::sym(fromvar)%in%transient,
-                                                       paste(!!dplyr::sym(fromvar),!!dplyr::sym(timevar),sep=sep),
-                                                       !!dplyr::sym(fromvar)),
-                                        newto=ifelse(!!dplyr::sym(tovar)%in%transient,
-                                                     paste(!!dplyr::sym(tovar),!!dplyr::sym(timevar)+timestep,sep=sep),
-                                                     !!dplyr::sym(tovar)))
+                                                             paste(!!dplyr::sym(fromvar),!!dplyr::sym(timevar),sep=sep),
+                                                             !!dplyr::sym(fromvar)),
+                                              newto=ifelse(!!dplyr::sym(tovar)%in%transient,
+                                                           paste(!!dplyr::sym(tovar),!!dplyr::sym(timevar)+timestep,sep=sep),
+                                                           !!dplyr::sym(tovar)))
 
   # Keep and rename variables
   model_frame <- model_frame[,c("newfrom","newto",timevar,Pvar)]

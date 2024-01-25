@@ -42,7 +42,7 @@
 #'
 #'
 #' @param data Data frame (or similar) in transition format as created with `dtms_format`.
-#' @param dtms DTMS object as created with `dtms`
+#' @param dtms DTMS object as created with `dtms`.
 #' @param fromvar Character string (optional), name of the variable with the starting state.
 #' @param tovar Character string (optional), name of the variable with the receiving state.
 #' @param timevar Character string (optional), name of the variable with the time scale.
