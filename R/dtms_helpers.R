@@ -86,3 +86,24 @@ dtms_combine <- function(values1,values2,sep) {
   return(output)
 
 }
+
+### Check if a short state name is in long name
+dtms_in <- function(vector,name,sep) {
+  res <- lapply(strsplit(vector,split=sep),function(y) any(name%in%y) )
+  res <- unlist(res)
+  return(res)
+}
+
+### Get time from long name
+dtms_gettime <- function(vector,sep) {
+  res <- lapply(strsplit(vector,split=sep),function(y) y[2] )
+  res <- unlist(res) |> as.numeric()
+  return(res)
+}
+
+### Get state from long name
+dtms_getstate <- function(vector,sep) {
+  res <-lapply(strsplit(vector,split=sep),function(x) x[1])
+  res <- unlist(res)
+  return(res)
+}
