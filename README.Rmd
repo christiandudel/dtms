@@ -196,6 +196,19 @@ dtms_expectancy(dtms=hrs,
                 matrix=Tw,
                 start_distr=Sw)
 
+## A variant: ignoring retirement as a starting state (shown only for men)
+limited <- c("Employed","Inactive")
+
+Smwr <- dtms_start(dtms=hrs,
+                   data=estdata,
+                   start_state=limited,
+                   variables=list(Gender=0))
+
+dtms_expectancy(dtms=hrs,
+                matrix=Tm,
+                start_state=limited,
+                start_distr=Smwr)
+
 ## Lifetime risk of reaching retirement
 dtms_risk(dtms=hrs,
           matrix=Tm,

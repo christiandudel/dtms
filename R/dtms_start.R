@@ -70,17 +70,15 @@ dtms_start <- function(data,
     timescale <- dtms$timescale
   }
 
-  # Starting time
+  # Starting state and time
+  if(is.null(start_state)) start_state <- transient
   if(is.null(start_time)) start_time <- min(timescale)
 
-  # Starting states
-  if(is.null(start_state)) {
-    starting <- dtms_combine(transient,start_time,sep=sep)
-  } else {
-    starting <- dtms_combine(start_state,start_time,sep=sep)
-  }
+  # Starting states, long names
+  starting <- dtms_combine(start_state,start_time,sep=sep)
 
-  # Restrict data: Time
+  # Restrict data: States and time
+  data <- data[data[,fromvar]%in%start_state,]
   data <- data[data[,timevar]==start_time,]
 
   # Apply restrictions, if any
@@ -93,7 +91,7 @@ dtms_start <- function(data,
   result <- data[,fromvar] |> table() |> prop.table()
 
   # Match with starting names
-  name_order <- match(names(result),transient)
+  name_order <- match(names(result),start_state)
   result <- as.numeric(result)[name_order]
   names(result) <- starting
 

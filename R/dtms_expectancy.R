@@ -99,15 +99,12 @@ dtms_expectancy <- function(matrix,
     timestep <- dtms$timestep
   }
 
-  # Starting time
+  # Starting state and time
+  if(is.null(start_state)) start_state <- transient
   if(is.null(start_time)) start_time <- min(timescale)
 
-  # Starting states
-  if(is.null(start_state)) {
-    starting <- dtms_combine(transient,start_time,sep=sep)
-  } else {
-    starting <- dtms_combine(start_state,start_time,sep=sep)
-  }
+  # Starting states, long names
+  starting <- dtms_combine(start_state,start_time,sep=sep)
 
   # Number of starting and receiving states
   nstart <- length(starting)

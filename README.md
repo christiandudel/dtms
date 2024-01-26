@@ -320,6 +320,23 @@ dtms_expectancy(dtms=hrs,
 #> start:Retired_50   7.836675 5.486704 18.24103 31.56440
 #> AVERAGE           10.450573 5.607548 16.68838 32.74651
 
+## A variant: ignoring retirement as a starting state (shown only for men)
+limited <- c("Employed","Inactive")
+
+Smwr <- dtms_start(dtms=hrs,
+                   data=estdata,
+                   start_state=limited,
+                   variables=list(Gender=0))
+
+dtms_expectancy(dtms=hrs,
+                matrix=Tm,
+                start_state=limited,
+                start_distr=Smwr)
+#>                    Employed Inactive  Retired    TOTAL
+#> start:Employed_50 13.307334 3.074605 13.53758 29.91952
+#> start:Inactive_50  8.782989 6.496935 13.75116 29.03108
+#> AVERAGE           12.650574 3.571394 13.56859 29.79056
+
 ## Lifetime risk of reaching retirement
 dtms_risk(dtms=hrs,
           matrix=Tm,
