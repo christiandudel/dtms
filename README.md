@@ -705,7 +705,7 @@ dtms_first(dtms=hrs,
 #> AVERAGE           9.734565e-07 4.465618e-07               1
 #> AVERAGE(COND.)    1.025810e-06 4.705784e-07               1
 
-### Last exit
+## Last exit
   
 # Leaving employment to any state
 dtms_last(dtms=hrs,

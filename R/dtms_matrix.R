@@ -16,7 +16,7 @@
 #' @param sep Character, separator between state name and value of time scale. Default is `_`.
 #' @param rescale Logical, rescale transition probabilities to sum to one? Default is TRUE.
 #'
-#' @return
+#' @return Returns a transition matrix.
 #' @export
 #'
 #' @examples

@@ -229,7 +229,7 @@ dtms_first(dtms=hrs,
            risk="Retired",
            start_distr=Sw)  
 
-### Last exit
+## Last exit
   
 # Leaving employment to any state
 dtms_last(dtms=hrs,

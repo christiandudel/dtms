@@ -103,37 +103,26 @@ dtms_transitions <- function(model,
   names(model_frame) <- c(fromvar,timevar)
 
   # Add time-constant covariates
-  nvar <- length(constant)
-  if(nvar>0) {
-    for(var in 1:nvar) {
-      # Variable name
-      varname <- names(constant)[var]
-      # Value
-      value <- constant[[var]]
-      # Assign
-      model_frame[varname] <- value
-    }
+  varnames <- names(constant)
+  for(var in varnames) {
+    model_frame[var] <- constant[[var]]
   }
 
   # Add time-varying covariates
-  nvar <- length(varying)
-  if(nvar>0) {
-    for(var in 1:nvar) {
-      # Get variable name
-      varname <- names(varying)[var]
-      # Get values
-      value <- varying[[var]]
-      # Check if enough values
-      if(length(value)!=length(timescale)) stop("Wrong number of time-varying values")
-      # Match to time variable
-      assign_values <- match(model_frame[,timevar],timescale)
-      # Assign values
-      model_frame[varname] <- value[assign_values]
-    }
+  varnames <- names(varying)
+  for(var in varnames) {
+    # Get values
+    value <- varying[[var]]
+    # Check if enough values
+    if(length(value)!=length(timescale)) stop("Wrong number of time-varying values")
+    # Match to time variable
+    assign_values <- match(model_frame[,timevar],timescale)
+    # Assign values
+    model_frame[var] <- value[assign_values]
   }
 
   # Predict (might need adjustment for other packages)
-  if(class(model)=="vgam") {
+  if(inherits(model,"vgam")) {
     model_frame[,all_states] <- stats::predict(model,model_frame,"response")[,all_states]
   } else stop("Currently only vgam is supported")
 
@@ -149,7 +138,7 @@ dtms_transitions <- function(model,
                                 direction="long",
                                 v.names=Pvar)
 
-  # Values of receiving variable
+  # Values of receiving state (state name + time)
   rightrows <- model_frame[,tovar]%in%transient
   oldvalues <- model_frame[rightrows,tovar]
   timevalues <- model_frame[rightrows,timevar]+timestep

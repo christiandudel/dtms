@@ -15,7 +15,7 @@
 #' @param method Character, chooses package for multinomial logistic regression, currently only `VGAM` supported.
 #' @param ... Further arguments passed to estimation functions.
 #'
-#' @return
+#' @return Returns an object with class depending on the package used.
 #' @export
 #'
 #' @examples

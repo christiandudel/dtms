@@ -41,6 +41,9 @@ dtms_matrix(
 
 \item{rescale}{Logical, rescale transition probabilities to sum to one? Default is TRUE.}
 }
+\value{
+Returns a transition matrix.
+}
 \description{
 This function creates a transiton matrix based on transition probabilities
 predicted using the function `dtms_transitions`.

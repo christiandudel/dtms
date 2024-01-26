@@ -1,38 +1,73 @@
-#' Title
+#' Tabulate starting distribution
 #'
-#' @param transient
-#' @param timescale
-#' @param dtms
-#' @param data
-#' @param start_time
-#' @param start_state
-#' @param fromvar
-#' @param timevar
-#' @param variables
-#' @param sep
+#' @description
+#' Tabulates the starting distribution.
 #'
-#' @return
+#' @details
+#' Per default, the starting distribution is the distribution of transient
+#' states #' at the first value of the time scale in the data. This can be
+#' changed to any value of the time scale, and any set of states. The
+#' distribution can also be conditional on further covariate values which can be
+#' specified with the argument `variables`.
+#'
+#' @param data Data in transition format, as created with `dtms_format` and cleaned with `dtms_clean`.
+#' @param dtms DTMS object.
+#' @param variables List (optional), a named list with covariate values which are used to restrict the data further.
+#' @param transient Character (optional), names of all transient states.
+#' @param timescale Numeric (optional), values of the time scale.
+#' @param start_state Character (optional), names of starting states. If NULL (default), all transient states will be considered.
+#' @param start_time Numeric (optional), start time. If NULL (default), the first value of the time scale will be used.
+#' @param fromvar Character, name of variable with starting state. Default is `from`, which is the package default for all functions.
+#' @param timevar Character, name of variable with time scale. Default is `time`, which is the package default for all functions.
+#' @param sep Character, separator for constructed state names. Default is `_`, which is the package default for all functions.
+#'
+#' @return Returns a table of the starting distribution.
 #' @export
 #'
 #' @examples
-dtms_start <- function(transient=NULL, # Names of transient states
-                       timescale=NULL, # Time scale
-                       dtms=NULL,# DTMS model
-                       data,# data frame with cleaned transition data
-                       start_time=NULL,# Starting time, will be lowest time in 'dtms' if NULL
-                       start_state=NULL,# Names of starting states, will be all transient states in 'dtms' if NULL
-                       fromvar="from", # Variable with starting state
-                       timevar="time", # Variable name of time
-                       variables=NULL, # List with variable values
-                       sep="_") { # Separator for state names
+## Define model: Absorbing and transient states, time scale
+#' hrs <- dtms(transient=c("Employed","Inactive","Retired"),
+#'             absorbing="Dead",
+#'             timescale=50:99)
+#' ## Reshape
+#' estdata <- dtms_format(data=hrsdata,
+#'                        dtms=hrs,
+#'                        idvar="ID",
+#'                        timevar="Age",
+#'                        statevar="State")
+#' ## Drop dead-to-dead transitions etc
+#' estdata <- dtms_clean(data=estdata,
+#'                       dtms=hrs)
+#' ## Starting distributions
+#' # Men
+#' Sm <- dtms_start(dtms=hrs,
+#'                  data=estdata,
+#'                  variables=list(Gender=0))
+#' # Women
+#' Sw <- dtms_start(dtms=hrs,
+#'                  data=estdata,
+#'                  variables=list(Gender=1))
+
+dtms_start <- function(data,
+                       dtms=NULL,
+                       variables=NULL,
+                       transient=NULL,
+                       timescale=NULL,
+                       start_state=NULL,
+                       start_time=NULL,
+                       fromvar="from",
+                       timevar="time",
+                       sep="_") {
 
   # Use dtms if provided
-  if(!is.null(dtms) & class(dtms)[2]=="dtms") {
-    if(is.null(transient)) transient <- dtms$transient
-    if(is.null(timescale)) {
-      timescale <- dtms$timescale
-      timescale <- timescale[-length(timescale)]
-    }
+  if(!is.null(dtms)) {
+
+    # Check
+    dtms_proper(dtms)
+
+    # Use values
+    transient <- dtms$transient
+    timescale <- dtms$timescale
   }
 
   # Starting time
@@ -40,25 +75,22 @@ dtms_start <- function(transient=NULL, # Names of transient states
 
   # Starting states
   if(is.null(start_state)) {
-    starting <- levels(interaction(transient,start_time,sep=sep))
+    starting <- dtms_combine(transient,start_time,sep=sep)
   } else {
-    starting <- levels(interaction(start_state,start_time,sep=sep))
+    starting <- dtms_combine(start_state,start_time,sep=sep)
   }
 
   # Restrict data: Time
   data <- data[data[,timevar]==start_time,]
 
   # Apply restrictions, if any
-  nvar <- length(variables)
   varnames <- names(variables)
-  if(nvar>0) {
-    for(var in 1:nvar) {
-      data <- data[data[,varnames[var]]==variables[[var]],]
-    }
+  for(var in varnames) {
+    data <- data[data[,var]==variables[[var]],]
   }
 
   # Tabulate
-  result <- prop.table(table(data[,fromvar]))
+  result <- data[,fromvar] |> table() |> prop.table()
 
   # Match with starting names
   name_order <- match(names(result),transient)
@@ -68,4 +100,4 @@ dtms_start <- function(transient=NULL, # Names of transient states
   # Return
   return(result)
 
-} #End of function
+}

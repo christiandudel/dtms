@@ -38,6 +38,9 @@ dtms_fit(
 
 \item{...}{Further arguments passed to estimation functions.}
 }
+\value{
+Returns an object with class depending on the package used.
+}
 \description{
 This function estimates a constrained discrete-time multistate model
 using multinomial logistic regression.

@@ -2,24 +2,75 @@
 % Please edit documentation in R/dtms_start.R
 \name{dtms_start}
 \alias{dtms_start}
-\title{Title}
+\title{Tabulate starting distribution}
 \usage{
 dtms_start(
+  data,
+  dtms = NULL,
+  variables = NULL,
   transient = NULL,
   timescale = NULL,
-  dtms = NULL,
-  data,
-  start_time = NULL,
   start_state = NULL,
+  start_time = NULL,
   fromvar = "from",
   timevar = "time",
-  variables = NULL,
   sep = "_"
 )
 }
 \arguments{
-\item{sep}{}
+\item{data}{Data in transition format, as created with `dtms_format` and cleaned with `dtms_clean`.}
+
+\item{dtms}{DTMS object.}
+
+\item{variables}{List (optional), a named list with covariate values which are used to restrict the data further.}
+
+\item{transient}{Character (optional), names of all transient states.}
+
+\item{timescale}{Numeric (optional), values of the time scale.}
+
+\item{start_state}{Character (optional), names of starting states. If NULL (default), all transient states will be considered.}
+
+\item{start_time}{Numeric (optional), start time. If NULL (default), the first value of the time scale will be used.}
+
+\item{fromvar}{Character, name of variable with starting state. Default is `from`, which is the package default for all functions.}
+
+\item{timevar}{Character, name of variable with time scale. Default is `time`, which is the package default for all functions.}
+
+\item{sep}{Character, separator for constructed state names. Default is `_`, which is the package default for all functions.}
+}
+\value{
+Returns a table of the starting distribution.
 }
 \description{
-Title
+Tabulates the starting distribution.
+}
+\details{
+Per default, the starting distribution is the distribution of transient
+states #' at the first value of the time scale in the data. This can be
+changed to any value of the time scale, and any set of states. The
+distribution can also be conditional on further covariate values which can be
+specified with the argument `variables`.
+}
+\examples{
+hrs <- dtms(transient=c("Employed","Inactive","Retired"),
+            absorbing="Dead",
+            timescale=50:99)
+## Reshape
+estdata <- dtms_format(data=hrsdata,
+                       dtms=hrs,
+                       idvar="ID",
+                       timevar="Age",
+                       statevar="State")
+## Drop dead-to-dead transitions etc
+estdata <- dtms_clean(data=estdata,
+                      dtms=hrs)
+## Starting distributions
+# Men
+Sm <- dtms_start(dtms=hrs,
+                 data=estdata,
+                 variables=list(Gender=0))
+# Women
+Sw <- dtms_start(dtms=hrs,
+                 data=estdata,
+                 variables=list(Gender=1))
 }
