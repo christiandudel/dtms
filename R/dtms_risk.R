@@ -2,7 +2,7 @@
 #'
 #' @description
 #' The function `dtms_risk` calculates the (partial) lifetime risk of ever
-#' reaching a state specified with the argument `risk`.#'
+#' reaching a state specified with the argument `risk`.
 #'
 #' @param matrix Matrix with transition probabilities, as generated with `dtms_matrix`
 #' @param risk Character, name of the state of interest.
@@ -19,6 +19,34 @@
 #' @export
 #'
 #' @examples
+#' ## Define model: Absorbing and transient states, time scale
+#' simple <- dtms(transient=c("A","B"),
+#'                absorbing="X",
+#'                timescale=0:20)
+#' ## Reshape to transition format
+#' estdata <- dtms_format(data=simpledata,
+#'                        dtms=simple,
+#'                        idvar="id",
+#'                        timevar="time",
+#'                        statevar="state")
+#' ## Clean
+#' estdata <- dtms_clean(data=estdata,
+#'                       dtms=simple)
+#' # Fit model
+#' fit <- dtms_fit(data=estdata)
+#' ## Predict probabilities
+#' probs    <- dtms_transitions(dtms=simple,
+#'                              model = fit)
+#' ## Get transition matrix
+#' Tp <- dtms_matrix(dtms=simple,
+#'                   probs=probs)
+#' ## Get starting distribution
+#' S <- dtms_start(dtms=simple,
+#'                 data=estdata)
+#' ## Lifetime risk
+#' dtms_risk(dtms=simple,
+#'           matrix=Tp,
+#'           risk="A")
 
 dtms_risk <- function(matrix,
                       risk,
