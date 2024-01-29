@@ -45,7 +45,7 @@ one absorbing state (X). The time scale goes from 0 to 20. Transition
 probabilities do change depending on time.
 
 ``` r
-## Load package
+## Load package 
 library(dtms)
 
 ## Define model: Absorbing and transient states, time scale

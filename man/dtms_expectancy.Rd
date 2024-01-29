@@ -21,7 +21,7 @@ dtms_expectancy(
 )
 }
 \arguments{
-\item{matrix}{Matrix with transition probabilities, as generated with `dtms_matrix`}
+\item{matrix}{Matrix with transition probabilities, as generated with `dtms_matrix`.}
 
 \item{dtms}{DTMS object as generated with `dtms`.}
 
@@ -42,8 +42,6 @@ dtms_expectancy(
 \item{correction}{Numeric (optional), correction for expectancy when starting state and state under consideration match, see details. Defaults to 0.5.}
 
 \item{total}{Logical (optional), calculate total expectancy. Default is TRUE.}
-
-\item{sep}{Character (optional), separator for between short state name and time in long state name.}
 
 \item{verbose}{Logical (optional), indicate whether correction and adjustment for timestep are applied. Default is FALSE.}
 }

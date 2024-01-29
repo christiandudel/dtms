@@ -26,7 +26,7 @@
 #' correction uses the entry `timestep` of `dtms`, or alternatively the
 #' argument `timestep`, and multiplies results with its value.
 #'
-#' @param matrix Matrix with transition probabilities, as generated with `dtms_matrix`
+#' @param matrix Matrix with transition probabilities, as generated with `dtms_matrix`.
 #' @param dtms DTMS object as generated with `dtms`.
 #' @param start_distr Numeric (optional), distribution of starting states. If specified, average expectancy over all starting states will be calculated.
 #' @param start_state Character (optional), name of starting states. If NULL (default) all transient states will be used.
@@ -37,7 +37,6 @@
 #' @param timescale Numeric (optional), values of time scale.
 #' @param timestep Numeric (optional), step length of time scale.
 #' @param total Logical (optional), calculate total expectancy. Default is TRUE.
-#' @param sep Character (optional), separator for between short state name and time in long state name.
 #' @param verbose Logical (optional), indicate whether correction and adjustment for timestep are applied. Default is FALSE.
 #'
 #' @return Returns a matrix with state expectancy for all transient states.
@@ -147,24 +146,31 @@ dtms_expectancy <- function(matrix,
 
   # Correction
   if(is.numeric(correction)) {
+
     # Only relevant if starting state = relevant state
     short_start <- dtms_getstate(starting,sep)
     correction_matrix <- outer(short_start,transient,FUN='==')
+
     # Adjust
     correction_matrix <- correction_matrix*correction
     result <- result - correction_matrix
+
     # Output
     if(verbose) cat("(Applying correction)","\n\n")
   }
 
   # Calculate average if starting distribution is provided
   if(!is.null(start_distr)) {
+
     # Check if matching
     if(length(start_distr)!=dim(result)[1]) stop("Starting distribution too long or short")
+
     # Match to starting/row ordering of result
     start_distr <- start_distr[match(names(start_distr),starting)]
+
     # Calculate
     AVERAGE <- colSums(result*start_distr)
+
     # Put into matrix for results
     result <- rbind(result,AVERAGE)
   }

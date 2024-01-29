@@ -1,62 +1,73 @@
-#' Title
+#' Calculate the lifetime risk of ever reaching a state
 #'
-#' @param matrix
-#' @param transient
-#' @param timescale
-#' @param dtms
-#' @param risk
-#' @param start_time
-#' @param start_state
-#' @param start_distr
-#' @param end_time
-#' @param sep
+#' @description
+#' The function `dtms_risk` calculates the (partial) lifetime risk of ever
+#' reaching a state specified with the argument `risk`.#'
 #'
-#' @return
+#' @param matrix Matrix with transition probabilities, as generated with `dtms_matrix`
+#' @param risk Character, name of the state of interest.
+#' @param dtms DTMS object as generated with `dtms`.
+#' @param start_distr Numeric (optional), distribution of starting states. If specified, average expectancy over all starting states will be calculated.
+#' @param start_state Character (optional), name of starting states. If NULL (default) all transient states will be used.
+#' @param start_time Numeric (optional), value of time scale for start. If NULL (default) first value of time scale will be used.
+#' @param end_time Numeric (optional), last value of time scale to consider. If NULL (default) all values of time scale starting from start_time will be used.
+#' @param transient Character (optional), names of transient states.
+#' @param timescale Numeric (optional), values of time scale.
+#' @param sep Character (optional), separator for between short state name and time in long state name.
+#'
+#' @return Probability of ever reaching state `risk`.
 #' @export
 #'
 #' @examples
-dtms_risk <- function(matrix,# Matrix with transition probabilities generated with dtms_matrix
-                      transient=NULL, # Names of transient states
-                      timescale=NULL, # Time scale
-                      dtms=NULL,# DTMS model
-                      risk, # name of state(s) for which risk is of interest
-                      start_time=NULL,# Starting time, will be lowest time in 'dtms' if NULL
-                      start_state=NULL,# Names of starting states, will be all transient states in 'dtms' if NULL
-                      start_distr=NULL,# Distribution of starting states for average
-                      end_time=NULL, # Time up to which lifetime risks are calculated, making them partial lifetime risks
-                      sep="_") {# Separator for names
+
+dtms_risk <- function(matrix,
+                      risk,
+                      dtms=NULL,
+                      start_distr=NULL,
+                      start_state=NULL,
+                      start_time=NULL,
+                      end_time=NULL,
+                      transient=NULL,
+                      timescale=NULL,
+                      sep="_") {
 
   # Use dtms if provided
-  if(!is.null(dtms) & class(dtms)[2]=="dtms") {
-    if(is.null(transient)) transient <- dtms$transient
-    if(is.null(timescale)) {
-      timescale <- dtms$timescale
-      timescale <- timescale[-length(timescale)]
-    }
+  if(!is.null(dtms)) {
+
+    # Check
+    dtms_proper(dtms)
+
+    # Use values
+    transient <- dtms$transient
+    timescale <- dtms$timescale
+    timestep <- dtms$timestep
   }
 
-  # Starting states
-  if(is.null(start_state)) {
-    starting <- levels(interaction(transient,min(timescale),sep=sep))
-  } else {
-    starting <- levels(interaction(start_state,start_time,sep=sep))
-  }
+  # Starting state and time
+  if(is.null(start_state)) start_state <- transient
+  if(is.null(start_time)) start_time <- min(timescale)
+
+  # Starting states, long names
+  starting <- dtms_combine(start_state,start_time,sep=sep)
+
+  # Time scale: Only transitions starting up to T-1 relevant
+  timescale <- timescale[-length(timescale)]
 
   # States of the transition matrix
-  states <- rownames(matrix)
+  allstates <- rownames(matrix)
 
   # Partition of states: all states which belong to risk
-  selectorU <- unlist(lapply(strsplit(states,sep),function(y) any(risk%in%y) ))
+  selectorU <- dtms_in(allstates,risk,sep)
 
-  # Use end time
+  # Use end_time if specified
   if(!is.null(end_time)) {
-    times <- as.numeric(unlist(lapply(strsplit(states,split=sep),function(y) y[2] )))
+    times <- dtms_gettime(allstates,sep)
     times <- times<=end_time
     times[!is.logical(times)] <- F
-    selectorU <- selectorU & times
+    selector <- selector & times
   }
 
-  # Invert
+  # Invert selection
   selectorD <- !selectorU
 
   # New transition matrix
@@ -74,23 +85,19 @@ dtms_risk <- function(matrix,# Matrix with transition probabilities generated wi
   colnames(newmatrix)[nnewstates+1] <- "Risk"
   rownames(newmatrix)[nnewstates+1] <- "Risk"
 
-  # Which are absorbing
-  whichabsorbing <- which(diag(newmatrix)==1)
-
-  # Umat
-  Umat <- newmatrix[-whichabsorbing,-whichabsorbing]
-
   # Get N
+  Umat <- dtms_absorbing(newmatrix)
   nstates <- dim(Umat)[1]
   Nmat <- solve(diag(1,nstates)-Umat)
 
   # Get R
+  whichabsorbing <- which(diag(newmatrix)==1)
   R <- newmatrix[-whichabsorbing,whichabsorbing]
 
   # Get results
   results <- Nmat%*%R
 
-  # Get results
+  # Get results in shape
   result <- rep(1,length(starting))
   whererisk <- !transient%in%risk
   result[whererisk] <- results[starting[whererisk],"Risk"]
@@ -115,4 +122,4 @@ dtms_risk <- function(matrix,# Matrix with transition probabilities generated wi
   # Return
   return(result)
 
-}  # End of function
+}

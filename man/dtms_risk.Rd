@@ -2,24 +2,46 @@
 % Please edit documentation in R/dtms_risk.R
 \name{dtms_risk}
 \alias{dtms_risk}
-\title{Title}
+\title{Calculate the lifetime risk of ever reaching a state}
 \usage{
 dtms_risk(
   matrix,
+  risk,
+  dtms = NULL,
+  start_distr = NULL,
+  start_state = NULL,
+  start_time = NULL,
+  end_time = NULL,
   transient = NULL,
   timescale = NULL,
-  dtms = NULL,
-  risk,
-  start_time = NULL,
-  start_state = NULL,
-  start_distr = NULL,
-  end_time = NULL,
   sep = "_"
 )
 }
 \arguments{
-\item{sep}{}
+\item{matrix}{Matrix with transition probabilities, as generated with `dtms_matrix`}
+
+\item{risk}{Character, name of the state of interest.}
+
+\item{dtms}{DTMS object as generated with `dtms`.}
+
+\item{start_distr}{Numeric (optional), distribution of starting states. If specified, average expectancy over all starting states will be calculated.}
+
+\item{start_state}{Character (optional), name of starting states. If NULL (default) all transient states will be used.}
+
+\item{start_time}{Numeric (optional), value of time scale for start. If NULL (default) first value of time scale will be used.}
+
+\item{end_time}{Numeric (optional), last value of time scale to consider. If NULL (default) all values of time scale starting from start_time will be used.}
+
+\item{transient}{Character (optional), names of transient states.}
+
+\item{timescale}{Numeric (optional), values of time scale.}
+
+\item{sep}{Character (optional), separator for between short state name and time in long state name.}
+}
+\value{
+Probability of ever reaching state `risk`.
 }
 \description{
-Title
+The function `dtms_risk` calculates the (partial) lifetime risk of ever
+reaching a state specified with the argument `risk`.#'
 }

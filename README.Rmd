@@ -51,7 +51,7 @@ of two transient states (A, B), and one absorbing state (X). The time scale goes
 Transition probabilities do change depending on time. 
 
 ```{r example1}
-## Load package
+## Load package 
 library(dtms)
 
 ## Define model: Absorbing and transient states, time scale
