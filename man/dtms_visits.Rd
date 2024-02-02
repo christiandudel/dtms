@@ -2,7 +2,7 @@
 % Please edit documentation in R/dtms_visits.R
 \name{dtms_visits}
 \alias{dtms_visits}
-\title{Title}
+\title{Calculate the distribution of the time spent in a subset of states}
 \usage{
 dtms_visits(
   matrix,
@@ -21,8 +21,71 @@ dtms_visits(
 )
 }
 \arguments{
-\item{total}{}
+\item{matrix}{Matrix with transition probabilities, as generated with `dtms_matrix`.}
+
+\item{transient}{Character (optional), short names of transient states. If NULL (default) transient states are taken from `dtms` object.}
+
+\item{timescale}{Numeric (optional), values of time scale. If NULL (default) obtained from `dtms` object.}
+
+\item{timestep}{Numeric (optional), step length of time scale. If NULL (default) obtained from `dtms` object.}
+
+\item{dtms}{DTMS object as created with `dtms`.}
+
+\item{risk}{Character (required), names of one or several states for which the time spent should be calculated.}
+
+\item{start_time}{Numeric (optional), value of time scale at start. If NULL (default), first value of time scale is used.}
+
+\item{start_state}{Character (optional), names of one or several starting states. If NULL (default), all transient states will be considered.}
+
+\item{start_distr}{Numeric (optional), distribution of starting states. Needs to be consistent with starting states.}
+
+\item{end_time}{Numeric (optional), value of time scale at end. If NULL (default), last value of time scale is used.}
+
+\item{method}{Character, do transitions happen mid-interval (`mid`, default) or at the end of the interval (`end`), see details.}
+
+\item{sep}{Character (optional), separator between short state name and value of time scale. Default is `_`.}
+
+\item{total}{Logical, should total of distribution be shown? Default is FALSE, as the total always is 1.}
+}
+\value{
+A table with the distribution of time spent in a subset of states.
 }
 \description{
-Title
+A short description...
+}
+\details{
+Mid-interval transitions and transitions at end of interval. Single state
+versus subset of states. Partial distribution.
+}
+\examples{
+## Define model: Absorbing and transient states, time scale
+simple <- dtms(transient=c("A","B"),
+               absorbing="X",
+               timescale=0:20)
+## Reshape to transition format
+estdata <- dtms_format(data=simpledata,
+                       dtms=simple,
+                       idvar="id",
+                       timevar="time",
+                       statevar="state")
+## Clean
+estdata <- dtms_clean(data=estdata,
+                      dtms=simple)
+## Fit model
+fit <- dtms_fit(data=estdata)
+## Predict probabilities
+probs    <- dtms_transitions(dtms=simple,
+                             model = fit)
+## Get transition matrix
+Tp <- dtms_matrix(dtms=simple,
+                  probs=probs)
+## Get starting distribution
+S <- dtms_start(dtms=simple,
+                data=estdata)
+## Distribution of visits
+dtms_visits(dtms=simple,
+            matrix=Tp,
+            risk="A",
+            start_distr=S,
+            total=TRUE)
 }

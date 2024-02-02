@@ -1,23 +1,61 @@
-#' Title
+#' Calculate the distribution of the time spent in a subset of states
 #'
-#' @param matrix
-#' @param transient
-#' @param timescale
-#' @param timestep
-#' @param dtms
-#' @param risk
-#' @param start_time
-#' @param start_state
-#' @param start_distr
-#' @param end_time
-#' @param method
-#' @param sep
-#' @param total
+#' @description
+#' A short description...
 #'
-#' @return
+#' @details
+#' Mid-interval transitions and transitions at end of interval. Single state
+#' versus subset of states. Partial distribution.
+#'
+#' @param matrix Matrix with transition probabilities, as generated with `dtms_matrix`.
+#' @param dtms DTMS object as created with `dtms`.
+#' @param risk Character (required), names of one or several states for which the time spent should be calculated.
+#' @param start_state Character (optional), names of one or several starting states. If NULL (default), all transient states will be considered.
+#' @param start_time Numeric (optional), value of time scale at start. If NULL (default), first value of time scale is used.
+#' @param end_time Numeric (optional), value of time scale at end. If NULL (default), last value of time scale is used.
+#' @param start_distr Numeric (optional), distribution of starting states. Needs to be consistent with starting states.
+#' @param method Character, do transitions happen mid-interval (`mid`, default) or at the end of the interval (`end`), see details.
+#' @param total Logical, should total of distribution be shown? Default is FALSE, as the total always is 1.
+#' @param transient Character (optional), short names of transient states. If NULL (default) transient states are taken from `dtms` object.
+#' @param timescale Numeric (optional), values of time scale. If NULL (default) obtained from `dtms` object.
+#' @param timestep Numeric (optional), step length of time scale. If NULL (default) obtained from `dtms` object.
+#' @param sep Character (optional), separator between short state name and value of time scale. Default is `_`.
+#'
+#' @return A table with the distribution of time spent in a subset of states.
 #' @export
 #'
 #' @examples
+#' ## Define model: Absorbing and transient states, time scale
+#' simple <- dtms(transient=c("A","B"),
+#'                absorbing="X",
+#'                timescale=0:20)
+#' ## Reshape to transition format
+#' estdata <- dtms_format(data=simpledata,
+#'                        dtms=simple,
+#'                        idvar="id",
+#'                        timevar="time",
+#'                        statevar="state")
+#' ## Clean
+#' estdata <- dtms_clean(data=estdata,
+#'                       dtms=simple)
+#' ## Fit model
+#' fit <- dtms_fit(data=estdata)
+#' ## Predict probabilities
+#' probs    <- dtms_transitions(dtms=simple,
+#'                              model = fit)
+#' ## Get transition matrix
+#' Tp <- dtms_matrix(dtms=simple,
+#'                   probs=probs)
+#' ## Get starting distribution
+#' S <- dtms_start(dtms=simple,
+#'                 data=estdata)
+#' ## Distribution of visits
+#' dtms_visits(dtms=simple,
+#'             matrix=Tp,
+#'             risk="A",
+#'             start_distr=S,
+#'             total=TRUE)
+
 dtms_visits <- function(matrix,# Matrix with transition probabilities generated with dtms_matrix
                         transient=NULL, # Names of transient states
                         timescale=NULL, # Time scale
