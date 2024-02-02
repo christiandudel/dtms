@@ -1,11 +1,26 @@
 #' Calculate the distribution of the time spent in a subset of states
 #'
 #' @description
-#' A short description...
+#' Calculates the distribution of the time spent in a state or a subset of states.
 #'
 #' @details
-#' Mid-interval transitions and transitions at end of interval. Single state
-#' versus subset of states. Partial distribution.
+#' The state(s) which count to the time are specified with the argument `risk`.
+#' If several states are specified, the resulting distribution refers to the
+#' lifetime spent in any of the specified states.
+#'
+#' In a discrete-time model, the time spent in a state depends on assumptions
+#' about when transitions happen. Currently, this functions supports two
+#' variants which can be specified with the argument `method`: mid-interval
+#' transitions can be selected with the option `mid` and imply that transitions
+#' happen at the middle of the time interval; and the option `end` assumes
+#' that instead transitions happen at the end of the interval. In this latter
+#' case the distribution of the time spent in a state is equivalent to the
+#' number of visits to that state.
+#'
+#' If a distribution of the starting states is provided with `start_distr` the
+#' output table has two additional rows. One shows the distribution
+#' unconditional on the starting state. The other shows the distribution
+#' conditional on not starting in any state of the risk set.
 #'
 #' @param matrix Matrix with transition probabilities, as generated with `dtms_matrix`.
 #' @param dtms DTMS object as created with `dtms`.
@@ -13,7 +28,7 @@
 #' @param start_state Character (optional), names of one or several starting states. If NULL (default), all transient states will be considered.
 #' @param start_time Numeric (optional), value of time scale at start. If NULL (default), first value of time scale is used.
 #' @param end_time Numeric (optional), value of time scale at end. If NULL (default), last value of time scale is used.
-#' @param start_distr Numeric (optional), distribution of starting states. Needs to be consistent with starting states.
+#' @param start_distr Numeric (optional), distribution of starting states. Needs to be consistent with starting states. If provided, average distribution is provided; see details.
 #' @param method Character, do transitions happen mid-interval (`mid`, default) or at the end of the interval (`end`), see details.
 #' @param total Logical, should total of distribution be shown? Default is FALSE, as the total always is 1.
 #' @param transient Character (optional), short names of transient states. If NULL (default) transient states are taken from `dtms` object.
