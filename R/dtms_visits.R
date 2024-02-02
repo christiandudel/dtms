@@ -56,50 +56,55 @@
 #'             start_distr=S,
 #'             total=TRUE)
 
-dtms_visits <- function(matrix,# Matrix with transition probabilities generated with dtms_matrix
-                        transient=NULL, # Names of transient states
-                        timescale=NULL, # Time scale
-                        timestep=NULL, # Step length
-                        dtms=NULL,# DTMS model
-                        risk, # name of state(s) for which risk is of interest
-                        start_time=NULL,# Starting time, will be lowest time in 'dtms' if NULL
-                        start_state=NULL,# Names of starting states, will be all transient states in 'dtms' if NULL
-                        start_distr=NULL,# Distribution of starting states for average
-                        end_time=NULL, # Time up to which lifetime risks are calculated, making them partial lifetime risks
-                        method="mid", # Mid-interval transitions or end of interval transitions, "mid" or "end"
-                        sep="_",# Separator
-                        total=F) { # Should total risk be added?
+dtms_visits <- function(matrix,
+                        dtms=NULL,
+                        risk,
+                        start_time=NULL,
+                        start_state=NULL,
+                        start_distr=NULL,
+                        end_time=NULL,
+                        method="mid",
+                        transient=NULL,
+                        timescale=NULL,
+                        timestep=NULL,
+                        sep="_",
+                        total=F) {
 
   # Use dtms if provided
-  if(!is.null(dtms) & class(dtms)[2]=="dtms") {
-    if(is.null(transient)) transient <- dtms$transient
-    if(is.null(timescale)) {
-      timescale <- dtms$timescale
-      timescale <- timescale[-length(timescale)]
-    }
-    if(is.null(timestep)) timestep <- dtms$timestep
+  if(!is.null(dtms)) {
+
+    # Check
+    dtms_proper(dtms)
+
+    # Use values
+    transient <- dtms$transient
+    timescale <- dtms$timescale
+    timestep <- dtms$timestep
   }
 
-  # Starting states
-  if(is.null(start_state)) {
-    starting <- levels(interaction(transient,min(timescale),sep=sep))
-  } else {
-    starting <- levels(interaction(start_state,start_time,sep=sep))
-  }
+  # Starting state and time
+  if(is.null(start_state)) start_state <- transient
+  if(is.null(start_time)) start_time <- min(timescale)
+
+  # Starting states, long names
+  starting <- dtms_combine(start_state,start_time,sep=sep)
+
+  # Time scale: Only transitions starting up to T-1 relevant
+  timescale <- timescale[-length(timescale)]
 
   # States of the transition matrix
-  states <- rownames(matrix)
-  nstates <- length(states)
+  allstates <- rownames(matrix)
+  nstates <- length(allstates)
 
   # Partition of states: all states which belong to risk
-  selectorU <- unlist(lapply(strsplit(states,sep),function(y) any(risk%in%y) ))
+  selectorU <- dtms_in(allstates,risk,sep)
 
-  # Use end time
+  # Use end_time if specified
   if(!is.null(end_time)) {
-    times <- as.numeric(unlist(lapply(strsplit(states,split=sep),function(y) y[2] )))
+    times <- dtms_gettime(allstates,sep)
     times <- times<=end_time
     times[!is.logical(times)] <- F
-    selectorU <- selectorU & times
+    selector <- selector & times
   }
 
   # Invert
@@ -138,22 +143,22 @@ dtms_visits <- function(matrix,# Matrix with transition probabilities generated 
   for(i in t_steps) {
     initial_conditions[[i]] <- matrix(data=0,nrow=nstates,ncol=nstates)
     initial_conditions[[i]][selectorD,selectorD] <- Biodem::mtx.exp(matrix[selectorD,selectorD],(i-1))
-    rownames(initial_conditions[[i]]) <- states
-    colnames(initial_conditions[[i]]) <- states
+    rownames(initial_conditions[[i]]) <- allstates
+    colnames(initial_conditions[[i]]) <- allstates
   }
   names(initial_conditions) <- paste("F",t_series,"0",sep="_")
 
   # Generate special case
   initial_conditions[["F_0_0"]] <- diag(1,nstates)
-  rownames(initial_conditions[["F_0_0"]]) <- states
-  colnames(initial_conditions[["F_0_0"]]) <- states
+  rownames(initial_conditions[["F_0_0"]]) <- allstates
+  colnames(initial_conditions[["F_0_0"]]) <- allstates
 
   # Generate matrices for which k>=n+1
   kgeq <- vector("list",t_transitions)
   for(i in t_steps) {
     kgeq[[i]] <- Biodem::mtx.exp(matrix,i-1)
-    rownames(kgeq[[i]]) <- states
-    colnames(kgeq[[i]]) <- states
+    rownames(kgeq[[i]]) <- allstates
+    colnames(kgeq[[i]]) <- allstates
   }
   names(kgeq) <- paste("F",t_series,t_steps,sep="_")
   if(method=="mid") {
@@ -166,8 +171,8 @@ dtms_visits <- function(matrix,# Matrix with transition probabilities generated 
   neg_matrices <- vector("list",t_transitions)
   for(i in t_steps) {
     neg_matrices[[i]] <- matrix(data=0,nrow=nstates,ncol=nstates)
-    rownames(neg_matrices[[i]]) <- states
-    colnames(neg_matrices[[i]]) <- states
+    rownames(neg_matrices[[i]]) <- allstates
+    colnames(neg_matrices[[i]]) <- allstates
   }
   names(neg_matrices) <- paste("F",t_series,"-0.5",sep="_")
 
@@ -187,8 +192,8 @@ dtms_visits <- function(matrix,# Matrix with transition probabilities generated 
           U_UD%*%results[[paste("F",i-1,which_d[k]-0.5,sep="_")]]
       if(method=="end") tmp[[paste("F",i,which_d[k],sep="_")]] <- U_U%*%results[[paste("F",i-1,which_d[k]-1,sep="_")]] +
           U_D%*%results[[paste("F",i-1,which_d[k],sep="_")]]
-      colnames(tmp[[paste("F",i,which_d[k],sep="_")]]) <- states
-      rownames(tmp[[paste("F",i,which_d[k],sep="_")]]) <- states
+      colnames(tmp[[paste("F",i,which_d[k],sep="_")]]) <- allstates
+      rownames(tmp[[paste("F",i,which_d[k],sep="_")]]) <- allstates
     }
 
     results <- c(results,tmp)
@@ -242,4 +247,4 @@ dtms_visits <- function(matrix,# Matrix with transition probabilities generated 
   # Return
   return(result)
 
-}  # End of function
+}

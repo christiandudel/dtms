@@ -6,9 +6,6 @@
 \usage{
 dtms_visits(
   matrix,
-  transient = NULL,
-  timescale = NULL,
-  timestep = NULL,
   dtms = NULL,
   risk,
   start_time = NULL,
@@ -16,18 +13,15 @@ dtms_visits(
   start_distr = NULL,
   end_time = NULL,
   method = "mid",
+  transient = NULL,
+  timescale = NULL,
+  timestep = NULL,
   sep = "_",
   total = F
 )
 }
 \arguments{
 \item{matrix}{Matrix with transition probabilities, as generated with `dtms_matrix`.}
-
-\item{transient}{Character (optional), short names of transient states. If NULL (default) transient states are taken from `dtms` object.}
-
-\item{timescale}{Numeric (optional), values of time scale. If NULL (default) obtained from `dtms` object.}
-
-\item{timestep}{Numeric (optional), step length of time scale. If NULL (default) obtained from `dtms` object.}
 
 \item{dtms}{DTMS object as created with `dtms`.}
 
@@ -42,6 +36,12 @@ dtms_visits(
 \item{end_time}{Numeric (optional), value of time scale at end. If NULL (default), last value of time scale is used.}
 
 \item{method}{Character, do transitions happen mid-interval (`mid`, default) or at the end of the interval (`end`), see details.}
+
+\item{transient}{Character (optional), short names of transient states. If NULL (default) transient states are taken from `dtms` object.}
+
+\item{timescale}{Numeric (optional), values of time scale. If NULL (default) obtained from `dtms` object.}
+
+\item{timestep}{Numeric (optional), step length of time scale. If NULL (default) obtained from `dtms` object.}
 
 \item{sep}{Character (optional), separator between short state name and value of time scale. Default is `_`.}
 
