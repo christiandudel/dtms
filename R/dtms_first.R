@@ -129,8 +129,7 @@ dtms_first  <- function(matrix,
   if(is.null(start_time)) t <- 0 else t <- which(start_time==timescale)-1
 
   # Generate max
-  if(is.null(end_time)) maxtime <- length(timescale)-1
-  if(!is.null(end_time)) maxtime <- which(end_time==timescale)-1
+  if(is.null(end_time)) maxtime <- length(timescale)-1 else maxtime <- which(end_time==timescale)-1
 
   # Generate W_t_0 and W_t_0.5, initial conditions
   results <- vector("list",2)

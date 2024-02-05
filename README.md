@@ -16,7 +16,7 @@ Peng Li, <li@demogr.mpg.de>
 
 The package dtms is a user-friendly implementation of discrete-time
 multistate models in R. It comes with many tools to analyze the results
-of multistate models. In particular, the worklfow mainly consists of
+of multistate models. In particular, the workflow mainly consists of
 estimating a discrete-time multistate model and then applying methods
 for absorbing Markov chains. Discrete-time multistate models lend
 themselves well for modelling trajectories captured in panel data.
