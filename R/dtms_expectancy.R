@@ -38,6 +38,7 @@
 #' @param timestep Numeric (optional), step length of time scale.
 #' @param total Logical (optional), calculate total expectancy. Default is TRUE.
 #' @param verbose Logical (optional), indicate whether correction and adjustment for timestep are applied. Default is FALSE.
+#' @param sep Character (optional), separator between short state name and value of time scale. Default is `_`.
 #'
 #' @return Returns a matrix with state expectancy for all transient states.
 #' @export

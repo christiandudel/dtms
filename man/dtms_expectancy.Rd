@@ -43,6 +43,8 @@ dtms_expectancy(
 
 \item{total}{Logical (optional), calculate total expectancy. Default is TRUE.}
 
+\item{sep}{Character (optional), separator between short state name and value of time scale. Default is `_`.}
+
 \item{verbose}{Logical (optional), indicate whether correction and adjustment for timestep are applied. Default is FALSE.}
 }
 \value{

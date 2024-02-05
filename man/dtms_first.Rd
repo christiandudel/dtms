@@ -2,29 +2,113 @@
 % Please edit documentation in R/dtms_first.R
 \name{dtms_first}
 \alias{dtms_first}
-\title{Title}
+\title{Time needed to reach a subset of states for the first time}
 \usage{
 dtms_first(
   matrix,
-  transient = NULL,
-  timescale = NULL,
-  timestep = NULL,
   dtms = NULL,
   risk,
   start_time = NULL,
   start_state = NULL,
   start_distr = NULL,
   end_time = NULL,
+  transient = NULL,
+  timescale = NULL,
+  timestep = NULL,
   method = "mid",
-  sep = "_",
-  total = T,
-  rescale = T,
-  maxiter = 200
+  total = TRUE,
+  rescale = TRUE,
+  sep = "_"
 )
 }
 \arguments{
-\item{maxiter}{}
+\item{matrix}{Matrix with transition probabilities generated with dtms_matrix.}
+
+\item{dtms}{DTMS object, as created with `dtms`.}
+
+\item{risk}{Character, name of state(s) for which risk is of interest.}
+
+\item{start_time}{Numeric (optional), value of time scale at start. If NULL (default), first value of time scale is used.}
+
+\item{start_state}{Character (optional), names of one or several starting states. If NULL (default), all transient states will be considered.}
+
+\item{start_distr}{Numeric (optional), distribution of starting states. Needs to be consistent with starting states. If provided, average distribution is provided; see details.}
+
+\item{end_time}{Numeric (optional), value of time scale at end. If NULL (default), last value of time scale is used.}
+
+\item{transient}{Character (optional), short names of transient states. If NULL (default) transient states are taken from `dtms` object.}
+
+\item{timescale}{Numeric (optional), values of time scale. If NULL (default) obtained from `dtms` object.}
+
+\item{timestep}{Numeric (optional), step length of time scale. If NULL (default) obtained from `dtms` object.}
+
+\item{method}{Character, do transitions happen mid-interval (`mid`, default) or at the end of the interval (`end`), see details.}
+
+\item{total}{Logical, should total of distribution be shown? Default is FALSE, as the total always is 1.}
+
+\item{rescale}{Logical, should distribution be rescaled to sum to 1? See details. Default is TRUE.}
+
+\item{sep}{Character (optional), separator between short state name and value of time scale. Default is `_`.}
+}
+\value{
+A table of the distribution of the time needed to reach the subset of states
 }
 \description{
-Title
+This function calculates the distribution of the time needed to reach a
+subset of states for the first time.
+}
+\details{
+The resulting distribution is conditional on ever reaching the subset of
+states, as it is not a finite number if the set is never reached. If the
+argument `rescale` is set to FALSE, the distribution will not sum to one but
+to the lifetime risk of ever reaching the subset.
+
+The state(s) which count to the time are specified with the argument `risk`.
+If several states are specified, the resulting distribution refers to the
+lifetime spent in any of the specified states.
+
+In a discrete-time model, the time spent in a state depends on assumptions
+about when transitions happen. Currently, this functions supports two
+variants which can be specified with the argument `method`: mid-interval
+transitions can be selected with the option `mid` and imply that transitions
+happen at the middle of the time interval; and the option `end` assumes
+that instead transitions happen at the end of the interval. In this latter
+case the distribution of the time spent in a state is equivalent to the
+number of visits to that state.
+
+If a distribution of the starting states is provided with `start_distr` the
+output table has two additional rows. One shows the distribution
+unconditional on the starting state. The other shows the distribution
+conditional on not starting in any state of the risk set.
+}
+\examples{
+## Define model: Absorbing and transient states, time scale
+simple <- dtms(transient=c("A","B"),
+               absorbing="X",
+               timescale=0:20)
+## Reshape to transition format
+estdata <- dtms_format(data=simpledata,
+                       dtms=simple,
+                       idvar="id",
+                       timevar="time",
+                       statevar="state")
+## Clean
+estdata <- dtms_clean(data=estdata,
+                      dtms=simple)
+# Fit model
+fit <- dtms_fit(data=estdata)
+## Predict probabilities
+probs    <- dtms_transitions(dtms=simple,
+                             model = fit)
+## Get transition matrix
+Tp <- dtms_matrix(dtms=simple,
+                  probs=probs)
+## Get starting distribution
+S <- dtms_start(dtms=simple,
+                data=estdata)
+## First visit
+dtms_first(dtms=simple,
+           matrix=Tp,
+           risk="A",
+           start_distr=S)
 }

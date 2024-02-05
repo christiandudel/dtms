@@ -1,64 +1,127 @@
-#' Title
+#' Time needed to reach a subset of states for the first time
 #'
-#' @param matrix
-#' @param transient
-#' @param timescale
-#' @param timestep
-#' @param dtms
-#' @param risk
-#' @param start_time
-#' @param start_state
-#' @param start_distr
-#' @param end_time
-#' @param method
-#' @param sep
-#' @param total
-#' @param rescale
-#' @param maxiter
+#' @description
+#' This function calculates the distribution of the time needed to reach a
+#' subset of states for the first time.
 #'
-#' @return
+#' @details
+#' The resulting distribution is conditional on ever reaching the subset of
+#' states, as it is not a finite number if the set is never reached. If the
+#' argument `rescale` is set to FALSE, the distribution will not sum to one but
+#' to the lifetime risk of ever reaching the subset.
+#'
+#' The state(s) which count to the time are specified with the argument `risk`.
+#' If several states are specified, the resulting distribution refers to the
+#' lifetime spent in any of the specified states.
+#'
+#' In a discrete-time model, the time spent in a state depends on assumptions
+#' about when transitions happen. Currently, this functions supports two
+#' variants which can be specified with the argument `method`: mid-interval
+#' transitions can be selected with the option `mid` and imply that transitions
+#' happen at the middle of the time interval; and the option `end` assumes
+#' that instead transitions happen at the end of the interval. In this latter
+#' case the distribution of the time spent in a state is equivalent to the
+#' number of visits to that state.
+#'
+#' If a distribution of the starting states is provided with `start_distr` the
+#' output table has two additional rows. One shows the distribution
+#' unconditional on the starting state. The other shows the distribution
+#' conditional on not starting in any state of the risk set.
+#'
+#' @param matrix Matrix with transition probabilities generated with dtms_matrix.
+#' @param dtms DTMS object, as created with `dtms`.
+#' @param risk Character, name of state(s) for which risk is of interest.
+#' @param start_state Character (optional), names of one or several starting states. If NULL (default), all transient states will be considered.
+#' @param start_time Numeric (optional), value of time scale at start. If NULL (default), first value of time scale is used.
+#' @param end_time Numeric (optional), value of time scale at end. If NULL (default), last value of time scale is used.
+#' @param start_distr Numeric (optional), distribution of starting states. Needs to be consistent with starting states. If provided, average distribution is provided; see details.
+#' @param method Character, do transitions happen mid-interval (`mid`, default) or at the end of the interval (`end`), see details.
+#' @param total Logical, should total of distribution be shown? Default is FALSE, as the total always is 1.
+#' @param rescale Logical, should distribution be rescaled to sum to 1? See details. Default is TRUE.
+#' @param transient Character (optional), short names of transient states. If NULL (default) transient states are taken from `dtms` object.
+#' @param timescale Numeric (optional), values of time scale. If NULL (default) obtained from `dtms` object.
+#' @param timestep Numeric (optional), step length of time scale. If NULL (default) obtained from `dtms` object.
+#' @param sep Character (optional), separator between short state name and value of time scale. Default is `_`.
+#'
+#' @return A table of the distribution of the time needed to reach the subset of states
 #' @export
 #'
 #' @examples
-dtms_first  <- function(matrix,# Matrix with transition probabilities generated with dtms_matrix
-                        transient=NULL, # Names of transient states
-                        timescale=NULL, # Time scale
-                        timestep=NULL, # Step length of the model
-                        dtms=NULL,# DTMS model
-                        risk, # name of state(s) for which risk is of interest
-                        start_time=NULL,# Starting time, will be lowest time in 'dtms' if NULL
-                        start_state=NULL,# Names of starting states, will be all transient states in 'dtms' if NULL
-                        start_distr=NULL,# Distribution of starting states for average
-                        end_time=NULL, # Time up to which lifetime risks are calculated, making them partial lifetime risks
-                        method="mid", # Mid-interval transitions or end of interval transitions, "mid" or "end"
-                        sep="_",# Separator
-                        total=T, # Should total risk be added?
-                        rescale=T, # Rescale probs to sum to one? If F, totals will be equivalent to lifetime risk
-                        maxiter=200) { # Maximum iterations, safeguard to avoid non-ending loop
+#' ## Define model: Absorbing and transient states, time scale
+#' simple <- dtms(transient=c("A","B"),
+#'                absorbing="X",
+#'                timescale=0:20)
+#' ## Reshape to transition format
+#' estdata <- dtms_format(data=simpledata,
+#'                        dtms=simple,
+#'                        idvar="id",
+#'                        timevar="time",
+#'                        statevar="state")
+#' ## Clean
+#' estdata <- dtms_clean(data=estdata,
+#'                       dtms=simple)
+#' # Fit model
+#' fit <- dtms_fit(data=estdata)
+#' ## Predict probabilities
+#' probs    <- dtms_transitions(dtms=simple,
+#'                              model = fit)
+#' ## Get transition matrix
+#' Tp <- dtms_matrix(dtms=simple,
+#'                   probs=probs)
+#' ## Get starting distribution
+#' S <- dtms_start(dtms=simple,
+#'                 data=estdata)
+#' ## First visit
+#' dtms_first(dtms=simple,
+#'            matrix=Tp,
+#'            risk="A",
+#'            start_distr=S)
+
+dtms_first  <- function(matrix,
+                        dtms=NULL,
+                        risk,
+                        start_time=NULL,
+                        start_state=NULL,
+                        start_distr=NULL,
+                        end_time=NULL,
+                        transient=NULL,
+                        timescale=NULL,
+                        timestep=NULL,
+                        method="mid",
+                        total=TRUE,
+                        rescale=TRUE,
+                        sep="_") {
 
   # Use dtms if provided
-  if(!is.null(dtms) & class(dtms)[2]=="dtms") {
-    if(is.null(transient)) transient <- dtms$transient
-    if(is.null(timescale)) {
-      timescale <- dtms$timescale
-      timescale <- timescale[-length(timescale)]
-    }
-    if(is.null(timestep)) timestep <- dtms$timestep
+  if(!is.null(dtms)) {
+
+    # Check
+    dtms_proper(dtms)
+
+    # Use values
+    transient <- dtms$transient
+    timescale <- dtms$timescale
+    timestep <- dtms$timestep
   }
 
-  # Starting states
-  if(is.null(start_state)) {
-    starting <- levels(interaction(transient,min(timescale),sep=sep))
-  } else {
-    starting <- levels(interaction(start_state,start_time,sep=sep))
-  }
+  # Starting state and time
+  if(is.null(start_state)) start_state <- transient
+  if(is.null(start_time)) start_time <- min(timescale)
+
+  # Starting states, long names
+  starting <- dtms_combine(start_state,start_time,sep=sep)
+
+  # Time scale: Only transitions starting up to T-1 relevant
+  timescale <- timescale[-length(timescale)]
 
   # States of the transition matrix
-  states <- rownames(matrix)
-  nstates <- length(states)
+  allstates <- rownames(matrix)
+  nstates <- length(allstates)
 
   # Select subset
-  selectorU <- unlist(lapply(strsplit(states,sep),function(y) any(risk%in%y) ))
+  selectorU <- dtms_in(allstates,risk,sep)
+
+  # Generate matrix
   P_E <- matrix(data=0,nrow=nstates,ncol=nstates)
   P_E[!selectorU,!selectorU] <- matrix[!selectorU,!selectorU]
 
@@ -67,10 +130,7 @@ dtms_first  <- function(matrix,# Matrix with transition probabilities generated 
 
   # Generate max
   if(is.null(end_time)) maxtime <- length(timescale)-1
-  if(!is.null(end_time)) if(!is.infinite(end_time))  {
-    maxtime <- which(end_time==timescale)-1
-    maxiter <- max(maxtime,maxiter)
-  } else maxtime <- Inf
+  if(!is.null(end_time)) maxtime <- which(end_time==timescale)-1
 
   # Generate W_t_0 and W_t_0.5, initial conditions
   results <- vector("list",2)
@@ -83,41 +143,39 @@ dtms_first  <- function(matrix,# Matrix with transition probabilities generated 
 
   # Variables
   upcoming <- 1.5
-  past.steps <- c(0,0.5)
+  past_steps <- c(0,0.5)
   steps <- 1
   end <- 0
 
   # Loop to generate results
-  while(end<5) {
-    past.steps <- c(past.steps,upcoming)
+  for(i in 1:maxtime) {
+    past_steps <- c(past_steps,upcoming)
     tmp <- vector("list",1)
-    tmp[[1]] <- t(Biodem::mtx.exp(P_E,upcoming-0.5)%*% matrix(data=1,nrow=nstates,ncol=nstates))*results[["W_0.5"]]
+    tmp[[1]] <- t(Biodem::mtx.exp(P_E,upcoming-0.5)%*%
+                    matrix(data=1,nrow=nstates,ncol=nstates))*results[["W_0.5"]]
     names(tmp) <- paste("W",upcoming,sep="_")
     results <- c(results,tmp)
-    steps <- steps+1
-    if(steps>maxtime) end <- 5
-    if(is.infinite(maxtime) & identical(results[[paste("W",upcoming-1,sep="_")]], results[[paste("W",upcoming,sep="_")]])) end <- end+1
-    if(steps>maxiter) end <- 5
     upcoming <- upcoming+1
   }
 
   # Generate V
-  results_V <- vector("list",length(past.steps)-1)
+  results_V <- vector("list",length(past_steps)-1)
   for(i in 1:length(results_V)) {
-    names(results_V)[i] <- paste("V",past.steps[i],sep="_")
-    results_V[[paste("V",past.steps[i],sep="_")]] <- results[[paste("W",past.steps[i],sep="_")]]-results[[paste("W",past.steps[i+1],sep="_")]]
-    colnames(results_V[[paste("V",past.steps[i],sep="_")]]) <- states
+    names(results_V)[i] <- paste("V",past_steps[i],sep="_")
+    results_V[[paste("V",past_steps[i],sep="_")]] <- results[[paste("W",past_steps[i],sep="_")]]-
+                                                     results[[paste("W",past_steps[i+1],sep="_")]]
+    colnames(results_V[[paste("V",past_steps[i],sep="_")]]) <- allstates
   }
 
   # Distribution
   tmp <- unlist(lapply(results_V, function(y) colSums(y)[starting]))
 
   # Result object
-  result <- matrix(data=tmp,ncol=length(past.steps)-1,nrow=length(starting))
+  result <- matrix(data=tmp,ncol=length(past_steps)-1,nrow=length(starting))
   rownames(result) <- paste0("start:",starting)
 
   # Get times right (interval length, mid interval vs end of interval)
-  steps <- past.steps*timestep
+  steps <- past_steps*timestep
   if(method=="end") steps[-1] <- steps[-1]+0.5*timestep
   colnames(result) <- paste(steps)[-length(steps)]
 
