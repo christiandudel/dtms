@@ -65,9 +65,6 @@ dtms_matrix <- function(probs,
     transient <- dtms$transient
   }
 
-  # Adjust time scale (transitions in the model)
-  #timescale <- timescale[-length(timescale)]
-
   # Combine states and time
   transient_states <- dtms_combine(transient,timescale,sep=sep)
   absorbing <- paste(absorbing)
@@ -77,7 +74,8 @@ dtms_matrix <- function(probs,
   probs <- dtms_rename(probs,c(fromvar,tovar,Pvar),c("from","to","P"))
 
   # Subset
-  probs <- subset(probs,subset=from%in%transient_states & to%in%all_states)
+  getthem <- probs$from%in%transient_states & probs$to%in%all_states
+  probs <- subset(probs,subset=getthem)
 
   # Total number of transient and absorbing states
   s_states <- length(transient_states)

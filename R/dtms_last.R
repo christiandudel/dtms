@@ -6,7 +6,35 @@
 #' very last time.
 #'
 #' @details
-#' Details go here.
+#' The resulting distribution is conditional on ever experiencing the final
+#' exit, as the waiting time otherwise is not a finite number. The argument
+#' `rescale` can be used to control whether the distribution is rescaled to
+#' sum to 1; it usually will do without rescaling.
+#'
+#' The state(s) which count to the time are specified with the argument `risk`.
+#' If several states are specified, the resulting distribution refers to the
+#' lifetime spent in any of the specified states. The optional argument
+#' `risk_to` can be used to restrict results to exits from the set `risk` to
+#' another specific subset defined by `risk_to`; i.e., this way, not all
+#' transitions out of `risk` count for the final exit, but only those to
+#' specific states.
+#'
+#' In a discrete-time model, the time spent in a state depends on assumptions
+#' about when transitions happen. Currently, this functions supports two
+#' variants which can be specified with the argument `method`: mid-interval
+#' transitions can be selected with the option `mid` and imply that transitions
+#' happen at the middle of the time interval; and the option `end` assumes
+#' that instead transitions happen at the end of the interval. In this latter
+#' case the distribution of the time spent in a state is equivalent to the
+#' number of visits to that state.
+#'
+#' If a distribution of the starting states is provided with `start_distr` the
+#' output table has two additional rows. One shows the distribution
+#' unconditional on the starting state. The other shows the distribution
+#' conditional on not starting in any state of the risk set.
+#'
+#' The distribution of partial waiting times can be generated using the arguments
+#' `start_state` and `start_time` in combination with `end_time`.
 #'
 #' @param matrix Matrix with transition probabilities, as generated with `dtms_matrix`.
 #' @param dtms DTMS object as created with `dtms`.

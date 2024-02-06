@@ -39,7 +39,7 @@ install_github("christiandudel/dtms")
 
 ## Example 1: Artificial data
 
-This is a very basic example using artificial data provided with the
+This is a basic example using artificial data which is provided with the
 package. The state space consists of two transient states (A, B), and
 one absorbing state (X). The time scale goes from 0 to 20. Transition
 probabilities do change depending on time.
