@@ -54,15 +54,32 @@ library(dtms)
 ## Look at data
 head(simpledata)
 #>   id time state
-#> 1  2    0     A
-#> 2  2    1     B
-#> 3  2    2     A
-#> 4  2    3     B
-#> 5  2    4     A
-#> 6  2    5     A
+#> 1  1    0     A
+#> 2  1    1     B
+#> 3  1    2     B
+#> 4  1    3     A
+#> 5  1    4     B
+#> 6  1    5     A
+
+## Number of units
+simpledata$id |> unique() |> length()
+#> [1] 993
+
+## Number of observations
+dim(simpledata)
+#> [1] 12173     3
 ```
 
-The data set contains three variables. ‘id’
+The data set is in long format and contains three variables. ‘id’ is an
+unit identifier; ‘time’ contains the value of the time scale; and
+‘state’ contains the state the unit occupied at a given time. In total,
+there are 993 units, each of them contributing to the total of 12,173
+observations.
+
+To work with this data set, we first define a basic discrete-time
+multistate model. This is done with the function ‘dtms’ and requires us
+to specify the names of the transient states, the names of the absorbing
+states, and the possible values of the time scale:
 
 ``` r
 ## Define model: Absorbing and transient states, time scale
@@ -70,6 +87,17 @@ simple <- dtms(transient=c("A","B"),
                absorbing="X",
                timescale=0:20)
 ```
+
+The resulting object of class ‘dtms’ can be passed to other functions of
+the package, as shown below.
+
+In a second step, we transform the data from long format to what we call
+transition format. This can be done using the function ‘dtms_format’. In
+this example, we need to specify the name of the object containing the
+data, and in addition a ‘dtms’ object as created above. Moreover, we
+need to specify which variables contain the unit identifier, which
+variable contains the values of the time scale, and which variable
+contains the information on the state:
 
 ``` r
 ## Reshape to transition format
@@ -84,27 +112,60 @@ estdata <- dtms_format(data=simpledata,
 ## Look at reshaped data
 head(estdata)
 #>   id time from to
-#> 1  2    0    A  B
-#> 2  2    1    B  A
-#> 3  2    2    A  B
-#> 4  2    3    B  A
-#> 5  2    4    A  A
-#> 6  2    5    A  B
+#> 1  1    0    A  B
+#> 2  1    1    B  B
+#> 3  1    2    B  A
+#> 4  1    3    A  B
+#> 5  1    4    B  A
+#> 6  1    5    A  B
 ```
 
+While in long format each row contains information on the currently
+occupied state, in transition format also the next state is shown in a
+variable. If there is no observation at time t+1, the next state is NA.
+The names of the variables in the resulting data set are by default
+chosen such that they match defaults of other functions of the package.
+
+Depending on the original data, there can be missing values in
+transition format data due to several reasons. The function ‘dtms_clean’
+provides a convenient way to remove such rows in the data, as well as
+other potentially problematic or unwanted rows. It returns a cleaned
+data set and prints a brief overview of the dropped rows to the console:
+
 ``` r
+## Missing values?
+estdata$to |> table(useNA="always")
+#> 
+#>    A    B    X <NA> 
+#> 3629 6668  616 1260
+
 ## Clean
 estdata <- dtms_clean(data=estdata,
                       dtms=simple)
 #> Dropping  0  rows not in time range
-#> Dropping  1215  rows starting or ending in NA
+#> Dropping  1260  rows starting or ending in NA
 #> Dropping  0  rows starting in absorbing state
 ```
+
+In this example, 1,260 transitions were dropped because they end in a
+missing value. No observations were dropped because they are out of the
+time range specified with the ‘dtms’ object, and no observations were
+dropped because they start in an absorbing state.
+
+To estimate the transition probabilities of the multistate model, the
+function ‘dtms_fit’ is used. In this simple example, it is enough to
+specify the name of the object with the transition data:
 
 ``` r
 # Fit model 
 fit <- dtms_fit(data=estdata)
 ```
+
+To predict transition probabilities and to arrange them in a matrix, the
+functions ‘dtms_transitions’ and ‘dtms_matrix’ are used. The function
+‘dtms_transitions’ needs a ‘dtms’ object as well as a fitted model,
+while the function ‘dtms_matrix’ requires a ‘dtms’ object and predicted
+probabilities:
 
 ``` r
 ## Predict probabilities
@@ -115,6 +176,11 @@ probs    <- dtms_transitions(dtms=simple,
 Tp <- dtms_matrix(dtms=simple,
                   probs=probs)
 ```
+
+In more complex examples, the previous functions would need more
+information. For instance, on which covariates to include in the
+estimation step, and which covariate values to use in the prediction
+step.
 
 ``` r
 ## Get starting distribution 
@@ -128,88 +194,93 @@ dtms_expectancy(dtms=simple,
                 matrix=Tp,
                 start_distr=S)
 #>                  A        B    TOTAL
-#> start:A_0 5.032526 8.548443 13.58097
-#> start:B_0 4.816435 8.745409 13.56184
-#> AVERAGE   4.922433 8.648792 13.57123
+#> start:A_0 5.049179 8.779119 13.82830
+#> start:B_0 4.817076 8.974606 13.79168
+#> AVERAGE   4.934108 8.876037 13.81014
 
 ## Lifetime risk 
 dtms_risk(dtms=simple,
           matrix=Tp,
           risk="A")
 #>       A_0       B_0 
-#> 1.0000000 0.9846722
+#> 1.0000000 0.9747251
 
 ## Distribution of visits
 dtms_visits(dtms=simple,
             matrix=Tp,
             risk="A",
             start_distr=S)
-#>                          0          0.5            1          1.5            2
-#> start:A_0      0.000000000 2.139855e-02 4.879217e-08 4.556273e-02 1.622331e-06
-#> start:B_0      0.015327783 2.609560e-08 3.727700e-02 9.151629e-07 7.358289e-02
-#> AVERAGE        0.007809102 1.049657e-02 1.899167e-02 2.235018e-02 3.748934e-02
-#> AVERAGE(COND.) 0.015327783 2.609560e-08 3.727700e-02 9.151629e-07 7.358289e-02
-#>                         2.5            3         3.5            4          4.5
-#> start:A_0      8.730566e-02 2.283215e-05 0.142322393 0.0001773257 0.1885937370
-#> start:B_0      1.369369e-05 1.255410e-01 0.000114216 0.1765943838 0.0005825317
-#> AVERAGE        4.283270e-02 6.397102e-02 0.069871069 0.0900571742 0.0928069756
-#> AVERAGE(COND.) 1.369369e-05 1.255410e-01 0.000114216 0.1765943838 0.0005825317
-#>                           5         5.5           6         6.5           7
-#> start:A_0      0.0008314274 0.196499353 0.002423313 0.156742389 0.004373127
-#> start:B_0      0.1976996572 0.001877542 0.171397369 0.003826978 0.111923917
-#> AVERAGE        0.1011306098 0.097344662 0.088511148 0.078836011 0.059167424
-#> AVERAGE(COND.) 0.1976996572 0.001877542 0.171397369 0.003826978 0.111923917
-#>                        7.5           8         8.5           9         9.5
-#> start:A_0      0.092856339 0.004750487 0.039010052 0.002965614 0.010871403
-#> start:B_0      0.004822623 0.052918772 0.003602474 0.017061793 0.001511186
-#> AVERAGE        0.048005477 0.029290961 0.020970823 0.010147246 0.006102619
-#> AVERAGE(COND.) 0.004822623 0.052918772 0.003602474 0.017061793 0.001511186
+#>                         0          0.5            1          1.5            2
+#> start:A_0      0.00000000 3.344785e-02 1.524098e-07 5.797771e-02 4.926242e-06
+#> start:B_0      0.02527488 8.546268e-08 5.015952e-02 2.894042e-06 8.196331e-02
+#> AVERAGE        0.01253064 1.686530e-02 2.486790e-02 2.923527e-02 4.063781e-02
+#> AVERAGE(COND.) 0.02527488 8.546268e-08 5.015952e-02 2.894042e-06 8.196331e-02
+#>                         2.5            3         3.5            4         4.5
+#> start:A_0      9.266006e-02 6.732588e-05 0.132278444 0.0005072002 0.163825048
+#> start:B_0      4.177893e-05 1.207099e-01 0.000335906 0.1555931217 0.001649927
+#> AVERAGE        4.674227e-02 5.987885e-02 0.066864678 0.0773948683 0.083422734
+#> AVERAGE(COND.) 4.177893e-05 1.207099e-01 0.000335906 0.1555931217 0.001649927
+#>                          5         5.5           6        6.5          7
+#> start:A_0      0.002303868 0.171369034 0.006495506 0.14648821 0.01131669
+#> start:B_0      0.170949275 0.005116145 0.155452071 0.01002041 0.11187195
+#> AVERAGE        0.085913985 0.088945066 0.080344395 0.07883093 0.06116944
+#> AVERAGE(COND.) 0.170949275 0.005116145 0.155452071 0.01002041 0.11187195
+#>                       7.5          8         8.5           9         9.5
+#> start:A_0      0.09698287 0.01183625 0.045819144 0.007086424 0.013985394
+#> start:B_0      0.01211451 0.05937680 0.008663089 0.021174322 0.003468210
+#> AVERAGE        0.05490729 0.03540565 0.027398114 0.014070847 0.008771241
+#> AVERAGE(COND.) 0.01211451 0.05937680 0.008663089 0.021174322 0.003468210
 #>                         10         10.5           11         11.5           12
-#> start:A_0      0.001011469 0.0018726567 0.0001841042 1.917082e-04 1.837269e-05
-#> start:B_0      0.003482617 0.0003406317 0.0004241658 4.124458e-05 3.037113e-05
-#> AVERAGE        0.002270454 0.0010921303 0.0003064093 1.150509e-04 2.448558e-05
-#> AVERAGE(COND.) 0.003482617 0.0003406317 0.0004241658 4.124458e-05 3.037113e-05
+#> start:A_0      0.002305142 0.0025284183 0.0003976300 2.609691e-04 3.740852e-05
+#> start:B_0      0.004610027 0.0007431612 0.0005751838 8.521778e-05 4.088115e-05
+#> AVERAGE        0.003447845 0.0016433331 0.0004856567 1.738360e-04 3.913016e-05
+#> AVERAGE(COND.) 0.004610027 0.0007431612 0.0005751838 8.521778e-05 4.088115e-05
 #>                        12.5           13         13.5           14         14.5
-#> start:A_0      1.172665e-05 1.061958e-06 4.406675e-07 3.745239e-08 1.045057e-08
-#> start:B_0      2.802212e-06 1.304568e-06 1.127352e-07 3.456681e-08 2.800620e-09
-#> AVERAGE        7.179885e-06 1.185561e-06 2.735946e-07 3.598226e-08 6.553120e-09
-#> AVERAGE(COND.) 2.802212e-06 1.304568e-06 1.127352e-07 3.456681e-08 2.800620e-09
+#> start:A_0      1.564394e-05 2.031264e-06 5.659645e-07 6.715140e-08 1.278164e-08
+#> start:B_0      5.468247e-06 1.707983e-06 2.074194e-07 4.347478e-08 4.853210e-09
+#> AVERAGE        1.059909e-05 1.870990e-06 3.882069e-07 5.541313e-08 8.850925e-09
+#> AVERAGE(COND.) 5.468247e-06 1.707983e-06 2.074194e-07 4.347478e-08 4.853210e-09
 #>                          15         15.5           16         16.5           17
-#> start:A_0      8.358261e-10 1.586479e-10 1.200906e-11 1.532996e-12 1.105782e-13
-#> start:B_0      5.751651e-10 4.394307e-11 5.998979e-12 4.352074e-13 3.796963e-14
-#> AVERAGE        7.030262e-10 1.002088e-10 8.947082e-12 9.737016e-13 7.358605e-14
-#> AVERAGE(COND.) 5.751651e-10 4.394307e-11 5.998979e-12 4.352074e-13 3.796963e-14
-#>                        17.5           18         18.5 19 19.5 20          20.5
-#> start:A_0      9.103829e-15 5.551115e-16 2.220446e-16  0    0  0  0.000000e+00
-#> start:B_0      2.553513e-15 1.110223e-16 2.220446e-16  0    0  0 -2.220446e-16
-#> AVERAGE        5.766615e-15 3.288597e-16 2.220446e-16  0    0  0 -1.131259e-16
-#> AVERAGE(COND.) 2.553513e-15 1.110223e-16 2.220446e-16  0    0  0 -2.220446e-16
+#> start:A_0      1.402855e-09 1.835138e-10 1.885092e-11 1.669886e-12 1.622036e-13
+#> start:B_0      6.896080e-10 7.167300e-11 6.823320e-12 6.676881e-13 4.085621e-14
+#> AVERAGE        1.049245e-09 1.280659e-10 1.288794e-11 1.173022e-12 1.020426e-13
+#> AVERAGE(COND.) 6.896080e-10 7.167300e-11 6.823320e-12 6.676881e-13 4.085621e-14
+#>                        17.5           18         18.5 19          19.5
+#> start:A_0      9.325873e-15 7.771561e-16 2.220446e-16  0 -2.220446e-16
+#> start:B_0      3.774758e-15 2.220446e-16 0.000000e+00  0  0.000000e+00
+#> AVERAGE        6.573771e-15 5.019459e-16 1.119605e-16  0 -1.119605e-16
+#> AVERAGE(COND.) 3.774758e-15 2.220446e-16 0.000000e+00  0  0.000000e+00
+#>                          20 20.5
+#> start:A_0      2.220446e-16    0
+#> start:B_0      0.000000e+00    0
+#> AVERAGE        1.119605e-16    0
+#> AVERAGE(COND.) 0.000000e+00    0
 
 ## First/last visit
 dtms_first(dtms=simple,
            matrix=Tp,
            risk="A",
            start_distr=S)
-#>                       0       0.5       1.5        2.5        3.5        4.5
-#> start:A_0      1.000000 0.0000000 0.0000000 0.00000000 0.00000000 0.00000000
-#> start:B_0      0.000000 0.5298969 0.2487133 0.11704870 0.05519050 0.02604746
-#> AVERAGE        0.494387 0.2679227 0.1257527 0.05918134 0.02790503 0.01316994
-#> AVERAGE(COND.) 0.000000 0.5298969 0.2487133 0.11704870 0.05519050 0.02604746
-#>                        5.5         6.5         7.5         8.5          9.5
-#> start:A_0      0.000000000 0.000000000 0.000000000 0.000000000 0.0000000000
-#> start:B_0      0.012289033 0.005786386 0.002713402 0.001263733 0.0005825315
-#> AVERAGE        0.006213494 0.002925672 0.001371931 0.000638960 0.0002945355
-#> AVERAGE(COND.) 0.012289033 0.005786386 0.002713402 0.001263733 0.0005825315
+#>                        0       0.5       1.5        2.5        3.5        4.5
+#> start:A_0      1.0000000 0.0000000 0.0000000 0.00000000 0.00000000 0.00000000
+#> start:B_0      0.0000000 0.5010275 0.2512179 0.12543486 0.06232798 0.03079644
+#> AVERAGE        0.5106238 0.2451909 0.1229401 0.06138483 0.03050183 0.01507104
+#> AVERAGE(COND.) 0.0000000 0.5010275 0.2512179 0.12543486 0.06232798 0.03079644
+#>                        5.5         6.5         7.5          8.5          9.5
+#> start:A_0      0.000000000 0.000000000 0.000000000 0.0000000000 0.0000000000
+#> start:B_0      0.015116433 0.007362337 0.003552825 0.0016957602 0.0007988563
+#> AVERAGE        0.007397622 0.003602952 0.001738668 0.0008298646 0.0003909412
+#> AVERAGE(COND.) 0.015116433 0.007362337 0.003552825 0.0016957602 0.0007988563
 #>                        10.5         11.5         12.5         13.5         14.5
 #> start:A_0      0.0000000000 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00
-#> start:B_0      0.0002645973 1.177700e-04 5.100991e-05 2.131786e-05 8.508056e-06
-#> AVERAGE        0.0001337838 5.954603e-05 2.579127e-05 1.077858e-05 4.301783e-06
-#> AVERAGE(COND.) 0.0002645973 1.177700e-04 5.100991e-05 2.131786e-05 8.508056e-06
+#> start:B_0      0.0003704929 1.686443e-04 7.506964e-05 3.253791e-05 1.366336e-05
+#> AVERAGE        0.0001813104 8.253051e-05 3.673729e-05 1.592328e-05 6.686523e-06
+#> AVERAGE(COND.) 0.0003704929 1.686443e-04 7.506964e-05 3.253791e-05 1.366336e-05
 #>                        15.5         16.5         17.5         18.5
 #> start:A_0      0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00
-#> start:B_0      3.203492e-06 1.122048e-06 3.598564e-07 1.038734e-07
-#> AVERAGE        1.619727e-06 5.673221e-07 1.819480e-07 5.251973e-08
-#> AVERAGE(COND.) 3.203492e-06 1.122048e-06 3.598564e-07 1.038734e-07
+#> start:B_0      5.526195e-06 2.138358e-06 7.856345e-07 2.717496e-07
+#> AVERAGE        2.704388e-06 1.046461e-06 3.844708e-07 1.329878e-07
+#> AVERAGE(COND.) 5.526195e-06 2.138358e-06 7.856345e-07 2.717496e-07
 #>                TOTAL(RESCALED)
 #> start:A_0                    1
 #> start:B_0                    1
@@ -223,25 +294,25 @@ dtms_last(dtms=simple,
           rescale=T,
           total=F)
 #>                       0.5         1.5        2.5        3.5        4.5
-#> start:A_0      0.02139862 0.003165014 0.01716994 0.01512527 0.02287022
-#> start:B_0      0.00000000 0.014828708 0.01124051 0.01858755 0.02150104
-#> AVERAGE        0.01057920 0.009062329 0.01417194 0.01687584 0.02217794
-#> AVERAGE(COND.) 0.00000000 0.014828708 0.01124051 0.01858755 0.02150104
+#> start:A_0      0.03344805 0.004045859 0.02216373 0.01841838 0.02582240
+#> start:B_0      0.00000000 0.020434290 0.01493887 0.02250838 0.02469425
+#> AVERAGE        0.01707937 0.012065966 0.01862806 0.02041993 0.02527031
+#> AVERAGE(COND.) 0.00000000 0.020434290 0.01493887 0.02250838 0.02469425
 #>                       5.5        6.5        7.5        8.5        9.5
-#> start:A_0      0.02701022 0.03466076 0.04220215 0.05132288 0.06076065
-#> start:B_0      0.02826224 0.03470859 0.04301832 0.05193985 0.06167011
-#> AVERAGE        0.02764325 0.03468494 0.04261482 0.05163483 0.06122049
-#> AVERAGE(COND.) 0.02826224 0.03470859 0.04301832 0.05193985 0.06167011
+#> start:A_0      0.02879462 0.03468157 0.03998133 0.04618269 0.05234543
+#> start:B_0      0.03027172 0.03510823 0.04108241 0.04717334 0.05359487
+#> AVERAGE        0.02951748 0.03489037 0.04052017 0.04666749 0.05295687
+#> AVERAGE(COND.) 0.03027172 0.03510823 0.04108241 0.04717334 0.05359487
 #>                      10.5       11.5       12.5       13.5       14.5
-#> start:A_0      0.07034746 0.07896209 0.08554483 0.08880084 0.08771500
-#> start:B_0      0.07131684 0.08008786 0.08674808 0.09005669 0.08895280
-#> AVERAGE        0.07083759 0.07953130 0.08615321 0.08943581 0.08834085
-#> AVERAGE(COND.) 0.07131684 0.08008786 0.08674808 0.09005669 0.08895280
+#> start:A_0      0.05851903 0.06416783 0.06891338 0.07228196 0.07398394
+#> start:B_0      0.05985931 0.06566226 0.07050766 0.07395867 0.07569828
+#> AVERAGE        0.05917493 0.06489917 0.06969359 0.07310250 0.07482290
+#> AVERAGE(COND.) 0.05985931 0.06566226 0.07050766 0.07395867 0.07569828
 #>                      15.5       16.5       17.5       18.5       19.5
-#> start:A_0      0.08189567 0.07207644 0.06034321 0.04907794 0.02955082
-#> start:B_0      0.08305237 0.07309409 0.06119532 0.04977093 0.02996810
-#> AVERAGE        0.08248051 0.07259098 0.06077405 0.04942832 0.02976180
-#> AVERAGE(COND.) 0.08305237 0.07309409 0.06119532 0.04977093 0.02996810
+#> start:A_0      0.07409558 0.07348171 0.07420418 0.07762634 0.05684198
+#> start:B_0      0.07581325 0.07518486 0.07592420 0.07942562 0.05815952
+#> AVERAGE        0.07493617 0.07431519 0.07504592 0.07850686 0.05748675
+#> AVERAGE(COND.) 0.07581325 0.07518486 0.07592420 0.07942562 0.05815952
 ```
 
 ## Example 2: Simulated HRS data

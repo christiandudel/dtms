@@ -63,16 +63,38 @@ library(dtms)
 
 ## Look at data
 head(simpledata)
-```
-The data set contains three variables. 'id' 
 
+## Number of units
+simpledata$id |> unique() |> length()
+
+## Number of observations
+dim(simpledata)
+```
+The data set is in long format and contains three variables. 'id' is an unit 
+identifier; 'time' contains the value of the time scale; and 'state' contains 
+the state the unit occupied at a given time. In total, there are 993 units, 
+each of them contributing to the total of 12,173 observations. 
+
+To work with this data set, we first define a basic discrete-time multistate 
+model. This is done with the function 'dtms' and requires us to specify the
+names of the transient states, the names of the absorbing states, and the 
+possible values of the time scale: 
 ```{r example1-modeldef}
 ## Define model: Absorbing and transient states, time scale
 simple <- dtms(transient=c("A","B"),
                absorbing="X",
                timescale=0:20)
 ```
+The resulting object of class 'dtms' can be passed to other functions of the 
+package, as shown 
+below.
 
+In a second step, we transform the data from long format to what we call 
+transition format. This can be done using the function 'dtms_format'. In this 
+example, we need to specify the name of the object containing the data, and
+in addition a 'dtms' object as created above. Moreover, we need to specify which
+variables contain the unit identifier, which variable contains the values of 
+the time scale, and which variable contains the information on the state:
 ```{r example1-transformat}
 ## Reshape to transition format
 estdata <- dtms_format(data=simpledata,
@@ -84,18 +106,41 @@ estdata <- dtms_format(data=simpledata,
 ## Look at reshaped data
 head(estdata)
 ```
+While in long format each row contains information on the currently occupied
+state, in transition format also the next state is shown in a variable. If there
+is no observation at time t+1, the next state is NA. The names of the variables 
+in the resulting data set are by default chosen such that they match defaults of 
+other functions of the package. 
 
+Depending on the original data, there can be missing values in transition format
+data due to several reasons. The function 'dtms_clean' provides a convenient
+way to remove such rows in the data, as well as other potentially problematic
+or unwanted rows. It returns a cleaned data set and prints a brief overview
+of the dropped rows to the console:
 ```{r example1-cleaning}
+## Missing values?
+estdata$to |> table(useNA="always")
+
 ## Clean
 estdata <- dtms_clean(data=estdata,
                       dtms=simple)
 ```
+In this example, 1,260 transitions were dropped because they end in a missing
+value. No observations were dropped because they are out of the time range 
+specified with the 'dtms' object, and no observations were dropped because they
+start in an absorbing state.
 
+To estimate the transition probabilities of the multistate model, the function 
+'dtms_fit' is used. In this simple example, it is enough to specify the name
+of the object with the transition data:
 ```{r example1-fit}
 # Fit model 
 fit <- dtms_fit(data=estdata)
 ```
-
+To predict transition probabilities and to arrange them in a matrix, the 
+functions 'dtms_transitions' and 'dtms_matrix' are used. The function 
+'dtms_transitions' needs a 'dtms' object as well as a fitted model, while
+the function 'dtms_matrix' requires a 'dtms' object and predicted probabilities: 
 ```{r example1-probs}
 ## Predict probabilities
 probs    <- dtms_transitions(dtms=simple,
@@ -105,6 +150,10 @@ probs    <- dtms_transitions(dtms=simple,
 Tp <- dtms_matrix(dtms=simple,
                   probs=probs)
 ```
+In more complex examples, the previous functions would need more information. 
+For instance, on which covariates to include in the estimation step, and which
+covariate values to use in the prediction step.
+
 
 ```{r example1-start}
 ## Get starting distribution 
