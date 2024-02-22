@@ -44,16 +44,14 @@ package. The state space consists of two transient states (A, B), and
 one absorbing state (X). The time scale goes from 0 to 20. Transition
 probabilities do change depending on time.
 
+The following code loads the package and the data set. The data set is
+called ‘simpledata’.
+
 ``` r
 ## Load package 
 library(dtms)
 
-## Define model: Absorbing and transient states, time scale
-simple <- dtms(transient=c("A","B"),
-               absorbing="X",
-               timescale=0:20)
-
-## Look at original data
+## Look at data
 head(simpledata)
 #>   id time state
 #> 1  2    0     A
@@ -62,7 +60,18 @@ head(simpledata)
 #> 4  2    3     B
 #> 5  2    4     A
 #> 6  2    5     A
+```
 
+The data set contains three variables. ‘id’
+
+``` r
+## Define model: Absorbing and transient states, time scale
+simple <- dtms(transient=c("A","B"),
+               absorbing="X",
+               timescale=0:20)
+```
+
+``` r
 ## Reshape to transition format
 estdata <- dtms_format(data=simpledata,
                        dtms=simple,
@@ -81,17 +90,23 @@ head(estdata)
 #> 4  2    3    B  A
 #> 5  2    4    A  A
 #> 6  2    5    A  B
+```
 
+``` r
 ## Clean
 estdata <- dtms_clean(data=estdata,
                       dtms=simple)
 #> Dropping  0  rows not in time range
 #> Dropping  1215  rows starting or ending in NA
 #> Dropping  0  rows starting in absorbing state
+```
 
+``` r
 # Fit model 
 fit <- dtms_fit(data=estdata)
+```
 
+``` r
 ## Predict probabilities
 probs    <- dtms_transitions(dtms=simple,
                              model = fit)
@@ -99,11 +114,15 @@ probs    <- dtms_transitions(dtms=simple,
 ## Get transition matrix 
 Tp <- dtms_matrix(dtms=simple,
                   probs=probs)
+```
 
+``` r
 ## Get starting distribution 
 S <- dtms_start(dtms=simple,
                 data=estdata)
+```
 
+``` r
 ## State expectancies 
 dtms_expectancy(dtms=simple,
                 matrix=Tp,
