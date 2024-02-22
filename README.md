@@ -182,11 +182,27 @@ information. For instance, on which covariates to include in the
 estimation step, and which covariate values to use in the prediction
 step.
 
+Before we generate several results, we calculate the starting
+distribution of the states; i.e., the distribution of states at the
+first value of the time scale.
+
 ``` r
 ## Get starting distribution 
 S <- dtms_start(dtms=simple,
                 data=estdata)
 ```
+
+This step is not necessary, but its result can be passed to several of
+the functions used for calculating results, providing additional
+information.
+
+Most functions used to calculate results need a transition matrix and a
+‘dtms’ object, and potentially further arguments. The two examples below
+calculate the expected time spent in a state (dtms_expectancy) and the
+lifetime risk of ever reaching a state (dtms_risk). In the first case,
+the starting distribution of states is passed to the function; this is
+optional. In the second case, one or several states need to be specified
+for which the lifetime risk os be calculated:
 
 ``` r
 ## State expectancies 
@@ -204,7 +220,35 @@ dtms_risk(dtms=simple,
           risk="A")
 #>       A_0       B_0 
 #> 1.0000000 0.9747251
+```
 
+The results of the call of ‘dtms_expectancy’ show the starting states in
+rows and the states in which the time is spent as columns. For instance,
+around 5.05 time units are spent in state A when starting in state A at
+time 0. The last column shows the total time until absorbtion. The last
+row is shown because the starting distribution was specified. It shows
+the average time spent in a state irrespective of the starting state.
+That is, on average 4.93 time units are spent in state A, 8.88 time
+units are spent in state B, for a total of 13.81 time units.
+
+The result of the call of ‘dtms_risk’ above is the lifetime risk of ever
+reaching state A depending on the starting state. Obviously, when
+starting in state A at time 0, this risk amounts to 1. When starting in
+state B, the risk is also very high and around 97%.
+
+The function calls below are all similar in that they provide full
+distributions as a result. Specifically, ‘dtms_visits’ calculates the
+distribution of the time spent in a state; the mean over this
+distribution is equal to the state expectancy as provided by
+‘dtms_expectancy’, and the one minus the proportion of 0 time units
+spent in a state is equal to the lifetime risk provided by ‘dtms_risk’.
+‘dtms_first’ calculates the distribution of the waiting time until a
+given state is reached for the first time, conditional on ever reaching
+this state. ‘dtms_last’ calculates the distribution of the waiting time
+until a state is left for the last time; i.e., there is no return back
+to this state.
+
+``` r
 ## Distribution of visits
 dtms_visits(dtms=simple,
             matrix=Tp,
@@ -256,7 +300,7 @@ dtms_visits(dtms=simple,
 #> AVERAGE        1.119605e-16    0
 #> AVERAGE(COND.) 0.000000e+00    0
 
-## First/last visit
+## Distribution of waiting time to first visit
 dtms_first(dtms=simple,
            matrix=Tp,
            risk="A",
@@ -287,6 +331,7 @@ dtms_first(dtms=simple,
 #> AVERAGE                      1
 #> AVERAGE(COND.)               1
 
+## Distribution of waiting time to last exit
 dtms_last(dtms=simple,
           matrix=Tp,
           risk="A",
@@ -315,11 +360,17 @@ dtms_last(dtms=simple,
 #> AVERAGE(COND.) 0.07581325 0.07518486 0.07592420 0.07942562 0.05815952
 ```
 
-## Example 2: Simulated HRS data
+## Example 2: Simulated working trajectories
 
 Here we provide an example based on simulated data from the Health and
-Retirement Study (HRS). There are three transient states (employed,
-inactive or unemployed, retired) and one absorbing state (dead).
+Retirement Study (HRS). The simulations are based on transition
+probabilities estimated from the HRS as part of Dudel & Myrskylä (2017)
+who studied working trajectories in late working life and old age. There
+are three transient states (employed, inactive or unemployed, retired)
+and one absorbing state (dead). The time scale represents age and ranges
+from 50 to 99, as the focus is on older individuals. The data set also
+contains each individual’s gender, and the transition probabilities
+underlying the simulated trajectories differ between men and women.
 
 ``` r
 ## Load package
