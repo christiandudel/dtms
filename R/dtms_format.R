@@ -176,6 +176,9 @@ dtms_format <- function(data,
       if(verbose) cat("Kept original name for id \n")
   }
 
+  # Class
+  class(data)[2] <- "dmts_data"
+
   # Return result
   return(data)
 

@@ -229,7 +229,7 @@ dtms_last(dtms=simple,
           total=F)
 ```
 
-## Example 2: Simulated working trajectories
+## Example 2: Working trajectories during late working life
 
 Here we provide an example using simulated data based on the Health and 
 Retirement Study (HRS). The simulations are are conducted using transition 

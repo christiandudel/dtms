@@ -363,7 +363,7 @@ dtms_last(dtms=simple,
 #> AVERAGE(COND.) 0.07581325 0.07518486 0.07592420 0.07942562 0.05815952
 ```
 
-## Example 2: Simulated working trajectories
+## Example 2: Working trajectories during late working life
 
 Here we provide an example using simulated data based on the Health and
 Retirement Study (HRS). The simulations are are conducted using
