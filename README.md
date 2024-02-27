@@ -4,6 +4,10 @@
 # dtms - An R package for discrete-time multistate models
 
 <!-- badges: start -->
+
+[![R-CMD-check](https://github.com/r-lib/usethis/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/r-lib/usethis/actions/workflows/R-CMD-check.yaml)
+[![Lifecycle:
+experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 <!-- badges: end -->
 
 ## Authors
@@ -23,10 +27,9 @@ themselves well for modelling trajectories captured in panel data.
 
 ## Disclaimer
 
-This package is still undergoing development and many functions are
-still experimental. The content of this repository will likely change in
-the future, and functions and features might be added or removed without
-warning.
+This package is currently undergoing development and many functions are
+experimental. The content of this repository will change in the future,
+and functions and features might be added or removed without warning.
 
 ## Installation
 
@@ -362,15 +365,27 @@ dtms_last(dtms=simple,
 
 ## Example 2: Simulated working trajectories
 
-Here we provide an example based on simulated data from the Health and
-Retirement Study (HRS). The simulations are based on transition
-probabilities estimated from the HRS as part of Dudel & Myrskylä (2017)
-who studied working trajectories in late working life and old age. There
-are three transient states (employed, inactive or unemployed, retired)
-and one absorbing state (dead). The time scale represents age and ranges
-from 50 to 99, as the focus is on older individuals. The data set also
-contains each individual’s gender, and the transition probabilities
-underlying the simulated trajectories differ between men and women.
+Here we provide an example using simulated data based on the Health and
+Retirement Study (HRS). The simulations are are conducted using
+transition probabilities estimated from the HRS and published by Dudel &
+Myrskylä (2017) who studied working trajectories in late working life
+and old age. These transition probabilities are used to simulate
+artificial but realistic trajectories. There are three transient states
+(employed, inactive or unemployed, retired) and one absorbing state
+(dead). The time scale represents age and ranges from 50 to 99, as the
+focus is on older individuals. Note that the actual HRS data is
+collected every two years and while the simulated data is annual. The
+data set also contains each individual’s gender, and the transition
+probabilities underlying the simulated trajectories differ between men
+and women.
+
+The workflow is similar to the previous example. First, a ‘dtms’ model
+is defined using the function \`dtms’. Second, the data is brought into
+transition format and cleaned. Third, transition probabilities are
+estimated and put into a transition matrix. In this example,
+probabilities are estimated and predicted using time-constant and
+time-varying covariates. Finally, the transition matrix is used to
+calculate state expectancies and similar measures.
 
 ``` r
 ## Load package
