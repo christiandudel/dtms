@@ -131,6 +131,17 @@ value. No observations were dropped because they are out of the time range
 specified with the 'dtms' object, and no observations were dropped because they
 start in an absorbing state.
 
+A brief overview of the data is provided when using the function 'summary':
+```{r example1-summary}
+# Fit model 
+summary(estdata)
+```
+This shows for all possible transitions the absolute number each transition is
+observed (e.g., there are 160 transitions from A to X); the proportion of 
+each transition relative to all transitions (e.g., a bit more than 1% of all
+observed transitions are from A to X); and raw transition probabilities (e.g.,
+the probability of transitioning to X starting in A is around 4%).
+
 To estimate the transition probabilities of the multistate model, the function 
 'dtms_fit' is used. In this simple example, it is enough to specify the name
 of the object with the transition data:

@@ -1,5 +1,32 @@
-### Method
-summary.dmts_data <- function(data,
+#' Summarize data in transition format
+#'
+#' @description
+#' Returns a data frame with number of observed transitions (column COUNT),
+#' relative proportion (column PROP), and raw transition probabilities (column
+#' PROB).
+#'
+#' @param data Data frame in transition format
+#' @param dtms dtms object
+#' @param fromvar Variable with starting state, optional
+#' @param tovar Variable with receiving state, optional
+#' @param weightvar Variable with weigths
+#'
+#' @return A data frame
+#' @export
+#'
+#' @examples
+#' simple <- dtms(transient=c("A","B"),
+#'                absorbing="X",
+#'                timescale=0:20)
+#' estdata <- dtms_format(data=simpledata,
+#'                        dtms=simple,
+#'                        idvar="id",
+#'                        timevar="time",
+#'                        statevar="state")
+#' dtms_data_summary(estdata)
+
+## Method
+dtms_data_summary <- function(data,
                               dtms=NULL,
                               fromvar="from",
                               tovar="to",
@@ -9,10 +36,17 @@ summary.dmts_data <- function(data,
     if(is.null(weightvar)) data$COUNT <- 1 else
       data <- dtms_rename(data,weightvar,"COUNT")
 
+    # For handling of missing values
+    data[is.na(data[,fromvar]),fromvar] <- "NA"
+    data[is.na(data[,tovar]),tovar] <- "NA"
+
     # Aggregate
     formal <- paste0("COUNT~",fromvar,"+",tovar)
-    formal <- as.formula(formal)
-    result <- aggregate(formal,data,FUN=sum)
+    formal <- stats::as.formula(formal)
+    result <- stats::aggregate(formal,data,FUN=sum,drop=F)
+
+    # If there are unused combinations COUNT could be NA
+    result[is.na(result$COUNT),"COUNT"] <- 0
 
     # Order
     ordering <- order(result[,fromvar],result[,tovar])
@@ -29,11 +63,27 @@ summary.dmts_data <- function(data,
     probs <- unlist(probs)
     result$PROB <- probs
 
-    # If dtms is provided match
-    if(is.null(dtms)) return(result) else {
-      ### CONTINUE HERE
+    # Row-numbers
+    rownames(result) <- NULL
+
+    # If dtms is provided
+    if(!is.null(dtms))  {
+
+      # Get data frame
+      newframe <- expand.grid(from=dtms$transient,to=c(dtms$transient,dtms$absorbing))
+
+      # Result
+      newresult <- merge(newframe,result,all=TRUE)
+
+      # Replace missings with zero
+      newresult[is.na(newresult$COUNT),c("COUNT","PROP","PROB")] <- rep(0,3)
+
+      # Warning
+      if(any(!result[,fromvar]%in%c(dtms$transient,dtms$absorbing))) warning("Some fromvar values not in state space")
+      if(any(!result[,tovar]%in%c(dtms$transient,dtms$absorbing))) warning("Some tovar values not in state space")
+
     }
+
+    # Return
+    return(result)
 }
-
-
-

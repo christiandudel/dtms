@@ -177,7 +177,7 @@ dtms_format <- function(data,
   }
 
   # Class
-  class(data)[2] <- "dmts_data"
+  class(data) <- c("dtms_data","data.frame")
 
   # Return result
   return(data)

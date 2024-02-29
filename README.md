@@ -155,6 +155,28 @@ missing value. No observations were dropped because they are out of the
 time range specified with the ‘dtms’ object, and no observations were
 dropped because they start in an absorbing state.
 
+A brief overview of the data is provided when using the function
+‘summary’:
+
+``` r
+# Fit model 
+summary(estdata)
+#>   from to COUNT       PROP       PROB
+#> 1    A  A   384 0.03518739 0.09741248
+#> 2    A  B  3398 0.31137176 0.86199899
+#> 3    A  X   160 0.01466141 0.04058853
+#> 4    B  A  3245 0.29735178 0.46549993
+#> 5    B  B  3270 0.29964263 0.46908621
+#> 6    B  X   456 0.04178503 0.06541386
+```
+
+This shows for all possible transitions the absolute number each
+transition is observed (e.g., there are 160 transitions from A to X);
+the proportion of each transition relative to all transitions (e.g., a
+bit more than 1% of all observed transitions are from A to X); and raw
+transition probabilities (e.g., the probability of transitioning to X
+starting in A is around 4%).
+
 To estimate the transition probabilities of the multistate model, the
 function ‘dtms_fit’ is used. In this simple example, it is enough to
 specify the name of the object with the transition data:

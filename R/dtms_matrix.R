@@ -153,7 +153,7 @@ dtms_matrix <- function(probs,
   if(rescale) Tm <- t(apply(Tm,1,function(x) x/sum(x)))
 
   # Class
-  class(Tm)[2] <- "dtms_matrix"
+  class(Tm) <- c("dtms_matrix","matrix")
 
   # Return
   return(Tm)
