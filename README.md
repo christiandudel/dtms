@@ -205,7 +205,26 @@ Tp <- dtms_matrix(dtms=simple,
 In more complex examples, the previous functions would need more
 information. For instance, on which covariates to include in the
 estimation step, and which covariate values to use in the prediction
-step.
+step. To get an overview of the transition probabilities, the function
+summary can be used:
+
+``` r
+## Summary of probabilities
+summary(probs)
+#>   from to    MIN MINtime    MAX MAXtime MEDIAN   MEAN
+#> 1    A  A 0.0791      19 0.0994       3 0.0979 0.0948
+#> 3    A  B 0.6763      19 0.8950       0 0.8601 0.8337
+#> 5    A  X 0.0058       0 0.2447      19 0.0420 0.0715
+#> 2    B  A 0.3302      19 0.4884       0 0.4658 0.4451
+#> 4    B  B 0.3217      19 0.5018       0 0.4661 0.4462
+#> 6    B  X 0.0098       0 0.3481      19 0.0681 0.1087
+```
+
+For all combinations of starting and receiving state, this shows the
+lowest transition probability and at what value of the time scale it
+occurs. It also shows the same for the highest transition probability,
+and in addition it shows the median and the mean of all transition
+probabilities between two states.
 
 Before we generate several results, we calculate the starting
 distribution of the states; i.e., the distribution of states at the

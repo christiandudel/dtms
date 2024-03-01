@@ -13,21 +13,23 @@ dtms_data_summary(
 )
 }
 \arguments{
-\item{data}{Data frame}
+\item{data}{Data frame in transition format}
 
-\item{dtms}{Dtms object}
+\item{dtms}{dtms object}
 
-\item{fromvar}{Variable with starting state}
+\item{fromvar}{Variable with starting state, optional}
 
-\item{tovar}{Variable with receiving state}
+\item{tovar}{Variable with receiving state, optional}
 
 \item{weightvar}{Variable with weigths}
 }
 \value{
-A data frame with counts and probabilities
+A data frame
 }
 \description{
-Summarize data in transition format
+Returns a data frame with number of observed transitions (column COUNT),
+relative proportion (column PROP), and raw transition probabilities (column
+PROB).
 }
 \examples{
 simple <- dtms(transient=c("A","B"),

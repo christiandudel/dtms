@@ -147,7 +147,7 @@ dtms_transitions <- function(model,
                                         sep=sep)
 
   # Class
-  class(model_frame)[2] <- "dtms_probs"
+  class(model_frame) <- c("dtms_probs","data.frame")
 
   # Return
   return(model_frame)
