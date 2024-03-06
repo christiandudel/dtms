@@ -1,11 +1,17 @@
 #' @export
-## Function for data summary
+## Summary function for data in transition format
 summary.dtms_data <- function(object,...) {
   dtms_data_summary(data=object,...)
 }
 
 #' @export
-## Function for transition probabilities
+## Summary function for transition probabilities
 summary.dtms_probs <- function(object,...) {
   dtms_probs_summary(probs=object,...)
+}
+
+#' @export
+## Summary function for distributional results
+summary.dtms_distr <- function(object,...) {
+  dtms_distr_summary(distr=object,...)
 }

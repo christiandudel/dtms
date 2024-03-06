@@ -175,6 +175,19 @@ transition probability and at what value of the time scale it occurs. It also
 shows the same for the highest transition probability, and in addition it shows
 the median and the mean of all transition probabilities between two states.
 
+Another useful way to look at the transition probabilies is to plot them. To
+make this easy, the package provides the function dtms_simplify which can 
+be applied to an object created with dtms_transitions to make it easier to plot.
+For instance, using ggplot2, a simple plot could look like this:
+```{r example1-probsplot}
+## Simple plot
+library(ggplot2)
+probs |>  dtms_simplify() |> 
+          ggplot(aes(x=time,y=P,color=to)) + 
+          geom_line() + 
+          facet_wrap(~from)
+```
+
 Before we generate several results, we calculate the starting distribution of
 the states; i.e., the distribution of states at the first value of the time
 scale. 
@@ -248,6 +261,35 @@ dtms_last(dtms=simple,
           rescale=T,
           total=F)
 ```
+The output from these functions tends to be difficult to read, and often 
+results on the distribution are used to calculate other statistics. A small
+set of such statistics can be generated using the function 'summary':
+```{r example1-results2-ctd}
+## Distribution of visits
+example <- dtms_visits(dtms=simple,
+                       matrix=Tp,
+                       risk="A",
+                       start_distr=S)
+summary(example)
+```
+In the example above this returns, respectively, the average lifetime spent in
+state A; the variance of the lifetime spent in state A; the standard deviation 
+of the lifetime spent in state A; the median of the lifetime spent in state A;
+ and the probability of spending zero lifetime in state A. Depending on which
+ distribution this function is applied to, some entries might not be defined. 
+ For instance: 
+```{r example1-results2-ctd2}
+## Distribution of waiting time to last exit
+example2 <- dtms_last(dtms=simple,
+                      matrix=Tp,
+                      risk="A",
+                      start_distr=S,
+                      rescale=T,
+                      total=F)
+summary(example2)
+```
+In this case, the distribution is conditional on ever experiencing the exit
+from state A, such that the waiting time until exit always has to be above 0. 
 
 ## Example 2: Working trajectories during late working life
 

@@ -127,7 +127,7 @@ dtms_transitions <- function(model,
   } else stop("Currently only vgam is supported")
 
   # Values of starting state
-  model_frame$from <- paste(model_frame$from,model_frame$time,sep=sep)
+  model_frame[,fromvar] <- paste(model_frame[,fromvar],model_frame[,timevar],sep=sep)
 
   # Reshape
   model_frame <- stats::reshape(model_frame,

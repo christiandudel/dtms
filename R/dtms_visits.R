@@ -104,9 +104,6 @@ dtms_visits <- function(matrix,
   # Starting states, long names
   starting <- dtms_combine(start_state,start_time,sep=sep)
 
-  # Time scale: Only transitions starting up to T-1 relevant
-  timescale <- timescale[-length(timescale)]
-
   # States of the transition matrix
   allstates <- rownames(matrix)
   nstates <- length(allstates)
@@ -258,6 +255,9 @@ dtms_visits <- function(matrix,
     TOTAL <- rowSums(result)
     result <- cbind(result,TOTAL)
   }
+
+  # Assign class
+  class(result) <- c("dtms_distr","matrix")
 
   # Return
   return(result)

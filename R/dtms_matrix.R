@@ -70,7 +70,7 @@ dtms_matrix <- function(probs,
   absorbing <- paste(absorbing)
   all_states <- c(transient_states,absorbing)
 
-  # Get names in probs right
+  # Get variable names in probs right
   probs <- dtms_rename(probs,c(fromvar,tovar,Pvar),c("from","to","P"))
 
   # Subset

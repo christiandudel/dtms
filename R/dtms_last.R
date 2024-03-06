@@ -213,6 +213,9 @@ dtms_last <- function(matrix,
     if(rescale) colnames(result)[dim(result)[2]] <- "TOTAL(RESCALED)"
   }
 
+  # Assign class
+  class(result) <- c("dtms_distr","matrix")
+
   # Output
   return(result)
 

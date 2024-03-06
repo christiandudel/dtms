@@ -52,4 +52,5 @@ estdata <- dtms_clean(data=estdata,
 fit <- dtms_fit(data=estdata)
 probs    <- dtms_transitions(dtms=simple,
                              model = fit)
+summary(probs)
 }
