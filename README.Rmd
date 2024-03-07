@@ -336,6 +336,9 @@ estdata <- dtms_format(data=hrsdata,
 estdata <- dtms_clean(data=estdata,
                       dtms=hrs)
 
+## Overview
+summary(estdata)
+
 ## Add age squared
 estdata$time2 <- estdata$time^2
   
@@ -356,6 +359,10 @@ probs_w <- dtms_transitions(dtms=hrs,
                             model = fit,
                             constant = list(Gender=1),
                             varying = list(time2 = (50:98)^2))
+
+# Overview
+summary(probs_m)
+summary(probs_w)
  
 ## Transition matrices
 Tm <- dtms_matrix(dtms=hrs,
@@ -407,52 +414,64 @@ dtms_risk(dtms=hrs,
           start_distr=Sw)
   
 ## Distribution of visits
-dtms_visits(dtms=hrs,
-            matrix=Tm,
-            risk="Retired",
-            start_distr=Sm)
+visitsm <- dtms_visits(dtms=hrs,
+                       matrix=Tm,
+                       risk="Retired",
+                       start_distr=Sm)
   
-dtms_visits(dtms=hrs,
-            matrix=Tw,
-            risk="Retired",
-            start_distr=Sw,
-            method="end")
+visitsw <- dtms_visits(dtms=hrs,
+                       matrix=Tw,
+                       risk="Retired",
+                       start_distr=Sw,
+                       method="end")
+
+summary(visitsm)
+summary(visitsw)
   
 ## First visit
-dtms_first(dtms=hrs,
-           matrix=Tm,
-           risk="Retired",
-           start_distr=Sm)  
+firstm <- dtms_first(dtms=hrs,
+                     matrix=Tm,
+                     risk="Retired",
+                     start_distr=Sm)  
   
-dtms_first(dtms=hrs,
-           matrix=Tw,
-           risk="Retired",
-           start_distr=Sw)  
+firstw <- dtms_first(dtms=hrs,
+                     matrix=Tw,
+                     risk="Retired",
+                     start_distr=Sw)  
+
+summary(firstm)
+summary(firstw)
 
 ## Last exit
   
 # Leaving employment to any state
-dtms_last(dtms=hrs,
-          matrix=Tm,
-          risk="Employed",
-          start_distr=Sm)  
+last1m <- dtms_last(dtms=hrs,
+                    matrix=Tm,
+                    risk="Employed",
+                    start_distr=Sm)  
   
-dtms_last(dtms=hrs,
-          matrix=Tw,
-          risk="Employed",
-          start_distr=Sw)  
+last1w <- dtms_last(dtms=hrs,
+                    matrix=Tw,
+                    risk="Employed",
+                    start_distr=Sw) 
+
+summary(last1m)
+summary(last1w)
   
 # Leaving employment for retirement
-dtms_last(dtms=hrs,
-          matrix=Tm,
-          risk="Employed",
-          risk_to="Retired",
-          start_distr=Sm)  
+last2m <- dtms_last(dtms=hrs,
+                    matrix=Tm,
+                    risk="Employed",
+                    risk_to="Retired",
+                    start_distr=Sm)  
   
-dtms_last(dtms=hrs,
-          matrix=Tw,
-          risk="Employed",
-          risk_to="Retired",
-          start_distr=Sw)  
+last2w <- dtms_last(dtms=hrs,
+                    matrix=Tw,
+                    risk="Employed",
+                    risk_to="Retired",
+                    start_distr=Sw)  
+
+summary(last2m)
+summary(last2w)
 
 ```
