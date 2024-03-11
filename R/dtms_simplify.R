@@ -9,6 +9,33 @@
 #' @export
 #'
 #' @examples
+#' ## Define model: Absorbing and transient states, time scale
+#' simple <- dtms(transient=c("A","B"),
+#'                absorbing="X",
+#'                timescale=0:20)
+#' ## Reshape to transition format
+#' estdata <- dtms_format(data=simpledata,
+#'                        dtms=simple,
+#'                        idvar="id",
+#'                        timevar="time",
+#'                        statevar="state")
+#' ## Clean
+#' estdata <- dtms_clean(data=estdata,
+#'                       dtms=simple)
+#' ## Fit model
+#' fit <- dtms_fit(data=estdata)
+#' ## Predict probabilities
+#' probs    <- dtms_transitions(dtms=simple,
+#'                              model = fit)
+#' ## Simplify
+#' probs |>  dtms_simplify()
+#' ## NOT RUN: requires ggplot2
+#' # library(ggplot2)
+#' # probs |>  dtms_simplify() |>
+#' #   ggplot(aes(x=time,y=P,color=to)) +
+#' #   geom_line() +
+#' #   facet_wrap(~from)
+
 dtms_simplify <- function(probs,
                           fromvar="from",
                           tovar="to",

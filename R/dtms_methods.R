@@ -15,3 +15,9 @@ summary.dtms_probs <- function(object,...) {
 summary.dtms_distr <- function(object,...) {
   dtms_distr_summary(distr=object,...)
 }
+
+#' @export
+## Plotting function for transition probabilities
+plot.dtms_probs <- function(x,...) {
+  dtms_plot(probs=x,...)
+}

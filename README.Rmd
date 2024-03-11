@@ -187,6 +187,12 @@ probs |>  dtms_simplify() |>
           geom_line() + 
           facet_wrap(~from)
 ```
+A simpler way is available which builds on base-R and does not require ggplot2.
+However, this creates less nice figures and is mainly intended as a very quick
+way of checking results:
+```{r example1-baseplot}
+plot(probs)
+```
 
 Before we generate several results, we calculate the starting distribution of
 the states; i.e., the distribution of states at the first value of the time
@@ -363,6 +369,12 @@ probs_w <- dtms_transitions(dtms=hrs,
 # Overview
 summary(probs_m)
 summary(probs_w)
+
+# Plotting, men as example
+probs_m |>  dtms_simplify() |> 
+            ggplot(aes(x=time,y=P,color=to)) + 
+            geom_line() + 
+            facet_wrap(~from)
  
 ## Transition matrices
 Tm <- dtms_matrix(dtms=hrs,

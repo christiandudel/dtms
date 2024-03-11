@@ -241,7 +241,16 @@ probs |>  dtms_simplify() |>
           facet_wrap(~from)
 ```
 
-<img src="man/figures/README-example1-probsplot-1.png" width="100%" />
+<img src="man/figures/README-example1-probsplot-1.png" width="100%" /> A
+simpler way is available which builds on base-R and does not require
+ggplot2. However, this creates less nice figures and is mainly intended
+as a very quick way of checking results:
+
+``` r
+plot(probs)
+```
+
+<img src="man/figures/README-example1-baseplot-1.png" width="100%" />
 
 Before we generate several results, we calculate the starting
 distribution of the states; i.e., the distribution of states at the
@@ -315,11 +324,11 @@ dtms_visits(dtms=simple,
             matrix=Tp,
             risk="A",
             start_distr=S)
-#>                         0        0.5          1        1.5          2
-#> start:A_0      0.00000000 0.03344785 0.00000000 0.05797786 0.00000000
-#> start:B_0      0.02527488 0.00000000 0.05015961 0.00000000 0.08196620
-#> AVERAGE        0.01253064 0.01686525 0.02486786 0.02923391 0.04063676
-#> AVERAGE(COND.) 0.02527488 0.00000000 0.05015961 0.00000000 0.08196620
+#>                         0           0.5          1        1.5          2
+#> start:A_0      0.00000000  3.344785e-02 0.00000000 0.05797786 0.00000000
+#> start:B_0      0.02527488 -3.469447e-18 0.05015961 0.00000000 0.08196620
+#> AVERAGE        0.01253064  1.686525e-02 0.02486786 0.02923391 0.04063676
+#> AVERAGE(COND.) 0.02527488 -3.469447e-18 0.05015961 0.00000000 0.08196620
 #>                       2.5          3        3.5          4        4.5
 #> start:A_0      0.09266499 0.00000000 0.13234577 0.00000000 0.16433225
 #> start:B_0      0.00000000 0.12075167 0.00000000 0.15592903 0.00000000
@@ -340,31 +349,26 @@ dtms_visits(dtms=simple,
 #> start:B_0      0.008078237 0.000000000 0.0013183451 0.0000000000 1.260989e-04
 #> AVERAGE        0.004004985 0.002437203 0.0006536021 0.0003320823 6.251665e-05
 #> AVERAGE(COND.) 0.008078237 0.000000000 0.0013183451 0.0000000000 1.260989e-04
-#>                        12.5           13         13.5           14
-#> start:A_0      5.305246e-05 0.000000e+00 2.597229e-06 0.000000e+00
-#> start:B_0      0.000000e+00 7.176230e-06 0.000000e+00 2.508942e-07
-#> AVERAGE        2.675040e-05 3.557793e-06 1.309589e-06 1.243870e-07
-#> AVERAGE(COND.) 0.000000e+00 7.176230e-06 0.000000e+00 2.508942e-07
-#>                         14.5            15          15.5            16
-#> start:A_0       7.993303e-08 -2.220446e-16  1.586369e-09 -1.110223e-16
-#> start:B_0      -1.110223e-16  5.542818e-09 -2.220446e-16  7.849654e-11
-#> AVERAGE         4.030426e-08  2.747988e-09  7.998875e-10  3.891654e-11
-#> AVERAGE(COND.) -1.110223e-16  5.542818e-09 -2.220446e-16  7.849654e-11
-#>                        16.5            17         17.5           18
-#> start:A_0      2.052114e-11 -1.110223e-16 1.714184e-13 0.000000e+00
-#> start:B_0      0.000000e+00  7.085443e-13 0.000000e+00 3.774758e-15
-#> AVERAGE        1.034728e-11  3.512223e-13 8.643352e-14 1.871429e-15
-#> AVERAGE(COND.) 0.000000e+00  7.085443e-13 0.000000e+00 3.774758e-15
-#>                        18.5 19 19.5           20 20.5            21
-#> start:A_0      7.771561e-16  0    0 2.220446e-16    0 -2.220446e-16
-#> start:B_0      0.000000e+00  0    0 0.000000e+00    0  0.000000e+00
-#> AVERAGE        3.918618e-16  0    0 1.119605e-16    0 -1.119605e-16
-#> AVERAGE(COND.) 0.000000e+00  0    0 0.000000e+00    0  0.000000e+00
-#>                        21.5
-#> start:A_0      2.220446e-16
-#> start:B_0      2.220446e-16
-#> AVERAGE        2.220446e-16
-#> AVERAGE(COND.) 2.220446e-16
+#>                        12.5           13         13.5           14         14.5
+#> start:A_0      5.305246e-05 0.000000e+00 2.597229e-06 0.000000e+00 7.993303e-08
+#> start:B_0      0.000000e+00 7.176230e-06 0.000000e+00 2.508942e-07 0.000000e+00
+#> AVERAGE        2.675040e-05 3.557793e-06 1.309589e-06 1.243870e-07 4.030426e-08
+#> AVERAGE(COND.) 0.000000e+00 7.176230e-06 0.000000e+00 2.508942e-07 0.000000e+00
+#>                          15         15.5           16         16.5           17
+#> start:A_0      0.000000e+00 1.586369e-09 0.000000e+00 2.052092e-11 2.220446e-16
+#> start:B_0      5.542817e-09 0.000000e+00 7.849632e-11 2.220446e-16 7.083223e-13
+#> AVERAGE        2.747988e-09 7.998875e-10 3.891649e-11 1.034728e-11 3.512802e-13
+#> AVERAGE(COND.) 5.542817e-09 0.000000e+00 7.849632e-11 2.220446e-16 7.083223e-13
+#>                        17.5           18         18.5           19
+#> start:A_0      1.711964e-13 0.000000e+00 6.661338e-16 2.220446e-16
+#> start:B_0      2.220446e-16 3.552714e-15 2.220446e-16 2.220446e-16
+#> AVERAGE        8.643164e-14 1.761345e-15 4.459656e-16 2.220446e-16
+#> AVERAGE(COND.) 2.220446e-16 3.552714e-15 2.220446e-16 2.220446e-16
+#>                         19.5            20 20.5           21          21.5
+#> start:A_0       2.220446e-16 -2.220446e-16    0 2.220446e-16  0.000000e+00
+#> start:B_0      -2.220446e-16  2.220446e-16    0 0.000000e+00 -2.220446e-16
+#> AVERAGE         1.876433e-18 -1.876433e-18    0 1.119605e-16 -1.100841e-16
+#> AVERAGE(COND.) -2.220446e-16  2.220446e-16    0 0.000000e+00 -2.220446e-16
 #> attr(,"class")
 #> [1] "dtms_distr" "matrix"
 
@@ -601,6 +605,17 @@ summary(probs_w)
 #> 6   Retired Employed 0.0052      98 0.1966      50 0.0115 0.0341
 #> 9   Retired Inactive 0.0000      98 0.2013      50 0.0032 0.0404
 #> 12  Retired  Retired 0.5857      50 0.9600      74 0.9001 0.8567
+
+# Plotting, men as example
+probs_m |>  dtms_simplify() |> 
+            ggplot(aes(x=time,y=P,color=to)) + 
+            geom_line() + 
+            facet_wrap(~from)
+```
+
+<img src="man/figures/README-example2-1.png" width="100%" />
+
+``` r
  
 ## Transition matrices
 Tm <- dtms_matrix(dtms=hrs,
@@ -708,8 +723,7 @@ firstw <- dtms_first(dtms=hrs,
                      start_distr=Sw)  
 
 summary(firstm)
-#> Warning in dtms_distr_summary(distr = object, ...): NAs durch Umwandlung
-#> erzeugt
+#> Warning in dtms_distr_summary(distr = object, ...): NAs introduced by coercion
 #>                       MEAN VARIANCE       SD MEDIAN      RISK0
 #> start:Employed_50 14.25887 42.52401 6.521043   14.5 0.00000000
 #> start:Inactive_50 12.31587 50.90513 7.134783   12.5 0.00000000
@@ -717,8 +731,7 @@ summary(firstm)
 #> AVERAGE           13.13712 52.58727 7.251708   13.5 0.06011927
 #> AVERAGE(COND.)    13.97744 44.20558 6.648728   13.5 0.00000000
 summary(firstw)
-#> Warning in dtms_distr_summary(distr = object, ...): NAs durch Umwandlung
-#> erzeugt
+#> Warning in dtms_distr_summary(distr = object, ...): NAs introduced by coercion
 #>                       MEAN VARIANCE       SD MEDIAN      RISK0
 #> start:Employed_50 14.10717 40.00302 6.324794   14.5 0.00000000
 #> start:Inactive_50 12.54709 46.49749 6.818907   12.5 0.00000000
@@ -740,8 +753,7 @@ last1w <- dtms_last(dtms=hrs,
                     start_distr=Sw) 
 
 summary(last1m)
-#> Warning in dtms_distr_summary(distr = object, ...): NAs durch Umwandlung
-#> erzeugt
+#> Warning in dtms_distr_summary(distr = object, ...): NAs introduced by coercion
 #>                       MEAN VARIANCE       SD MEDIAN RISK0
 #> start:Employed_50 16.50265 76.98676 8.774210   15.5    NA
 #> start:Inactive_50 18.02302 68.14259 8.254853   17.5    NA
@@ -749,8 +761,7 @@ summary(last1m)
 #> AVERAGE           16.73797 75.91238 8.712771   16.5    NA
 #> AVERAGE(COND.)    17.97027 68.47754 8.275116   17.5    NA
 summary(last1w)
-#> Warning in dtms_distr_summary(distr = object, ...): NAs durch Umwandlung
-#> erzeugt
+#> Warning in dtms_distr_summary(distr = object, ...): NAs introduced by coercion
 #>                       MEAN VARIANCE       SD MEDIAN RISK0
 #> start:Employed_50 16.15218 87.76963 9.368545   15.5    NA
 #> start:Inactive_50 18.31738 77.06422 8.778623   17.5    NA
@@ -772,8 +783,7 @@ last2w <- dtms_last(dtms=hrs,
                     start_distr=Sw)  
 
 summary(last2m)
-#> Warning in dtms_distr_summary(distr = object, ...): NAs durch Umwandlung
-#> erzeugt
+#> Warning in dtms_distr_summary(distr = object, ...): NAs introduced by coercion
 #>                       MEAN VARIANCE       SD MEDIAN RISK0
 #> start:Employed_50 18.74988 64.64429 8.040167   18.5    NA
 #> start:Inactive_50 19.72542 56.78054 7.535286   19.5    NA
@@ -781,8 +791,7 @@ summary(last2m)
 #> AVERAGE           18.90783 63.49802 7.968565   18.5    NA
 #> AVERAGE(COND.)    19.69276 57.06149 7.553906   19.5    NA
 summary(last2w)
-#> Warning in dtms_distr_summary(distr = object, ...): NAs durch Umwandlung
-#> erzeugt
+#> Warning in dtms_distr_summary(distr = object, ...): NAs introduced by coercion
 #>                       MEAN VARIANCE       SD MEDIAN RISK0
 #> start:Employed_50 19.33660 73.65218 8.582085   19.5    NA
 #> start:Inactive_50 20.62023 63.26114 7.953687   20.5    NA
