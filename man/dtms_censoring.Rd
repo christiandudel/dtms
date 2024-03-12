@@ -11,39 +11,74 @@ dtms_censoring(
   tovar = "to",
   timevar = "time",
   idvar = "id",
-  add = F,
-  addtype = "id",
   print = T,
   printlong = F,
+  add = F,
+  addtype = "id",
   varnames = c("LEFT", "GAP", "RIGHT")
 )
 }
 \arguments{
-\item{data}{Data frame}
+\item{data}{Data frame, as created with "dtms_format".}
 
-\item{dtms}{dtms object}
+\item{dtms}{dtms object, as created with "dtms".}
 
-\item{fromvar}{Variable with starting state}
+\item{fromvar}{Optional, character, name of variable with starting state. Default is "from" as used as default in other functions.}
 
-\item{tovar}{Variable with receiving state}
+\item{tovar}{Optional, character, name of variable with receiving state. Default is "to" as used as default in other functions.}
 
-\item{timevar}{Variable with time scale}
+\item{timevar}{Optional, character, name of variable with time scale. Default is "time" as used as default in other functions.}
 
-\item{idvar}{Variable with unit ID}
+\item{idvar}{Optional, character, name of variable with unit ID. Default is "id" as used as default in other functions.}
 
-\item{add}{Add indicators to data set?}
+\item{print}{Optional, logical, Print counts? Default is TRUE.}
 
-\item{addtype}{If add=T, what type of information should be added? Either "id" or "obs".}
+\item{printlong}{Optional, logical, print cross-tabulation? Default is FALSE.}
 
-\item{print}{Print short table?}
+\item{add}{Optional, logical, add indicators to data set? Default is FALSE.}
 
-\item{printlong}{Print long table?}
+\item{addtype}{Optional, character. If add=T, what type of information should be added? Either "id" or "obs", see details.}
 
-\item{varnames}{If variables are added, what should be their names}
+\item{varnames}{Optional, character vector with names of added variables. Default is "c("LEFT","GAP","RIGHT")"}
 }
 \value{
 Table or data frame
 }
 \description{
-Get information on left censoring, right censoring, and gaps in data
+This function provides an overview of censoring and gaps in the data. It can
+do so in several ways: by providing counts of units with left censoring,
+right censoring, and gaps; by providing a cross-tabulation of the number of
+units with left censoring and/or right censoring and/or gaps; and by
+returning the data frame with added indicators on censoring and gaps.
+}
+\details{
+Added variables can be at the unit level or at the observation level. This
+is controlled by the argument "addtype". If it is set to "id" then the unit
+level is used. The added variables then are the same for each observation
+of a unit. For instance, if a unit experiences any gap, then the added
+variable has the value TRUE for all observations of that unit. If "addtype"
+is set to "obs", then the observation level is used and the indicators are
+only set to TRUE if they apply to a specific observation. For instance, if
+a unit experience right censoring, only the last observation will have TRUE
+as the value for the right-censoring indicator; i.e., showing that after this
+last observation there is right censoring. This can be helpful for analyses
+to understand censoring better.
+}
+\examples{
+## Define model: Absorbing and transient states, time scale
+simple <- dtms(transient=c("A","B"),
+               absorbing="X",
+               timescale=0:19)
+# Reshape to transition format
+estdata <- dtms_format(data=simpledata,
+                       dtms=simple,
+                       idvar="id",
+                       timevar="time",
+                       statevar="state")
+## Clean
+estdata <- dtms_clean(data=estdata,
+                      dtms=simple)
+## Censoring
+dtms_censoring(data=estdata,
+               dtms=simple)
 }

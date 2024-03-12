@@ -37,6 +37,17 @@ estdata <- dtms_clean(data=estdata,
 dtms_censoring(data=estdata,
                dtms=simple)
 
+# More advanced censoring example
+estdata <- dtms_censoring(data=estdata,
+                          dtms=simple,
+                          add=T,
+                          addtype="obs")
+
+estdata |>
+  subset(subset=to!="X",select=c(RIGHT,to)) |>
+  table() |>
+  prop.table(margin=1)
+
 ## Summary of data
 summary(estdata)
 

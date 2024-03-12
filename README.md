@@ -559,11 +559,31 @@ summary(estdata)
 #> 10  Retired Employed   838 0.008398645 0.016604252
 #> 11  Retired Inactive   606 0.006073483 0.012007371
 #> 12  Retired  Retired 46423 0.465262884 0.919831976
+
+## Basic censoring
 dtms_censoring(data=estdata,
                dtms=hrs)
 #> Units with left censoring:  2036 
 #> Units with gaps:  1720 
 #> Units with right censoring:  1323
+
+## More advanced censoring example
+estdata <- dtms_censoring(data=estdata,
+                          dtms=hrs,
+                          add=T,
+                          addtype="obs")
+#> Units with left censoring:  2036 
+#> Units with gaps:  1720 
+#> Units with right censoring:  1323
+
+estdata |>
+  subset(subset=to!="Dead",select=c(RIGHT,to)) |>
+  table() |>
+  prop.table(margin=1)
+#>        to
+#> RIGHT     Employed   Inactive    Retired
+#>   FALSE 0.34202412 0.13846880 0.51950708
+#>   TRUE  0.19123205 0.07860922 0.73015873
 
 ## Add age squared
 estdata$time2 <- estdata$time^2

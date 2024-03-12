@@ -354,8 +354,21 @@ estdata <- dtms_clean(data=estdata,
 
 ## Overview
 summary(estdata)
+
+## Basic censoring
 dtms_censoring(data=estdata,
                dtms=hrs)
+
+## More advanced censoring example
+estdata <- dtms_censoring(data=estdata,
+                          dtms=hrs,
+                          add=T,
+                          addtype="obs")
+
+estdata |>
+  subset(subset=to!="Dead",select=c(RIGHT,to)) |>
+  table() |>
+  prop.table(margin=1)
 
 ## Add age squared
 estdata$time2 <- estdata$time^2
