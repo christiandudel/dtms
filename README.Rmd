@@ -85,7 +85,7 @@ possible values of the time scale:
 ## Define model: Absorbing and transient states, time scale
 simple <- dtms(transient=c("A","B"),
                absorbing="X",
-               timescale=0:20)
+               timescale=0:19)
 ```
 The resulting object of class 'dtms' can be passed to other functions of the 
 package, as shown below.
@@ -133,7 +133,7 @@ start in an absorbing state.
 
 A brief overview of the data is provided when using the function 'summary':
 ```{r example1-summary}
-# Fit model 
+## Summary of data
 summary(estdata)
 ```
 This shows for all possible transitions the absolute number each transition is
@@ -142,11 +142,20 @@ each transition relative to all transitions (e.g., a bit more than 1% of all
 observed transitions are from A to X); and raw transition probabilities (e.g.,
 the probability of transitioning to X starting in A is around 4%).
 
+Some more information on the data is provided by the function 'dtms_censoring'.
+It can be used in different ways, but a basic version shows an overview of
+the number of units with left censoring, the number of units with gaps in their
+series of observations, and the number of units with right censoring:
+```{r example1-censoring}
+dtms_censoring(data=estdata,
+               dtms=simple)
+```
+
 To estimate the transition probabilities of the multistate model, the function 
 'dtms_fit' is used. In this simple example, it is enough to specify the name
 of the object with the transition data:
 ```{r example1-fit}
-# Fit model 
+## Fit model 
 fit <- dtms_fit(data=estdata)
 ```
 To predict transition probabilities and to arrange them in a matrix, the 
@@ -191,10 +200,11 @@ A simpler way is available which builds on base-R and does not require ggplot2.
 However, this creates less nice figures and is mainly intended as a very quick
 way of checking results:
 ```{r example1-baseplot}
+## Simple base plot
 plot(probs)
 ```
 
-Before we generate several results, we calculate the starting distribution of
+Before we generate more results, we calculate the starting distribution of
 the states; i.e., the distribution of states at the first value of the time
 scale. 
 ```{r example1-start}
@@ -344,6 +354,8 @@ estdata <- dtms_clean(data=estdata,
 
 ## Overview
 summary(estdata)
+dtms_censoring(data=estdata,
+               dtms=hrs)
 
 ## Add age squared
 estdata$time2 <- estdata$time^2
