@@ -32,7 +32,7 @@ dtms_fit(
 
 \item{timevar}{Character (optional), name of variable with time scale. Defaults to `time`, which is used as default in other functions of the package.}
 
-\item{reference}{Numeric (optional). Reference level of multinomial logistic regression (VGAM)}
+\item{reference}{Numeric or character (optional). Reference level of multinomial logistic regression.}
 
 \item{package}{Character, chooses package for multinomial logistic regression, currently `VGAM`, `nnet`, and `mclogit` are supported. Default is `VGAM`.}
 
