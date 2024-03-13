@@ -64,6 +64,10 @@ head(simpledata)
 #> 5  1    4     B
 #> 6  1    5     A
 
+## States
+simpledata$state |> unique()
+#> [1] "A" "B" "X"
+
 ## Number of units
 simpledata$id |> unique() |> length()
 #> [1] 993

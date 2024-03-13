@@ -66,6 +66,9 @@ library(dtms)
 ## Look at data
 head(simpledata)
 
+## States
+simpledata$state |> unique()
+
 ## Number of units
 simpledata$id |> unique() |> length()
 

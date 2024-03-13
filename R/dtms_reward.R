@@ -2,7 +2,7 @@
 #'
 #' @description
 #' This function calculates the expected rewards by starting state in a
-#' Markov chain with rewards.#'
+#' Markov chain with rewards.
 #'
 #' @param matrix Matrix, transition matrix as generated with dtms_matrix.
 #' @param reward Matrix, matrix with rewards, has to be of same dimensions as `matrix`.
