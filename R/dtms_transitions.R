@@ -121,10 +121,14 @@ dtms_transitions <- function(model,
     model_frame[var] <- value[assign_values]
   }
 
-  # Predict (might need adjustment for other packages)
-  if(inherits(model,"vgam")) {
+  # Predict
+  if(inherits(model,c("vgam","mclogit"))) {
     model_frame[,all_states] <- stats::predict(model,model_frame,"response")[,all_states]
-  } else stop("Currently only vgam is supported")
+  }
+
+  if(inherits(model,"nnet")) {
+    model_frame[,all_states] <- stats::predict(model,model_frame,"probs")[,all_states]
+  }
 
   # Values of starting state
   model_frame[,fromvar] <- paste(model_frame[,fromvar],model_frame[,timevar],sep=sep)

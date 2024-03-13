@@ -15,4 +15,6 @@ Depends:
     R (>= 2.10)
 Imports: 
     Biodem,
+    mclogit,
+    nnet,
     VGAM

@@ -11,8 +11,8 @@
 #' @param timevar Character (optional), name of variable with time scale. Defaults to `time`, which is used as default in other functions of the package.
 #' @param formula Formula (optional). If no formula is specified, it will be build from the information specified with controls, fromvar, tovar, and timevar.
 #' @param weights Character (optional). Name of variable with survey weights.
-#' @param reference Numeric (optional). Reference level of multinomial logistic regression (VGAM)
-#' @param method Character, chooses package for multinomial logistic regression, currently only `VGAM` supported.
+#' @param reference Numeric or character (optional). Reference level of multinomial logistic regression.
+#' @param package Character, chooses package for multinomial logistic regression, currently `VGAM`, `nnet`, and `mclogit` are supported. Default is `VGAM`.
 #' @param ... Further arguments passed to estimation functions.
 #'
 #' @return Returns an object with class depending on the package used.
@@ -35,19 +35,16 @@
 #' ## Fit model
 #' fit <- dtms_fit(data=estdata)
 
-dtms_fit <- function(data,      # Name of data frame, required
-                     controls=NULL, # Name(s) of control variables, if any
-                     formula=NULL,  # Alternatively, full formula
-                     weights=NULL,  # Weights, if any
-                     fromvar="from", # Name of variable with starting state
-                     tovar="to",   # Name of variable with receiving state
-                     timevar="time", # Name of variable with time
-                     reference=1,   # Reference category
-                     method="VGAM", # Function to use
-                     ...) {  # Further arguments to be passed to estimation function
-
-  # Checks
-  if(!method=="VGAM") stop("Currently only VGAM supported")
+dtms_fit <- function(data,
+                     controls=NULL,
+                     formula=NULL,
+                     weights=NULL,
+                     fromvar="from",
+                     tovar="to",
+                     timevar="time",
+                     reference=1,
+                     package="VGAM",
+                     ...) {
 
   # Build formula if not specified
   if(is.null(formula)) {
@@ -60,16 +57,44 @@ dtms_fit <- function(data,      # Name of data frame, required
     formula <- stats::as.formula(formula)
   }
 
-  # Estimate
-  if(method=="VGAM") {
+  # Factors (needed by most packages)
+  data[,fromvar] <- as.factor(data[,fromvar])
+  data[,tovar] <- as.factor(data[,tovar])
+  data[,tovar] <- stats::relevel(data[,tovar],ref=reference)
 
-    # Calculate
+  # VGAM
+  if(package=="VGAM") {
+
+    # Estimate
     dtms_fit <- VGAM::vgam(formula=formula,
                            family=VGAM::multinomial(refLevel=reference),
                            data=data,
                            weights=weights,
                            ...)
   }
+
+  #nnet
+  if(package=="nnet") {
+
+    # Estimate
+    dtms_fit <- nnet::multinom(formula=formula,
+                               data=data,
+                               weights=weights,
+                               ...)
+
+  }
+
+  #mclogit
+  if(package=="mclogit") {
+
+    # Estimate
+    dtms_fit <- mclogit::mblogit(formula=formula,
+                                 data=data,
+                                 weights=weights,
+                                 ...)
+
+  }
+
 
   # Return results
   return(dtms_fit)

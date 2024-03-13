@@ -13,7 +13,7 @@ dtms_fit(
   tovar = "to",
   timevar = "time",
   reference = 1,
-  method = "VGAM",
+  package = "VGAM",
   ...
 )
 }
@@ -34,7 +34,7 @@ dtms_fit(
 
 \item{reference}{Numeric (optional). Reference level of multinomial logistic regression (VGAM)}
 
-\item{method}{Character, chooses package for multinomial logistic regression, currently only `VGAM` supported.}
+\item{package}{Character, chooses package for multinomial logistic regression, currently `VGAM`, `nnet`, and `mclogit` are supported. Default is `VGAM`.}
 
 \item{...}{Further arguments passed to estimation functions.}
 }

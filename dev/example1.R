@@ -52,7 +52,7 @@ estdata |>
 summary(estdata)
 
 ## Fit model
-fit <- dtms_fit(data=estdata)
+fit <- dtms_fit(data=estdata,package="mclogit")
 
 ## Predict probabilities
 probs    <- dtms_transitions(dtms=simple,

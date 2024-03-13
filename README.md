@@ -512,8 +512,9 @@ time-varying covariates. Finally, the transition matrix is used to
 calculate state expectancies and similar measures.
 
 ``` r
-## Load package
+## Load packages
 library(dtms)
+library(ggplot2)
 
 ## Define model: Absorbing and transient states, time scale
 hrs <- dtms(transient=c("Employed","Inactive","Retired"),
