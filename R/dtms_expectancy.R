@@ -28,7 +28,8 @@
 #'
 #' @param matrix Matrix with transition probabilities, as generated with `dtms_matrix`.
 #' @param dtms DTMS object as generated with `dtms`.
-#' @param start_distr Numeric (optional), distribution of starting states. If specified, average expectancy over all starting states will be calculated.
+#' @param risk Character (otpional), name of one transient state. If specified expectancies are only shown for this state but by values of the time scale.
+#' @param start_distr Numeric (optional), distribution of starting states. If specified, average expectancy over all starting states will be calculated. Only applied if risk=NULL.
 #' @param start_state Character (optional), name of starting states. If NULL (default) all transient states will be used.
 #' @param start_time Numeric (optional), value of time scale for start. If NULL (default) first value of time scale will be used.
 #' @param end_time Numeric (optional), last value of time scale to consider. If NULL (default) all values of time scale starting from start_time will be used.
@@ -36,8 +37,9 @@
 #' @param transient Character (optional), names of transient states.
 #' @param timescale Numeric (optional), values of time scale.
 #' @param timestep Numeric (optional), step length of time scale.
-#' @param total Logical (optional), calculate total expectancy. Default is TRUE.
+#' @param total Logical (optional), calculate total expectancy. Default is TRUE. Only applied if risk=NULL.
 #' @param verbose Logical (optional), indicate whether correction and adjustment for timestep are applied. Default is FALSE.
+#' @param fundamental Logical (optional), return fundamental matrix? Default is FALSE.
 #' @param sep Character (optional), separator between short state name and value of time scale. Default is `_`.
 #'
 #' @return Returns a matrix with state expectancy for all transient states.
@@ -75,6 +77,7 @@
 
 dtms_expectancy <- function(matrix,
                             dtms=NULL,
+                            risk=NULL,
                             start_distr=NULL,
                             start_time=NULL,
                             start_state=NULL,
@@ -85,6 +88,7 @@ dtms_expectancy <- function(matrix,
                             correction=0.5,
                             total=T,
                             sep="_",
+                            fundamental=F,
                             verbose = F) {
 
   # Use dtms if provided
@@ -113,55 +117,88 @@ dtms_expectancy <- function(matrix,
   # Remove absorbing states
   matrix <- dtms_absorbing(matrix)
 
+  # All transient states
+  allstates <- rownames(matrix)
+
   # Fundamental matrix
   nstates <- dim(matrix)[1]
   Nmat <- solve(diag(1,nstates)-matrix)
 
-  # Matrix for results
-  result <- matrix(data=NA,ncol=ntransient,nrow=nstart)
-  rownames(result) <- paste0("start:",starting)
-  colnames(result) <- transient
-
-  # Get and place state expectancies
-  allstates <- rownames(matrix)
-
-  for(i in 1:ntransient) {
-
-    # Get states
-    selector <- dtms_in(allstates,transient[i],sep)
-
-    # Use end_time if specified
-    if(!is.null(end_time)) {
-      times <- dtms_gettime(allstates,sep)
-      times <- times<=end_time
-      times[!is.logical(times)] <- F
-      selector <- selector & times
-    }
-
-    # Calculate results and place
-    if(nstart>1) tmp <- rowSums(Nmat[starting,selector]) else tmp <- sum(Nmat[starting,selector])
-
-    # Place
-    result[,transient[i]] <- tmp
-  }
-
   # Correction
   if(is.numeric(correction)) {
 
-    # Only relevant if starting state = relevant state
-    short_start <- dtms_getstate(starting,sep)
-    correction_matrix <- outer(short_start,transient,FUN='==')
-
     # Adjust
-    correction_matrix <- correction_matrix*correction
-    result <- result - correction_matrix
+    diag(Nmat) <- diag(Nmat) - correction
 
     # Output
     if(verbose) cat("(Applying correction)","\n\n")
   }
 
+  # Only return fundamental matrix?
+  if(fundamental) {
+    return(Nmat)
+  }
+
+  # Variant 1: Expectation of all transient states
+  if(is.null(risk)) {
+
+    # Matrix for results
+    result <- matrix(data=NA,ncol=ntransient,nrow=nstart)
+    rownames(result) <- paste0("start:",starting)
+    colnames(result) <- transient
+
+    for(i in 1:ntransient) {
+
+      # Get states
+      selector <- dtms_in(allstates,transient[i],sep)
+
+      # Use end_time if specified
+      if(!is.null(end_time)) {
+        times <- dtms_gettime(allstates,sep)
+        times <- times<=end_time
+        times[!is.logical(times)] <- F
+        selector <- selector & times
+      }
+
+      # Calculate results and place
+      if(nstart>1) tmp <- rowSums(Nmat[starting,selector]) else tmp <- sum(Nmat[starting,selector])
+
+      # Place
+      result[,transient[i]] <- tmp
+    }
+
+  }
+
+  # Variant 2: Expectation in one state by time scale
+  if(!is.null(risk)) {
+
+    # Check
+    if(length(risk)!=1) stop("Only one state allowed for 'risk'")
+
+    # Get time right
+    first <- which(timescale==start_time)
+    if(is.null(end_time)) last <- length(timescale) else
+      last <- which(timescale==end_time)
+    times <- timescale[first:last]
+    ntimes <- length(times)
+
+    # Get right columns from fundamental matrix
+    selector1 <- dtms_in(allstates,risk,sep)
+    selector2 <- dtms_gettime(allstates,sep)%in%times
+    selector <- selector1 & selector2
+
+    # Get result
+    tmp <- rowSums(Nmat[,selector])
+
+    # Matrix with results
+    result <- matrix(data=tmp,ncol=ntimes,nrow=nstart,byrow=T)
+    rownames(result) <- transient
+    colnames(result) <- paste(times)
+
+  }
+
   # Calculate average if starting distribution is provided
-  if(!is.null(start_distr)) {
+  if(!is.null(start_distr) & is.null(risk)) {
 
     # Check if matching
     if(length(start_distr)!=dim(result)[1]) stop("Starting distribution too long or short")
@@ -177,7 +214,7 @@ dtms_expectancy <- function(matrix,
   }
 
   # Add row totals
-  if(total) {
+  if(total & is.null(risk)) {
     TOTAL <- rowSums(result)
     result <- cbind(result,TOTAL)
   }

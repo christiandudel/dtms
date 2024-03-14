@@ -7,6 +7,7 @@
 dtms_expectancy(
   matrix,
   dtms = NULL,
+  risk = NULL,
   start_distr = NULL,
   start_time = NULL,
   start_state = NULL,
@@ -17,6 +18,7 @@ dtms_expectancy(
   correction = 0.5,
   total = T,
   sep = "_",
+  fundamental = F,
   verbose = F
 )
 }
@@ -24,6 +26,8 @@ dtms_expectancy(
 \item{matrix}{Matrix with transition probabilities, as generated with `dtms_matrix`.}
 
 \item{dtms}{DTMS object as generated with `dtms`.}
+
+\item{risk}{Character (otpional), name of one transient state. If specified expectancies are only shown for this state but by values of the time scale.}
 
 \item{start_distr}{Numeric (optional), distribution of starting states. If specified, average expectancy over all starting states will be calculated.}
 
@@ -41,9 +45,11 @@ dtms_expectancy(
 
 \item{correction}{Numeric (optional), correction for expectancy when starting state and state under consideration match, see details. Defaults to 0.5.}
 
-\item{total}{Logical (optional), calculate total expectancy. Default is TRUE.}
+\item{total}{Logical (optional), calculate total expectancy. Default is TRUE. Only applied if risk=NULL.}
 
 \item{sep}{Character (optional), separator between short state name and value of time scale. Default is `_`.}
+
+\item{fundamental}{Logical (optional), return fundamental matrix? Default is FALSE.}
 
 \item{verbose}{Logical (optional), indicate whether correction and adjustment for timestep are applied. Default is FALSE.}
 }

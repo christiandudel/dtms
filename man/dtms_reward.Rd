@@ -20,7 +20,7 @@ A matrix with expected rewards.
 }
 \description{
 This function calculates the expected rewards by starting state in a
-Markov chain with rewards.#'
+Markov chain with rewards.
 }
 \examples{
 ## Define model: Absorbing and transient states, time scale

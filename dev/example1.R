@@ -84,6 +84,11 @@ dtms_expectancy(dtms=simple,
                 matrix=Tp,
                 start_distr=S)
 
+dtms_expectancy(dtms=simple,
+                risk="A",
+                matrix=Tp,
+                start_distr=S)
+
 ## Lifetime risk
 dtms_risk(dtms=simple,
           matrix=Tp,

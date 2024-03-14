@@ -325,6 +325,31 @@ reaching state A depending on the starting state. Obviously, when
 starting in state A at time 0, this risk amounts to 1. When starting in
 state B, the risk is also very high and around 97%.
 
+It is also possible to calculate state expectancies conditional on
+values of the time scale. For this, a single transient state has to be
+specified for which we want to know how long units spent in it:
+
+``` r
+dtms_expectancy(dtms=simple,
+                risk="A",
+                matrix=Tp)
+#>          0        1        2        3        4        5        6        7
+#> A 5.006818 4.694051 4.387121 4.086756 3.793721 3.508792 3.232746 2.966329
+#> B 4.774829 4.460056 4.150827 3.847848 3.551860 3.263624 2.983902 2.713433
+#>          8        9       10       11       12       13       14       15
+#> A 2.710219 2.464994 2.231025 2.008520 1.797071 1.596393 1.403558 1.219479
+#> B 2.452900 2.202883 1.963824 1.735883 1.519020 1.312339 1.115226 0.923136
+#>          16        17        18  19
+#> A 1.0284166 0.8538373 0.5827048 0.5
+#> B 0.7377421 0.5341427 0.3529947 0.0
+```
+
+In the example aboce, we look at the time spent in state A. The results
+by row now indicate the remaining life expectancy in state A starting
+from the state in the row at a given time. For instance, if a unit is in
+state A at time 5, an additional 3.51 time units will be spent in state
+A (as seen in row named “A”, column named “5”).
+
 The function calls below are all similar in that they provide full
 distributions as a result. Specifically, ‘dtms_visits’ calculates the
 distribution of the time spent in a state; the mean over this
