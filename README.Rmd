@@ -349,7 +349,7 @@ probabilities estimated from the HRS and published by Dudel & Myrskylä (2017)
 who studied working trajectories in late working life and old age. These
 transition probabilities are used to simulate artificial but realistic 
 trajectories. There are three transient states 
-(employed, inactive or unemployed, retired) and one absorbing state (dead). 
+(working, non-working, retired) and one absorbing state (dead). 
 The time scale represents age and ranges from 50 to 99, as the focus is on older
 individuals. Note that the actual HRS data is collected every two years and 
 while the simulated data is annual. The data set also contains each individual's 
@@ -369,7 +369,7 @@ library(dtms)
 library(ggplot2)
 
 ## Define model: Absorbing and transient states, time scale
-hrs <- dtms(transient=c("Employed","Inactive","Retired"),
+hrs <- dtms(transient=c("Working","Non-working","Retired"),
             absorbing="Dead",
             timescale=50:99)
 
@@ -461,8 +461,8 @@ dtms_expectancy(dtms=hrs,
                 matrix=Tw,
                 start_distr=Sw)
 
-## A variant: ignoring retirement as a starting state (shown only for men)
-limited <- c("Employed","Inactive")
+## Variant: ignoring retirement as a starting state (shown only for men)
+limited <- c("Working","Non-working")
 
 Smwr <- dtms_start(dtms=hrs,
                    data=estdata,
@@ -516,30 +516,30 @@ summary(firstw)
 
 ## Last exit
   
-# Leaving employment to any state
+# Leaving work to any state
 last1m <- dtms_last(dtms=hrs,
                     matrix=Tm,
-                    risk="Employed",
+                    risk="Working",
                     start_distr=Sm)  
   
 last1w <- dtms_last(dtms=hrs,
                     matrix=Tw,
-                    risk="Employed",
+                    risk="Working",
                     start_distr=Sw) 
 
 summary(last1m)
 summary(last1w)
   
-# Leaving employment for retirement
+# Leaving work for retirement
 last2m <- dtms_last(dtms=hrs,
                     matrix=Tm,
-                    risk="Employed",
+                    risk="Working",
                     risk_to="Retired",
                     start_distr=Sm)  
   
 last2w <- dtms_last(dtms=hrs,
                     matrix=Tw,
-                    risk="Employed",
+                    risk="Working",
                     risk_to="Retired",
                     start_distr=Sw)  
 

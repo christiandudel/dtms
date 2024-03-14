@@ -29,7 +29,7 @@ dtms_expectancy(
 
 \item{risk}{Character (otpional), name of one transient state. If specified expectancies are only shown for this state but by values of the time scale.}
 
-\item{start_distr}{Numeric (optional), distribution of starting states. If specified, average expectancy over all starting states will be calculated.}
+\item{start_distr}{Numeric (optional), distribution of starting states. If specified, average expectancy over all starting states will be calculated. Only applied if risk=NULL.}
 
 \item{start_time}{Numeric (optional), value of time scale for start. If NULL (default) first value of time scale will be used.}
 

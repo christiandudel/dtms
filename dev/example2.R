@@ -4,7 +4,7 @@ library(ggplot2)
 library(devtools)
 
 ## Define model: Absorbing and transient states, time scale
-hrs <- dtms(transient=c("Employed","Inactive","Retired"),
+hrs <- dtms(transient=c("Working","Non-working","Retired"),
             absorbing="Dead",
             timescale=50:99)
 
@@ -98,7 +98,7 @@ dtms_expectancy(dtms=hrs,
                 start_distr=Sw)
 
 ## A variant: ignoring retirement as a starting state (shown only for men)
-limited <- c("Employed","Inactive")
+limited <- c("Working","Non-working")
 
 Smwr <- dtms_start(dtms=hrs,
                    data=estdata,
@@ -155,12 +155,12 @@ summary(firstw)
 # Leaving employment to any state
 last1m <- dtms_last(dtms=hrs,
                     matrix=Tm,
-                    risk="Employed",
+                    risk="Working",
                     start_distr=Sm)
 
 last1w <- dtms_last(dtms=hrs,
                     matrix=Tw,
-                    risk="Employed",
+                    risk="Working",
                     start_distr=Sw)
 
 summary(last1m)
@@ -169,13 +169,13 @@ summary(last1w)
 # Leaving employment for retirement
 last2m <- dtms_last(dtms=hrs,
                     matrix=Tm,
-                    risk="Employed",
+                    risk="Working",
                     risk_to="Retired",
                     start_distr=Sm)
 
 last2w <- dtms_last(dtms=hrs,
                     matrix=Tw,
-                    risk="Employed",
+                    risk="Working",
                     risk_to="Retired",
                     start_distr=Sw)
 

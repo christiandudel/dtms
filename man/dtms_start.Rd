@@ -52,7 +52,7 @@ distribution can also be conditional on further covariate values which can be
 specified with the argument `variables`.
 }
 \examples{
-hrs <- dtms(transient=c("Employed","Inactive","Retired"),
+hrs <- dtms(transient=c("Working","Non-working","Retired"),
             absorbing="Dead",
             timescale=50:99)
 ## Reshape

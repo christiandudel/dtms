@@ -26,7 +26,7 @@
 #'
 #' @examples
 ## Define model: Absorbing and transient states, time scale
-#' hrs <- dtms(transient=c("Employed","Inactive","Retired"),
+#' hrs <- dtms(transient=c("Working","Non-working","Retired"),
 #'             absorbing="Dead",
 #'             timescale=50:99)
 #' ## Reshape
