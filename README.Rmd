@@ -35,6 +35,23 @@ discrete-time multistate model and then applying methods for absorbing Markov
 chains. Discrete-time multistate models lend themselves well for modelling 
 trajectories captured in panel data. 
 
+## Features
+
+Data handling: functions for reshaping data, cleaning data, general descriptives
+and descriptives on censoring. 
+
+Estimation of transition probabilities: builds on existing R packages, allowing 
+for semiparametric estimation ([VGAM](https://cran.r-project.org/web/packages/VGAM)), 
+random effects and random intercepts ([mclogit](https://cran.r-project.org/web/packages/mclogit)), 
+and neural networks ([nnet](https://cran.r-project.org/web/packages/nnet)). 
+Functions for descriptive statistics on transition probabilities and for 
+plotting them are also available.
+
+Markov chain methods: (partial) state/life expectancy, (partial) lifetime risk, 
+(partial) distribution of occupation time, (partial) distribution of waiting 
+time to first visit, (partial) distribution of waiting time to last exit, 
+Markov chains with rewards.
+
 ## Disclaimer
 
 This package is currently undergoing development and many functions are 
