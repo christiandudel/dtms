@@ -42,7 +42,9 @@ plotting them are also available.
 Markov chain methods: (partial) state/life expectancy, (partial)
 lifetime risk, (partial) distribution of occupation time, (partial)
 distribution of waiting time to first visit, (partial) distribution of
-waiting time to last exit, Markov chains with rewards.
+waiting time to last exit, based on (partial) distributions
+variance/standard deviation and median of occupancy time and first
+visit/last exit, Markov chains with rewards.
 
 ## Disclaimer
 

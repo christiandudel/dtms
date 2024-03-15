@@ -6,15 +6,12 @@
 \usage{
 dtms_first(
   matrix,
-  dtms = NULL,
+  dtms,
   risk,
   start_time = NULL,
   start_state = NULL,
   start_distr = NULL,
   end_time = NULL,
-  transient = NULL,
-  timescale = NULL,
-  timestep = NULL,
   method = "mid",
   total = TRUE,
   rescale = TRUE,
@@ -22,31 +19,25 @@ dtms_first(
 )
 }
 \arguments{
-\item{matrix}{Matrix with transition probabilities generated with dtms_matrix.}
+\item{matrix}{Matrix, with transition probabilities, as generated with \code{dtms_matrix}.}
 
-\item{dtms}{DTMS object, as created with `dtms`.}
+\item{dtms}{dtms object, as created with \code{dtms}.}
 
 \item{risk}{Character, name of state(s) for which risk is of interest.}
 
-\item{start_time}{Numeric (optional), value of time scale at start. If NULL (default), first value of time scale is used.}
+\item{start_time}{Numeric (optional), value of time scale for start. If NULL (default) first value of time scale will be used.}
 
-\item{start_state}{Character (optional), names of one or several starting states. If NULL (default), all transient states will be considered.}
+\item{start_state}{Character (optional), name of starting states. If NULL (default) all transient states will be used.}
 
-\item{start_distr}{Numeric (optional), distribution of starting states. Needs to be consistent with starting states. If provided, average distribution is provided; see details.}
+\item{start_distr}{Numeric (optional), distribution of starting states. If specified, average expectancy over all starting states will be calculated. Only applied if risk=NULL.}
 
-\item{end_time}{Numeric (optional), value of time scale at end. If NULL (default), last value of time scale is used.}
+\item{end_time}{Numeric (optional), last value of time scale to consider. If NULL (default) all values of time scale starting from start_time will be used.}
 
-\item{transient}{Character (optional), short names of transient states. If NULL (default) transient states are taken from `dtms` object.}
+\item{method}{Character (optional), do transitions happen mid-interval (`mid`, default) or at the end of the interval (`end`), see details.}
 
-\item{timescale}{Numeric (optional), values of time scale. If NULL (default) obtained from `dtms` object.}
+\item{total}{Logical (optional), should total of distribution be shown? See details. Default is FALSE.}
 
-\item{timestep}{Numeric (optional), step length of time scale. If NULL (default) obtained from `dtms` object.}
-
-\item{method}{Character, do transitions happen mid-interval (`mid`, default) or at the end of the interval (`end`), see details.}
-
-\item{total}{Logical, should total of distribution be shown? Default is FALSE, as the total always is 1.}
-
-\item{rescale}{Logical, should distribution be rescaled to sum to 1? See details. Default is TRUE.}
+\item{rescale}{Logical (optional), should distribution be rescaled to sum to 1? See details. Default is TRUE.}
 
 \item{sep}{Character (optional), separator between short state name and value of time scale. Default is `_`.}
 }

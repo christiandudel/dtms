@@ -9,7 +9,7 @@
 A data frame with 10,529 rows and 3 columns:
 \describe{
   \item{id}{Identifier of the units}
-  \item{age}{Age}
+  \item{time}{Time scale}
   \item{state}{The state occupied by an unit at a given age}
 }
 }

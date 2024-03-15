@@ -6,26 +6,23 @@
 \usage{
 dtms_expectancy(
   matrix,
-  dtms = NULL,
+  dtms,
   risk = NULL,
   start_distr = NULL,
   start_time = NULL,
   start_state = NULL,
   end_time = NULL,
-  transient = NULL,
-  timescale = NULL,
-  timestep = NULL,
   correction = 0.5,
-  total = T,
+  total = TRUE,
   sep = "_",
-  fundamental = F,
-  verbose = F
+  fundamental = FALSE,
+  verbose = FALSE
 )
 }
 \arguments{
-\item{matrix}{Matrix with transition probabilities, as generated with `dtms_matrix`.}
+\item{matrix}{Matrix, with transition probabilities, as generated with \code{dtms_matrix}.}
 
-\item{dtms}{DTMS object as generated with `dtms`.}
+\item{dtms}{dtms object, as created with \code{dtms}.}
 
 \item{risk}{Character (otpional), name of one transient state. If specified expectancies are only shown for this state but by values of the time scale.}
 
@@ -37,12 +34,6 @@ dtms_expectancy(
 
 \item{end_time}{Numeric (optional), last value of time scale to consider. If NULL (default) all values of time scale starting from start_time will be used.}
 
-\item{transient}{Character (optional), names of transient states.}
-
-\item{timescale}{Numeric (optional), values of time scale.}
-
-\item{timestep}{Numeric (optional), step length of time scale.}
-
 \item{correction}{Numeric (optional), correction for expectancy when starting state and state under consideration match, see details. Defaults to 0.5.}
 
 \item{total}{Logical (optional), calculate total expectancy. Default is TRUE. Only applied if risk=NULL.}
@@ -51,10 +42,10 @@ dtms_expectancy(
 
 \item{fundamental}{Logical (optional), return fundamental matrix? Default is FALSE.}
 
-\item{verbose}{Logical (optional), indicate whether correction and adjustment for timestep are applied. Default is FALSE.}
+\item{verbose}{Logical (optional), print some information on what is computed. Default is FALSE.}
 }
 \value{
-Returns a matrix with state expectancy for all transient states.
+A matrix with state expectancies.
 }
 \description{
 This function calculates the expected time spent in the transient states
@@ -79,8 +70,7 @@ of time spent in a certain state if its equal to the starting state. This is
 controlled with the argument `correction` which is applied multiplicative.
 For instance, its default value 0.5 means that the state expectancy in some
 state X starting from state X is reduced by 0.5 time steps. The second
-correction uses the entry `timestep` of `dtms`, or alternatively the
-argument `timestep`, and multiplies results with its value.
+correction uses the entry `timestep` of `dtms`, and multiplies results with its value.
 }
 \examples{
 ## Define model: Absorbing and transient states, time scale

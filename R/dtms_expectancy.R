@@ -23,26 +23,22 @@
 #' controlled with the argument `correction` which is applied multiplicative.
 #' For instance, its default value 0.5 means that the state expectancy in some
 #' state X starting from state X is reduced by 0.5 time steps. The second
-#' correction uses the entry `timestep` of `dtms`, or alternatively the
-#' argument `timestep`, and multiplies results with its value.
+#' correction uses the entry `timestep` of `dtms`, and multiplies results with its value.
 #'
-#' @param matrix Matrix with transition probabilities, as generated with `dtms_matrix`.
-#' @param dtms DTMS object as generated with `dtms`.
+#' @param matrix Matrix, with transition probabilities, as generated with \code{dtms_matrix}.
+#' @param dtms dtms object, as created with \code{dtms}.
 #' @param risk Character (otpional), name of one transient state. If specified expectancies are only shown for this state but by values of the time scale.
 #' @param start_distr Numeric (optional), distribution of starting states. If specified, average expectancy over all starting states will be calculated. Only applied if risk=NULL.
 #' @param start_state Character (optional), name of starting states. If NULL (default) all transient states will be used.
 #' @param start_time Numeric (optional), value of time scale for start. If NULL (default) first value of time scale will be used.
 #' @param end_time Numeric (optional), last value of time scale to consider. If NULL (default) all values of time scale starting from start_time will be used.
 #' @param correction Numeric (optional), correction for expectancy when starting state and state under consideration match, see details. Defaults to 0.5.
-#' @param transient Character (optional), names of transient states.
-#' @param timescale Numeric (optional), values of time scale.
-#' @param timestep Numeric (optional), step length of time scale.
 #' @param total Logical (optional), calculate total expectancy. Default is TRUE. Only applied if risk=NULL.
-#' @param verbose Logical (optional), indicate whether correction and adjustment for timestep are applied. Default is FALSE.
+#' @param verbose Logical (optional), print some information on what is computed. Default is FALSE.
 #' @param fundamental Logical (optional), return fundamental matrix? Default is FALSE.
 #' @param sep Character (optional), separator between short state name and value of time scale. Default is `_`.
 #'
-#' @return Returns a matrix with state expectancy for all transient states.
+#' @return A matrix with state expectancies.
 #' @export
 #'
 #' @examples
@@ -76,43 +72,31 @@
 #'                 start_distr=S)
 
 dtms_expectancy <- function(matrix,
-                            dtms=NULL,
+                            dtms,
                             risk=NULL,
                             start_distr=NULL,
                             start_time=NULL,
                             start_state=NULL,
                             end_time=NULL,
-                            transient=NULL,
-                            timescale=NULL,
-                            timestep=NULL,
                             correction=0.5,
-                            total=T,
+                            total=TRUE,
                             sep="_",
-                            fundamental=F,
-                            verbose = F) {
+                            fundamental=FALSE,
+                            verbose=FALSE) {
 
-  # Use dtms if provided
-  if(!is.null(dtms)) {
-
-    # Check
-    dtms_proper(dtms)
-
-    # Use values
-    transient <- dtms$transient
-    timescale <- dtms$timescale
-    timestep <- dtms$timestep
-  }
+  # Check
+  dtms_proper(dtms)
 
   # Starting state and time
-  if(is.null(start_state)) start_state <- transient
-  if(is.null(start_time)) start_time <- min(timescale)
+  if(is.null(start_state)) start_state <- dtms$transient
+  if(is.null(start_time)) start_time <- min(dtms$timescale)
 
   # Starting states, long names
   starting <- dtms_combine(start_state,start_time,sep=sep)
 
   # Number of starting and receiving states
   nstart <- length(starting)
-  ntransient <- length(transient)
+  ntransient <- length(dtms$transient)
 
   # Remove absorbing states
   matrix <- dtms_absorbing(matrix)
@@ -145,12 +129,12 @@ dtms_expectancy <- function(matrix,
     # Matrix for results
     result <- matrix(data=NA,ncol=ntransient,nrow=nstart)
     rownames(result) <- paste0("start:",starting)
-    colnames(result) <- transient
+    colnames(result) <- dtms$transient
 
     for(i in 1:ntransient) {
 
       # Get states
-      selector <- dtms_in(allstates,transient[i],sep)
+      selector <- dtms_in(allstates,dtms$transient[i],sep)
 
       # Use end_time if specified
       if(!is.null(end_time)) {
@@ -164,7 +148,7 @@ dtms_expectancy <- function(matrix,
       if(nstart>1) tmp <- rowSums(Nmat[starting,selector]) else tmp <- sum(Nmat[starting,selector])
 
       # Place
-      result[,transient[i]] <- tmp
+      result[,dtms$transient[i]] <- tmp
     }
 
   }
@@ -176,10 +160,10 @@ dtms_expectancy <- function(matrix,
     if(length(risk)!=1) stop("Only one state allowed for 'risk'")
 
     # Get time right
-    first <- which(timescale==start_time)
-    if(is.null(end_time)) last <- length(timescale) else
-      last <- which(timescale==end_time)
-    times <- timescale[first:last]
+    first <- which(dtms$timescale==start_time)
+    if(is.null(end_time)) last <- length(dtms$timescale) else
+      last <- which(dtms$timescale==end_time)
+    times <- dtms$timescale[first:last]
     ntimes <- length(times)
 
     # Get right columns from fundamental matrix
@@ -192,7 +176,7 @@ dtms_expectancy <- function(matrix,
 
     # Matrix with results
     result <- matrix(data=tmp,ncol=ntimes,nrow=nstart,byrow=T)
-    rownames(result) <- transient
+    rownames(result) <- dtms$transient
     colnames(result) <- paste(times)
 
   }
@@ -220,8 +204,8 @@ dtms_expectancy <- function(matrix,
   }
 
   # Adjust for time step
-  if(timestep!=1) {
-    result <- result*timestep
+  if(dtms$timestep!=1) {
+    result <- result*dtms$timestep
     if(verbose) cat("Adjusting for step length","\n\n")
   }
 

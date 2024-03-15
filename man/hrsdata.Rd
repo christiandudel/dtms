@@ -10,7 +10,7 @@ A data frame with 250,000 rows and 4 columns:
 \describe{
   \item{ID}{Person identifier}
   \item{Gender}{Individuals' gender (0=men, 1=women)}
-  \item{Age}{Age}
+  \item{Age}{Age, the time scale of this example}
   \item{State}{The state occupied by an unit at a given age}
 }
 }

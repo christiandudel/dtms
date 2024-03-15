@@ -13,15 +13,15 @@ dtms_data_summary(
 )
 }
 \arguments{
-\item{data}{Data frame in transition format}
+\item{data}{Data frame, as created with \code{dtms_format}.}
 
-\item{dtms}{dtms object}
+\item{dtms}{dtms object, as created with \code{dtms}.}
 
-\item{fromvar}{Variable with starting state, optional}
+\item{fromvar}{Character (optional), name of variable with starting state. Default is "from".}
 
-\item{tovar}{Variable with receiving state, optional}
+\item{tovar}{Character (optional), name of variable with receiving state. Default is "to".}
 
-\item{weightvar}{Variable with weigths}
+\item{weightvar}{Character (optional), name of variable with weights. Default is NULL.}
 }
 \value{
 A data frame

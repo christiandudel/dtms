@@ -52,7 +52,7 @@ are out of the time range of the model; and transitions starting in
 absorbing states.
 
 Transitions starting or ending with a missing state often occur for three
-reasons. First, the function `dtms_format` will always create a transition
+reasons. First, the function \code{dtms_format} will always create a transition
 with a missing receiving state for the last observation of a unit, whether
 due to #' censoring or not. For instance, if t=20 is the last value of the
 time scale, and a unit is in state A at that #' time, then there will be a
@@ -66,11 +66,11 @@ these transitions can be dropped. Third, there might be missing values in
 the sequence of states. For instance, a unit might first be in state A, then
 state B, then the state is missing, and then state is again A, giving the
 sequence A, B, NA, A. This implies a transition from B to NA, and from NA to
-A. The function `dtms_format` by default will ignore missing observations
+A. The function \code{dtms_format} by default will ignore missing observations
 and will not create transitions based on them, but it will if the argument
 `fill` is set to TRUE. Creating these transitions can lead to data sets
 which are much larger than the original data. If they are created,
-`dtms_clean` can handle them.
+\code{dtms_clean} can handle them.
 
 Transitions which are out of the time range can occur, for instance, when
 the researcher is interested in a shorter time frame than covered by data
