@@ -6,43 +6,37 @@
 \usage{
 dtms_clean(
   data,
-  dtms = NULL,
+  dtms,
   fromvar = "from",
   tovar = "to",
   timevar = "time",
-  timescale = NULL,
-  absorbing = NULL,
-  dropTime = T,
-  dropNA = T,
-  dropAbs = T,
-  verbose = T
+  dropTime = TRUE,
+  dropNA = TRUE,
+  dropAbs = TRUE,
+  verbose = TRUE
 )
 }
 \arguments{
-\item{data}{Data frame (or similar) in transition format as created with `dtms_format`.}
+\item{data}{Data frame, as created with \code{dtms_format}.}
 
-\item{dtms}{DTMS object as created with `dtms`.}
+\item{dtms}{dtms object, as created with \code{dtms}.}
 
-\item{fromvar}{Character string (optional), name of the variable with the starting state.}
+\item{fromvar}{Character (optional), name of variable with starting state. Default is "from".}
 
-\item{tovar}{Character string (optional), name of the variable with the receiving state.}
+\item{tovar}{Character (optional), name of variable with receiving state. Default is "to".}
 
-\item{timevar}{Character string (optional), name of the variable with the time scale.}
+\item{timevar}{Character (optional), name of variable with time scale. Default is "time".}
 
-\item{timescale}{Numeric (optional), values of the time scale.}
+\item{dropTime}{Logical (optional), drop transitions with values of time not covered by the model. Default is TRUE.}
 
-\item{absorbing}{Character (optional), names of absorbing state.}
+\item{dropNA}{Logical (optional), drop transitions with gaps, last observations, and similar. Default is TRUE.}
 
-\item{dropTime}{Logical, drop transitions with values of time not covered by the model. Default is TRUE.}
+\item{dropAbs}{Logical (optional), drop transitions starting from absorbing states. Default is TRUE.}
 
-\item{dropNA}{Logical, drop transitions with gaps, last observations, and similar. Default is TRUE.}
-
-\item{dropAbs}{Logical, drop transitions starting from absorbing states. Default is TRUE.}
-
-\item{verbose}{Logical, print how many transitions were dropped. Default is true.}
+\item{verbose}{Logical (optional), print how many transitions were dropped. Default is TRUE}
 }
 \value{
-Returns a cleaned data frame in transition format.
+Cleaned data frame in transition format.
 }
 \description{
 Cleans data in transition format. It can handle issues regularly occurring

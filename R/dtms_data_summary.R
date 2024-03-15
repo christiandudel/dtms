@@ -5,11 +5,11 @@
 #' relative proportion (column PROP), and raw transition probabilities (column
 #' PROB).
 #'
-#' @param data Data frame in transition format
-#' @param dtms dtms object
-#' @param fromvar Variable with starting state, optional
-#' @param tovar Variable with receiving state, optional
-#' @param weightvar Variable with weigths
+#' @param data Data frame, as created with \code{dtms_format}.
+#' @param dtms dtms object, as created with \code{dtms}.
+#' @param fromvar Character (optional), name of variable with starting state. Default is "from".
+#' @param tovar Character (optional), name of variable with receiving state. Default is "to".
+#' @param weightvar Character (optional), name of variable with weights. Default is NULL.
 #'
 #' @return A data frame
 #' @export

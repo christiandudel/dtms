@@ -7,7 +7,7 @@
 #' A data frame with 10,529 rows and 3 columns:
 #' \describe{
 #'   \item{id}{Identifier of the units}
-#'   \item{age}{Age}
+#'   \item{time}{Time scale}
 #'   \item{state}{The state occupied by an unit at a given age}
 #' }
 "simpledata"
@@ -24,7 +24,7 @@
 #' \describe{
 #'   \item{ID}{Person identifier}
 #'   \item{Gender}{Individuals' gender (0=men, 1=women)}
-#'   \item{Age}{Age}
+#'   \item{Age}{Age, the time scale of this example}
 #'   \item{State}{The state occupied by an unit at a given age}
 #' }
 #' @source <https://doi.org/10.1007/s13524-017-0619-6>

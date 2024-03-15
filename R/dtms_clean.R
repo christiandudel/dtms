@@ -14,7 +14,7 @@
 #' absorbing states.
 #'
 #' Transitions starting or ending with a missing state often occur for three
-#' reasons. First, the function `dtms_format` will always create a transition
+#' reasons. First, the function \code{dtms_format} will always create a transition
 #' with a missing receiving state for the last observation of a unit, whether
 #' due to #' censoring or not. For instance, if t=20 is the last value of the
 #' time scale, and a unit is in state A at that #' time, then there will be a
@@ -28,11 +28,11 @@
 #' the sequence of states. For instance, a unit might first be in state A, then
 #' state B, then the state is missing, and then state is again A, giving the
 #' sequence A, B, NA, A. This implies a transition from B to NA, and from NA to
-#' A. The function `dtms_format` by default will ignore missing observations
+#' A. The function \code{dtms_format} by default will ignore missing observations
 #' and will not create transitions based on them, but it will if the argument
 #' `fill` is set to TRUE. Creating these transitions can lead to data sets
 #' which are much larger than the original data. If they are created,
-#' `dtms_clean` can handle them.
+#' \code{dtms_clean} can handle them.
 #'
 #' Transitions which are out of the time range can occur, for instance, when
 #' the researcher is interested in a shorter time frame than covered by data
@@ -40,20 +40,17 @@
 #' time since start of the trial in months and data might be available for 60
 #' months. But perhaps the researcher is only interested in the first 36 months.
 #'
+#' @param data Data frame, as created with \code{dtms_format}.
+#' @param dtms dtms object, as created with \code{dtms}.
+#' @param fromvar Character (optional), name of variable with starting state. Default is "from".
+#' @param tovar Character (optional), name of variable with receiving state. Default is "to".
+#' @param timevar Character (optional), name of variable with time scale. Default is "time".
+#' @param dropTime Logical (optional), drop transitions with values of time not covered by the model. Default is TRUE.
+#' @param dropNA Logical (optional), drop transitions with gaps, last observations, and similar. Default is TRUE.
+#' @param dropAbs Logical (optional), drop transitions starting from absorbing states. Default is TRUE.
+#' @param verbose Logical (optional), print how many transitions were dropped. Default is TRUE
 #'
-#' @param data Data frame (or similar) in transition format as created with `dtms_format`.
-#' @param dtms DTMS object as created with `dtms`.
-#' @param fromvar Character string (optional), name of the variable with the starting state.
-#' @param tovar Character string (optional), name of the variable with the receiving state.
-#' @param timevar Character string (optional), name of the variable with the time scale.
-#' @param timescale Numeric (optional), values of the time scale.
-#' @param absorbing Character (optional), names of absorbing state.
-#' @param dropTime Logical, drop transitions with values of time not covered by the model. Default is TRUE.
-#' @param dropNA Logical, drop transitions with gaps, last observations, and similar. Default is TRUE.
-#' @param dropAbs Logical, drop transitions starting from absorbing states. Default is TRUE.
-#' @param verbose Logical, print how many transitions were dropped. Default is true.
-#'
-#' @return Returns a cleaned data frame in transition format.
+#' @return Cleaned data frame in transition format.
 #' @export
 #'
 #' @examples
@@ -73,31 +70,21 @@
 #'                       dtms=simple)
 
 dtms_clean <- function(data,
-                       dtms=NULL,
+                       dtms,
                        fromvar="from",
                        tovar="to",
                        timevar="time",
-                       timescale=NULL,
-                       absorbing=NULL,
-                       dropTime=T,
-                       dropNA=T,
-                       dropAbs=T,
-                       verbose=T) {
+                       dropTime=TRUE,
+                       dropNA=TRUE,
+                       dropAbs=TRUE,
+                       verbose=TRUE) {
 
-  # Use dtms if provided
-  if(!is.null(dtms)) {
-
-    # Check
-    dtms_proper(dtms)
-
-    # Use values
-    timescale <- dtms$timescale
-    absorbing <- dtms$absorbing
-  }
+  # Check
+  dtms_proper(dtms)
 
   # Drop observations not in time range
   if(dropTime) {
-    whichrows <- unlist(data[,timevar])%in%timescale
+    whichrows <- unlist(data[,timevar])%in%dtms$timescale
     data <- data[whichrows,]
     if(verbose) {
       count <- sum(!whichrows)
@@ -117,7 +104,7 @@ dtms_clean <- function(data,
 
   # Drop transitions starting in absorbing states
   if(dropAbs) {
-    whichrows <- !unlist(data[,fromvar])%in%absorbing
+    whichrows <- !unlist(data[,fromvar])%in%dtms$absorbing
     data <- data[whichrows,]
     if(verbose) {
       count <- sum(!whichrows)
