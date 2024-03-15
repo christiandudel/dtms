@@ -19,3 +19,10 @@ fit3 <- dtms_fit(data=estdata,package="mclogit",random=~1|id)
 vcov(fit1)
 vcov(fit2)
 vcov(fit3)
+
+
+##########################################
+
+install.packages("coxed")
+library(coxed)
+help("bca")

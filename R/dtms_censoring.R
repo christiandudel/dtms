@@ -1,38 +1,38 @@
-#' Get information on left censoring, right censoring, and gaps in data
+#' Left censoring, right censoring, and gaps in data
 #'
 #' @description
 #' This function provides an overview of censoring and gaps in the data. It can
 #' do so in several ways: by providing counts of units with left censoring,
 #' right censoring, and gaps; by providing a cross-tabulation of the number of
 #' units with left censoring and/or right censoring and/or gaps; and by
-#' returning the data frame with added indicators on censoring and gaps.
+#' returning a data frame with added indicators on censoring and gaps.
 #'
 #' @details
 #' Added variables can be at the unit level or at the observation level. This
 #' is controlled by the argument "addtype". If it is set to "id" then the unit
-#' level is used. The added variables then are the same for each observation
-#' of a unit. For instance, if a unit experiences any gap, then the added
-#' variable has the value TRUE for all observations of that unit. If "addtype"
-#' is set to "obs", then the observation level is used and the indicators are
-#' only set to TRUE if they apply to a specific observation. For instance, if
-#' a unit experience right censoring, only the last observation will have TRUE
-#' as the value for the right-censoring indicator; i.e., showing that after this
-#' last observation there is right censoring. This can be helpful for analyses
-#' to understand censoring better.
+#' level is used. In this case the added variables are the same for
+#' each observation  of a unit. For instance, if a unit experiences any gap,
+#' then the added variable has the value TRUE for all observations of that unit.
+#' If "addtype" is set to "obs" the observation level is used and the indicators
+#' are only set to TRUE if they apply to a specific observation. For instance,
+#' if a unit experience right censoring, only the last observation will have
+#' TRUE as the value for the right-censoring indicator; i.e., showing that after
+#' this last observation there is right censoring. This can be helpful for
+#' analyses to understand censoring better.
 #'
-#' @param data Data frame, as created with "dtms_format".
-#' @param dtms dtms object, as created with "dtms".
-#' @param fromvar Optional, character, name of variable with starting state. Default is "from" as used as default in other functions.
-#' @param tovar Optional, character, name of variable with receiving state. Default is "to" as used as default in other functions.
-#' @param timevar Optional, character, name of variable with time scale. Default is "time" as used as default in other functions.
-#' @param idvar Optional, character, name of variable with unit ID. Default is "id" as used as default in other functions.
-#' @param print Optional, logical, Print counts? Default is TRUE.
-#' @param printlong Optional, logical, print cross-tabulation? Default is FALSE.
-#' @param add Optional, logical, add indicators to data set? Default is FALSE.
-#' @param addtype Optional, character. If add=T, what type of information should be added? Either "id" or "obs", see details.
-#' @param varnames Optional, character vector with names of added variables. Default is "c("LEFT","GAP","RIGHT")"
+#' @param data Data frame, as created with \code{dtms_format}.
+#' @param dtms dtms object, as created with \code{dtms}.
+#' @param fromvar Character (optional), name of variable with starting state. Default is "from".
+#' @param tovar Character (optional), name of variable with receiving state. Default is "to".
+#' @param timevar Character (optional), name of variable with time scale. Default is "time".
+#' @param idvar Character (optional), name of variable with unit ID. Default is "id".
+#' @param print Logical (optional), print counts? Default is TRUE.
+#' @param printlong Logical (optional), print cross-tabulation? Default is FALSE.
+#' @param add Logical (optional), add indicators to data set? Default is FALSE. If TRUE the data frame specified with \code{data} is returned with added columns.
+#' @param addtype Character (optional), what type of information should be added if add=TRUE. Either "id" or "obs", see details. Default is "id".
+#' @param varnames Character vector (optional), names of added variables if add=T. Default is "c("LEFT","GAP","RIGHT")".
 #'
-#' @return Table or data frame
+#' @return Table or data frame.
 #' @export
 #'
 #' @examples
@@ -59,9 +59,9 @@ dtms_censoring <- function(data,
                            tovar="to",
                            timevar="time",
                            idvar="id",
-                           print=T,
-                           printlong=F,
-                           add=F,
+                           print=TRUE,
+                           printlong=FALSE,
+                           add=FALSE,
                            addtype="id",
                            varnames=c("LEFT","GAP","RIGHT")) {
 
@@ -130,7 +130,7 @@ dtms_censoring <- function(data,
   # Add indicators to data by observation
   if(add & addtype=="obs") {
 
-    # Getting vector for left censoring
+    # Left censoring
     left <- by(data[,timevar],
                data[,idvar],
                FUN=function(x) {
@@ -139,12 +139,12 @@ dtms_censoring <- function(data,
                  return(c(first,rest))
                  })
 
-    # Getting vector for gaps
+    # GGaps
     gap <- by(data[,timevar],
               data[,idvar],
               FUN=function(x) c(diff(x)!=dtms$timestep,FALSE))
 
-    # Getting vectors for right censoring
+    # Right censoring: Last state is not absorbing
     right1 <- by(data[,tovar],
                  data[,idvar],
                  FUN=function(x) {
@@ -153,6 +153,7 @@ dtms_censoring <- function(data,
                    return <- c(rest,last)
                    })
 
+    # Right censoring: Last obs is not at end of timescale
     right2 <- by(data[,timevar],
                  data[,idvar],
                  FUN=function(x) {
