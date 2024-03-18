@@ -20,7 +20,7 @@
 #' this last observation there is right censoring. This can be helpful for
 #' analyses to understand censoring better.
 #'
-#' @param data Data frame, as created with \code{dtms_format}.
+#' @param data Data frame in transition format, as created with \code{dtms_format}.
 #' @param dtms dtms object, as created with \code{dtms}.
 #' @param fromvar Character (optional), name of variable with starting state. Default is "from".
 #' @param tovar Character (optional), name of variable with receiving state. Default is "to".

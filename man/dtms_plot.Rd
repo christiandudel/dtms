@@ -16,24 +16,21 @@ dtms_plot(
 )
 }
 \arguments{
-\item{probs}{Object with transition probabilities}
+\item{probs}{Object with transition probabilities as created with \code{dtms_transitions}.}
 
-\item{dtms}{Optional, dtms object describing the model. If not provided states will be guessed from 'probs'.}
+\item{dtms}{dtms object, as created with \code{dtms}.}
 
-\item{fromvar}{Optional, character string indicating the variable with the starting state.}
+\item{fromvar}{Character (optional), name of variable with starting state. Default is `from`.}
 
-\item{tovar}{Optional, character string indicating the variable with the receiving state.}
+\item{tovar}{Character (optional), name of variable with receiving state. Default is `to`.}
 
-\item{timevar}{Optional, character string indicating the variable with the time scale.}
+\item{timevar}{Character (optional), name of variable with time scale. Default is `time`.}
 
-\item{Pvar}{Optional, character string indicating the variable with the transition probabilities.}
+\item{Pvar}{Character (optional), name of variable with transition probabilities. Default is `P`.}
 
-\item{sep}{Optional, character string with separator for long state names. Default is "_".}
+\item{sep}{Character (optional), separator between short state name and value of time scale. Default is `_`.}
 
 \item{...}{Further arguments passed to plot().}
-}
-\value{
-Sends a plot to the current device
 }
 \description{
 A simple function for plotting transition probabilities with base R. This is

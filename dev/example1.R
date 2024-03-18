@@ -1,6 +1,7 @@
 ## Load package
 library(dtms)
 library(devtools)
+source("R/dtms_helpers.R")
 
 ## Look at data
 head(simpledata)

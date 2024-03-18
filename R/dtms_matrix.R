@@ -4,17 +4,14 @@
 #' This function creates a transiton matrix based on transition probabilities
 #' predicted using the function `dtms_transitions`.
 #'
-#' @param probs Data frame with transition probabilities, as created with `dtms_transitions`.
-#' @param dtms DTMS object, as created with `dtms`.
-#' @param transient Character (optional), names of transient states
-#' @param absorbing Character (optional), names of absorbing states
-#' @param timescale Numeric (optional), values of time scale
-#' @param fromvar Character, name of variable with sending state. Default is `from`, as is used per default with `dtms_transitions`.
-#' @param tovar Character, name of variable with receiving state. Default is `to`, as is used per default with `dtms_transitions`.
-#' @param Pvar Character, name of variable with transition probabilities. Default is `P`, as is used per default with `dtms_transitions`.
-#' @param enforcedeath Logical, make sure that every unit moves to absorbing state after last value of time scale. Default is TRUE.
-#' @param sep Character, separator between state name and value of time scale. Default is `_`.
-#' @param rescale Logical, rescale transition probabilities to sum to one? Default is TRUE.
+#' @param probs Data frame with transition probabilities, as created with \code{dtms_transitions}.
+#' @param dtms dtms object, as created with \code{dtms}.
+#' @param fromvar Character (optional), name of variable with starting state. Default is "from".
+#' @param tovar Character (optional), name of variable with receiving state. Default is "to".
+#' @param Pvar Character (optional), name of variable with transition probabilities. Default is `P`.
+#' @param enforcedeath Logical (optional), make sure that every unit moves to absorbing state after last value of time scale? Default is TRUE.
+#' @param sep Character (optional), separator between short state name and value of time scale. Default is `_`.
+#' @param rescale Logical (optional), rescale transition probabilities to sum to 1? Default is TRUE.
 #'
 #' @return Returns a transition matrix.
 #' @export
@@ -43,9 +40,6 @@
 
 dtms_matrix <- function(probs,
                         dtms=NULL,
-                        transient=NULL,
-                        absorbing=NULL,
-                        timescale=NULL,
                         fromvar="from",
                         tovar="to",
                         Pvar="P",
@@ -53,21 +47,12 @@ dtms_matrix <- function(probs,
                         sep="_",
                         rescale=T) {
 
-  # Use dtms if provided
-  if(!is.null(dtms)) {
-
-    # Check
-    dtms_proper(dtms)
-
-    # Use values
-    timescale <- dtms$timescale
-    absorbing <- dtms$absorbing
-    transient <- dtms$transient
-  }
+  # Check
+  dtms_proper(dtms)
 
   # Combine states and time
-  transient_states <- dtms_combine(transient,timescale,sep=sep)
-  absorbing <- paste(absorbing)
+  transient_states <- dtms_combine(dtms$transient,dtms$timescale,sep=sep)
+  absorbing <- paste(dtms$absorbing)
   all_states <- c(transient_states,absorbing)
 
   # Get variable names in probs right
@@ -138,7 +123,7 @@ dtms_matrix <- function(probs,
 
   # Make sure everyone dies at the end
   if(enforcedeath==T) {
-    last_states <- paste(transient,max(timescale),sep=sep)
+    last_states <- paste(dtms$transient,max(dtms$timescale),sep=sep)
     if(length(absorbing)==1) {
       Tm[last_states,] <- 0
       Tm[last_states,absorbing] <- 1

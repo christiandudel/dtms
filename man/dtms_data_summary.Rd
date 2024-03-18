@@ -9,7 +9,7 @@ dtms_data_summary(
   dtms = NULL,
   fromvar = "from",
   tovar = "to",
-  weightvar = NULL
+  weights = NULL
 )
 }
 \arguments{
@@ -21,7 +21,7 @@ dtms_data_summary(
 
 \item{tovar}{Character (optional), name of variable with receiving state. Default is "to".}
 
-\item{weightvar}{Character (optional), name of variable with weights. Default is NULL.}
+\item{weights}{Character (optional), name of variable with weights. Default is NULL.}
 }
 \value{
 A data frame

@@ -6,14 +6,12 @@
 \usage{
 dtms_format(
   data,
-  dtms = NULL,
+  dtms,
   idvar = "id",
   timevar = "time",
   statevar = "state",
   fromvar = "from",
   tovar = "to",
-  timestep = NULL,
-  timescale = NULL,
   keepnames = FALSE,
   fill = FALSE,
   verbose = TRUE
@@ -22,25 +20,21 @@ dtms_format(
 \arguments{
 \item{data}{Data frame in long format.}
 
-\item{dtms}{Object of class 'dtms' (optional) as created with `dtms`. Needed when arguments 'timestep' and/or `timescale' are not specified. Default is NULL.}
+\item{dtms}{dtms object, as created with \code{dtms}.}
 
-\item{idvar}{Character (optional), name of variable in 'data' with unit identifier, default is 'id'.}
+\item{idvar}{Character (optional), name of variable with unit ID. Default is "id".}
 
-\item{timevar}{Character (optional), name of variable in 'data' with time scale, default is 'time'.}
+\item{timevar}{Character (optional), name of variable with time scale. Default is "time".}
 
 \item{statevar}{Character (optional), name of variable in 'data' with state, default is 'state'.}
 
-\item{fromvar}{Character (optional), name of variable in reshaped data with starting state, default is 'from'.}
+\item{fromvar}{Character (optional), name of variable with starting state in reshaped data. Default is "from".}
 
-\item{tovar}{Character (optional), name of variable in reshaped data with receiving state, default is 'to'.}
+\item{tovar}{Character (optional), name of variable with receiving state in reshaped data. Default is "to".}
 
-\item{timestep}{Numeric (optional), step length for time scale. Needed when argument 'dtms' is not specified. Default is NULL.}
+\item{keepnames}{Logical (optional), keep original names for id and time variable? Default is FALSE; i.e., not keeping original names.}
 
-\item{timescale}{Numeric (optional), values of time scale. Needed when argument `dtms` is not specified.}
-
-\item{keepnames}{Logical, keep original names for id and time variable? Default is FALSE; i.e., not keeping original names.}
-
-\item{fill}{Logical, fill implicit missings with explicit NA? Default is FALSE.}
+\item{fill}{Logical, fill implicit missing values with explicit NA? Default is FALSE.}
 
 \item{verbose}{Logical, create output to console if changing variable names is not possible? Default is TRUE.}
 }

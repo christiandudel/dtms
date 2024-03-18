@@ -28,7 +28,7 @@
 #' unconditional on the starting state. The other shows the distribution
 #' conditional on not starting in any state of the risk set.
 #'
-#' @param matrix Matrix, with transition probabilities, as generated with \code{dtms_matrix}.
+#' @param matrix Matrix with transition probabilities, as generated with \code{dtms_matrix}.
 #' @param dtms dtms object, as created with \code{dtms}.
 #' @param risk Character, name of state(s) for which risk is of interest.
 #' @param start_distr Numeric (optional), distribution of starting states. If specified, average expectancy over all starting states will be calculated. Only applied if risk=NULL.

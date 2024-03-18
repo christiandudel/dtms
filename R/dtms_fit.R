@@ -4,11 +4,11 @@
 #' This function estimates a constrained discrete-time multistate model
 #' using multinomial logistic regression.
 #'
-#' @param data Data frame, as prepared with `dtms_format` and `dtms_clean`.
+#' @param data Data frame in transition format, as created with \code{dtms_format}.
 #' @param controls Character (optional), names of control variables
-#' @param fromvar Character (optional), name of variable with starting state. Defaults to `from`, which is used as default in other functions of the package.
-#' @param tovar Character (optional), name of variable with receiving state. Defaults to `to`, which is used as default in other functions of the package.
-#' @param timevar Character (optional), name of variable with time scale. Defaults to `time`, which is used as default in other functions of the package.
+#' @param fromvar Character (optional), name of variable with starting state. Default is "from".
+#' @param tovar Character (optional), name of variable with receiving state. Default is "to".
+#' @param timevar Character (optional), name of variable with time scale. Default is "time".
 #' @param formula Formula (optional). If no formula is specified, it will be build from the information specified with controls, fromvar, tovar, and timevar.
 #' @param weights Character (optional). Name of variable with survey weights.
 #' @param reference Numeric or character (optional). Reference level of multinomial logistic regression.
@@ -56,6 +56,9 @@ dtms_fit <- function(data,
     }
     formula <- stats::as.formula(formula)
   }
+
+  # Get weights if specified
+  if(!is.null(weights)) weights <- data[,weights]
 
   # Factors (needed by most packages)
   data[,fromvar] <- as.factor(data[,fromvar])

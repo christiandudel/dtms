@@ -19,7 +19,7 @@ dtms_first(
 )
 }
 \arguments{
-\item{matrix}{Matrix, with transition probabilities, as generated with \code{dtms_matrix}.}
+\item{matrix}{Matrix with transition probabilities, as generated with \code{dtms_matrix}.}
 
 \item{dtms}{dtms object, as created with \code{dtms}.}
 

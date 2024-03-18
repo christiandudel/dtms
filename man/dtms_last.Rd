@@ -7,16 +7,13 @@ the last time.}
 \usage{
 dtms_last(
   matrix,
-  dtms = NULL,
+  dtms,
   risk,
   risk_to = NULL,
   start_time = NULL,
   start_state = NULL,
   start_distr = NULL,
   end_time = NULL,
-  transient = NULL,
-  timescale = NULL,
-  timestep = NULL,
   method = "mid",
   sep = "_",
   total = TRUE,
@@ -24,38 +21,32 @@ dtms_last(
 )
 }
 \arguments{
-\item{matrix}{Matrix with transition probabilities, as generated with `dtms_matrix`.}
+\item{matrix}{Matrix with transition probabilities, as generated with \code{dtms_matrix}.}
 
-\item{dtms}{DTMS object as created with `dtms`.}
+\item{dtms}{dtms object, as created with \code{dtms}.}
 
-\item{risk}{Character (required), names of one or several states for which the waiting time should be calculated.}
+\item{risk}{Character, name of state(s) for which risk is of interest.}
 
 \item{risk_to}{Character (optional), names of one or several states to which the states specified in `risk` are left. See details.}
 
-\item{start_time}{Numeric (optional), value of time scale at start. If NULL (default), first value of time scale is used.}
+\item{start_time}{Numeric (optional), value of time scale for start. If NULL (default) first value of time scale will be used.}
 
-\item{start_state}{Character (optional), names of one or several starting states. If NULL (default), all transient states will be considered.}
+\item{start_state}{Character (optional), name of starting states. If NULL (default) all transient states will be used.}
 
-\item{start_distr}{Numeric (optional), distribution of starting states. Needs to be consistent with starting states. If provided, average distribution is provided; see details.}
+\item{start_distr}{Numeric (optional), distribution of starting states. If specified, average expectancy over all starting states will be calculated. Only applied if risk=NULL.}
 
-\item{end_time}{Numeric (optional), value of time scale at end. If NULL (default), last value of time scale is used.}
+\item{end_time}{Numeric (optional), last value of time scale to consider. If NULL (default) all values of time scale starting from start_time will be used.}
 
-\item{transient}{Character (optional), short names of transient states. If NULL (default) transient states are taken from `dtms` object.}
-
-\item{timescale}{Numeric (optional), values of time scale. If NULL (default) obtained from `dtms` object.}
-
-\item{timestep}{Numeric (optional), step length of time scale. If NULL (default) obtained from `dtms` object.}
-
-\item{method}{Character, do transitions happen mid-interval (`mid`, default) or at the end of the interval (`end`), see details.}
+\item{method}{Character (optional), do transitions happen mid-interval (`mid`, default) or at the end of the interval (`end`), see details.}
 
 \item{sep}{Character (optional), separator between short state name and value of time scale. Default is `_`.}
 
 \item{total}{Logical, should total of distribution be shown? Default is FALSE, as the total always is 1.}
 
-\item{rescale}{Logical, should distribution be rescaled to sum to 1? See details. Default is TRUE.}
+\item{rescale}{Logical (optional), should distribution be rescaled to sum to 1? See details. Default is TRUE.}
 }
 \value{
-The distribution of the waiting time until a subset of states is left for the last time.
+Matrix with the distribution(s) of the waiting time.
 }
 \description{
 Calculates the distribution of the until a subset of states is left for the

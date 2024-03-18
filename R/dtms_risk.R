@@ -4,16 +4,14 @@
 #' The function `dtms_risk` calculates the (partial) lifetime risk of ever
 #' reaching a state specified with the argument `risk`.
 #'
-#' @param matrix Matrix with transition probabilities, as generated with `dtms_matrix`
-#' @param risk Character, name of the state of interest.
-#' @param dtms DTMS object as generated with `dtms`.
-#' @param start_distr Numeric (optional), distribution of starting states. If specified, average expectancy over all starting states will be calculated.
+#' @param matrix Matrix with transition probabilities, as generated with \code{dtms_matrix}.
+#' @param risk Character, name of state(s) for which risk is of interest.
+#' @param dtms dtms object, as created with \code{dtms}.
+#' @param start_distr Numeric (optional), distribution of starting states. If specified, average expectancy over all starting states will be calculated. Only applied if risk=NULL.
 #' @param start_state Character (optional), name of starting states. If NULL (default) all transient states will be used.
 #' @param start_time Numeric (optional), value of time scale for start. If NULL (default) first value of time scale will be used.
 #' @param end_time Numeric (optional), last value of time scale to consider. If NULL (default) all values of time scale starting from start_time will be used.
-#' @param transient Character (optional), names of transient states.
-#' @param timescale Numeric (optional), values of time scale.
-#' @param sep Character (optional), separator for between short state name and time in long state name.
+#' @param sep Character (optional), separator between short state name and value of time scale. Default is `_`.
 #'
 #' @return Probability of ever reaching state `risk`.
 #' @export
@@ -50,36 +48,22 @@
 
 dtms_risk <- function(matrix,
                       risk,
-                      dtms=NULL,
+                      dtms,
                       start_distr=NULL,
                       start_state=NULL,
                       start_time=NULL,
                       end_time=NULL,
-                      transient=NULL,
-                      timescale=NULL,
                       sep="_") {
 
-  # Use dtms if provided
-  if(!is.null(dtms)) {
-
-    # Check
-    dtms_proper(dtms)
-
-    # Use values
-    transient <- dtms$transient
-    timescale <- dtms$timescale
-    timestep <- dtms$timestep
-  }
+  # Check
+  dtms_proper(dtms)
 
   # Starting state and time
-  if(is.null(start_state)) start_state <- transient
-  if(is.null(start_time)) start_time <- min(timescale)
+  if(is.null(start_state)) start_state <- dtms$transient
+  if(is.null(start_time)) start_time <- min(dtms$timescale)
 
   # Starting states, long names
   starting <- dtms_combine(start_state,start_time,sep=sep)
-
-  # Time scale: Only transitions starting up to T-1 relevant
-  timescale <- timescale[-length(timescale)]
 
   # States of the transition matrix
   allstates <- rownames(matrix)
@@ -127,7 +111,7 @@ dtms_risk <- function(matrix,
 
   # Get results in shape
   result <- rep(1,length(starting))
-  whererisk <- !transient%in%risk
+  whererisk <- !dtms$transient%in%risk
   result[whererisk] <- results[starting[whererisk],"Risk"]
   names(result) <- starting
 

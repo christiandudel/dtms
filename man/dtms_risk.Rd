@@ -7,24 +7,22 @@
 dtms_risk(
   matrix,
   risk,
-  dtms = NULL,
+  dtms,
   start_distr = NULL,
   start_state = NULL,
   start_time = NULL,
   end_time = NULL,
-  transient = NULL,
-  timescale = NULL,
   sep = "_"
 )
 }
 \arguments{
-\item{matrix}{Matrix with transition probabilities, as generated with `dtms_matrix`}
+\item{matrix}{Matrix with transition probabilities, as generated with \code{dtms_matrix}.}
 
-\item{risk}{Character, name of the state of interest.}
+\item{risk}{Character, name of state(s) for which risk is of interest.}
 
-\item{dtms}{DTMS object as generated with `dtms`.}
+\item{dtms}{dtms object, as created with \code{dtms}.}
 
-\item{start_distr}{Numeric (optional), distribution of starting states. If specified, average expectancy over all starting states will be calculated.}
+\item{start_distr}{Numeric (optional), distribution of starting states. If specified, average expectancy over all starting states will be calculated. Only applied if risk=NULL.}
 
 \item{start_state}{Character (optional), name of starting states. If NULL (default) all transient states will be used.}
 
@@ -32,11 +30,7 @@ dtms_risk(
 
 \item{end_time}{Numeric (optional), last value of time scale to consider. If NULL (default) all values of time scale starting from start_time will be used.}
 
-\item{transient}{Character (optional), names of transient states.}
-
-\item{timescale}{Numeric (optional), values of time scale.}
-
-\item{sep}{Character (optional), separator for between short state name and time in long state name.}
+\item{sep}{Character (optional), separator between short state name and value of time scale. Default is `_`.}
 }
 \value{
 Probability of ever reaching state `risk`.

@@ -1,9 +1,13 @@
 #' Simplify state names
 #'
-#' @param probs Object with transition probabilities
-#' @param fromvar Name of variable with starting state
-#' @param tovar Name of variable with receiving state
-#' @param sep Separator for long state name
+#' @description
+#' This function turns long state names into short state names. It is
+#' particularly useful for plotting and when used in pipes, see the example.
+#'
+#' @param probs Object with transition probabilities as created with \code{dtms_transitions}.
+#' @param fromvar Character (optional), name of variable with starting state. Default is `from`.
+#' @param tovar Character (optional), name of variable with receiving state. Default is `to`.
+#' @param sep Character (optional), separator between short state name and value of time scale. Default is `_`.
 #'
 #' @return Data frame
 #' @export

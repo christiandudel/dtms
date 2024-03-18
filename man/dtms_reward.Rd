@@ -7,13 +7,13 @@
 dtms_reward(matrix, reward, dtms, sep = "_")
 }
 \arguments{
-\item{matrix}{Matrix, transition matrix as generated with dtms_matrix.}
+\item{matrix}{Matrix with transition probabilities, as generated with \code{dtms_matrix}.}
 
-\item{reward}{Matrix, matrix with rewards, has to be of same dimensions as `matrix`.}
+\item{reward}{Matrix with rewards, has to be of same dimensions as `matrix`.}
 
-\item{dtms}{A dtms object, as created with `dtms`.}
+\item{dtms}{dtms object, as created with \code{dtms}.}
 
-\item{sep}{Character (optional), separator for long state names. Default is `_`.}
+\item{sep}{Character (optional), separator between short state name and value of time scale. Default is `_`.}
 }
 \value{
 A matrix with expected rewards.

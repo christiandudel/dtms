@@ -18,7 +18,7 @@ dtms_fit(
 )
 }
 \arguments{
-\item{data}{Data frame, as prepared with `dtms_format` and `dtms_clean`.}
+\item{data}{Data frame in transition format, as created with \code{dtms_format}.}
 
 \item{controls}{Character (optional), names of control variables}
 
@@ -26,11 +26,11 @@ dtms_fit(
 
 \item{weights}{Character (optional). Name of variable with survey weights.}
 
-\item{fromvar}{Character (optional), name of variable with starting state. Defaults to `from`, which is used as default in other functions of the package.}
+\item{fromvar}{Character (optional), name of variable with starting state. Default is "from".}
 
-\item{tovar}{Character (optional), name of variable with receiving state. Defaults to `to`, which is used as default in other functions of the package.}
+\item{tovar}{Character (optional), name of variable with receiving state. Default is "to".}
 
-\item{timevar}{Character (optional), name of variable with time scale. Defaults to `time`, which is used as default in other functions of the package.}
+\item{timevar}{Character (optional), name of variable with time scale. Default is "time".}
 
 \item{reference}{Numeric or character (optional). Reference level of multinomial logistic regression.}
 

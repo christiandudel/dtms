@@ -36,23 +36,20 @@
 #' The distribution of partial waiting times can be generated using the arguments
 #' `start_state` and `start_time` in combination with `end_time`.
 #'
-#' @param matrix Matrix with transition probabilities, as generated with `dtms_matrix`.
-#' @param dtms DTMS object as created with `dtms`.
-#' @param risk Character (required), names of one or several states for which the waiting time should be calculated.
+#' @param matrix Matrix with transition probabilities, as generated with \code{dtms_matrix}.
+#' @param dtms dtms object, as created with \code{dtms}.
+#' @param risk Character, name of state(s) for which risk is of interest.
 #' @param risk_to Character (optional), names of one or several states to which the states specified in `risk` are left. See details.
-#' @param start_state Character (optional), names of one or several starting states. If NULL (default), all transient states will be considered.
-#' @param start_time Numeric (optional), value of time scale at start. If NULL (default), first value of time scale is used.
-#' @param end_time Numeric (optional), value of time scale at end. If NULL (default), last value of time scale is used.
-#' @param start_distr Numeric (optional), distribution of starting states. Needs to be consistent with starting states. If provided, average distribution is provided; see details.
-#' @param method Character, do transitions happen mid-interval (`mid`, default) or at the end of the interval (`end`), see details.
-#' @param rescale Logical, should distribution be rescaled to sum to 1? See details. Default is TRUE.
+#' @param start_distr Numeric (optional), distribution of starting states. If specified, average expectancy over all starting states will be calculated. Only applied if risk=NULL.
+#' @param start_state Character (optional), name of starting states. If NULL (default) all transient states will be used.
+#' @param start_time Numeric (optional), value of time scale for start. If NULL (default) first value of time scale will be used.
+#' @param end_time Numeric (optional), last value of time scale to consider. If NULL (default) all values of time scale starting from start_time will be used.
+#' @param method Character (optional), do transitions happen mid-interval (`mid`, default) or at the end of the interval (`end`), see details.
+#' @param rescale Logical (optional), should distribution be rescaled to sum to 1? See details. Default is TRUE.
 #' @param total Logical, should total of distribution be shown? Default is FALSE, as the total always is 1.
-#' @param transient Character (optional), short names of transient states. If NULL (default) transient states are taken from `dtms` object.
-#' @param timescale Numeric (optional), values of time scale. If NULL (default) obtained from `dtms` object.
-#' @param timestep Numeric (optional), step length of time scale. If NULL (default) obtained from `dtms` object.
 #' @param sep Character (optional), separator between short state name and value of time scale. Default is `_`.
 #'
-#' @return The distribution of the waiting time until a subset of states is left for the last time.
+#' @return Matrix with the distribution(s) of the waiting time.
 #' @export
 #'
 #' @examples
@@ -87,42 +84,30 @@
 #'            start_distr=S)
 
 dtms_last <- function(matrix,
-                      dtms=NULL,
+                      dtms,
                       risk,
                       risk_to=NULL,
                       start_time=NULL,
                       start_state=NULL,
                       start_distr=NULL,
                       end_time=NULL,
-                      transient=NULL,
-                      timescale=NULL,
-                      timestep=NULL,
                       method="mid",
                       sep="_",
                       total=TRUE,
                       rescale=TRUE){
 
-  # Use dtms if provided
-  if(!is.null(dtms)) {
-
-    # Check
-    dtms_proper(dtms)
-
-    # Use values
-    transient <- dtms$transient
-    timescale <- dtms$timescale
-    timestep <- dtms$timestep
-  }
+  # Check
+  dtms_proper(dtms)
 
   # Starting state and time
-  if(is.null(start_state)) start_state <- transient
-  if(is.null(start_time)) start_time <- min(timescale)
+  if(is.null(start_state)) start_state <- dtms$transient
+  if(is.null(start_time)) start_time <- min(dtms$timescale)
 
   # Starting states, long names
   starting <- dtms_combine(start_state,start_time,sep=sep)
 
   # Time scale: Only transitions starting up to T-1 relevant
-  timescale <- timescale[-length(timescale)]
+  timescale_reduced <- dtms$timescale[-length(dtms$timescale)]
 
   # States of the transition matrix
   allstates <- rownames(matrix)
@@ -130,13 +115,16 @@ dtms_last <- function(matrix,
 
   # Select subset
   selectorD <- dtms_in(allstates,risk,sep)
-  if(is.null(risk_to)) selectorU <- !selectorD else selectorU <- dtms_in(allstates,risk_to,sep)
+  if(is.null(risk_to)) selectorU <- !selectorD else
+    selectorU <- dtms_in(allstates,risk_to,sep)
 
   # Get maxtime
-  if(is.null(end_time)) maxtime <- length(timescale)-1 else maxtime <- which(end_time==timescale)
+  if(is.null(end_time)) maxtime <- length(timescale_reduced)-1 else
+    maxtime <- which(end_time==timescale_reduced)
 
   # Generate t
-  if(is.null(start_time)) t <- 0 else t <- which(start_time==timescale)-1
+  if(is.null(start_time)) t <- 0 else
+    t <- which(start_time==timescale_reduced)-1
 
   # Partition transition matrix
   P_E <- matrix(data=0,nrow=nstates,ncol=nstates)
@@ -178,8 +166,8 @@ dtms_last <- function(matrix,
   rownames(result) <- paste0("start:",starting)
 
   # Get times right (interval length, mid interval vs end of interval)
-  steps <- past.steps*timestep
-  if(method=="end") steps[-1] <- steps[-1]+0.5*timestep
+  steps <- past.steps*dtms$timestep
+  if(method=="end") steps[-1] <- steps[-1]+0.5*dtms$timestep
   colnames(result) <- paste(steps)
 
   # Average
@@ -191,7 +179,7 @@ dtms_last <- function(matrix,
     result <- rbind(result,AVERAGE)
 
     # Conditional on not starting in state in risk set
-    whererisk <- !transient%in%risk
+    whererisk <- !dtms$transient%in%risk
     tmp_distr <- start_distr[whererisk]/sum(start_distr[whererisk])
     tmp_names <- paste0("start:",names(tmp_distr))
     tmp <- tmp_distr%*%result[tmp_names,]

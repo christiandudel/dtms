@@ -19,7 +19,7 @@ dtms_censoring(
 )
 }
 \arguments{
-\item{data}{Data frame, as created with \code{dtms_format}.}
+\item{data}{Data frame in transition format, as created with \code{dtms_format}.}
 
 \item{dtms}{dtms object, as created with \code{dtms}.}
 

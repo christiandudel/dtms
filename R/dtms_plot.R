@@ -5,16 +5,15 @@
 #' fast, but it is much easier to produce nicer looking results with
 #' dtms_simplify.
 #'
-#' @param probs Object with transition probabilities
-#' @param dtms Optional, dtms object describing the model. If not provided states will be guessed from 'probs'.
-#' @param fromvar Optional, character string indicating the variable with the starting state.
-#' @param tovar Optional, character string indicating the variable with the receiving state.
-#' @param timevar Optional, character string indicating the variable with the time scale.
-#' @param Pvar Optional, character string indicating the variable with the transition probabilities.
-#' @param sep Optional, character string with separator for long state names. Default is "_".
+#' @param probs Object with transition probabilities as created with \code{dtms_transitions}.
+#' @param dtms dtms object, as created with \code{dtms}.
+#' @param fromvar Character (optional), name of variable with starting state. Default is `from`.
+#' @param tovar Character (optional), name of variable with receiving state. Default is `to`.
+#' @param timevar Character (optional), name of variable with time scale. Default is `time`.
+#' @param Pvar Character (optional), name of variable with transition probabilities. Default is `P`.
+#' @param sep Character (optional), separator between short state name and value of time scale. Default is `_`.
 #' @param ... Further arguments passed to plot().
 #'
-#' @return Sends a plot to the current device
 #' @export
 #'
 #' @examples

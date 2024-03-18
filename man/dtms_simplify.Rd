@@ -7,19 +7,20 @@
 dtms_simplify(probs, fromvar = "from", tovar = "to", sep = "_")
 }
 \arguments{
-\item{probs}{Object with transition probabilities}
+\item{probs}{Object with transition probabilities as created with \code{dtms_transitions}.}
 
-\item{fromvar}{Name of variable with starting state}
+\item{fromvar}{Character (optional), name of variable with starting state. Default is `from`.}
 
-\item{tovar}{Name of variable with receiving state}
+\item{tovar}{Character (optional), name of variable with receiving state. Default is `to`.}
 
-\item{sep}{Separator for long state name}
+\item{sep}{Character (optional), separator between short state name and value of time scale. Default is `_`.}
 }
 \value{
 Data frame
 }
 \description{
-Simplify state names
+This function turns long state names into short state names. It is
+particularly useful for plotting and when used in pipes, see the example.
 }
 \examples{
 ## Define model: Absorbing and transient states, time scale

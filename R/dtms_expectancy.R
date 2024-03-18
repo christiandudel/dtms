@@ -25,7 +25,7 @@
 #' state X starting from state X is reduced by 0.5 time steps. The second
 #' correction uses the entry `timestep` of `dtms`, and multiplies results with its value.
 #'
-#' @param matrix Matrix, with transition probabilities, as generated with \code{dtms_matrix}.
+#' @param matrix Matrix with transition probabilities, as generated with \code{dtms_matrix}.
 #' @param dtms dtms object, as created with \code{dtms}.
 #' @param risk Character (otpional), name of one transient state. If specified expectancies are only shown for this state but by values of the time scale.
 #' @param start_distr Numeric (optional), distribution of starting states. If specified, average expectancy over all starting states will be calculated. Only applied if risk=NULL.

@@ -9,7 +9,7 @@
 #' @param dtms dtms object, as created with \code{dtms}.
 #' @param fromvar Character (optional), name of variable with starting state. Default is "from".
 #' @param tovar Character (optional), name of variable with receiving state. Default is "to".
-#' @param weightvar Character (optional), name of variable with weights. Default is NULL.
+#' @param weights Character (optional), name of variable with weights. Default is NULL.
 #'
 #' @return A data frame
 #' @export
@@ -30,11 +30,11 @@ dtms_data_summary <- function(data,
                               dtms=NULL,
                               fromvar="from",
                               tovar="to",
-                              weightvar=NULL) {
+                              weights=NULL) {
 
     # Weights per transition
-    if(is.null(weightvar)) data$COUNT <- 1 else
-      data <- dtms_rename(data,weightvar,"COUNT")
+    if(is.null(weights)) data$COUNT <- 1 else
+      data <- dtms_rename(data,weights,"COUNT")
 
     # For handling of missing values
     data[is.na(data[,fromvar]),fromvar] <- "NA"

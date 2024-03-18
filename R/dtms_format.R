@@ -72,16 +72,14 @@
 #' }
 #'
 #' @param data Data frame in long format.
-#' @param dtms Object of class 'dtms' (optional) as created with `dtms`. Needed when arguments 'timestep' and/or `timescale' are not specified. Default is NULL.
-#' @param idvar Character (optional), name of variable in 'data' with unit identifier, default is 'id'.
-#' @param timevar Character (optional), name of variable in 'data' with time scale, default is 'time'.
+#' @param dtms dtms object, as created with \code{dtms}.
+#' @param idvar Character (optional), name of variable with unit ID. Default is "id".
+#' @param timevar Character (optional), name of variable with time scale. Default is "time".
 #' @param statevar Character (optional), name of variable in 'data' with state, default is 'state'.
-#' @param fromvar Character (optional), name of variable in reshaped data with starting state, default is 'from'.
-#' @param tovar Character (optional), name of variable in reshaped data with receiving state, default is 'to'.
-#' @param timescale Numeric (optional), values of time scale. Needed when argument `dtms` is not specified.
-#' @param timestep Numeric (optional), step length for time scale. Needed when argument 'dtms' is not specified. Default is NULL.
-#' @param keepnames Logical, keep original names for id and time variable? Default is FALSE; i.e., not keeping original names.
-#' @param fill Logical, fill implicit missings with explicit NA? Default is FALSE.
+#' @param fromvar Character (optional), name of variable with starting state in reshaped data. Default is "from".
+#' @param tovar Character (optional), name of variable with receiving state in reshaped data. Default is "to".
+#' @param keepnames Logical (optional), keep original names for id and time variable? Default is FALSE; i.e., not keeping original names.
+#' @param fill Logical, fill implicit missing values with explicit NA? Default is FALSE.
 #' @param verbose Logical, create output to console if changing variable names is not possible? Default is TRUE.
 #'
 #' @return A data set reshaped to transition format
@@ -100,14 +98,12 @@
 #' statevar="state")
 
 dtms_format <- function(data,
-                        dtms=NULL,
+                        dtms,
                         idvar="id",
                         timevar="time",
                         statevar="state",
                         fromvar="from",
                         tovar="to",
-                        timestep=NULL,
-                        timescale=NULL,
                         keepnames=FALSE,
                         fill=FALSE,
                         verbose=TRUE) {
@@ -115,16 +111,8 @@ dtms_format <- function(data,
   # Transform to data frame, e.g., if tibble
   if(class(data)[1]!="data.frame") data <- as.data.frame(data)
 
-  # Use dtms if provided
-  if(!is.null(dtms)) {
-
-    # Check
-    dtms_proper(dtms)
-
-    # Use values
-    timescale <- dtms$timescale
-    timestep <- dtms$timestep
-  }
+  # Check
+  dtms_proper(dtms)
 
   # Fill data
   if(fill) {
@@ -133,7 +121,7 @@ dtms_format <- function(data,
     idvalues <- data[,idvar] |> unique()
 
     # Full data
-    fulldata <- expand.grid(timescale,idvalues,
+    fulldata <- expand.grid(dtms$timescale,idvalues,
                             stringsAsFactors=FALSE)
     names(fulldata) <- c(timevar,idvar)
 
@@ -156,7 +144,7 @@ dtms_format <- function(data,
   consecutive <- dtms_consecutive(data=data,
                                   idvar=idvar,
                                   timevar=timevar,
-                                  timestep=timestep)
+                                  timestep=dtms$timestep)
 
   # Get next state
   data[,tovar] <- NA

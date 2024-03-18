@@ -4,10 +4,10 @@
 #' This function calculates the expected rewards by starting state in a
 #' Markov chain with rewards.
 #'
-#' @param matrix Matrix, transition matrix as generated with dtms_matrix.
-#' @param reward Matrix, matrix with rewards, has to be of same dimensions as `matrix`.
-#' @param dtms A dtms object, as created with `dtms`.
-#' @param sep Character (optional), separator for long state names. Default is `_`.
+#' @param matrix Matrix with transition probabilities, as generated with \code{dtms_matrix}.
+#' @param reward Matrix with rewards, has to be of same dimensions as `matrix`.
+#' @param dtms dtms object, as created with \code{dtms}.
+#' @param sep Character (optional), separator between short state name and value of time scale. Default is `_`.
 #'
 #' @return A matrix with expected rewards.
 #' @export

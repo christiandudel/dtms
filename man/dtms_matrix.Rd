@@ -7,9 +7,6 @@
 dtms_matrix(
   probs,
   dtms = NULL,
-  transient = NULL,
-  absorbing = NULL,
-  timescale = NULL,
   fromvar = "from",
   tovar = "to",
   Pvar = "P",
@@ -19,27 +16,21 @@ dtms_matrix(
 )
 }
 \arguments{
-\item{probs}{Data frame with transition probabilities, as created with `dtms_transitions`.}
+\item{probs}{Data frame with transition probabilities, as created with \code{dtms_transitions}.}
 
-\item{dtms}{DTMS object, as created with `dtms`.}
+\item{dtms}{dtms object, as created with \code{dtms}.}
 
-\item{transient}{Character (optional), names of transient states}
+\item{fromvar}{Character (optional), name of variable with starting state. Default is "from".}
 
-\item{absorbing}{Character (optional), names of absorbing states}
+\item{tovar}{Character (optional), name of variable with receiving state. Default is "to".}
 
-\item{timescale}{Numeric (optional), values of time scale}
+\item{Pvar}{Character (optional), name of variable with transition probabilities. Default is `P`.}
 
-\item{fromvar}{Character, name of variable with sending state. Default is `from`, as is used per default with `dtms_transitions`.}
+\item{enforcedeath}{Logical (optional), make sure that every unit moves to absorbing state after last value of time scale? Default is TRUE.}
 
-\item{tovar}{Character, name of variable with receiving state. Default is `to`, as is used per default with `dtms_transitions`.}
+\item{sep}{Character (optional), separator between short state name and value of time scale. Default is `_`.}
 
-\item{Pvar}{Character, name of variable with transition probabilities. Default is `P`, as is used per default with `dtms_transitions`.}
-
-\item{enforcedeath}{Logical, make sure that every unit moves to absorbing state after last value of time scale. Default is TRUE.}
-
-\item{sep}{Character, separator between state name and value of time scale. Default is `_`.}
-
-\item{rescale}{Logical, rescale transition probabilities to sum to one? Default is TRUE.}
+\item{rescale}{Logical (optional), rescale transition probabilities to sum to 1? Default is TRUE.}
 }
 \value{
 Returns a transition matrix.
