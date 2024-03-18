@@ -22,7 +22,7 @@ dtms_risk(
 
 \item{dtms}{dtms object, as created with \code{dtms}.}
 
-\item{start_distr}{Numeric (optional), distribution of starting states. If specified, average expectancy over all starting states will be calculated. Only applied if risk=NULL.}
+\item{start_distr}{Numeric (optional), distribution of starting states. If specified, average distribution over all starting states will be calculated.}
 
 \item{start_state}{Character (optional), name of starting states. If NULL (default) all transient states will be used.}
 

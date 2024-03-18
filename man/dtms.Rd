@@ -4,16 +4,18 @@
 \alias{dtms}
 \title{Create dtms object}
 \usage{
-dtms(transient, absorbing, timescale, timestep = NULL)
+dtms(transient, absorbing, timescale, timestep = NULL, sep = "_")
 }
 \arguments{
-\item{transient}{A character vector of names of the transient states in the state space}
+\item{transient}{A character vector of names of the transient states in the state space.}
 
-\item{absorbing}{A character vector of names of the absorbing states in the state space}
+\item{absorbing}{A character vector of names of the absorbing states in the state space.}
 
-\item{timescale}{A numeric vector with the time scale, including the starting time and the final time}
+\item{timescale}{A numeric vector with the time scale, including the starting time and the final time.}
 
-\item{timestep}{Step length of the time scale, will be guessed if NULL (default)}
+\item{timestep}{Numeric (optional), step length of the time scale, will be guessed if NULL (default).}
+
+\item{sep}{Character (optional), separator between short state name and value of time scale. Default is `_`.}
 }
 \value{
 Returns an object of class 'dtms'
