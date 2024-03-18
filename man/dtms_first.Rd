@@ -14,8 +14,7 @@ dtms_first(
   end_time = NULL,
   method = "mid",
   total = TRUE,
-  rescale = TRUE,
-  sep = "_"
+  rescale = TRUE
 )
 }
 \arguments{
@@ -38,8 +37,6 @@ dtms_first(
 \item{total}{Logical (optional), should total of distribution be shown? See details. Default is FALSE.}
 
 \item{rescale}{Logical (optional), should distribution be rescaled to sum to 1? See details. Default is TRUE.}
-
-\item{sep}{Character (optional), separator between short state name and value of time scale. Default is `_`.}
 }
 \value{
 A table of the distribution of the time needed to reach the subset of states

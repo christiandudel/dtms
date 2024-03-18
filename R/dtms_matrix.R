@@ -10,7 +10,6 @@
 #' @param tovar Character (optional), name of variable with receiving state. Default is "to".
 #' @param Pvar Character (optional), name of variable with transition probabilities. Default is `P`.
 #' @param enforcedeath Logical (optional), make sure that every unit moves to absorbing state after last value of time scale? Default is TRUE.
-#' @param sep Character (optional), separator between short state name and value of time scale. Default is `_`.
 #' @param rescale Logical (optional), rescale transition probabilities to sum to 1? Default is TRUE.
 #'
 #' @return Returns a transition matrix.
@@ -44,14 +43,13 @@ dtms_matrix <- function(probs,
                         tovar="to",
                         Pvar="P",
                         enforcedeath=T,
-                        sep="_",
                         rescale=T) {
 
   # Check
   dtms_proper(dtms)
 
   # Combine states and time
-  transient_states <- dtms_combine(dtms$transient,dtms$timescale,sep=sep)
+  transient_states <- dtms_combine(dtms$transient,dtms$timescale,sep=dtms$sep)
   absorbing <- paste(dtms$absorbing)
   all_states <- c(transient_states,absorbing)
 
@@ -123,7 +121,7 @@ dtms_matrix <- function(probs,
 
   # Make sure everyone dies at the end
   if(enforcedeath==T) {
-    last_states <- paste(dtms$transient,max(dtms$timescale),sep=sep)
+    last_states <- paste(dtms$transient,max(dtms$timescale),sep=dtms$sep)
     if(length(absorbing)==1) {
       Tm[last_states,] <- 0
       Tm[last_states,absorbing] <- 1

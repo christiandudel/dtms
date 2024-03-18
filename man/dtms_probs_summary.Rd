@@ -10,9 +10,9 @@ dtms_probs_summary(
   tovar = "to",
   timevar = "time",
   Pvar = "P",
-  sep = "_",
   digits = 4,
-  format = "decimal"
+  format = "decimal",
+  sep = "_"
 )
 }
 \arguments{
@@ -26,11 +26,11 @@ dtms_probs_summary(
 
 \item{Pvar}{Character (optional), name of variable with transition probabilities. Default is `P`.}
 
-\item{sep}{Character (optional), separator between short state name and value of time scale. Default is `_`.}
-
 \item{digits}{Numeric (optional), number of digits to return, default is 6.}
 
 \item{format}{Character (optional), show results in decimal format or percentage, either `decimal` or `percent`. Default is `decimal`.}
+
+\item{sep}{Character (optional), separator between short state name and value of time scale. Default is `_`.}
 }
 \value{
 A data frame

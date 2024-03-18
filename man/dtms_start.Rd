@@ -11,8 +11,7 @@ dtms_start(
   start_state = NULL,
   start_time = NULL,
   fromvar = "from",
-  timevar = "time",
-  sep = "_"
+  timevar = "time"
 )
 }
 \arguments{
@@ -29,8 +28,6 @@ dtms_start(
 \item{fromvar}{Character (optional), name of variable with starting state. Default is `from`.}
 
 \item{timevar}{Character (optional), name of variable with time scale. Default is `time`.}
-
-\item{sep}{Character (optional), separator between short state name and value of time scale. Default is `_`.}
 }
 \value{
 Returns a table of the starting distribution.

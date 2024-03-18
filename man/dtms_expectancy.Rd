@@ -14,7 +14,6 @@ dtms_expectancy(
   end_time = NULL,
   correction = 0.5,
   total = TRUE,
-  sep = "_",
   fundamental = FALSE,
   verbose = FALSE
 )
@@ -37,8 +36,6 @@ dtms_expectancy(
 \item{correction}{Numeric (optional), correction for expectancy when starting state and state under consideration match, see details. Defaults to 0.5.}
 
 \item{total}{Logical (optional), calculate total expectancy. Default is TRUE. Only applied if risk=NULL.}
-
-\item{sep}{Character (optional), separator between short state name and value of time scale. Default is `_`.}
 
 \item{fundamental}{Logical (optional), return fundamental matrix? Default is FALSE.}
 

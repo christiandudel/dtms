@@ -11,8 +11,7 @@ dtms_risk(
   start_distr = NULL,
   start_state = NULL,
   start_time = NULL,
-  end_time = NULL,
-  sep = "_"
+  end_time = NULL
 )
 }
 \arguments{
@@ -29,8 +28,6 @@ dtms_risk(
 \item{start_time}{Numeric (optional), value of time scale for start. If NULL (default) first value of time scale will be used.}
 
 \item{end_time}{Numeric (optional), last value of time scale to consider. If NULL (default) all values of time scale starting from start_time will be used.}
-
-\item{sep}{Character (optional), separator between short state name and value of time scale. Default is `_`.}
 }
 \value{
 Probability of ever reaching state `risk`.

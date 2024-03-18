@@ -6,12 +6,11 @@
 \usage{
 dtms_plot(
   probs,
-  dtms = NULL,
+  dtms,
   fromvar = "from",
   tovar = "to",
   timevar = "time",
   Pvar = "P",
-  sep = "_",
   ...
 )
 }
@@ -27,8 +26,6 @@ dtms_plot(
 \item{timevar}{Character (optional), name of variable with time scale. Default is `time`.}
 
 \item{Pvar}{Character (optional), name of variable with transition probabilities. Default is `P`.}
-
-\item{sep}{Character (optional), separator between short state name and value of time scale. Default is `_`.}
 
 \item{...}{Further arguments passed to plot().}
 }

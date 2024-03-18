@@ -7,7 +7,6 @@
 #' @param matrix Matrix with transition probabilities, as generated with \code{dtms_matrix}.
 #' @param reward Matrix with rewards, has to be of same dimensions as `matrix`.
 #' @param dtms dtms object, as created with \code{dtms}.
-#' @param sep Character (optional), separator between short state name and value of time scale. Default is `_`.
 #'
 #' @return A matrix with expected rewards.
 #' @export
@@ -43,8 +42,7 @@
 
 dtms_reward <- function(matrix,
                         reward,
-                        dtms,
-                        sep="_") {
+                        dtms) {
 
   # Check
   dtms_proper(dtms)
@@ -52,7 +50,7 @@ dtms_reward <- function(matrix,
   # Starting states, long names
   starting <- dtms_combine(dtms$transient,
                            min(dtms$timescale),
-                           sep=sep)
+                           sep=dtms$sep)
 
   # Number of starting and receiving states
   nstart <- length(starting)

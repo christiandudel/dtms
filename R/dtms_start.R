@@ -17,7 +17,6 @@
 #' @param start_time Numeric (optional), value of time scale for start. If NULL (default) first value of time scale will be used.
 #' @param fromvar Character (optional), name of variable with starting state. Default is `from`.
 #' @param timevar Character (optional), name of variable with time scale. Default is `time`.
-#' @param sep Character (optional), separator between short state name and value of time scale. Default is `_`.
 #'
 #' @return Returns a table of the starting distribution.
 #' @export
@@ -52,8 +51,7 @@ dtms_start <- function(data,
                        start_state=NULL,
                        start_time=NULL,
                        fromvar="from",
-                       timevar="time",
-                       sep="_") {
+                       timevar="time") {
 
   # Check
   dtms_proper(dtms)
@@ -63,7 +61,7 @@ dtms_start <- function(data,
   if(is.null(start_time)) start_time <- min(dtms$timescale)
 
   # Starting states, long names
-  starting <- dtms_combine(start_state,start_time,sep=sep)
+  starting <- dtms_combine(start_state,start_time,sep=dtms$sep)
 
   # Restrict data: States and time
   data <- data[data[,fromvar]%in%start_state,]

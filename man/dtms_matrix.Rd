@@ -11,7 +11,6 @@ dtms_matrix(
   tovar = "to",
   Pvar = "P",
   enforcedeath = T,
-  sep = "_",
   rescale = T
 )
 }
@@ -27,8 +26,6 @@ dtms_matrix(
 \item{Pvar}{Character (optional), name of variable with transition probabilities. Default is `P`.}
 
 \item{enforcedeath}{Logical (optional), make sure that every unit moves to absorbing state after last value of time scale? Default is TRUE.}
-
-\item{sep}{Character (optional), separator between short state name and value of time scale. Default is `_`.}
 
 \item{rescale}{Logical (optional), rescale transition probabilities to sum to 1? Default is TRUE.}
 }

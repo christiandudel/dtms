@@ -11,7 +11,6 @@
 #' @param tovar Character (optional), name of variable with receiving state. Default is `to`.
 #' @param timevar Character (optional), name of variable with time scale. Default is `time`.
 #' @param Pvar Character (optional), name of variable with transition probabilities. Default is `P`.
-#' @param sep Character (optional), separator between short state name and value of time scale. Default is `_`.
 #' @param ... Further arguments passed to plot().
 #'
 #' @export
@@ -40,12 +39,11 @@
 #'           dtms=simple)
 
 dtms_plot <- function(probs,
-                      dtms=NULL,
+                      dtms,
                       fromvar="from",
                       tovar="to",
                       timevar="time",
                       Pvar="P",
-                      sep="_",
                       ...) {
 
   # Check
@@ -55,7 +53,7 @@ dtms_plot <- function(probs,
   probs <- dtms_simplify(probs,
                          fromvar=fromvar,
                          tovar=tovar,
-                         sep=sep)
+                         sep=dtms$sep)
 
   # All states
   if(!is.null(dtms)) {

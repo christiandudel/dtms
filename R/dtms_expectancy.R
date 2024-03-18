@@ -36,7 +36,6 @@
 #' @param total Logical (optional), calculate total expectancy. Default is TRUE. Only applied if risk=NULL.
 #' @param verbose Logical (optional), print some information on what is computed. Default is FALSE.
 #' @param fundamental Logical (optional), return fundamental matrix? Default is FALSE.
-#' @param sep Character (optional), separator between short state name and value of time scale. Default is `_`.
 #'
 #' @return A matrix with state expectancies.
 #' @export
@@ -80,7 +79,6 @@ dtms_expectancy <- function(matrix,
                             end_time=NULL,
                             correction=0.5,
                             total=TRUE,
-                            sep="_",
                             fundamental=FALSE,
                             verbose=FALSE) {
 
@@ -92,7 +90,7 @@ dtms_expectancy <- function(matrix,
   if(is.null(start_time)) start_time <- min(dtms$timescale)
 
   # Starting states, long names
-  starting <- dtms_combine(start_state,start_time,sep=sep)
+  starting <- dtms_combine(start_state,start_time,sep=dtms$sep)
 
   # Number of starting and receiving states
   nstart <- length(starting)
@@ -134,11 +132,11 @@ dtms_expectancy <- function(matrix,
     for(i in 1:ntransient) {
 
       # Get states
-      selector <- dtms_in(allstates,dtms$transient[i],sep)
+      selector <- dtms_in(allstates,dtms$transient[i],dtms$sep)
 
       # Use end_time if specified
       if(!is.null(end_time)) {
-        times <- dtms_gettime(allstates,sep)
+        times <- dtms_gettime(allstates,dtms$sep)
         times <- times<=end_time
         times[!is.logical(times)] <- F
         selector <- selector & times
@@ -167,8 +165,8 @@ dtms_expectancy <- function(matrix,
     ntimes <- length(times)
 
     # Get right columns from fundamental matrix
-    selector1 <- dtms_in(allstates,risk,sep)
-    selector2 <- dtms_gettime(allstates,sep)%in%times
+    selector1 <- dtms_in(allstates,risk,dtms$ep)
+    selector2 <- dtms_gettime(allstates,dtms$sep)%in%times
     selector <- selector1 & selector2
 
     # Get result

@@ -38,7 +38,6 @@
 #' @param method Character (optional), do transitions happen mid-interval (`mid`, default) or at the end of the interval (`end`), see details.
 #' @param total Logical (optional), should total of distribution be shown? See details. Default is FALSE.
 #' @param rescale Logical (optional), should distribution be rescaled to sum to 1? See details. Default is TRUE.
-#' @param sep Character (optional), separator between short state name and value of time scale. Default is `_`.
 #'
 #' @return A table of the distribution of the time needed to reach the subset of states
 #' @export
@@ -83,8 +82,7 @@ dtms_first  <- function(matrix,
                         end_time=NULL,
                         method="mid",
                         total=TRUE,
-                        rescale=TRUE,
-                        sep="_") {
+                        rescale=TRUE) {
 
   # Check
   dtms_proper(dtms)
@@ -94,7 +92,7 @@ dtms_first  <- function(matrix,
   if(is.null(start_time)) start_time <- min(dtms$timescale)
 
   # Starting states, long names
-  starting <- dtms_combine(start_state,start_time,sep=sep)
+  starting <- dtms_combine(start_state,start_time,sep=dtms$sep)
 
   # Time scale: Only transitions starting up to T-1 relevant
   timescale_reduced <- dtms$timescale[-length(dtms$timescale)]
@@ -104,7 +102,7 @@ dtms_first  <- function(matrix,
   nstates <- length(allstates)
 
   # Select subset
-  selectorU <- dtms_in(allstates,risk,sep)
+  selectorU <- dtms_in(allstates,risk,dtms$sep)
 
   # Generate matrix
   P_E <- matrix(data=0,nrow=nstates,ncol=nstates)

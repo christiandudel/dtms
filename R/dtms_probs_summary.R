@@ -36,9 +36,9 @@ dtms_probs_summary <- function(probs,
                                tovar="to",
                                timevar="time",
                                Pvar="P",
-                               sep="_",
                                digits=4,
-                               format="decimal") {
+                               format="decimal",
+                               sep="_") {
 
   # Get short state names
   probs[,fromvar] <- dtms_getstate(probs[,fromvar],sep=sep)

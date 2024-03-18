@@ -222,7 +222,7 @@ However, this creates less nice figures and is mainly intended as a very quick
 way of checking results:
 ```{r example1-baseplot}
 ## Simple base plot
-plot(probs)
+plot(probs,dtms=simple)
 ```
 
 Before we generate more results, we calculate the starting distribution of

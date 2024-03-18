@@ -11,7 +11,6 @@
 #' @param start_state Character (optional), name of starting states. If NULL (default) all transient states will be used.
 #' @param start_time Numeric (optional), value of time scale for start. If NULL (default) first value of time scale will be used.
 #' @param end_time Numeric (optional), last value of time scale to consider. If NULL (default) all values of time scale starting from start_time will be used.
-#' @param sep Character (optional), separator between short state name and value of time scale. Default is `_`.
 #'
 #' @return Probability of ever reaching state `risk`.
 #' @export
@@ -52,8 +51,7 @@ dtms_risk <- function(matrix,
                       start_distr=NULL,
                       start_state=NULL,
                       start_time=NULL,
-                      end_time=NULL,
-                      sep="_") {
+                      end_time=NULL) {
 
   # Check
   dtms_proper(dtms)
@@ -63,17 +61,17 @@ dtms_risk <- function(matrix,
   if(is.null(start_time)) start_time <- min(dtms$timescale)
 
   # Starting states, long names
-  starting <- dtms_combine(start_state,start_time,sep=sep)
+  starting <- dtms_combine(start_state,start_time,sep=dtms$sep)
 
   # States of the transition matrix
   allstates <- rownames(matrix)
 
   # Partition of states: all states which belong to risk
-  selectorU <- dtms_in(allstates,risk,sep)
+  selectorU <- dtms_in(allstates,risk,dtms$sep)
 
   # Use end_time if specified
   if(!is.null(end_time)) {
-    times <- dtms_gettime(allstates,sep)
+    times <- dtms_gettime(allstates,dtms$sep)
     times <- times<=end_time
     times[!is.logical(times)] <- F
     selector <- selector & times

@@ -13,7 +13,6 @@ dtms_visits(
   start_distr = NULL,
   end_time = NULL,
   method = "mid",
-  sep = "_",
   total = F
 )
 }
@@ -33,8 +32,6 @@ dtms_visits(
 \item{end_time}{Numeric (optional), last value of time scale to consider. If NULL (default) all values of time scale starting from start_time will be used.}
 
 \item{method}{Character (optional), do transitions happen mid-interval (`mid`, default) or at the end of the interval (`end`), see details.}
-
-\item{sep}{Character (optional), separator between short state name and value of time scale. Default is `_`.}
 
 \item{total}{Logical, should total of distribution be shown? Default is FALSE, as the total always is 1.}
 }

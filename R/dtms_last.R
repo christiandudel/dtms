@@ -47,7 +47,6 @@
 #' @param method Character (optional), do transitions happen mid-interval (`mid`, default) or at the end of the interval (`end`), see details.
 #' @param rescale Logical (optional), should distribution be rescaled to sum to 1? See details. Default is TRUE.
 #' @param total Logical, should total of distribution be shown? Default is FALSE, as the total always is 1.
-#' @param sep Character (optional), separator between short state name and value of time scale. Default is `_`.
 #'
 #' @return Matrix with the distribution(s) of the waiting time.
 #' @export
@@ -92,7 +91,6 @@ dtms_last <- function(matrix,
                       start_distr=NULL,
                       end_time=NULL,
                       method="mid",
-                      sep="_",
                       total=TRUE,
                       rescale=TRUE){
 
@@ -104,7 +102,7 @@ dtms_last <- function(matrix,
   if(is.null(start_time)) start_time <- min(dtms$timescale)
 
   # Starting states, long names
-  starting <- dtms_combine(start_state,start_time,sep=sep)
+  starting <- dtms_combine(start_state,start_time,sep=dtms$sep)
 
   # Time scale: Only transitions starting up to T-1 relevant
   timescale_reduced <- dtms$timescale[-length(dtms$timescale)]
@@ -114,9 +112,9 @@ dtms_last <- function(matrix,
   nstates <- length(allstates)
 
   # Select subset
-  selectorD <- dtms_in(allstates,risk,sep)
+  selectorD <- dtms_in(allstates,risk,dtms$sep)
   if(is.null(risk_to)) selectorU <- !selectorD else
-    selectorU <- dtms_in(allstates,risk_to,sep)
+    selectorU <- dtms_in(allstates,risk_to,dtms$sep)
 
   # Get maxtime
   if(is.null(end_time)) maxtime <- length(timescale_reduced)-1 else

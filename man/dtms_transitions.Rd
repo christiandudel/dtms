@@ -12,8 +12,7 @@ dtms_transitions(
   timevar = "time",
   fromvar = "from",
   tovar = "to",
-  Pvar = "P",
-  sep = "_"
+  Pvar = "P"
 )
 }
 \arguments{
@@ -32,8 +31,6 @@ dtms_transitions(
 \item{tovar}{Character (optional), name of variable with receiving state. Default is `to`.}
 
 \item{Pvar}{Character (optional), name of variable with transition probabilities. Default is `P`.}
-
-\item{sep}{Character (optional), separator between short state name and value of time scale. Default is `_`.}
 }
 \value{
 A data frame with transition probabilities.

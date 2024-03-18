@@ -287,7 +287,7 @@ as a very quick way of checking results:
 
 ``` r
 ## Simple base plot
-plot(probs)
+plot(probs,dtms=simple)
 ```
 
 <img src="man/figures/README-example1-baseplot-1.png" width="100%" />

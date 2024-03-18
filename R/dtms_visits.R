@@ -31,7 +31,6 @@
 #' @param end_time Numeric (optional), last value of time scale to consider. If NULL (default) all values of time scale starting from start_time will be used.
 #' @param method Character (optional), do transitions happen mid-interval (`mid`, default) or at the end of the interval (`end`), see details.
 #' @param total Logical, should total of distribution be shown? Default is FALSE, as the total always is 1.
-#' @param sep Character (optional), separator between short state name and value of time scale. Default is `_`.
 #'
 #' @return A table with the distribution of time spent in a subset of states.
 #' @export
@@ -76,7 +75,6 @@ dtms_visits <- function(matrix,
                         start_distr=NULL,
                         end_time=NULL,
                         method="mid",
-                        sep="_",
                         total=F) {
 
   # Check
@@ -87,18 +85,18 @@ dtms_visits <- function(matrix,
   if(is.null(start_time)) start_time <- min(dtms$timescale)
 
   # Starting states, long names
-  starting <- dtms_combine(start_state,start_time,sep=sep)
+  starting <- dtms_combine(start_state,start_time,sep=dtms$sep)
 
   # States of the transition matrix
   allstates <- rownames(matrix)
   nstates <- length(allstates)
 
   # Partition of states: all states which belong to risk
-  selectorU <- dtms_in(allstates,risk,sep)
+  selectorU <- dtms_in(allstates,risk,dtms$sep)
 
   # Use end_time if specified
   if(!is.null(end_time)) {
-    times <- dtms_gettime(allstates,sep)
+    times <- dtms_gettime(allstates,dtms$sep)
     times <- times<=end_time
     times[!is.logical(times)] <- F
     selector <- selector & times

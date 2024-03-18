@@ -74,7 +74,7 @@ probs |>  dtms_simplify() |>
   facet_wrap(~from)
 
 ## Simple base plot
-plot(probs)
+plot(probs,dtms=simple)
 
 ## Get starting distribution
 S <- dtms_start(dtms=simple,

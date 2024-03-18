@@ -4,7 +4,7 @@
 \alias{dtms_reward}
 \title{Markov chain with rewards}
 \usage{
-dtms_reward(matrix, reward, dtms, sep = "_")
+dtms_reward(matrix, reward, dtms)
 }
 \arguments{
 \item{matrix}{Matrix with transition probabilities, as generated with \code{dtms_matrix}.}
@@ -12,8 +12,6 @@ dtms_reward(matrix, reward, dtms, sep = "_")
 \item{reward}{Matrix with rewards, has to be of same dimensions as `matrix`.}
 
 \item{dtms}{dtms object, as created with \code{dtms}.}
-
-\item{sep}{Character (optional), separator between short state name and value of time scale. Default is `_`.}
 }
 \value{
 A matrix with expected rewards.

@@ -33,7 +33,6 @@
 #' @param tovar Character (optional), name of variable with receiving state. Default is `to`.
 #' @param timevar Character (optional), name of variable with time scale. Default is `time`.
 #' @param Pvar Character (optional), name of variable with transition probabilities. Default is `P`.
-#' @param sep Character (optional), separator between short state name and value of time scale. Default is `_`.
 #'
 #' @return A data frame with transition probabilities.
 #' @export
@@ -65,8 +64,7 @@ dtms_transitions <- function(model,
                              timevar="time",
                              fromvar="from",
                              tovar="to",
-                             Pvar="P",
-                             sep="_") {
+                             Pvar="P") {
 
   # Check
   dtms_proper(dtms)
@@ -113,7 +111,7 @@ dtms_transitions <- function(model,
   }
 
   # Values of starting state
-  model_frame[,fromvar] <- paste(model_frame[,fromvar],model_frame[,timevar],sep=sep)
+  model_frame[,fromvar] <- paste(model_frame[,fromvar],model_frame[,timevar],sep=dtms$sep)
 
   # Reshape
   model_frame <- stats::reshape(model_frame,
@@ -130,7 +128,7 @@ dtms_transitions <- function(model,
   timevalues <- model_frame[rightrows,timevar]+dtms$timestep
   model_frame[rightrows,tovar] <- paste(oldvalues,
                                         timevalues,
-                                        sep=sep)
+                                        sep=dtms$sep)
 
   # Class
   class(model_frame) <- c("dtms_probs","data.frame")
