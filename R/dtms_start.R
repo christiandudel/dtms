@@ -10,16 +10,14 @@
 #' distribution can also be conditional on further covariate values which can be
 #' specified with the argument `variables`.
 #'
-#' @param data Data in transition format, as created with `dtms_format` and cleaned with `dtms_clean`.
-#' @param dtms DTMS object.
-#' @param variables List (optional), a named list with covariate values which are used to restrict the data further.
-#' @param transient Character (optional), names of all transient states.
-#' @param timescale Numeric (optional), values of the time scale.
-#' @param start_state Character (optional), names of starting states. If NULL (default), all transient states will be considered.
-#' @param start_time Numeric (optional), start time. If NULL (default), the first value of the time scale will be used.
-#' @param fromvar Character, name of variable with starting state. Default is `from`, which is the package default for all functions.
-#' @param timevar Character, name of variable with time scale. Default is `time`, which is the package default for all functions.
-#' @param sep Character, separator for constructed state names. Default is `_`, which is the package default for all functions.
+#' @param data Data frame in transition format, as created with \code{dtms_format}.
+#' @param dtms dtms object, as created with \code{dtms}.
+#' @param variables List (optional), a named list with covariate values which are used to restrict the data.
+#' @param start_state Character (optional), name of starting states. If NULL (default) all transient states will be used.
+#' @param start_time Numeric (optional), value of time scale for start. If NULL (default) first value of time scale will be used.
+#' @param fromvar Character (optional), name of variable with starting state. Default is `from`.
+#' @param timevar Character (optional), name of variable with time scale. Default is `time`.
+#' @param sep Character (optional), separator between short state name and value of time scale. Default is `_`.
 #'
 #' @return Returns a table of the starting distribution.
 #' @export
@@ -49,30 +47,20 @@
 #'                  variables=list(Gender=1))
 
 dtms_start <- function(data,
-                       dtms=NULL,
+                       dtms,
                        variables=NULL,
-                       transient=NULL,
-                       timescale=NULL,
                        start_state=NULL,
                        start_time=NULL,
                        fromvar="from",
                        timevar="time",
                        sep="_") {
 
-  # Use dtms if provided
-  if(!is.null(dtms)) {
-
-    # Check
-    dtms_proper(dtms)
-
-    # Use values
-    transient <- dtms$transient
-    timescale <- dtms$timescale
-  }
+  # Check
+  dtms_proper(dtms)
 
   # Starting state and time
-  if(is.null(start_state)) start_state <- transient
-  if(is.null(start_time)) start_time <- min(timescale)
+  if(is.null(start_state)) start_state <- dtms$transient
+  if(is.null(start_time)) start_time <- min(dtms$timescale)
 
   # Starting states, long names
   starting <- dtms_combine(start_state,start_time,sep=sep)

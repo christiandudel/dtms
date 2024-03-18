@@ -6,10 +6,8 @@
 \usage{
 dtms_start(
   data,
-  dtms = NULL,
+  dtms,
   variables = NULL,
-  transient = NULL,
-  timescale = NULL,
   start_state = NULL,
   start_time = NULL,
   fromvar = "from",
@@ -18,25 +16,21 @@ dtms_start(
 )
 }
 \arguments{
-\item{data}{Data in transition format, as created with `dtms_format` and cleaned with `dtms_clean`.}
+\item{data}{Data frame in transition format, as created with \code{dtms_format}.}
 
-\item{dtms}{DTMS object.}
+\item{dtms}{dtms object, as created with \code{dtms}.}
 
-\item{variables}{List (optional), a named list with covariate values which are used to restrict the data further.}
+\item{variables}{List (optional), a named list with covariate values which are used to restrict the data.}
 
-\item{transient}{Character (optional), names of all transient states.}
+\item{start_state}{Character (optional), name of starting states. If NULL (default) all transient states will be used.}
 
-\item{timescale}{Numeric (optional), values of the time scale.}
+\item{start_time}{Numeric (optional), value of time scale for start. If NULL (default) first value of time scale will be used.}
 
-\item{start_state}{Character (optional), names of starting states. If NULL (default), all transient states will be considered.}
+\item{fromvar}{Character (optional), name of variable with starting state. Default is `from`.}
 
-\item{start_time}{Numeric (optional), start time. If NULL (default), the first value of the time scale will be used.}
+\item{timevar}{Character (optional), name of variable with time scale. Default is `time`.}
 
-\item{fromvar}{Character, name of variable with starting state. Default is `from`, which is the package default for all functions.}
-
-\item{timevar}{Character, name of variable with time scale. Default is `time`, which is the package default for all functions.}
-
-\item{sep}{Character, separator for constructed state names. Default is `_`, which is the package default for all functions.}
+\item{sep}{Character (optional), separator between short state name and value of time scale. Default is `_`.}
 }
 \value{
 Returns a table of the starting distribution.
