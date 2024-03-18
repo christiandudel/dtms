@@ -25,19 +25,15 @@
 #' names are either a combination of the name of a transient state and a value
 #' of the time scale, or the name of an absorbing state.
 #'
-#' @param model Model for transition probabilities estimated with `dtms_fit`.
-#' @param dtms DTMS object as created with `dtms`.
+#' @param model Model estimated with \code{dtms_fit}.
+#' @param dtms dtms object, as created with \code{dtms}.
 #' @param constant List (optional) with values for time-constant predictors (see details).
 #' @param varying List (optional) with values for time-varying predictors (see details).
-#' @param transient Character (optional), names of transient states in the model.
-#' @param absorbing Character (optional), names of absorbing states in the model.
-#' @param timescale Numeric (optional), values of the time scale.
-#' @param timestep Numeric (optional), step length of the time scale.
-#' @param timevar Character, name of variable with time scale in output data. Default is `time`.
-#' @param fromvar Character, name of variable with sending state in output data. Default is `from`.
-#' @param tovar Character, name of variable with receiving state in output data. Default is `to`.
-#' @param Pvar Character, name of variable with transition probabilities in output data. Default is `P`.
-#' @param sep Character, separator between state name and value of time scale. Default is `_`, see details.
+#' @param fromvar Character (optional), name of variable with starting state. Default is `from`.
+#' @param tovar Character (optional), name of variable with receiving state. Default is `to`.
+#' @param timevar Character (optional), name of variable with time scale. Default is `time`.
+#' @param Pvar Character (optional), name of variable with transition probabilities. Default is `P`.
+#' @param sep Character (optional), separator between short state name and value of time scale. Default is `_`.
 #'
 #' @return A data frame with transition probabilities.
 #' @export
@@ -63,41 +59,27 @@
 #'                              model = fit)
 
 dtms_transitions <- function(model,
-                             dtms=NULL,
+                             dtms,
                              constant=NULL,
                              varying=NULL,
-                             transient=NULL,
-                             absorbing=NULL,
-                             timescale=NULL,
-                             timestep=NULL,
                              timevar="time",
                              fromvar="from",
                              tovar="to",
                              Pvar="P",
                              sep="_") {
 
-  # Use dtms if provided
-  if(!is.null(dtms)) {
-
-    # Check
-    dtms_proper(dtms)
-
-    # Use values
-    timescale <- dtms$timescale
-    absorbing <- dtms$absorbing
-    transient <- dtms$transient
-    timestep <- dtms$timestep
-  }
+  # Check
+  dtms_proper(dtms)
 
   # Adjust time scale (transitions in the model)
-  timescale <- timescale[-length(timescale)]
+  timescale_reduced <- dtms$timescale[-length(dtms$timescale)]
 
   # Get full state space
-  all_states <- paste(c(transient,absorbing))
+  all_states <- paste(c(dtms$transient,dtms$absorbing))
 
   # Create empty frame
-  model_frame <- expand.grid(from=transient,
-                             time=timescale)
+  model_frame <- expand.grid(from=dtms$transient,
+                             time=timescale_reduced)
 
   # Get names right
   names(model_frame) <- c(fromvar,timevar)
@@ -114,9 +96,9 @@ dtms_transitions <- function(model,
     # Get values
     value <- varying[[var]]
     # Check if enough values
-    if(length(value)!=length(timescale)) stop("Wrong number of time-varying values")
+    if(length(value)!=length(timescale_reduced)) stop("Wrong number of time-varying values")
     # Match to time variable
-    assign_values <- match(model_frame[,timevar],timescale)
+    assign_values <- match(model_frame[,timevar],timescale_reduced)
     # Assign values
     model_frame[var] <- value[assign_values]
   }
@@ -143,9 +125,9 @@ dtms_transitions <- function(model,
                                 v.names=Pvar)
 
   # Values of receiving state (state name + time)
-  rightrows <- model_frame[,tovar]%in%transient
+  rightrows <- model_frame[,tovar]%in%dtms$transient
   oldvalues <- model_frame[rightrows,tovar]
-  timevalues <- model_frame[rightrows,timevar]+timestep
+  timevalues <- model_frame[rightrows,timevar]+dtms$timestep
   model_frame[rightrows,tovar] <- paste(oldvalues,
                                         timevalues,
                                         sep=sep)

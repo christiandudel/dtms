@@ -6,13 +6,9 @@
 \usage{
 dtms_transitions(
   model,
-  dtms = NULL,
+  dtms,
   constant = NULL,
   varying = NULL,
-  transient = NULL,
-  absorbing = NULL,
-  timescale = NULL,
-  timestep = NULL,
   timevar = "time",
   fromvar = "from",
   tovar = "to",
@@ -21,31 +17,23 @@ dtms_transitions(
 )
 }
 \arguments{
-\item{model}{Model for transition probabilities estimated with `dtms_fit`.}
+\item{model}{Model estimated with \code{dtms_fit}.}
 
-\item{dtms}{DTMS object as created with `dtms`.}
+\item{dtms}{dtms object, as created with \code{dtms}.}
 
 \item{constant}{List (optional) with values for time-constant predictors (see details).}
 
 \item{varying}{List (optional) with values for time-varying predictors (see details).}
 
-\item{transient}{Character (optional), names of transient states in the model.}
+\item{timevar}{Character (optional), name of variable with time scale. Default is `time`.}
 
-\item{absorbing}{Character (optional), names of absorbing states in the model.}
+\item{fromvar}{Character (optional), name of variable with starting state. Default is `from`.}
 
-\item{timescale}{Numeric (optional), values of the time scale.}
+\item{tovar}{Character (optional), name of variable with receiving state. Default is `to`.}
 
-\item{timestep}{Numeric (optional), step length of the time scale.}
+\item{Pvar}{Character (optional), name of variable with transition probabilities. Default is `P`.}
 
-\item{timevar}{Character, name of variable with time scale in output data. Default is `time`.}
-
-\item{fromvar}{Character, name of variable with sending state in output data. Default is `from`.}
-
-\item{tovar}{Character, name of variable with receiving state in output data. Default is `to`.}
-
-\item{Pvar}{Character, name of variable with transition probabilities in output data. Default is `P`.}
-
-\item{sep}{Character, separator between state name and value of time scale. Default is `_`, see details.}
+\item{sep}{Character (optional), separator between short state name and value of time scale. Default is `_`.}
 }
 \value{
 A data frame with transition probabilities.
