@@ -8,7 +8,8 @@
 #' @param transient A character vector of names of the transient states in the state space.
 #' @param absorbing A character vector of names of the absorbing states in the state space.
 #' @param timescale A numeric vector with the time scale, including the starting time and the final time.
-#' @param timestep Step length of the time scale, will be guessed if NULL (default).
+#' @param timestep Numeric (optional), step length of the time scale, will be guessed if NULL (default).
+#' @param sep Character (optional), separator between short state name and value of time scale. Default is `_`.
 #'
 #' @return Returns an object of class 'dtms'
 #' @export
@@ -21,7 +22,8 @@
 dtms <- function(transient,
                  absorbing,
                  timescale,
-                 timestep=NULL) {
+                 timestep=NULL,
+                 sep="_") {
 
   # Guess time step?
   if(is.null(timestep)) {
@@ -42,7 +44,8 @@ dtms <- function(transient,
   result <- list(transient=transient,
                  absorbing=absorbing,
                  timescale=timescale,
-                 timestep=timestep)
+                 timestep=timestep,
+                 sep=sep)
 
   # Assign class
   class(result)[2] <- "dtms"
