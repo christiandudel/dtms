@@ -5,10 +5,10 @@
 #' an abstract definition of a multistate model, including the names of the transient states, the names of the
 #' absorbing states, the values the time scale can take, and the step length of the time scale.
 #'
-#' @param transient A character vector of names of the transient states in the state space
-#' @param absorbing A character vector of names of the absorbing states in the state space
-#' @param timescale A numeric vector with the time scale, including the starting time and the final time
-#' @param timestep Step length of the time scale, will be guessed if NULL (default)
+#' @param transient A character vector of names of the transient states in the state space.
+#' @param absorbing A character vector of names of the absorbing states in the state space.
+#' @param timescale A numeric vector with the time scale, including the starting time and the final time.
+#' @param timestep Step length of the time scale, will be guessed if NULL (default).
 #'
 #' @return Returns an object of class 'dtms'
 #' @export

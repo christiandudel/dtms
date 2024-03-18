@@ -22,18 +22,15 @@
 #' unconditional on the starting state. The other shows the distribution
 #' conditional on not starting in any state of the risk set.
 #'
-#' @param matrix Matrix with transition probabilities, as generated with `dtms_matrix`.
-#' @param dtms DTMS object as created with `dtms`.
-#' @param risk Character (required), names of one or several states for which the time spent should be calculated.
-#' @param start_state Character (optional), names of one or several starting states. If NULL (default), all transient states will be considered.
-#' @param start_time Numeric (optional), value of time scale at start. If NULL (default), first value of time scale is used.
-#' @param end_time Numeric (optional), value of time scale at end. If NULL (default), last value of time scale is used.
-#' @param start_distr Numeric (optional), distribution of starting states. Needs to be consistent with starting states. If provided, average distribution is provided; see details.
-#' @param method Character, do transitions happen mid-interval (`mid`, default) or at the end of the interval (`end`), see details.
+#' @param matrix Matrix with transition probabilities, as generated with \code{dtms_matrix}.
+#' @param dtms dtms object, as created with \code{dtms}.
+#' @param risk Character, name of state(s) for which risk is of interest.
+#' @param start_distr Numeric (optional), distribution of starting states. If specified, average expectancy over all starting states will be calculated.
+#' @param start_state Character (optional), name of starting states. If NULL (default) all transient states will be used.
+#' @param start_time Numeric (optional), value of time scale for start. If NULL (default) first value of time scale will be used.
+#' @param end_time Numeric (optional), last value of time scale to consider. If NULL (default) all values of time scale starting from start_time will be used.
+#' @param method Character (optional), do transitions happen mid-interval (`mid`, default) or at the end of the interval (`end`), see details.
 #' @param total Logical, should total of distribution be shown? Default is FALSE, as the total always is 1.
-#' @param transient Character (optional), short names of transient states. If NULL (default) transient states are taken from `dtms` object.
-#' @param timescale Numeric (optional), values of time scale. If NULL (default) obtained from `dtms` object.
-#' @param timestep Numeric (optional), step length of time scale. If NULL (default) obtained from `dtms` object.
 #' @param sep Character (optional), separator between short state name and value of time scale. Default is `_`.
 #'
 #' @return A table with the distribution of time spent in a subset of states.
@@ -72,34 +69,22 @@
 #'             total=TRUE)
 
 dtms_visits <- function(matrix,
-                        dtms=NULL,
+                        dtms,
                         risk,
                         start_time=NULL,
                         start_state=NULL,
                         start_distr=NULL,
                         end_time=NULL,
                         method="mid",
-                        transient=NULL,
-                        timescale=NULL,
-                        timestep=NULL,
                         sep="_",
                         total=F) {
 
-  # Use dtms if provided
-  if(!is.null(dtms)) {
-
-    # Check
-    dtms_proper(dtms)
-
-    # Use values
-    transient <- dtms$transient
-    timescale <- dtms$timescale
-    timestep <- dtms$timestep
-  }
+  # Check
+  dtms_proper(dtms)
 
   # Starting state and time
-  if(is.null(start_state)) start_state <- transient
-  if(is.null(start_time)) start_time <- min(timescale)
+  if(is.null(start_state)) start_state <- dtms$transient
+  if(is.null(start_time)) start_time <- min(dtms$timescale)
 
   # Starting states, long names
   starting <- dtms_combine(start_state,start_time,sep=sep)
@@ -142,7 +127,8 @@ dtms_visits <- function(matrix,
   }
 
   # Get n
-  if(is.null(end_time)) n <- length(timescale) else n <- which(end_time==timescale)
+  if(is.null(end_time)) n <- length(dtms$timescale) else
+    n <- which(end_time==dtms$timescale)
 
   # Time steps
   t_series <- 0:n
@@ -199,10 +185,12 @@ dtms_visits <- function(matrix,
     names(tmp) <- paste("F",i,which_d,sep="_")
 
     for(k in 1:n_d) { # Equation (7)
-      if(method=="mid") tmp[[paste("F",i,which_d[k],sep="_")]] <- U_U%*%results[[paste("F",i-1,which_d[k]-1,sep="_")]] +
+      if(method=="mid") tmp[[paste("F",i,which_d[k],sep="_")]] <-
+          U_U%*%results[[paste("F",i-1,which_d[k]-1,sep="_")]] +
           U_D%*%results[[paste("F",i-1,which_d[k],sep="_")]]   +
           U_UD%*%results[[paste("F",i-1,which_d[k]-0.5,sep="_")]]
-      if(method=="end") tmp[[paste("F",i,which_d[k],sep="_")]] <- U_U%*%results[[paste("F",i-1,which_d[k]-1,sep="_")]] +
+      if(method=="end") tmp[[paste("F",i,which_d[k],sep="_")]] <-
+          U_U%*%results[[paste("F",i-1,which_d[k]-1,sep="_")]] +
           U_D%*%results[[paste("F",i-1,which_d[k],sep="_")]]
       colnames(tmp[[paste("F",i,which_d[k],sep="_")]]) <- allstates
       rownames(tmp[[paste("F",i,which_d[k],sep="_")]]) <- allstates
@@ -226,8 +214,8 @@ dtms_visits <- function(matrix,
   result <- cbind(result[,1],t(apply(result,1,diff)))
 
   # Column names
-  if(method=="mid") colnames(result) <- paste(c(d_series,n+0.5,n+1)*timestep)
-  if(method=="end") colnames(result) <- paste(c(d_series,n+1)*timestep)
+  if(method=="mid") colnames(result) <- paste(c(d_series,n+0.5,n+1)*dtms$timestep)
+  if(method=="end") colnames(result) <- paste(c(d_series,n+1)*dtms$timestep)
 
   # Drop last col if mid-transitions
   if(method=="mid") result <- result[,which(colnames(result)!=paste0(n+1))]
@@ -241,7 +229,7 @@ dtms_visits <- function(matrix,
     result <- rbind(result,AVERAGE)
 
     # Conditional on not starting in state in risk set
-    whererisk <- !transient%in%risk
+    whererisk <- !dtms$transient%in%risk
     tmp_distr <- start_distr[whererisk]/sum(start_distr[whererisk])
     tmp_names <- paste0("start:",names(tmp_distr))
     tmp <- tmp_distr%*%result[tmp_names,]
