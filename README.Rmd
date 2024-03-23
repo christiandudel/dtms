@@ -68,6 +68,180 @@ library(devtools)
 install_github("christiandudel/dtms")
 ```
 
+## Workflow
+
+The basic workflow consists of two main steps: estimating a discrete-time 
+multistate model to predict transition probabilities; and then applying Markov
+chain methods to the these transition probabilities to describe the process. The 
+first step can be broken down into several smaller steps. These include 
+defining the components of the multistate model; preparing and cleaning the 
+input data; and specifying the functional form of the multistate model. These
+steps are described below. After this, we present to examples which show the
+complete workflow based on data provided with the package.
+
+## Model setup
+
+Disrete-time multistate models as implemented in dtms consist of three
+components: a list of the transient states; a list of the absorbing states; 
+and a list of values of the time scale. Moreover, there are two components
+additional components which the user not necessarily needs to specify: the
+step length of the timescale, and a separator (see below). 
+
+To define these components, the function `dtms` is used. It has an 
+argument for each of the components, but only three are necessary: the 
+names of the transient states, the names of the absorbing states, and the
+values of the time scale. The step length of the timescale is implicitly defined
+by the values of the timescale, and the separator uses a default value which 
+users likely don't want to change in a majority of applications. In the first
+example provided further below, the function `dtms` is used like this:
+``` r
+## Load package
+library(dtms)
+## Define model: Absorbing and transient states, time scale
+simple <- dtms(transient=c("A","B"),
+               absorbing="X",
+               timescale=0:19)
+```
+The arguments `transient` and `absorbing` take the names of the
+transient and absorbing states, respectively, which are specified as character
+vectors. In this case, there are two transient states called `A` and `B` and 
+an absorbing state `X`. Each model needs at least one transient state and one
+absorbing state. `timescale` takes the values of the timescale which are
+specified with a numeric vector. In this example, the time scale starts at 0
+and stops at 19, with a step length of 1. The step length has to be consistent
+along the timescale. For instance, a timescale with values 0, 1, 2, 4, 5, 7 is
+not allowed. However, the step length does not need to equal 1; e.g., 0, 2, 4,
+6, ... would be fine. 
+
+The separator is a character string used to construct what we call 
+long state names. Its default is `_`. Long state names consist of a 
+combination of the names of the transient states with values of
+the time scale. They are used internally to handle that transition probabilities
+might depend on values of the time scale. Long state names are never 
+constructed for absorbing states. For instance, if the transient states are 
+called `A` and `B`, the time scale can take on values 0, 1, and 2, and the
+separator is `_`, then the following long state names will be used: `A_0`, 
+`A_1`, `A_2`, `B_0`, `B_1`, and `B_2`. Due to the temporal ordering of states
+not all transitions between these states are possible; e.g., it is not 
+possible to transition from `A_2` to `B_0`. 
+
+## Input data
+
+The input data has to be panel data in long format. If your data is not in this
+shape, there are many tools already available in R and its extensions which
+allow you to reshape it. An example of data in long format could look like this:
+
+```{r echo = FALSE, results='asis'}
+dat <- data.frame(idvar=c(1,1,1,1,2,2,"..."),
+                  timevar=c(0,1,2,3,0,1,"..."),
+                  statevar=c("A","A","B","A","B","A","..."),
+                  X=c(2,2,2,2,1,1,"..."),
+                  Y=c(1020,1025,1015,1000,2300,2321,"..."))
+library(knitr)
+kable(dat)
+```
+
+The first variable, `idvar`, contains a unit identifier. The first four
+rows of the data belong to unit `1`. The variable `timevar` has the 
+values of the timescale. `statevar` shows the state each unit is 
+occupying at a given time. `X` and `Z` are additional covariates. 
+
+The dtms package provides tools to reshape this data into what we call
+transition format. For the example data shown above transition format looks 
+like this:
+
+```{r echo = FALSE, results='asis'}
+dat <- data.frame(idvar=c(1,1,1,2,"..."),
+                  timevar=c(0,1,2,0,"..."),
+                  fromvar=c("A","A","B","B","..."),
+                  tovar=c("A","B","A","A","..."),
+                  X=c(2,2,2,1,"..."),
+                  Y=c(1020,1025,1015,2300,"..."))
+library(knitr)
+kable(dat)
+```
+
+Each row shows for each unit (`idvar`) and given time (`timevar`) the
+state currently occupied (`fromvar`) and the state the unit will transition
+to at the next value of the time scale (`tovar`). For unit 1, the last
+observation in long format is at time 3. However, this is the final observation
+and there is no transition to another state after this. This means that the last
+observed transition for unit 1 starts at time 2. 
+
+To reshape data into transition format, the function `dtms_format` can be
+used. It is one of the many functions of the package which takes the result of
+the function `dtms` as one of its inputs. In the second example provided below
+`dtms_format` is used like this:
+```{r data example}
+## Load package
+library(dtms)
+## Define model: Absorbing and transient states, time scale
+hrs <- dtms(transient=c("Working","Non-working","Retired"),
+            absorbing="Dead",
+            timescale=50:99)
+## Reshape
+estdata <- dtms_format(data=hrsdata,
+                       dtms=hrs,
+                       idvar="ID",
+                       timevar="Age",
+                       statevar="State")
+```
+First, `dtms`is called to define the model. The call of `dtms_format` specifies
+the data frame which contains the data in long format (argument `data`), the
+definition of the multistate model (argument `dtms`), the name of the variable
+containing the unit identifier (argument `idvar`), the name of the variable
+containing the values of the timescale (argument `timevar`), and the variable
+indicating the states (argument `statevar`). The original data and the
+reshaped data can be compared like this:
+```{r head}
+hrsdata |> subset(ID==3) |> head()
+estdata |> subset(id==3) |> head()
+```
+Three things are important to note. First, if not specified otherwise, 
+`dtms_format` changes variable names to default names. These default names are
+also default values for other functions, meaning that certain variable names
+do not need to be specified all the time, making the workflow easier. 
+Specifically, the variable with the unit identifier gets the name `id`; the
+variable with the timescale gets the name `time`; and the variables with the
+starting and receiving state get the names `from` and `to`. Other names can of
+course be specified, but they have to be used consistently. 
+
+Second, the object returned by `dtms_format` is a standard data frame. This 
+comes with benefits and costs. On the upside this means that data in 
+transition format can easily be viewed and modified using standard tools, making
+it very accessible to users. The main downside is that it does not contain
+general information on the model or the data, which could make the workflow
+slightly more convenient. We decided to keep intermediate steps as accessible
+as possible.
+
+Third, the data in long format contains an additional variable (`Gender`). All
+variables which are not `idvar`, `timevar`, or `statevar` do not need to be
+specified and are handled in the same way. For any variables X, Y, Z, ... the
+value at time $t$ is assigned to the transition starting in time $t$. 
+
+A useful function for handling data in transition format is `dtms_clean`. It
+can be used to remove, for instance, transitions starting and/or ending in a
+missing value. Depending on the data, these can occur quite frequently. For
+instance, in the example used above:
+```{r NA}
+estdata |> subset(id==1) |> head()
+```
+This means that for the unit with ID 1, at least the first couple of transitions
+only contain missing values. This is because in the original data these 
+values are missing:
+```{r NAhrs}
+hrsdata |> subset(ID==1) |> head()
+```
+`dtms_format` simply takes each row in the input data and adds the state at
+the next value of the time scale to that row. If this next value is NA, or if it
+is not included in the data, the resulting value of `to' will be NA. 
+
+Such missing values and a few other things can be removed as follows:
+```{r clean}
+estdata <- dtms_clean(data=estdata,
+                      dtms=hrs)
+```
+
 ## Example 1: Artificial data
 
 This is a basic example using artificial data which is provided with the 

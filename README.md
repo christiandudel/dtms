@@ -18,7 +18,7 @@ Peng Li, <li@demogr.mpg.de>
 
 ## Overview
 
-The package \code{dtms} is a user-friendly implementation of discrete-time
+The package dtms is a user-friendly implementation of discrete-time
 multistate models in R. It comes with many tools to analyze the results
 of multistate models. In particular, the workflow mainly consists of
 estimating a discrete-time multistate model and then applying methods
@@ -54,7 +54,7 @@ and functions and features might be added or removed without warning.
 
 ## Installation
 
-You can install the development version of \code{dtms} like this:
+You can install the development version of dtms like this:
 
 ``` r
 library(devtools)
@@ -63,64 +63,195 @@ install_github("christiandudel/dtms")
 
 ## Workflow
 
-The basic workflow consists of two main steps: estimating a discrete-time 
-multistate model to predict transition probabilities; and then applying Markov
-chain methods to the these transition probabilities to describe the process. The 
-first step can be broken down into several smaller steps. These include 
-defining the components of the multistate model; preparing and cleaning the 
-input data; and specifying the functional form of the multistate model. These
-steps are described below. After this, we present to examples which show the
-complete workflow based on data provided with the package.
+The basic workflow consists of two main steps: estimating a
+discrete-time multistate model to predict transition probabilities; and
+then applying Markov chain methods to the these transition probabilities
+to describe the process. The first step can be broken down into several
+smaller steps. These include defining the components of the multistate
+model; preparing and cleaning the input data; and specifying the
+functional form of the multistate model. These steps are described
+below. After this, we present to examples which show the complete
+workflow based on data provided with the package.
 
 ## Model setup
 
-Disrete-time multistate models as implemented in \code{dtms} consist of three
-components: a list of the transient states; a list of the absorbing states; 
-and a list of values of the time scale. Moreover, there are two components
-additional components which the user not necessarily needs to specify: the
-step length of the timescale, and a separator (see below). 
+Disrete-time multistate models as implemented in dtms consist of three
+components: a list of the transient states; a list of the absorbing
+states; and a list of values of the time scale. Moreover, there are two
+components additional components which the user not necessarily needs to
+specify: the step length of the timescale, and a separator (see below).
 
-To define these components, the function \code{dtms} is used. It has an 
-argument for each of the components, but only three are necessary: the 
-names of the transient states, the names of the absorbing states, and the
-values of the time scale. The step length of the timescale is implicitly defined
-by the values of the timescale, and the separator uses a default value which 
-users likely don't want to change in a majority of applications. In the first
-example provided further below, the function \code{dtms} is used like this:
+To define these components, the function `dtms` is used. It has an
+argument for each of the components, but only three are necessary: the
+names of the transient states, the names of the absorbing states, and
+the values of the time scale. The step length of the timescale is
+implicitly defined by the values of the timescale, and the separator
+uses a default value which users likely don’t want to change in a
+majority of applications. In the first example provided further below,
+the function `dtms` is used like this:
+
 ``` r
+## Load package
+library(dtms)
 ## Define model: Absorbing and transient states, time scale
 simple <- dtms(transient=c("A","B"),
                absorbing="X",
                timescale=0:19)
 ```
-The arguments \code{transient} and \code{absorbing} take the names of the
-transient and absorbing states, respectively, which are specified as character
-vectors. In this case, there are two transient states called `A` and `B` and 
-an absorbing state `X`. Each model needs at least one transient state and one
-absorbing state. \code{timescale} takes the values of the timescale which are
-specified with a numeric vector. In this example, the time scale starts at 0
-and stops at 19, with a step length of 1. The step length has to be consistent
-along the timescale. For instance, a timescale with values 0, 1, 2, 4, 5, 7 is
-not allowed. However, the step length does not need to equal 1; e.g., 0, 2, 4,
-6, ... would be fine. 
 
-The separator is a character string used to construct what we call 
-`long state names`. Its default is `_`. Long state names consist of a 
-combination of the names of the transient states with values of
-the time scale. They are used internally to handle that transition probabilities
-might depend on values of the time scale. Long state names are never 
-constructed for absorbing states. For instance, if the transient states are 
-called `A` and `B`, the time scale can take on values 0, 1, and 2, and the
-separator is `_`, then the following long state names will be used: `A_0`, 
-`A_1`, `A_2`, `B_0`, `B_1`, and `B_2`. Due to the temporal ordering of states
-not all transitions between these states are possible; e.g., it is not 
-possible to transition from `A_2` to `B_0`. 
+The arguments `transient` and `absorbing` take the names of the
+transient and absorbing states, respectively, which are specified as
+character vectors. In this case, there are two transient states called
+`A` and `B` and an absorbing state `X`. Each model needs at least one
+transient state and one absorbing state. `timescale` takes the values of
+the timescale which are specified with a numeric vector. In this
+example, the time scale starts at 0 and stops at 19, with a step length
+of 1. The step length has to be consistent along the timescale. For
+instance, a timescale with values 0, 1, 2, 4, 5, 7 is not allowed.
+However, the step length does not need to equal 1; e.g., 0, 2, 4, 6, …
+would be fine.
+
+The separator is a character string used to construct what we call long
+state names. Its default is `_`. Long state names consist of a
+combination of the names of the transient states with values of the time
+scale. They are used internally to handle that transition probabilities
+might depend on values of the time scale. Long state names are never
+constructed for absorbing states. For instance, if the transient states
+are called `A` and `B`, the time scale can take on values 0, 1, and 2,
+and the separator is `_`, then the following long state names will be
+used: `A_0`, `A_1`, `A_2`, `B_0`, `B_1`, and `B_2`. Due to the temporal
+ordering of states not all transitions between these states are
+possible; e.g., it is not possible to transition from `A_2` to `B_0`.
 
 ## Input data
 
-The input data has to be panel data in long format. If your data is not in this
-shape, there are many tools already available in R and its extensions which
-allow you to reshape it. 
+The input data has to be panel data in long format. If your data is not
+in this shape, there are many tools already available in R and its
+extensions which allow you to reshape it. An example of data in long
+format could look like this:
+
+| idvar | timevar | statevar | X   | Y    |
+|:------|:--------|:---------|:----|:-----|
+| 1     | 0       | A        | 2   | 1020 |
+| 1     | 1       | A        | 2   | 1025 |
+| 1     | 2       | B        | 2   | 1015 |
+| 1     | 3       | A        | 2   | 1000 |
+| 2     | 0       | B        | 1   | 2300 |
+| 2     | 1       | A        | 1   | 2321 |
+| …     | …       | …        | …   | …    |
+
+The first variable, `idvar`, contains a unit identifier. The first four
+rows of the data belong to unit `1`. The variable `timevar` has the
+values of the timescale. `statevar` shows the state each unit is
+occupying at a given time. `X` and `Z` are additional covariates.
+
+The dtms package provides tools to reshape this data into what we call
+transition format. For the example data shown above transition format
+looks like this:
+
+| idvar | timevar | fromvar | tovar | X   | Y    |
+|:------|:--------|:--------|:------|:----|:-----|
+| 1     | 0       | A       | A     | 2   | 1020 |
+| 1     | 1       | A       | B     | 2   | 1025 |
+| 1     | 2       | B       | A     | 2   | 1015 |
+| 2     | 0       | B       | A     | 1   | 2300 |
+| …     | …       | …       | …     | …   | …    |
+
+Each row shows for each unit (`idvar`) and given time (`timevar`) the
+state currently occupied (`fromvar`) and the state the unit will
+transition to at the next value of the time scale (`tovar`). For unit 1,
+the last observation in long format is at time 3. However, this is the
+final observation and there is no transition to another state after
+this. This means that the last observed transition for unit 1 starts at
+time 2.
+
+To reshape data into transition format, the function `dtms_format` can
+be used. It is one of the many functions of the package which takes the
+result of the function `dtms` as one of its inputs. In the second
+example provided below `dtms_format` is used like this:
+
+``` r
+## Load package
+library(dtms)
+## Define model: Absorbing and transient states, time scale
+hrs <- dtms(transient=c("Working","Non-working","Retired"),
+            absorbing="Dead",
+            timescale=50:99)
+## Reshape
+estdata <- dtms_format(data=hrsdata,
+                       dtms=hrs,
+                       idvar="ID",
+                       timevar="Age",
+                       statevar="State")
+```
+
+First, `dtms`is called to define the model. The call of `dtms_format`
+specifies the data frame which contains the data in long format
+(argument `data`), the definition of the multistate model (argument
+`dtms`), the name of the variable containing the unit identifier
+(argument `idvar`), the name of the variable containing the values of
+the timescale (argument `timevar`), and the variable indicating the
+states (argument `statevar`). The original data and the reshaped data
+can be compared like this:
+
+``` r
+hrsdata |> subset(ID==3) |> head()
+#>     ID Gender Age       State
+#> 101  3      1  50     Working
+#> 102  3      1  51     Working
+#> 103  3      1  52     Working
+#> 104  3      1  53     Working
+#> 105  3      1  54 Non-working
+#> 106  3      1  55 Non-working
+estdata |> subset(id==3) |> head()
+#>     id Gender time        from          to
+#> 101  3      1   50     Working     Working
+#> 102  3      1   51     Working     Working
+#> 103  3      1   52     Working     Working
+#> 104  3      1   53     Working Non-working
+#> 105  3      1   54 Non-working Non-working
+#> 106  3      1   55 Non-working Non-working
+```
+
+Three things are important to note. First, if not specified otherwise,
+`dtms_format` changes variable names to default names. These default
+names are also default values for other functions, meaning that certain
+variable names do not need to be specified all the time, making the
+workflow easier. Specifically, the variable with the unit identifier
+gets the name `id`; the variable with the timescale gets the name
+`time`; and the variables with the starting and receiving state get the
+names `from` and `to`. Other names can of course be specified, but they
+have to be used consistently.
+
+Second, the object returned by `dtms_format` is a standard data frame.
+This comes with benefits and costs. On the upside this means that data
+in transition format can easily be viewed and modified using standard
+tools, making it very accessible to users. The main downside is that it
+does not contain general information on the model or the data, which
+could make the workflow slightly more convenient. We decided to keep
+intermediate steps as accessible as possible.
+
+Third, the data in long format contains an additional variable
+(`Gender`). All variables which are not `idvar`, `timevar`, or
+`statevar` do not need to be specified and are handled in the same way.
+For any variables X, Y, Z, … the value at time $t$ is assigned to the
+transition starting in time $t$.
+
+A useful function for handling data in transition format is
+`dtms_clean`. It can be used to remove, for instance, transitions
+starting and/or ending in a missing value. Depending on the data, these
+can occur quite frequently. For instance, in the example used above:
+
+``` r
+estdata |> subset(id==1) |> head()
+#>   id Gender time from   to
+#> 1  1      1   50 <NA> <NA>
+#> 2  1      1   51 <NA> <NA>
+#> 3  1      1   52 <NA> <NA>
+#> 4  1      1   53 <NA> <NA>
+#> 5  1      1   54 <NA> <NA>
+#> 6  1      1   55 <NA> <NA>
+```
 
 ## Example 1: Artificial data
 
@@ -450,16 +581,16 @@ dtms_visits(dtms=simple,
             matrix=Tp,
             risk="A",
             start_distr=S)
-#>                         0        0.5          1        1.5          2
-#> start:A_0      0.00000000 0.03344800 0.00000000 0.05798264 0.00000000
-#> start:B_0      0.02527496 0.00000000 0.05016242 0.00000000 0.08200508
-#> AVERAGE        0.01253069 0.01686533 0.02486925 0.02923632 0.04065604
-#> AVERAGE(COND.) 0.02527496 0.00000000 0.05016242 0.00000000 0.08200508
-#>                          2.5             3        3.5          4        4.5
-#> start:A_0       9.272739e-02 -2.775558e-17 0.13278564 0.00000000 0.16612892
-#> start:B_0      -2.775558e-17  1.210458e-01 0.00000000 0.15724305 0.00000000
-#> AVERAGE         4.675550e-02  6.001144e-02 0.06695389 0.07795712 0.08376641
-#> AVERAGE(COND.) -2.775558e-17  1.210458e-01 0.00000000 0.15724305 0.00000000
+#>                         0           0.5          1        1.5          2
+#> start:A_0      0.00000000  3.344800e-02 0.00000000 0.05798264 0.00000000
+#> start:B_0      0.02527496 -6.938894e-18 0.05016242 0.00000000 0.08200508
+#> AVERAGE        0.01253069  1.686533e-02 0.02486925 0.02923632 0.04065604
+#> AVERAGE(COND.) 0.02527496 -6.938894e-18 0.05016242 0.00000000 0.08200508
+#>                       2.5          3        3.5          4        4.5
+#> start:A_0      0.09272739 0.00000000 0.13278564 0.00000000 0.16612892
+#> start:B_0      0.00000000 0.12104579 0.00000000 0.15724305 0.00000000
+#> AVERAGE        0.04675550 0.06001144 0.06695389 0.07795712 0.08376641
+#> AVERAGE(COND.) 0.00000000 0.12104579 0.00000000 0.15724305 0.00000000
 #>                         5        5.5          6        6.5          7
 #> start:A_0      0.00000000 0.17786454 0.00000000 0.15780490 0.00000000
 #> start:B_0      0.17606542 0.00000000 0.16547248 0.00000000 0.12398646
@@ -476,20 +607,25 @@ dtms_visits(dtms=simple,
 #> AVERAGE        0.002653975 0.001475388 0.0003274104 0.0001504495 2.297886e-05
 #> AVERAGE(COND.) 0.005353188 0.000000000 0.0006604016 0.0000000000 4.634940e-05
 #>                        12.5           13         13.5           14         14.5
-#> start:A_0      1.767521e-05 0.000000e+00 6.331159e-07 0.000000e+00 1.418449e-08
+#> start:A_0      1.767521e-05 0.000000e+00 6.331159e-07 0.000000e+00 1.418450e-08
 #> start:B_0      0.000000e+00 1.915403e-06 0.000000e+00 4.832799e-08 0.000000e+00
 #> AVERAGE        8.912289e-06 9.496080e-07 3.192331e-07 2.395979e-08 7.152182e-09
 #> AVERAGE(COND.) 0.000000e+00 1.915403e-06 0.000000e+00 4.832799e-08 0.000000e+00
 #>                          15         15.5           16         16.5           17
-#> start:A_0      0.000000e+00 2.023649e-10 0.000000e+00 1.831979e-12 0.000000e+00
-#> start:B_0      7.612809e-10 0.000000e+00 7.491119e-12 0.000000e+00 4.485301e-14
-#> AVERAGE        3.774238e-10 1.020375e-10 3.713907e-12 9.237303e-13 2.223699e-14
-#> AVERAGE(COND.) 7.612809e-10 0.000000e+00 7.491119e-12 0.000000e+00 4.485301e-14
-#>                        17.5 18 18.5 19         19.5            20         20.5
-#> start:A_0      1.021405e-14  0    0  0 2.220446e-16 -2.220446e-16 2.220446e-16
-#> start:B_0      0.000000e+00  0    0  0 0.000000e+00  0.000000e+00 0.000000e+00
-#> AVERAGE        5.150184e-15  0    0  0 1.119605e-16 -1.119605e-16 1.119605e-16
-#> AVERAGE(COND.) 0.000000e+00  0    0  0 0.000000e+00  0.000000e+00 0.000000e+00
+#> start:A_0      0.000000e+00 2.023647e-10 0.000000e+00 1.831868e-12 0.000000e+00
+#> start:B_0      7.612808e-10 0.000000e+00 7.491341e-12 0.000000e+00 4.463097e-14
+#> AVERAGE        3.774237e-10 1.020374e-10 3.714017e-12 9.236743e-13 2.212690e-14
+#> AVERAGE(COND.) 7.612808e-10 0.000000e+00 7.491341e-12 0.000000e+00 4.463097e-14
+#>                         17.5            18          18.5            19
+#> start:A_0       1.043610e-14 -2.220446e-16  2.220446e-16 -2.220446e-16
+#> start:B_0      -1.110223e-16  3.330669e-16 -2.220446e-16  2.220446e-16
+#> AVERAGE         5.207102e-15  5.316561e-17  1.876433e-18 -1.876433e-18
+#> AVERAGE(COND.) -1.110223e-16  3.330669e-16 -2.220446e-16  2.220446e-16
+#>                         19.5           20 20.5
+#> start:A_0       2.220446e-16 0.000000e+00    0
+#> start:B_0      -2.220446e-16 2.220446e-16    0
+#> AVERAGE         1.876433e-18 1.100841e-16    0
+#> AVERAGE(COND.) -2.220446e-16 2.220446e-16    0
 #> attr(,"class")
 #> [1] "dtms_distr" "matrix"
 
@@ -864,7 +1000,8 @@ firstw <- dtms_first(dtms=hrs,
                      start_distr=Sw)  
 
 summary(firstm)
-#> Warning in dtms_distr_summary(distr = object, ...): NAs introduced by coercion
+#> Warning in dtms_distr_summary(distr = object, ...): NAs durch Umwandlung
+#> erzeugt
 #>                          MEAN VARIANCE       SD MEDIAN    RISK0
 #> start:Working_50     14.25887 42.52401 6.521043   14.5 0.000000
 #> start:Non-working_50 12.31587 50.90513 7.134783   12.5 0.000000
@@ -872,7 +1009,8 @@ summary(firstm)
 #> AVERAGE              10.53175 62.91454 7.931868   10.5 0.153159
 #> AVERAGE(COND.)       12.43652 50.60457 7.113689   12.5 0.000000
 summary(firstw)
-#> Warning in dtms_distr_summary(distr = object, ...): NAs introduced by coercion
+#> Warning in dtms_distr_summary(distr = object, ...): NAs durch Umwandlung
+#> erzeugt
 #>                           MEAN VARIANCE       SD MEDIAN     RISK0
 #> start:Working_50     14.107172 40.00302 6.324794   14.5 0.0000000
 #> start:Non-working_50 12.547088 46.49749 6.818907   12.5 0.0000000
@@ -894,7 +1032,8 @@ last1w <- dtms_last(dtms=hrs,
                     start_distr=Sw) 
 
 summary(last1m)
-#> Warning in dtms_distr_summary(distr = object, ...): NAs introduced by coercion
+#> Warning in dtms_distr_summary(distr = object, ...): NAs durch Umwandlung
+#> erzeugt
 #>                          MEAN VARIANCE       SD MEDIAN RISK0
 #> start:Working_50     16.50265 76.98676 8.774210   15.5    NA
 #> start:Non-working_50 18.02302 68.14259 8.254853   17.5    NA
@@ -902,7 +1041,8 @@ summary(last1m)
 #> AVERAGE              17.89872 69.01534 8.307547   17.5    NA
 #> AVERAGE(COND.)       17.99576 68.31640 8.265373   17.5    NA
 summary(last1w)
-#> Warning in dtms_distr_summary(distr = object, ...): NAs introduced by coercion
+#> Warning in dtms_distr_summary(distr = object, ...): NAs durch Umwandlung
+#> erzeugt
 #>                          MEAN VARIANCE       SD MEDIAN RISK0
 #> start:Working_50     16.15218 87.76963 9.368545   15.5    NA
 #> start:Non-working_50 18.31738 77.06422 8.778623   17.5    NA
@@ -924,7 +1064,8 @@ last2w <- dtms_last(dtms=hrs,
                     start_distr=Sw)  
 
 summary(last2m)
-#> Warning in dtms_distr_summary(distr = object, ...): NAs introduced by coercion
+#> Warning in dtms_distr_summary(distr = object, ...): NAs durch Umwandlung
+#> erzeugt
 #>                          MEAN VARIANCE       SD MEDIAN RISK0
 #> start:Working_50     18.74988 64.64429 8.040167   18.5    NA
 #> start:Non-working_50 19.72542 56.78054 7.535286   19.5    NA
@@ -932,7 +1073,8 @@ summary(last2m)
 #> AVERAGE              19.64929 57.45635 7.579997   19.5    NA
 #> AVERAGE(COND.)       19.70856 56.92587 7.544924   19.5    NA
 summary(last2w)
-#> Warning in dtms_distr_summary(distr = object, ...): NAs introduced by coercion
+#> Warning in dtms_distr_summary(distr = object, ...): NAs durch Umwandlung
+#> erzeugt
 #>                          MEAN VARIANCE       SD MEDIAN RISK0
 #> start:Working_50     19.33660 73.65218 8.582085   19.5    NA
 #> start:Non-working_50 20.62023 63.26114 7.953687   20.5    NA
