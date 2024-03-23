@@ -253,6 +253,77 @@ estdata |> subset(id==1) |> head()
 #> 6  1      1   55 <NA> <NA>
 ```
 
+This means that for the unit with ID 1, at least the first couple of
+transitions only contain missing values. This is because in the original
+data these values are missing:
+
+``` r
+hrsdata |> subset(ID==1) |> head()
+#>   ID Gender Age State
+#> 1  1      1  50  <NA>
+#> 2  1      1  51  <NA>
+#> 3  1      1  52  <NA>
+#> 4  1      1  53  <NA>
+#> 5  1      1  54  <NA>
+#> 6  1      1  55  <NA>
+```
+
+Technically, this is because `dtms_format` takes each row in the input
+data and adds the state at the next value of the time scale to that row.
+If this next value is NA, or if it is not included in the data, the
+resulting value of \`to’ will be NA.
+
+Such missing values and a few other things can be removed as follows:
+
+``` r
+estdata <- dtms_clean(data=estdata,
+                      dtms=hrs)
+#> Dropping  0  rows not in time range
+#> Dropping  98287  rows starting or ending in NA
+#> Dropping  51935  rows starting in absorbing state
+```
+
+## Estimating transition probabilities
+
+Getting transition probabilities ready requires three steps. First,
+estimating a regression model for the transition probabilities. Second,
+predicting transition probabilities using this model. Third, putting the
+transition probabilities into a transition matrix.
+
+Estimating a regression model is done using `dtms_fit`. Currently, this
+function builds on several other packages to allow for, among other
+things, semiparametric estimation and random effects. In the first
+example below, we show a very basic call of this function:
+
+``` r
+## Fit model 
+fit <- dtms_fit(data=estdata)
+```
+
+This will estimate a model which uses the time scale as a linear
+predictor. Covariates and different functional forms can be included in
+several ways. If the variables follow the naming conventions of the
+package (e.g., the timescale is in `time`), then a convenient way for
+including covariates is to use the argument `controls`. For example, if
+in a data set there are two variables named `Z1` and `Z2`, then they
+could be included as follows:
+
+``` r
+fit <- dtms_fit(data=somedata,
+                covariates=c("Z1","Z2"))
+```
+
+It is also possible to specify a formula, like is common practice for
+most regression functions. This way you have to specify the (standard)
+names of the timescale and the state variables:
+
+``` r
+fit <- dtms_fit(data=somedata,
+                formula=to~from+time+Z1+Z2)
+```
+
+## Using transition probabilities
+
 ## Example 1: Artificial data
 
 This is a basic example using artificial data which is provided with the
