@@ -18,7 +18,7 @@ Peng Li, <li@demogr.mpg.de>
 
 ## Overview
 
-The package dtms is a user-friendly implementation of discrete-time
+The package \code{dtms} is a user-friendly implementation of discrete-time
 multistate models in R. It comes with many tools to analyze the results
 of multistate models. In particular, the workflow mainly consists of
 estimating a discrete-time multistate model and then applying methods
@@ -54,12 +54,73 @@ and functions and features might be added or removed without warning.
 
 ## Installation
 
-You can install the development version of dtms like this:
+You can install the development version of \code{dtms} like this:
 
 ``` r
 library(devtools)
 install_github("christiandudel/dtms")
 ```
+
+## Workflow
+
+The basic workflow consists of two main steps: estimating a discrete-time 
+multistate model to predict transition probabilities; and then applying Markov
+chain methods to the these transition probabilities to describe the process. The 
+first step can be broken down into several smaller steps. These include 
+defining the components of the multistate model; preparing and cleaning the 
+input data; and specifying the functional form of the multistate model. These
+steps are described below. After this, we present to examples which show the
+complete workflow based on data provided with the package.
+
+## Model setup
+
+Disrete-time multistate models as implemented in \code{dtms} consist of three
+components: a list of the transient states; a list of the absorbing states; 
+and a list of values of the time scale. Moreover, there are two components
+additional components which the user not necessarily needs to specify: the
+step length of the timescale, and a separator (see below). 
+
+To define these components, the function \code{dtms} is used. It has an 
+argument for each of the components, but only three are necessary: the 
+names of the transient states, the names of the absorbing states, and the
+values of the time scale. The step length of the timescale is implicitly defined
+by the values of the timescale, and the separator uses a default value which 
+users likely don't want to change in a majority of applications. In the first
+example provided further below, the function \code{dtms} is used like this:
+``` r
+## Define model: Absorbing and transient states, time scale
+simple <- dtms(transient=c("A","B"),
+               absorbing="X",
+               timescale=0:19)
+```
+The arguments \code{transient} and \code{absorbing} take the names of the
+transient and absorbing states, respectively, which are specified as character
+vectors. In this case, there are two transient states called `A` and `B` and 
+an absorbing state `X`. Each model needs at least one transient state and one
+absorbing state. \code{timescale} takes the values of the timescale which are
+specified with a numeric vector. In this example, the time scale starts at 0
+and stops at 19, with a step length of 1. The step length has to be consistent
+along the timescale. For instance, a timescale with values 0, 1, 2, 4, 5, 7 is
+not allowed. However, the step length does not need to equal 1; e.g., 0, 2, 4,
+6, ... would be fine. 
+
+The separator is a character string used to construct what we call 
+`long state names`. Its default is `_`. Long state names consist of a 
+combination of the names of the transient states with values of
+the time scale. They are used internally to handle that transition probabilities
+might depend on values of the time scale. Long state names are never 
+constructed for absorbing states. For instance, if the transient states are 
+called `A` and `B`, the time scale can take on values 0, 1, and 2, and the
+separator is `_`, then the following long state names will be used: `A_0`, 
+`A_1`, `A_2`, `B_0`, `B_1`, and `B_2`. Due to the temporal ordering of states
+not all transitions between these states are possible; e.g., it is not 
+possible to transition from `A_2` to `B_0`. 
+
+## Input data
+
+The input data has to be panel data in long format. If your data is not in this
+shape, there are many tools already available in R and its extensions which
+allow you to reshape it. 
 
 ## Example 1: Artificial data
 
