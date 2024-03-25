@@ -438,7 +438,8 @@ estdata <- dtms_clean(data=estdata,
                       dtms=simple)
 ```
 In this example, 1,260 transitions were dropped because they end in a missing
-value. No observations were dropped because they are out of the time range 
+value. No observations were dropped because the states are not covered by the
+state space, no observations are dropped because they are out of the time range 
 specified with the 'dtms' object, and no observations were dropped because they
 start in an absorbing state.
 

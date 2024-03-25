@@ -45,6 +45,7 @@
 #' @param fromvar Character (optional), name of variable with starting state. Default is "from".
 #' @param tovar Character (optional), name of variable with receiving state. Default is "to".
 #' @param timevar Character (optional), name of variable with time scale. Default is "time".
+#' @param dropState Logical (optional), drop transitions with states which are not part of the state space. Default is TRUE.
 #' @param dropTime Logical (optional), drop transitions with values of time not covered by the model. Default is TRUE.
 #' @param dropNA Logical (optional), drop transitions with gaps, last observations, and similar. Default is TRUE.
 #' @param dropAbs Logical (optional), drop transitions starting from absorbing states. Default is TRUE.
@@ -75,12 +76,24 @@ dtms_clean <- function(data,
                        tovar="to",
                        timevar="time",
                        dropTime=TRUE,
+                       dropState=TRUE,
                        dropNA=TRUE,
                        dropAbs=TRUE,
                        verbose=TRUE) {
 
   # Check
   dtms_proper(dtms)
+
+  # Drop observations not in state space
+  if(dropState) {
+    allstates <- c(dtms$transient,dtms$absorbing,NA)
+    whichrows <- unlist(data[,fromvar])%in%allstates & unlist(data[,tovar])%in%allstates
+    data <- data[whichrows,]
+    if(verbose) {
+      count <- sum(!whichrows)
+      cat("Dropping ",count," rows not in state space\n")
+    }
+  }
 
   # Drop observations not in time range
   if(dropTime) {

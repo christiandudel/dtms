@@ -11,6 +11,7 @@ dtms_clean(
   tovar = "to",
   timevar = "time",
   dropTime = TRUE,
+  dropState = TRUE,
   dropNA = TRUE,
   dropAbs = TRUE,
   verbose = TRUE
@@ -28,6 +29,8 @@ dtms_clean(
 \item{timevar}{Character (optional), name of variable with time scale. Default is "time".}
 
 \item{dropTime}{Logical (optional), drop transitions with values of time not covered by the model. Default is TRUE.}
+
+\item{dropState}{Logical (optional), drop transitions with states which are not part of the state space. Default is TRUE.}
 
 \item{dropNA}{Logical (optional), drop transitions with gaps, last observations, and similar. Default is TRUE.}
 
