@@ -188,8 +188,17 @@ specifies the data frame which contains the data in long format
 `dtms`), the name of the variable containing the unit identifier
 (argument `idvar`), the name of the variable containing the values of
 the timescale (argument `timevar`), and the variable indicating the
-states (argument `statevar`). The original data and the reshaped data
-can be compared like this:
+states (argument `statevar`).
+
+Note that at this stage, the states captured by the variable specified
+with `statevar` do not necessarily need to match the states in the
+‘dtms’ object. In particular, this means that if there are any states in
+the input data which are not in the ‘dtms’ object, there will be no
+warning or similar at this stage. However, the function `dtms_clean()`
+described below will remove states not included in the ‘dtms’ object by
+default.
+
+The original data and the reshaped data can be compared like this:
 
 ``` r
 hrsdata |> subset(ID==3) |> head()
