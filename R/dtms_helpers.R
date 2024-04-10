@@ -108,3 +108,18 @@ dtms_getstate <- function(vector,sep) {
   res <- unlist(res)
   return(res)
 }
+
+### Calculate power of matrix
+dtms_mtexp <- function(matrix,n) {
+
+  res <- diag(nrow=nrow(matrix))
+  rep <- 0
+
+  while(rep<n) {
+    res <- res %*% matrix
+    rep <- rep+1
+  }
+
+  return(res)
+
+}

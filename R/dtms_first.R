@@ -117,11 +117,11 @@ dtms_first  <- function(matrix,
   # Generate W_t_0 and W_t_0.5, initial conditions
   results <- vector("list",2)
   names(results) <- c("W_0","W_0.5")
-  results[["W_0"]] <- Biodem::mtx.exp(matrix,t)
+  results[["W_0"]] <- dtms_mtexp(matrix,t)
   if(t==0) {
     results[["W_0.5"]] <- matrix(data=0,ncol=nstates,nrow=nstates)
     diag(results[["W_0.5"]][!selectorU,!selectorU]) <- 1
-  } else results[["W_0.5"]] <- Biodem::mtx.exp(P_E,t)
+  } else results[["W_0.5"]] <- dtms_mtexp(P_E,t)
 
   # Variables
   upcoming <- 1.5
@@ -133,7 +133,7 @@ dtms_first  <- function(matrix,
   for(i in 1:maxtime) {
     past_steps <- c(past_steps,upcoming)
     tmp <- vector("list",1)
-    tmp[[1]] <- t(Biodem::mtx.exp(P_E,upcoming-0.5)%*%
+    tmp[[1]] <- t(dtms_mtexp(P_E,upcoming-0.5)%*%
                     matrix(data=1,nrow=nstates,ncol=nstates))*results[["W_0.5"]]
     names(tmp) <- paste("W",upcoming,sep="_")
     results <- c(results,tmp)

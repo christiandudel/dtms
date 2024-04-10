@@ -135,8 +135,8 @@ dtms_last <- function(matrix,
   ones <- matrix(data=1,nrow=nstates,ncol=nstates)
   results <- vector("list",1)
   names(results) <- "E_0"
-  results[["E_0"]] <- t(Biodem::mtx.exp(P_S,maxtime-t+1)%*%ones) *
-                        Biodem::mtx.exp(matrix,t)
+  results[["E_0"]] <- t(dtms_mtexp(P_S,maxtime-t+1)%*%ones) *
+                          dtms_mtexp(matrix,t)
   colnames(results[["E_0"]]) <- allstates
 
   # Loop for other E_x
@@ -148,9 +148,9 @@ dtms_last <- function(matrix,
     e <- step-0.5
     tmp <- vector("list",1)
     names(tmp) <- paste("E",step,sep="_")
-    tmp[[paste("E",step,sep="_")]] <- t(Biodem::mtx.exp(matrix,e)%*%P_E%*%
-                                        Biodem::mtx.exp(P_S,maxtime-t-e)%*%ones) *
-                                        Biodem::mtx.exp(matrix,t)
+    tmp[[paste("E",step,sep="_")]] <- t(dtms_mtexp(matrix,e)%*%P_E%*%
+                                        dtms_mtexp(P_S,maxtime-t-e)%*%ones) *
+                                        dtms_mtexp(matrix,t)
     colnames(tmp[[paste("E",step,sep="_")]]) <- allstates
     results <- c(results,tmp)
     step <- step+1

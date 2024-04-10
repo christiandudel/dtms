@@ -138,7 +138,7 @@ dtms_visits <- function(matrix,
   initial_conditions <- vector("list",t_transitions)
   for(i in t_steps) {
     initial_conditions[[i]] <- matrix(data=0,nrow=nstates,ncol=nstates)
-    initial_conditions[[i]][selectorD,selectorD] <- Biodem::mtx.exp(matrix[selectorD,selectorD],(i-1))
+    initial_conditions[[i]][selectorD,selectorD] <- dtms_mtexp(matrix[selectorD,selectorD],(i-1))
     rownames(initial_conditions[[i]]) <- allstates
     colnames(initial_conditions[[i]]) <- allstates
   }
@@ -152,7 +152,7 @@ dtms_visits <- function(matrix,
   # Generate matrices for which k>=n+1
   kgeq <- vector("list",t_transitions)
   for(i in t_steps) {
-    kgeq[[i]] <- Biodem::mtx.exp(matrix,i-1)
+    kgeq[[i]] <- dtms_mtexp(matrix,i-1)
     rownames(kgeq[[i]]) <- allstates
     colnames(kgeq[[i]]) <- allstates
   }
