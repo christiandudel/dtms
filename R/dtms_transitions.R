@@ -21,6 +21,11 @@
 #' provide a value for each (potential) transition in the model; i.e., starting
 #' from time t=0, starting from time t=1, etc., until time t=T-1.
 #'
+#' The argument `dropvar` controls whether the covariate values used for
+#' prediction are dropped. If `FALSE` each row of the resulting data frame will
+#' have the covariate values #' which were used to predict the corresponding
+#' probability.
+#'
 #' The argument `separator` sets the separator used to create state names. State
 #' names are either a combination of the name of a transient state and a value
 #' of the time scale, or the name of an absorbing state.
@@ -29,6 +34,8 @@
 #' @param dtms dtms object, as created with \code{dtms}.
 #' @param constant List (optional) with values for time-constant predictors (see details).
 #' @param varying List (optional) with values for time-varying predictors (see details).
+#' @param dropvar Logical (optional), should covariate values used for prediction be returned (see details). Default is `TRUE`.
+#' @param fromvar Logical (optional), should covariate values be kept in output? Default is `FALSE`.
 #' @param fromvar Character (optional), name of variable with starting state. Default is `from`.
 #' @param tovar Character (optional), name of variable with receiving state. Default is `to`.
 #' @param timevar Character (optional), name of variable with time scale. Default is `time`.
@@ -61,6 +68,7 @@ dtms_transitions <- function(model,
                              dtms,
                              constant=NULL,
                              varying=NULL,
+                             dropvar=TRUE,
                              timevar="time",
                              fromvar="from",
                              tovar="to",
@@ -129,6 +137,14 @@ dtms_transitions <- function(model,
   model_frame[rightrows,tovar] <- paste(oldvalues,
                                         timevalues,
                                         sep=dtms$sep)
+
+  # Drop row names
+  rownames(model_frame) <- NULL
+
+  # Drop covariate values for prediction
+  if(dropvar) {
+    model_frame <- model_frame[,c(fromvar,tovar,timevar,Pvar)]
+  }
 
   # Class
   class(model_frame) <- c("dtms_probs","data.frame")

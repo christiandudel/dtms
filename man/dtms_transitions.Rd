@@ -9,6 +9,7 @@ dtms_transitions(
   dtms,
   constant = NULL,
   varying = NULL,
+  dropvar = TRUE,
   timevar = "time",
   fromvar = "from",
   tovar = "to",
@@ -23,6 +24,8 @@ dtms_transitions(
 \item{constant}{List (optional) with values for time-constant predictors (see details).}
 
 \item{varying}{List (optional) with values for time-varying predictors (see details).}
+
+\item{dropvar}{Logical (optional), should covariate values used for prediction be returned (see details). Default is `TRUE`.}
 
 \item{timevar}{Character (optional), name of variable with time scale. Default is `time`.}
 
@@ -55,6 +58,11 @@ a value for the corresponding time-constant variable. For time-varying
 variables, each entry must have the length of the time scale minus one, and
 provide a value for each (potential) transition in the model; i.e., starting
 from time t=0, starting from time t=1, etc., until time t=T-1.
+
+The argument `dropvar` controls whether the covariate values used for
+prediction are dropped. If `FALSE` each row of the resulting data frame will
+have the covariate values #' which were used to predict the corresponding
+probability.
 
 The argument `separator` sets the separator used to create state names. State
 names are either a combination of the name of a transient state and a value
