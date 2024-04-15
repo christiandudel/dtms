@@ -13,7 +13,9 @@ dtms_transitions(
   timevar = "time",
   fromvar = "from",
   tovar = "to",
-  Pvar = "P"
+  Pvar = "P",
+  se = FALSE,
+  vcov = FALSE
 )
 }
 \arguments{
@@ -34,6 +36,10 @@ dtms_transitions(
 \item{tovar}{Character (optional), name of variable with receiving state. Default is `to`.}
 
 \item{Pvar}{Character (optional), name of variable with transition probabilities. Default is `P`.}
+
+\item{se}{Logical (optional), return standard errors of predicted probabilites. Default is `TRUE`.}
+
+\item{vcov}{Logical (optional), return variance-covariance matrix of predicted probabilites. Default is `FALSE`.}
 }
 \value{
 A data frame with transition probabilities.
@@ -58,6 +64,9 @@ a value for the corresponding time-constant variable. For time-varying
 variables, each entry must have the length of the time scale minus one, and
 provide a value for each (potential) transition in the model; i.e., starting
 from time t=0, starting from time t=1, etc., until time t=T-1.
+
+If `vcov=TRUE` the full variance-covariance matrix of the transition
+probabilities will be returned instead of the transition probabilities.
 
 The argument `dropvar` controls whether the covariate values used for
 prediction are dropped. If `FALSE` each row of the resulting data frame will

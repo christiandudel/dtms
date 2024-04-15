@@ -58,7 +58,7 @@ fit <- dtms_fit(data=estdata,package="mclogit")
 
 ## Predict probabilities
 probs    <- dtms_transitions(dtms=simple,
-                             model = fit)
+                             model = fit,se=TRUE)
 
 ## Get transition matrix
 Tp <- dtms_matrix(dtms=simple,

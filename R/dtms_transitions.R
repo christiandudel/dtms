@@ -21,6 +21,9 @@
 #' provide a value for each (potential) transition in the model; i.e., starting
 #' from time t=0, starting from time t=1, etc., until time t=T-1.
 #'
+#' If `vcov=TRUE` the full variance-covariance matrix of the transition
+#' probabilities will be returned instead of the transition probabilities.
+#'
 #' The argument `dropvar` controls whether the covariate values used for
 #' prediction are dropped. If `FALSE` each row of the resulting data frame will
 #' have the covariate values #' which were used to predict the corresponding
@@ -34,6 +37,8 @@
 #' @param dtms dtms object, as created with \code{dtms}.
 #' @param constant List (optional) with values for time-constant predictors (see details).
 #' @param varying List (optional) with values for time-varying predictors (see details).
+#' @param se Logical (optional), return standard errors of predicted probabilites. Default is `TRUE`.
+#' @param vcov Logical (optional), return variance-covariance matrix of predicted probabilites. Default is `FALSE`.
 #' @param dropvar Logical (optional), should covariate values used for prediction be returned (see details). Default is `TRUE`.
 #' @param fromvar Logical (optional), should covariate values be kept in output? Default is `FALSE`.
 #' @param fromvar Character (optional), name of variable with starting state. Default is `from`.
@@ -72,7 +77,9 @@ dtms_transitions <- function(model,
                              timevar="time",
                              fromvar="from",
                              tovar="to",
-                             Pvar="P") {
+                             Pvar="P",
+                             se=FALSE,
+                             vcov=FALSE) {
 
   # Check
   dtms_proper(dtms)
@@ -85,7 +92,8 @@ dtms_transitions <- function(model,
 
   # Create empty frame
   model_frame <- expand.grid(from=dtms$transient,
-                             time=timescale_reduced)
+                             time=timescale_reduced,
+                             stringsAsFactors=FALSE)
 
   # Get names right
   names(model_frame) <- c(fromvar,timevar)
@@ -130,6 +138,90 @@ dtms_transitions <- function(model,
                                 direction="long",
                                 v.names=Pvar)
 
+  # SE/CI/vcov
+  if(se|vcov) {
+
+    # Simplify starting state (needed for model.matrix below)
+    model_frame[,fromvar] <- dtms_simplify(model_frame)$from
+
+    # Coefficients
+    if(inherits(model,"mclogit")) {
+      C <- stats::coef(model)
+      Cstates <- dtms_getstate(names(C),sep="~")
+      Cstates <- unique(Cstates)
+      C <- matrix(data=C,
+                  ncol=length(dtms$transient),
+                  byrow=T)
+    }
+
+    if(inherits(model,"nnet")) {
+      C <- stats::coef(model)
+      Cstates <- rownames(C)
+      C <- t(C)
+    }
+
+    # vcov of coefficients
+    Vml <- stats::vcov(model)
+
+    if(inherits(model,"nnet")) Vnames <- dtms_getstate(rownames(Vml),sep=c(":"))
+    if(inherits(model,"mclogit")) {
+      ordernames <- sort(rownames(Vml))
+      Vml <- Vml[ordernames,ordernames]
+      Vnames <- dtms_getstate(rownames(Vml),sep=c("~"))
+    }
+
+    # Number of probabilities, coefs, states
+    nprobs <- dim(model_frame)[1]
+    ncoef <- dim(Vml)[1]
+    nstates <- length(all_states)
+
+    # Model matrix
+    form <- stats::formula(model)
+    mm <- stats::model.matrix(object=form,data=model_frame)
+
+    # Scores
+    dscores <- matrix(data=1,
+                      ncol=nstates,
+                      nrow=nprobs)
+    colnames(dscores) <- sort(all_states)
+    dscores[,Cstates] <- exp(mm%*%C)
+
+    # Full score (minus one because reference category)
+    fullscore <- rowSums(dscores)
+
+    # Parts of full derivative (n'*z-n*z')/z^2
+    Z <- matrix(data=fullscore,
+                nrow=nprobs,
+                ncol=ncoef)
+
+    N <- stats::model.matrix(object=~to,data=model_frame)
+    N[,1] <- N[,1]-rowSums(N[,-1])
+    N <- rowSums(N*dscores)
+    N <- matrix(data=N,
+                nrow=nprobs,
+                ncol=ncoef)
+
+    varvalues <- do.call("cbind",replicate(nstates-1,mm,simplify=FALSE))
+    Zdash <- varvalues*dscores[,Vnames]
+
+    Ndash <- outer(model_frame$to,Vnames,FUN=`==`)
+    Ndash <- Ndash*N*varvalues
+
+    # Matrix of derivatives
+    G <- (Ndash*Z-N*Zdash)/Z^2
+
+    # Vcov matrix
+    Vp <- G%*%Vml%*%t(G)
+
+    # Return vcov matrix
+    if(vcov) return(Vp)
+
+    # Full starting state
+    model_frame[,fromvar] <- paste(model_frame[,fromvar],model_frame[,timevar],sep=dtms$sep)
+    model_frame$se <- sqrt(diag(Vp))
+
+  }
+
   # Values of receiving state (state name + time)
   rightrows <- model_frame[,tovar]%in%dtms$transient
   oldvalues <- model_frame[rightrows,tovar]
@@ -143,7 +235,7 @@ dtms_transitions <- function(model,
 
   # Drop covariate values for prediction
   if(dropvar) {
-    model_frame <- model_frame[,c(fromvar,tovar,timevar,Pvar)]
+    model_frame <- model_frame[,names(model_frame)%in%c(fromvar,tovar,timevar,Pvar,"se")]
   }
 
   # Class

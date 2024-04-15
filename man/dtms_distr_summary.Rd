@@ -19,7 +19,7 @@ with dtms_visits, dtms_first, and dtms_last.
 \examples{
 simple <- dtms(transient=c("A","B"),
 absorbing="X",
-timescale=0:20)
+timescale=0:19)
 estdata <- dtms_format(data=simpledata,
                        dtms=simple,
                        idvar="id",
