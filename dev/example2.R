@@ -2,6 +2,7 @@
 library(dtms)
 library(ggplot2)
 library(devtools)
+source("R/dtms_helpers.R")
 
 ## Define model: Absorbing and transient states, time scale
 hrs <- dtms(transient=c("Working","Non-working","Retired"),

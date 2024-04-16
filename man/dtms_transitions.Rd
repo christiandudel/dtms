@@ -14,7 +14,7 @@ dtms_transitions(
   fromvar = "from",
   tovar = "to",
   Pvar = "P",
-  se = FALSE,
+  se = TRUE,
   vcov = FALSE
 )
 }

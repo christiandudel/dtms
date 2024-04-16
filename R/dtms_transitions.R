@@ -78,7 +78,7 @@ dtms_transitions <- function(model,
                              fromvar="from",
                              tovar="to",
                              Pvar="P",
-                             se=FALSE,
+                             se=TRUE,
                              vcov=FALSE) {
 
   # Check
@@ -154,6 +154,14 @@ dtms_transitions <- function(model,
                   byrow=T)
     }
 
+    if(inherits(model,"vgam")) {
+      C <- stats::coef(model)
+      C <- matrix(C,
+                  ncol=length(all_states)-1,
+                  byrow=T)
+      Cstates <- model@extra$colnames.y[-model@extra$use.refLevel]
+    }
+
     if(inherits(model,"nnet")) {
       C <- stats::coef(model)
       Cstates <- rownames(C)
@@ -163,12 +171,33 @@ dtms_transitions <- function(model,
     # vcov of coefficients
     Vml <- stats::vcov(model)
 
-    if(inherits(model,"nnet")) Vnames <- dtms_getstate(rownames(Vml),sep=c(":"))
     if(inherits(model,"mclogit")) {
       ordernames <- sort(rownames(Vml))
       Vml <- Vml[ordernames,ordernames]
       Vnames <- dtms_getstate(rownames(Vml),sep=c("~"))
     }
+
+    if(inherits(model,"vgam")) {
+
+      # Get nice names (assigned below)
+      nicenames <- dtms_getstate(rownames(Vml),sep=c(":"))
+      nicenames <- unique(nicenames)
+      nicenames <- sort(dtms_combine(Cstates,nicenames,sep=":"))
+
+      # Reorder
+      newnames <- unlist(lapply(strsplit(colnames(Vml),split=":"),function(x) paste0(x[2],":",x[1])))
+      colnames(Vml) <- rownames(Vml) <- newnames
+      ordernames <- sort(rownames(Vml))
+      Vml <- Vml[ordernames,ordernames]
+
+      # Assign nice names
+      colnames(Vml) <- rownames(Vml) <- nicenames
+
+      # State names
+      Vnames <- dtms_getstate(rownames(Vml),sep=c(":"))
+    }
+
+    if(inherits(model,"nnet")) Vnames <- dtms_getstate(rownames(Vml),sep=c(":"))
 
     # Number of probabilities, coefs, states
     nprobs <- dim(model_frame)[1]
@@ -211,8 +240,10 @@ dtms_transitions <- function(model,
     G <- (Ndash*Z-N*Zdash)/(Z^2)
 
     # Re-order
-    if(inherits(model,"nnet")) colnames(G) <- dtms_combine(Cstates,colnames(mm),sep=":")
     if(inherits(model,"mclogit")) colnames(G) <- dtms_combine(Cstates,colnames(mm),sep="~")
+    if(inherits(model,"vgam")) colnames(G) <- dtms_combine(Cstates,colnames(mm),sep=":")
+    if(inherits(model,"nnet")) colnames(G) <- dtms_combine(Cstates,colnames(mm),sep=":")
+
     G <- G[,rownames(Vml)]
 
     # Vcov matrix
