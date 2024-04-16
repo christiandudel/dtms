@@ -55,7 +55,8 @@ fit <- dtms_fit(data=estdata,
 probs_m <- dtms_transitions(dtms=hrs,
                             model = fit,
                             constant = list(Gender=0),
-                            varying = list(time2 = (50:98)^2))
+                            varying = list(time2 = (50:98)^2),
+                            CI=TRUE)
 
 # Women
 probs_w <- dtms_transitions(dtms=hrs,
@@ -70,8 +71,10 @@ summary(probs_w)
 # Plotting, men as example
 probs_m |>  dtms_simplify() |>
   ggplot(aes(x=time,y=P,color=to)) +
+  geom_ribbon(aes(ymin = CIlow, ymax = CIup,fill=to),alpha=0.5) +
   geom_line() +
   facet_wrap(~from)
+
 
 ## Transition matrices
 Tm <- dtms_matrix(dtms=hrs,
