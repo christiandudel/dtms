@@ -150,7 +150,7 @@ dtms_transitions <- function(model,
       Cstates <- dtms_getstate(names(C),sep="~")
       Cstates <- unique(Cstates)
       C <- matrix(data=C,
-                  ncol=length(dtms$transient),
+                  ncol=length(all_states)-1,
                   byrow=T)
     }
 
@@ -179,14 +179,14 @@ dtms_transitions <- function(model,
     form <- stats::formula(model)
     mm <- stats::model.matrix(object=form,data=model_frame)
 
-    # Scores
+    # Scores (denominator for predicted prob)
     dscores <- matrix(data=1,
                       ncol=nstates,
                       nrow=nprobs)
     colnames(dscores) <- sort(all_states)
     dscores[,Cstates] <- exp(mm%*%C)
 
-    # Full score (minus one because reference category)
+    # Full score (numerator for predicted prob)
     fullscore <- rowSums(dscores)
 
     # Parts of full derivative (n'*z-n*z')/z^2
@@ -208,7 +208,12 @@ dtms_transitions <- function(model,
     Ndash <- Ndash*N*varvalues
 
     # Matrix of derivatives
-    G <- (Ndash*Z-N*Zdash)/Z^2
+    G <- (Ndash*Z-N*Zdash)/(Z^2)
+
+    # Re-order
+    if(inherits(model,"nnet")) colnames(G) <- dtms_combine(Cstates,colnames(mm),sep=":")
+    if(inherits(model,"mclogit")) colnames(G) <- dtms_combine(Cstates,colnames(mm),sep="~")
+    G <- G[,rownames(Vml)]
 
     # Vcov matrix
     Vp <- G%*%Vml%*%t(G)
