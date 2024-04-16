@@ -928,7 +928,8 @@ is defined using the function \`dtms’. Second, the data is brought into
 transition format and cleaned. Third, transition probabilities are
 estimated and put into a transition matrix. In this example,
 probabilities are estimated and predicted using time-constant and
-time-varying covariates. Finally, the transition matrix is used to
+time-varying covariates, and the probabilities are plotted together with
+confidence intervals. Finally, the transition matrix is used to
 calculate state expectancies and similar measures.
 
 ``` r
