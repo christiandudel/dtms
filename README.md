@@ -51,7 +51,7 @@ the block bootstrap.
 
 This package is currently undergoing development and many functions are
 experimental. The content of this repository will change in the future,
-and functions and features might be added or removed without warning.
+and functions and features might be removed or changed without warning.
 
 ## Installation
 
