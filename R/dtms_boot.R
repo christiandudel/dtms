@@ -44,7 +44,37 @@
 #' @export
 #'
 #' @examples
-#' #Currently none
+#' ## Define model: Absorbing and transient states, time scale
+#' simple <- dtms(transient=c("A","B"),
+#'                absorbing="X",
+#'                timescale=0:20)
+#' ## Reshape to transition format
+#' estdata <- dtms_format(data=simpledata,
+#'                        dtms=simple,
+#'                        idvar="id",
+#'                        timevar="time",
+#'                        statevar="state")
+#' ## Clean
+#' estdata <- dtms_clean(data=estdata,
+#'                       dtms=simple)
+#' # Bootstrap function
+#' bootfun <- function(data,dtms) {
+#'   fit <- dtms_fit(data=data)
+#'   probs    <- dtms_transitions(dtms=dtms,
+#'                                model = fit)
+#'   Tp <- dtms_matrix(dtms=dtms,
+#'                     probs=probs)
+#'   S <- dtms_start(dtms=dtms,
+#'                   data=data)
+#'   dtms_expectancy(dtms=dtms,
+#'                   matrix=Tp,
+#'                   start_distr=S)
+#' }
+#' # Run bootstrap
+#' bootstrap <- dtms_boot(data=estdata,
+#'                        dtms=simple,
+#'                        fun=bootfun,
+#'                        rep=5)
 
 dtms_boot <- function(data,
                       dtms,
