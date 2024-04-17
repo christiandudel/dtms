@@ -850,4 +850,63 @@ last2w <- dtms_last(dtms=hrs,
 summary(last2m)
 summary(last2w)
 
+# Bootstrap example (not run)
+# bootfun <- function(data,dtms) {
+# 
+#   fit <- dtms_fit(data=data,
+#                   controls=c("Gender","time2"),
+#                   package="mclogit")
+# 
+#   probs_m <- dtms_transitions(dtms=dtms,
+#                               model = fit,
+#                               constant = list(Gender=0),
+#                               varying = list(time2 = (50:98)^2),
+#                               CI=TRUE)
+# 
+#   probs_w <- dtms_transitions(dtms=dtms,
+#                               model = fit,
+#                               constant = list(Gender=1),
+#                               varying = list(time2 = (50:98)^2))
+# 
+#   Tm <- dtms_matrix(dtms=dtms,
+#                     probs=probs_m)
+# 
+#   Tw <- dtms_matrix(dtms=dtms,
+#                     probs=probs_w)
+# 
+#   Sm <- dtms_start(dtms=dtms,
+#                    data=data,
+#                    variables=list(Gender=0))
+# 
+#   Sw <- dtms_start(dtms=dtms,
+#                    data=data,
+#                    variables=list(Gender=1))
+# 
+#   res1 <- dtms_expectancy(dtms=dtms,
+#                   matrix=Tm,
+#                   start_distr=Sm)
+# 
+#   res2 <- dtms_expectancy(dtms=dtms,
+#                   matrix=Tw,
+#                   start_distr=Sw)
+# 
+#   rbind(res1,res2)
+# 
+# }
+# 
+# bootresults <- dtms_boot(data=estdata,
+#                          dtms=hrs,
+#                          fun=bootfun,
+#                          idvar="id",
+#                          rep=50,
+#                          method="block",
+#                          seed=321,
+#                          parallel=TRUE)
+# 
+# wle_men <- unlist(lapply(bootresults,function(x) x[4,1]))
+# wle_women <- unlist(lapply(bootresults,function(x) x[8,1]))
+# 
+# quantile(wle_men,probs=c(0.025,0.975))
+# quantile(wle_women,probs=c(0.025,0.975))
+
 ```

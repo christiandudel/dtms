@@ -77,8 +77,8 @@ dtms_start <- function(data,
   result <- data[,fromvar] |> table() |> prop.table()
 
   # Match with starting names
-  name_order <- match(names(result),start_state)
-  result <- as.numeric(result)[name_order]
+  result <- result[start_state]
+  result <- as.numeric(result)
   names(result) <- starting
 
   # Return

@@ -1097,7 +1097,7 @@ dtms_expectancy(dtms=hrs,
 #> start:Working_50     13.307334    3.074605 13.53758 29.91952
 #> start:Non-working_50  8.782989    6.496935 13.75116 29.03108
 #> start:Retired_50      8.821763    3.905134 15.19067 27.91757
-#> AVERAGE               9.030076    5.957937 13.93754 28.92555
+#> AVERAGE              12.445981    3.589228 13.65526 29.69047
     
 dtms_expectancy(dtms=hrs,
                 matrix=Tw,
@@ -1106,7 +1106,7 @@ dtms_expectancy(dtms=hrs,
 #> start:Working_50     12.066485    4.386659 16.53253 32.98567
 #> start:Non-working_50  7.445512    8.199122 16.77896 32.42359
 #> start:Retired_50      7.836675    5.486704 18.24103 31.56440
-#> AVERAGE               7.782617    7.188133 17.21576 32.18651
+#> AVERAGE              10.450573    5.607548 16.68838 32.74651
 
 ## Variant: ignoring retirement as a starting state (shown only for men)
 limited <- c("Working","Non-working")
@@ -1131,14 +1131,14 @@ dtms_risk(dtms=hrs,
           risk="Retired",
           start_distr=Sm)
 #>     Working_50 Non-working_50     Retired_50        AVERAGE AVERAGE(COND.) 
-#>      0.8828701      0.8806115      1.0000000      0.8971367      0.8807514
+#>      0.8828701      0.8806115      1.0000000      0.8888186      0.8825422
   
 dtms_risk(dtms=hrs,
           matrix=Tw,
           risk="Retired",
           start_distr=Sw)
 #>     Working_50 Non-working_50     Retired_50        AVERAGE AVERAGE(COND.) 
-#>      0.9172407      0.9159547      1.0000000      0.9417899      0.9160418
+#>      0.9172407      0.9159547      1.0000000      0.9207352      0.9168268
   
 ## Distribution of visits
 visitsm <- dtms_visits(dtms=hrs,
@@ -1157,15 +1157,15 @@ summary(visitsm)
 #> start:Working_50     13.53758  97.35708  9.866969   13.0 0.1171299
 #> start:Non-working_50 13.75116 103.70848 10.183736   13.0 0.1193885
 #> start:Retired_50     15.19067 112.59117 10.610899   14.5 0.0000000
-#> AVERAGE              13.93754 104.84205 10.239241   13.0 0.1028633
-#> AVERAGE(COND.)       13.73793 103.31768 10.164531   13.0 0.1192486
+#> AVERAGE              13.65526  99.18227  9.959030   13.0 0.1111814
+#> AVERAGE(COND.)       13.56859  98.28472  9.913865   13.0 0.1174578
 summary(visitsw)
 #>                          MEAN VARIANCE       SD MEDIAN      RISK0
 #> start:Working_50     17.44977 112.1093 10.58817     18 0.08275934
 #> start:Non-working_50 17.69491 117.8990 10.85813     18 0.08404534
 #> start:Retired_50     18.74103 124.6118 11.16296     19 0.00000000
-#> AVERAGE              18.00421 119.9284 10.95118     18 0.05821008
-#> AVERAGE(COND.)       17.67830 117.5104 10.84022     18 0.08395818
+#> AVERAGE              17.58562 114.5507 10.70284     18 0.07926479
+#> AVERAGE(COND.)       17.52865 113.9856 10.67640     18 0.08317318
   
 ## First visit
 firstm <- dtms_first(dtms=hrs,
@@ -1180,20 +1180,20 @@ firstw <- dtms_first(dtms=hrs,
 
 summary(firstm)
 #> Warning in dtms_distr_summary(distr = object, ...): NAs introduced by coercion
-#>                          MEAN VARIANCE       SD MEDIAN    RISK0
-#> start:Working_50     14.25887 42.52401 6.521043   14.5 0.000000
-#> start:Non-working_50 12.31587 50.90513 7.134783   12.5 0.000000
-#> start:Retired_50      0.00000  0.00000 0.000000    0.0 1.000000
-#> AVERAGE              10.53175 62.91454 7.931868   10.5 0.153159
-#> AVERAGE(COND.)       12.43652 50.60457 7.113689   12.5 0.000000
+#>                          MEAN VARIANCE       SD MEDIAN      RISK0
+#> start:Working_50     14.25887 42.52401 6.521043   14.5 0.00000000
+#> start:Non-working_50 12.31587 50.90513 7.134783   12.5 0.00000000
+#> start:Retired_50      0.00000  0.00000 0.000000    0.0 1.00000000
+#> AVERAGE              13.13712 52.58727 7.251708   13.5 0.06011927
+#> AVERAGE(COND.)       13.97744 44.20558 6.648728   13.5 0.00000000
 summary(firstw)
 #> Warning in dtms_distr_summary(distr = object, ...): NAs introduced by coercion
-#>                           MEAN VARIANCE       SD MEDIAN     RISK0
-#> start:Working_50     14.107172 40.00302 6.324794   14.5 0.0000000
-#> start:Non-working_50 12.547088 46.49749 6.818907   12.5 0.0000000
-#> start:Retired_50      0.000000  0.00000 0.000000    0.0 1.0000000
-#> AVERAGE               8.532744 66.31976 8.143695    7.5 0.3256328
-#> AVERAGE(COND.)       12.652964 46.21071 6.797846   12.5 0.0000000
+#>                          MEAN VARIANCE       SD MEDIAN      RISK0
+#> start:Working_50     14.10717 40.00302 6.324794   14.5 0.00000000
+#> start:Non-working_50 12.54709 46.49749 6.818907   12.5 0.00000000
+#> start:Retired_50      0.00000  0.00000 0.000000    0.0 1.00000000
+#> AVERAGE              12.91123 49.41190 7.029360   13.5 0.05103632
+#> AVERAGE(COND.)       13.60562 42.62186 6.528542   13.5 0.00000000
 
 ## Last exit
   
@@ -1214,16 +1214,16 @@ summary(last1m)
 #> start:Working_50     16.50265 76.98676 8.774210   15.5    NA
 #> start:Non-working_50 18.02302 68.14259 8.254853   17.5    NA
 #> start:Retired_50     17.83146 69.33252 8.326615   17.5    NA
-#> AVERAGE              17.89872 69.01534 8.307547   17.5    NA
-#> AVERAGE(COND.)       17.99576 68.31640 8.265373   17.5    NA
+#> AVERAGE              16.73797 75.91238 8.712771   16.5    NA
+#> AVERAGE(COND.)       17.97027 68.47754 8.275116   17.5    NA
 summary(last1w)
 #> Warning in dtms_distr_summary(distr = object, ...): NAs introduced by coercion
 #>                          MEAN VARIANCE       SD MEDIAN RISK0
 #> start:Working_50     16.15218 87.76963 9.368545   15.5    NA
 #> start:Non-working_50 18.31738 77.06422 8.778623   17.5    NA
 #> start:Retired_50     17.94411 78.93510 8.884543   17.5    NA
-#> AVERAGE              18.07580 78.52729 8.861562   17.5    NA
-#> AVERAGE(COND.)       18.19651 77.70055 8.814791   17.5    NA
+#> AVERAGE              16.78741 85.57486 9.250668   16.5    NA
+#> AVERAGE(COND.)       18.26738 77.33095 8.793802   17.5    NA
   
 # Leaving work for retirement
 last2m <- dtms_last(dtms=hrs,
@@ -1244,14 +1244,73 @@ summary(last2m)
 #> start:Working_50     18.74988 64.64429 8.040167   18.5    NA
 #> start:Non-working_50 19.72542 56.78054 7.535286   19.5    NA
 #> start:Retired_50     19.60618 57.79592 7.602363   19.5    NA
-#> AVERAGE              19.64929 57.45635 7.579997   19.5    NA
-#> AVERAGE(COND.)       19.70856 56.92587 7.544924   19.5    NA
+#> AVERAGE              18.90783 63.49802 7.968565   18.5    NA
+#> AVERAGE(COND.)       19.69276 57.06149 7.553906   19.5    NA
 summary(last2w)
 #> Warning in dtms_distr_summary(distr = object, ...): NAs introduced by coercion
 #>                          MEAN VARIANCE       SD MEDIAN RISK0
 #> start:Working_50     19.33660 73.65218 8.582085   19.5    NA
 #> start:Non-working_50 20.62023 63.26114 7.953687   20.5    NA
 #> start:Retired_50     20.40228 64.97334 8.060604   20.5    NA
-#> AVERAGE              20.48432 64.43114 8.026901   20.5    NA
-#> AVERAGE(COND.)       20.55041 63.81999 7.988741   20.5    NA
+#> AVERAGE              19.73733 70.75006 8.411305   19.5    NA
+#> AVERAGE(COND.)       20.59143 63.49278 7.968235   20.5    NA
+
+# Bootstrap example (not run)
+# bootfun <- function(data,dtms) {
+# 
+#   fit <- dtms_fit(data=data,
+#                   controls=c("Gender","time2"),
+#                   package="mclogit")
+# 
+#   probs_m <- dtms_transitions(dtms=dtms,
+#                               model = fit,
+#                               constant = list(Gender=0),
+#                               varying = list(time2 = (50:98)^2),
+#                               CI=TRUE)
+# 
+#   probs_w <- dtms_transitions(dtms=dtms,
+#                               model = fit,
+#                               constant = list(Gender=1),
+#                               varying = list(time2 = (50:98)^2))
+# 
+#   Tm <- dtms_matrix(dtms=dtms,
+#                     probs=probs_m)
+# 
+#   Tw <- dtms_matrix(dtms=dtms,
+#                     probs=probs_w)
+# 
+#   Sm <- dtms_start(dtms=dtms,
+#                    data=data,
+#                    variables=list(Gender=0))
+# 
+#   Sw <- dtms_start(dtms=dtms,
+#                    data=data,
+#                    variables=list(Gender=1))
+# 
+#   res1 <- dtms_expectancy(dtms=dtms,
+#                   matrix=Tm,
+#                   start_distr=Sm)
+# 
+#   res2 <- dtms_expectancy(dtms=dtms,
+#                   matrix=Tw,
+#                   start_distr=Sw)
+# 
+#   rbind(res1,res2)
+# 
+# }
+# 
+# bootresults <- dtms_boot(data=estdata,
+#                          dtms=hrs,
+#                          fun=bootfun,
+#                          idvar="id",
+#                          rep=50,
+#                          method="block",
+#                          seed=321,
+#                          parallel=TRUE)
+# 
+# wle_men <- unlist(lapply(bootresults,function(x) x[4,1]))
+# wle_women <- unlist(lapply(bootresults,function(x) x[8,1]))
+# 
+# quantile(wle_men,probs=c(0.025,0.975))
+# quantile(wle_women,probs=c(0.025,0.975))
 ```

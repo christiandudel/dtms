@@ -51,8 +51,8 @@ dtms_transitions(
 A data frame with transition probabilities.
 }
 \description{
-`dtms_transitions` predicts transition probabilities based on a model
-estimated with `dtms_fit`.
+`dtms_transitions()` predicts transition probabilities based on a model
+estimated with `dtms_fit()`.
 }
 \details{
 Predicted transition probabilities are returned as a data frame, and not
