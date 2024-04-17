@@ -246,16 +246,22 @@ quantile(wle_men,probs=c(0.025,0.975))
 quantile(wle_women,probs=c(0.025,0.975))
 
 ## Comparing constrained vs unconstrained model: AIC
-fit1 <- dtms_fit(data=estdata,
-                 controls=c("Gender","time2"),
+## Restricting to men, because we know the true model
+estdatam <- subset(estdata,Gender==0)
+
+fit1 <- dtms_fit(data=estdatam,
+                 #controls=c("Gender","time2"),
+                 controls="time2",
                  package="mclogit")
 
-fit2 <- dtms_fullfit(data=estdata,
-                     controls=c("Gender","time2"),
+fit2 <- dtms_fullfit(data=estdatam,
+                     #controls=c("Gender","time2"),
+                     controls="time2",
                      package="mclogit")
 
 AIC(fit1)
 AIC(fit2)
+exp((AIC(fit2)-AIC(fit1))/2)
 
 ## Comparing constrained vs unconstrained model: results
 probs1 <- dtms_transitions(dtms=hrs,
