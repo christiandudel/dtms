@@ -2,10 +2,29 @@
 #'
 #' @description
 #' This function is a simple wrapper for bootstrapping and block-bootstrapping
-#' data in transition format.
+#' data in transition format. Parallel processing is supported.
 #'
 #' @details
-#' This is currently a placeholder. What goes here: fun(arguments -> 1st data, 2nd dtms), seed (if null), progress, parallel, results (list with rep entries)
+#' \code{dtms_boot()} takes a function specified with the argument `fun` and
+#' applies it several times to resampled data, where the original data is
+#' specified with the argument `data` and `rep` specifies the number of
+#' replications. The argument `dtms` takes an object created with \code{dtms()}
+#' and also passes it to `fun`. `data` is passed to `fun` as its first argument,
+#' and `dtms` is passed as the second argument.
+#'
+#' The result of this function is a list with as many entries as there are
+#' replications. Each entry is the result of calling `fun` for the respective
+#' replication.
+#'
+#' Two methods are implemented and selected with the argument `method`. A simple
+#' resampling bootstrap, which assumes that the rows in `data` are independent
+#' of each other. And the block bootstrap which allows for dependent
+#' observations; e.g., different units each contributing several transitions.
+#' If the block bootstrap is used the argument `idvar` sets which variable in
+#' `data` contains information the unit/cluster identifier.
+#'
+#' For parallel computing the packages `foreach` and `doParallel` (and their
+#' dependcies are used). See the documentation of these packages for details.
 #'
 #' @param data Data frame in transition format as created with \code{dtms_format}.
 #' @param dtms dtms object, as created with \code{dtms}.
@@ -13,7 +32,7 @@
 #' @param rep Numeric, number of bootstrap replications.
 #' @param method Character (optional), either "simple" for simple bootstrap or "block" for block bootstrap. Default is "simple".
 #' @param idvar Character (optional), name of ID variable in `data' identifying units. Only required for block bootstrap. Default is "id".
-#' @param seed Numeric (optional), seed for random numbers. See details.
+#' @param seed Numeric (optional), seed for random numbers. If not specified, the seed is based on the system time.
 #' @param verbose Logical (optional), print output which might be generated when running `fun`? Default is FALSE.
 #' @param progress Logical (optional), indicate progress if simple bootstrap? Default is FALSE.
 #' @param parallel Logical (optional), use parallel processing? Default is FALSE.

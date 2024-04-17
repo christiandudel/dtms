@@ -33,7 +33,7 @@ dtms_boot(
 
 \item{idvar}{Character (optional), name of ID variable in `data' identifying units. Only required for block bootstrap. Default is "id".}
 
-\item{seed}{Numeric (optional), seed for random numbers. See details.}
+\item{seed}{Numeric (optional), seed for random numbers. If not specified, the seed is based on the system time.}
 
 \item{verbose}{Logical (optional), print output which might be generated when running `fun`? Default is FALSE.}
 
@@ -52,10 +52,29 @@ A list of results, see details
 }
 \description{
 This function is a simple wrapper for bootstrapping and block-bootstrapping
-data in transition format.
+data in transition format. Parallel processing is supported.
 }
 \details{
-This is currently a placeholder. What goes here: fun, seed (if null), progress, parallel
+\code{dtms_boot()} takes a function specified with the argument `fun` and
+applies it several times to resampled data, where the original data is
+specified with the argument `data` and `rep` specifies the number of
+replications. The argument `dtms` takes an object created with \code{dtms()}
+and also passes it to `fun`. `data` is passed to `fun` as its first argument,
+and `dtms` is passed as the second argument.
+
+The result of this function is a list with as many entries as there are
+replications. Each entry is the result of calling `fun` for the respective
+replication.
+
+Two methods are implemented and selected with the argument `method`. A simple
+resampling bootstrap, which assumes that the rows in `data` are independent
+of each other. And the block bootstrap which allows for dependent
+observations; e.g., different units each contributing several transitions.
+If the block bootstrap is used the argument `idvar` sets which variable in
+`data` contains information the unit/cluster identifier.
+
+For parallel computing the packages `foreach` and `doParallel` (and their
+dependcies are used). See the documentation of these packages for details.
 }
 \examples{
 #Currently none
