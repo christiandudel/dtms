@@ -50,6 +50,10 @@ time to first visit, (partial) distribution of waiting time to last exit, based
 on (partial) distributions variance/standard deviation and median of occupancy 
 time and first visit/last exit, Markov chains with rewards.
 
+Inference: analytic standard errors and variance-covariance matrix for 
+transition probabilities; simulated inference using the bootstrap and the block
+bootstrap.
+
 ## Disclaimer
 
 This package is currently undergoing development and many functions are 
@@ -640,6 +644,15 @@ summary(example2)
 ```
 In this case, the distribution is conditional on ever experiencing the exit
 from state A, such that the waiting time until exit always has to be above 0. 
+
+With respect to inference, the package currently provides analytic standard
+errors for transition probabilities, and simulated inference for all other 
+statistics. Standard errors for transition probabilities are provided by 
+default by the function `dtms_transitions()`, and it can also return confidence
+intervals. Two methods for simulated inference are implemented: the (simple) 
+bootstrap and the block bootstrap. Both methods are provided by the function
+`dtms_boot()`. How to use `dtms_transitions()` and `dtms_boot()` for inference
+is demonstrated in the second example below.
 
 ## Example 2: Working trajectories during late working life
 
