@@ -108,4 +108,5 @@ bootstrap <- dtms_boot(data=estdata,
                        dtms=simple,
                        fun=bootfun,
                        rep=5)
+summary(bootstrap,probs=c(0.025,0.5,0.975))
 }

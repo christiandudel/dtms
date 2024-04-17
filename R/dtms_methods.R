@@ -17,6 +17,12 @@ summary.dtms_distr <- function(object,...) {
 }
 
 #' @export
+## Summary function for bootstrap
+summary.dtms_boot <- function(object,...) {
+  dtms_boot_summary(object,...)
+}
+
+#' @export
 ## Plotting function for transition probabilities
 plot.dtms_probs <- function(x,...) {
   dtms_plot(probs=x,...)

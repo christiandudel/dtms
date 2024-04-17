@@ -1322,9 +1322,5 @@ summary(last2w)
 #                          seed=321,
 #                          parallel=TRUE)
 # 
-# wle_men <- unlist(lapply(bootresults,function(x) x[4,1]))
-# wle_women <- unlist(lapply(bootresults,function(x) x[8,1]))
-# 
-# quantile(wle_men,probs=c(0.025,0.975))
-# quantile(wle_women,probs=c(0.025,0.975))
+# summary(bootresults)
 ```
