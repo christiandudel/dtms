@@ -8,6 +8,7 @@
 #' @param dtms dtms object, as created with \code{dtms}.
 #' @param size Numeric, number of trajectories which will be simulated. Default is 100.
 #' @param start_distr Numeric (optional), distribution of starting states. If NULL, starting states will be assumed to be equally distributed.
+#' @param droplast Logical (optional), drop final time step after the time scale in which every unit is absorbed? Default is TRUE.
 #' @param varnames Character (optional), suffix for variable names in simulated data. Will be pasted with values of the timescale. Default is "T_".
 #'
 #' @return A data frame with simulated trajectories in wide format.
@@ -37,6 +38,7 @@ dtms_simulate <- function(matrix,
                           dtms,
                           size=100,
                           start_distr=NULL,
+                          droplast=TRUE,
                           varnames="T_") {
 
   # Load markovchain package, because of "new" below
@@ -79,7 +81,7 @@ dtms_simulate <- function(matrix,
                           size=1,
                           prob=start_distr)
 
-  simseq <- markovchain::rmarkovchain(n = ntime-1,
+  simseq <- markovchain::rmarkovchain(n = ntime-as.numeric(droplast),
                                       object = sim,
                                       t0 = initial_state,
                                       include.t0=T)
@@ -89,7 +91,8 @@ dtms_simulate <- function(matrix,
   }
 
   # Nicer names
-  names(simdata) <- paste0(varnames,dtms$timescale)
+  if(droplast) names(simdata) <- paste0(varnames,dtms$timescale) else
+    names(simdata) <- paste0(varnames,c(dtms$timescale,max(dtms$timescale)+dtms$timestep))
 
   # Return
   return(simdata)

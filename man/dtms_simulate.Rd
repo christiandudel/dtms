@@ -4,7 +4,14 @@
 \alias{dtms_simulate}
 \title{Simulation of Markov chains}
 \usage{
-dtms_simulate(matrix, dtms, size = 100, start_distr = NULL, varnames = "T_")
+dtms_simulate(
+  matrix,
+  dtms,
+  size = 100,
+  start_distr = NULL,
+  droplast = TRUE,
+  varnames = "T_"
+)
 }
 \arguments{
 \item{matrix}{Matrix, a matrix of transition probabilities as created with \code{dtms_matrix()},}
@@ -14,6 +21,8 @@ dtms_simulate(matrix, dtms, size = 100, start_distr = NULL, varnames = "T_")
 \item{size}{Numeric, number of trajectories which will be simulated. Default is 100.}
 
 \item{start_distr}{Numeric (optional), distribution of starting states. If NULL, starting states will be assumed to be equally distributed.}
+
+\item{droplast}{Logical (optional), drop final time step after the time scale in which every unit is absorbed? Default is TRUE.}
 
 \item{varnames}{Character (optional), suffix for variable names in simulated data. Will be pasted with values of the timescale. Default is "T_".}
 }
