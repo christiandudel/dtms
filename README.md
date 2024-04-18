@@ -32,7 +32,8 @@ allowing for semiparametric estimation
 ([VGAM](https://cran.r-project.org/web/packages/VGAM)), random effects
 and random intercepts
 ([mclogit](https://cran.r-project.org/web/packages/mclogit)), and neural
-networks ([nnet](https://cran.r-project.org/web/packages/nnet)).
+networks ([nnet](https://cran.r-project.org/web/packages/nnet)); all
+possible for constrained and unconstrained/fully interacted models.
 Functions for descriptive statistics on transition probabilities and for
 plotting them are also available.
 
