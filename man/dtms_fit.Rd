@@ -14,6 +14,7 @@ dtms_fit(
   timevar = "time",
   reference = 1,
   package = "VGAM",
+  full = FALSE,
   ...
 )
 }
@@ -35,6 +36,8 @@ dtms_fit(
 \item{reference}{Numeric or character (optional). Reference level of multinomial logistic regression.}
 
 \item{package}{Character, chooses package for multinomial logistic regression, currently `VGAM`, `nnet`, and `mclogit` are supported. Default is `VGAM`.}
+
+\item{full}{Logical (optional), estimate fully interacted model? Default is FALSE.}
 
 \item{...}{Further arguments passed to estimation functions.}
 }

@@ -123,3 +123,38 @@ dtms_mtexp <- function(matrix,n) {
   return(res)
 
 }
+
+### Generate formula for estimation
+dtms_formula <- function(controls, # Arguments the same as for dtms_fit
+                         fromvar,
+                         tovar,
+                         timevar,
+                         full) {
+
+  # Constrained model
+  if(!full) {
+    formula <- paste0(tovar,"~",fromvar)
+    if(!is.null(timevar)) formula <- paste(formula,timevar,sep="+")
+    if(!is.null(controls)) {
+      controls <- paste(controls,collapse="+")
+      formula <- paste(formula,controls,sep="+")
+    }
+    formula <- stats::as.formula(formula)
+    # Unconstrained/fully interacted model
+  } else {
+    formula <- paste0(tovar,"~")
+    varlist <- character(0)
+    if(!is.null(timevar)) varlist <- timevar
+    if(!is.null(controls)) varlist <- c(varlist,controls)
+    varlist <- paste(varlist,fromvar,sep="*")
+    if(length(varlist)>0) {
+      varlist <- paste(varlist,collapse="+")
+      formula <- paste0(formula,varlist)
+    }
+    formula <- stats::as.formula(formula)
+  }
+
+  # Return
+  return(formula)
+
+}

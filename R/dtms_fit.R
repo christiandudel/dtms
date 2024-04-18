@@ -13,6 +13,7 @@
 #' @param weights Character (optional). Name of variable with survey weights.
 #' @param reference Numeric or character (optional). Reference level of multinomial logistic regression.
 #' @param package Character, chooses package for multinomial logistic regression, currently `VGAM`, `nnet`, and `mclogit` are supported. Default is `VGAM`.
+#' @param full Logical (optional), estimate fully interacted model? Default is FALSE.
 #' @param ... Further arguments passed to estimation functions.
 #'
 #' @return Returns an object with class depending on the package used.
@@ -44,18 +45,18 @@ dtms_fit <- function(data,
                      timevar="time",
                      reference=1,
                      package="VGAM",
+                     full=FALSE,
                      ...) {
 
   # Build formula if not specified
-  if(is.null(formula)) {
-    formula <- paste0(tovar,"~",fromvar)
-    if(!is.null(timevar)) formula <- paste(formula,timevar,sep="+")
-    if(!is.null(controls)) {
-      controls <- paste(controls,collapse="+")
-      formula <- paste(formula,controls,sep="+")
-    }
-    formula <- stats::as.formula(formula)
-  }
+  if(is.null(formula)) formula <- dtms_formula(controls=controls,
+                                               fromvar=fromvar,
+                                               tovar=tovar,
+                                               timevar=timevar,
+                                               full=full)
+
+  # Make sure environment for formula is correct (ugh)
+  environment(formula) <- environment()
 
   # Get weights if specified
   if(!is.null(weights)) weights <- data[,weights]
@@ -69,21 +70,21 @@ dtms_fit <- function(data,
   if(package=="VGAM") {
 
     # Estimate
-    dtms_fit <- VGAM::vgam(formula=formula,
-                           family=VGAM::multinomial(refLevel=reference),
-                           data=data,
-                           weights=weights,
-                           ...)
+    fitted <- VGAM::vgam(formula=formula,
+                         family=VGAM::multinomial(refLevel=reference),
+                         data=data,
+                         weights=weights,
+                         ...)
   }
 
   #nnet
   if(package=="nnet") {
 
     # Estimate
-    dtms_fit <- nnet::multinom(formula=formula,
-                               data=data,
-                               weights=weights,
-                               ...)
+    fitted <- nnet::multinom(formula=formula,
+                             data=data,
+                             weights=weights,
+                             ...)
 
   }
 
@@ -91,15 +92,15 @@ dtms_fit <- function(data,
   if(package=="mclogit") {
 
     # Estimate
-    dtms_fit <- mclogit::mblogit(formula=formula,
-                                 data=data,
-                                 weights=weights,
-                                 ...)
+    fitted <- mclogit::mblogit(formula=formula,
+                               data=data,
+                               weights=weights,
+                               ...)
 
   }
 
 
   # Return results
-  return(dtms_fit)
+  return(fitted)
 
 }

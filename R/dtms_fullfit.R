@@ -3,7 +3,8 @@
 #' @description
 #' This function estimates an unconstrained discrete-time multistate model
 #' using multinomial logistic regression. This is achieved by interacting
-#' the starting state with all predictors in the model.
+#' the starting state with all predictors in the model. It is a wrapper for
+#' \code{dtms_fit()} with slightly less arguments.
 #'
 #' @param data Data frame in transition format, as created with \code{dtms_format}.
 #' @param controls Character (optional), names of control variables
@@ -47,63 +48,15 @@ dtms_fullfit <- function(data,
                          package="VGAM",
                          ...) {
 
-  # Build formula if not specified
-  if(is.null(formula)) {
-    formula <- paste0(tovar,"~")
-    varlist <- character(0)
-    if(!is.null(timevar)) varlist <- timevar
-    if(!is.null(controls)) varlist <- c(varlist,controls)
-    varlist <- paste(varlist,fromvar,sep="*")
-    if(length(varlist)>0) {
-      varlist <- paste(varlist,collapse="+")
-      formula <- paste0(formula,varlist)
-    }
-    formula <- stats::as.formula(formula)
-  }
-
-  # Get weights if specified
-  if(!is.null(weights)) weights <- data[,weights]
-
-  # Factors (needed by most packages)
-  data[,fromvar] <- as.factor(data[,fromvar])
-  data[,tovar] <- as.factor(data[,tovar])
-  data[,tovar] <- stats::relevel(data[,tovar],ref=reference)
-
-  # VGAM
-  if(package=="VGAM") {
-
-    # Estimate
-    dtms_fit <- VGAM::vgam(formula=formula,
-                           family=VGAM::multinomial(refLevel=reference),
-                           data=data,
-                           weights=weights,
-                           ...)
-  }
-
-  #nnet
-  if(package=="nnet") {
-
-    # Estimate
-    dtms_fit <- nnet::multinom(formula=formula,
-                               data=data,
-                               weights=weights,
-                               ...)
-
-  }
-
-  #mclogit
-  if(package=="mclogit") {
-
-    # Estimate
-    dtms_fit <- mclogit::mblogit(formula=formula,
-                                 data=data,
-                                 weights=weights,
-                                 ...)
-
-  }
-
-
-  # Return results
-  return(dtms_fit)
+  dtms_fit(data=data,
+           controls=controls,
+           formula=formula,
+           weights=weights,
+           fromvar=fromvar,
+           tovar=tovar,
+           timevar=timevar,
+           reference=reference,
+           package=package,
+           full=TRUE)
 
 }

@@ -44,7 +44,8 @@ Returns an object with class depending on the package used.
 \description{
 This function estimates an unconstrained discrete-time multistate model
 using multinomial logistic regression. This is achieved by interacting
-the starting state with all predictors in the model.
+the starting state with all predictors in the model. It is a wrapper for
+\code{dtms_fit()} with slightly less arguments.
 }
 \examples{
 ## Define model: Absorbing and transient states, time scale
