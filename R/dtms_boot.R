@@ -32,7 +32,6 @@
 #' @param rep Numeric, number of bootstrap replications.
 #' @param method Character (optional), either "simple" for simple bootstrap or "block" for block bootstrap. Default is "simple".
 #' @param idvar Character (optional), name of ID variable in `data' identifying units. Only required for block bootstrap. Default is "id".
-#' @param seed Numeric (optional), seed for random numbers. If not specified, the seed is based on the system time.
 #' @param verbose Logical (optional), print output which might be generated when running `fun`? Default is FALSE.
 #' @param progress Logical (optional), indicate progress if simple bootstrap? Default is FALSE.
 #' @param parallel Logical (optional), use parallel processing? Default is FALSE.
@@ -83,16 +82,12 @@ dtms_boot <- function(data,
                       rep,
                       method="simple",
                       idvar="id",
-                      seed=NULL,
                       verbose=FALSE,
                       progress=FALSE,
                       parallel=FALSE,
                       cores=2,
                       .packages=c("mclogit","VGAM","nnet","dtms"),
                       ...) {
-
-  # Seed
-  if(is.null(seed)) set.seed(as.numeric(Sys.time()))
 
   # For resampling
   if(method=="simple") n <- dim(data)[1]

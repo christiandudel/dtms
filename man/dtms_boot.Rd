@@ -11,7 +11,6 @@ dtms_boot(
   rep,
   method = "simple",
   idvar = "id",
-  seed = NULL,
   verbose = FALSE,
   progress = FALSE,
   parallel = FALSE,
@@ -32,8 +31,6 @@ dtms_boot(
 \item{method}{Character (optional), either "simple" for simple bootstrap or "block" for block bootstrap. Default is "simple".}
 
 \item{idvar}{Character (optional), name of ID variable in `data' identifying units. Only required for block bootstrap. Default is "id".}
-
-\item{seed}{Numeric (optional), seed for random numbers. If not specified, the seed is based on the system time.}
 
 \item{verbose}{Logical (optional), print output which might be generated when running `fun`? Default is FALSE.}
 

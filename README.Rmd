@@ -54,6 +54,9 @@ Inference: analytic standard errors and variance-covariance matrix for
 transition probabilities; simulated inference using the bootstrap and the block
 bootstrap.
 
+Other features: simulation of Markov chains using the package
+[markovchain](https://cran.r-project.org/web/packages/markovchain).
+
 ## Disclaimer
 
 This package is currently undergoing development and many functions are 
