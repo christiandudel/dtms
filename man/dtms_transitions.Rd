@@ -7,8 +7,7 @@
 dtms_transitions(
   model,
   dtms,
-  constant = NULL,
-  varying = NULL,
+  controls = NULL,
   dropvar = TRUE,
   timevar = "time",
   fromvar = "from",
@@ -25,9 +24,7 @@ dtms_transitions(
 
 \item{dtms}{dtms object, as created with \code{dtms}.}
 
-\item{constant}{List (optional) with values for time-constant predictors (see details).}
-
-\item{varying}{List (optional) with values for time-varying predictors (see details).}
+\item{controls}{List (optional) with values for predictors (see details).}
 
 \item{dropvar}{Logical (optional), should covariate values used for prediction be returned (see details). Default is `TRUE`.}
 
@@ -62,14 +59,15 @@ analyzing the transition probabilities themselves.
 
 Depending on the model specification, the prediction of transition
 probabilities will require values for predictor variables which can be
-specified with the arguments `constant` and `varying` for time-constant and
-time-varying variables, respectively. In both cases, named lists have to be
-used, where each entry name must correspond to a variable name in the model.
+specified with the argument `controls`. This is done using a named list
+where each entry name must correspond to a variable name in the model.
 For time-constant variables, each list entry is of length one and provides
 a value for the corresponding time-constant variable. For time-varying
 variables, each entry must have the length of the time scale minus one, and
 provide a value for each (potential) transition in the model; i.e., starting
-from time t=0, starting from time t=1, etc., until time t=T-1.
+from time t=0, starting from time t=1, etc., until time t=T-1. Alternatively,
+it can be of the same length as the time scale; in this case, the last value
+is dismissed.
 
 If `vcov=TRUE` the full variance-covariance matrix of the transition
 probabilities will be returned instead of the transition probabilities. If

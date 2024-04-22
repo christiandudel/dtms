@@ -1,6 +1,7 @@
 ## Load package
-library(dtms)
+#library(dtms)
 library(devtools)
+load_all()
 source("R/dtms_helpers.R")
 
 ## Look at data
@@ -53,13 +54,15 @@ estdata |>
 ## Summary of data
 summary(estdata)
 
-## Fit model
-fit <- dtms_fit(data=estdata,package="mclogit")
+## Fit basic model (only starting state as predictor)
+fit <- dtms_fit(data=estdata,
+                controls="time",
+                package="mclogit")
 
 ## Predict probabilities
-probs    <- dtms_transitions(dtms=simple,
-                             model = fit,
-                             se=TRUE)
+probs <- dtms_transitions(dtms=simple,
+                          controls=list(time=simple$timescale),
+                          model = fit)
 
 ## Get transition matrix
 Tp <- dtms_matrix(dtms=simple,

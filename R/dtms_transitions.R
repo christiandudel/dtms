@@ -12,14 +12,15 @@
 #'
 #' Depending on the model specification, the prediction of transition
 #' probabilities will require values for predictor variables which can be
-#' specified with the arguments `constant` and `varying` for time-constant and
-#' time-varying variables, respectively. In both cases, named lists have to be
-#' used, where each entry name must correspond to a variable name in the model.
+#' specified with the argument `controls`. This is done using a named list
+#' where each entry name must correspond to a variable name in the model.
 #' For time-constant variables, each list entry is of length one and provides
 #' a value for the corresponding time-constant variable. For time-varying
 #' variables, each entry must have the length of the time scale minus one, and
 #' provide a value for each (potential) transition in the model; i.e., starting
-#' from time t=0, starting from time t=1, etc., until time t=T-1.
+#' from time t=0, starting from time t=1, etc., until time t=T-1. Alternatively,
+#' it can be of the same length as the time scale; in this case, the last value
+#' is dismissed.
 #'
 #' If `vcov=TRUE` the full variance-covariance matrix of the transition
 #' probabilities will be returned instead of the transition probabilities. If
@@ -37,8 +38,7 @@
 #'
 #' @param model Model estimated with \code{dtms_fit}.
 #' @param dtms dtms object, as created with \code{dtms}.
-#' @param constant List (optional) with values for time-constant predictors (see details).
-#' @param varying List (optional) with values for time-varying predictors (see details).
+#' @param controls List (optional) with values for predictors (see details).
 #' @param se Logical (optional), return standard errors of predicted probabilites. Default is `TRUE`.
 #' @param vcov Logical (optional), return variance-covariance matrix of predicted probabilites. Default is `FALSE`.
 #' @param CI Logical (optional), return confidence intervals? See details. Default is FALSE.
@@ -75,8 +75,7 @@
 
 dtms_transitions <- function(model,
                              dtms,
-                             constant=NULL,
-                             varying=NULL,
+                             controls=NULL,
                              dropvar=TRUE,
                              timevar="time",
                              fromvar="from",
@@ -92,6 +91,7 @@ dtms_transitions <- function(model,
 
   # Adjust time scale (transitions in the model)
   timescale_reduced <- dtms$timescale[-length(dtms$timescale)]
+  ntime <- length(timescale_reduced)
 
   # Get full state space
   all_states <- paste(c(dtms$transient,dtms$absorbing))
@@ -104,23 +104,32 @@ dtms_transitions <- function(model,
   # Get names right
   names(model_frame) <- c(fromvar,timevar)
 
-  # Add time-constant covariates
-  varnames <- names(constant)
+  # Deal with controls
+  varnames <- names(controls)
   for(var in varnames) {
-    model_frame[var] <- constant[[var]]
-  }
 
-  # Add time-varying covariates
-  varnames <- names(varying)
-  for(var in varnames) {
     # Get values
-    value <- varying[[var]]
-    # Check if enough values
-    if(length(value)!=length(timescale_reduced)) stop("Wrong number of time-varying values")
-    # Match to time variable
-    assign_values <- match(model_frame[,timevar],timescale_reduced)
-    # Assign values
-    model_frame[var] <- value[assign_values]
+    value <- controls[[var]]
+    nvalue <- length(value)
+
+    # Check
+    if(!nvalue%in%c(1,ntime,ntime+1)) stop("Wrong number of time-varying values")
+
+    # Act depending on how many values
+    if(nvalue==1) model_frame[var] <- value
+
+    if(nvalue==ntime) {
+      assign_values <- match(model_frame[,timevar],timescale_reduced)
+      model_frame[var] <- value[assign_values]
+    }
+
+    if(nvalue==ntime+1) {
+      value <- value[-nvalue]
+      assign_values <- match(model_frame[,timevar],timescale_reduced)
+      model_frame[var] <- value[assign_values]
+    }
+
+
   }
 
   # Predict

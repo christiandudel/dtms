@@ -1,7 +1,8 @@
 ## Load package
-library(dtms)
-library(ggplot2)
 library(devtools)
+load_all()
+#library(dtms)
+library(ggplot2)
 source("R/dtms_helpers.R")
 
 ## Define model: Absorbing and transient states, time scale
@@ -46,7 +47,7 @@ estdata$time2 <- estdata$time^2
 
 ## Fit model
 fit <- dtms_fit(data=estdata,
-                controls=c("Gender","time2"),
+                controls=c("Gender","time","time2"),
                 package="mclogit")
 
 ## Transition probabilities by gender
@@ -54,15 +55,17 @@ fit <- dtms_fit(data=estdata,
 # Men
 probs_m <- dtms_transitions(dtms=hrs,
                             model = fit,
-                            constant = list(Gender=0),
-                            varying = list(time2 = (50:98)^2),
+                            controls = list(Gender=0,
+                                            time  =50:98,
+                                            time2 =(50:98)^2),
                             CI=TRUE)
 
 # Women
 probs_w <- dtms_transitions(dtms=hrs,
                             model = fit,
-                            constant = list(Gender=1),
-                            varying = list(time2 = (50:98)^2))
+                            controls = list(Gender=1,
+                                            time  =50:98,
+                                            time2 =(50:98)^2))
 
 # Overview
 summary(probs_m)
@@ -190,19 +193,20 @@ summary(last2w)
 bootfun <- function(data,dtms) {
 
   fit <- dtms_fit(data=data,
-                  controls=c("Gender","time2"),
+                  controls=c("Gender","time","time2"),
                   package="mclogit")
 
   probs_m <- dtms_transitions(dtms=dtms,
                               model = fit,
-                              constant = list(Gender=0),
-                              varying = list(time2 = (50:98)^2),
-                              CI=TRUE)
+                              controls = list(Gender=0,
+                                              time  =50:98,
+                                              time2 =(50:98)^2))
 
   probs_w <- dtms_transitions(dtms=dtms,
                               model = fit,
-                              constant = list(Gender=1),
-                              varying = list(time2 = (50:98)^2))
+                              controls = list(Gender=1,
+                                              time  =50:98,
+                                              time2 =(50:98)^2))
 
   Tm <- dtms_matrix(dtms=dtms,
                     probs=probs_m)
@@ -251,12 +255,12 @@ estdatam <- subset(estdata,Gender==0)
 
 fit1 <- dtms_fit(data=estdatam,
                  #controls=c("Gender","time2"),
-                 controls="time2",
+                 controls=c("time","time2"),
                  package="mclogit")
 
 fit2 <- dtms_fullfit(data=estdatam,
                      #controls=c("Gender","time2"),
-                     controls="time2",
+                     controls=c("time","time2"),
                      package="mclogit")
 
 AIC(fit1)
@@ -266,17 +270,17 @@ exp((AIC(fit2)-AIC(fit1))/2)
 ## Comparing constrained vs unconstrained model: results
 probs1 <- dtms_transitions(dtms=hrs,
                            model = fit1,
-                           constant = list(Gender=0),
-                           varying = list(time2 = (50:98)^2),
-                           CI=TRUE)
+                           controls = list(Gender=0,
+                                           time  =50:98,
+                                           time2 =(50:98)^2))
 T1 <- dtms_matrix(dtms=hrs,
                   probs=probs1)
 
 probs2 <- dtms_transitions(dtms=hrs,
                            model = fit2,
-                           constant = list(Gender=0),
-                           varying = list(time2 = (50:98)^2),
-                           CI=TRUE)
+                           controls = list(Gender=0,
+                                            time  =50:98,
+                                            time2 =(50:98)^2))
 T2 <- dtms_matrix(dtms=hrs,
                   probs=probs2)
 

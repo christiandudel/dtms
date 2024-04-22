@@ -11,7 +11,6 @@ dtms_fullfit(
   weights = NULL,
   fromvar = "from",
   tovar = "to",
-  timevar = "time",
   reference = 1,
   package = "VGAM",
   ...
@@ -29,8 +28,6 @@ dtms_fullfit(
 \item{fromvar}{Character (optional), name of variable with starting state. Default is "from".}
 
 \item{tovar}{Character (optional), name of variable with receiving state. Default is "to".}
-
-\item{timevar}{Character (optional), name of variable with time scale. Default is "time".}
 
 \item{reference}{Numeric or character (optional). Reference level of multinomial logistic regression.}
 

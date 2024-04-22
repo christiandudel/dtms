@@ -8,7 +8,6 @@
 #' @param controls Character (optional), names of control variables
 #' @param fromvar Character (optional), name of variable with starting state. Default is "from".
 #' @param tovar Character (optional), name of variable with receiving state. Default is "to".
-#' @param timevar Character (optional), name of variable with time scale. Default is "time".
 #' @param formula Formula (optional). If no formula is specified, it will be build from the information specified with controls, fromvar, tovar, and timevar.
 #' @param weights Character (optional). Name of variable with survey weights.
 #' @param reference Numeric or character (optional). Reference level of multinomial logistic regression.
@@ -42,7 +41,6 @@ dtms_fit <- function(data,
                      weights=NULL,
                      fromvar="from",
                      tovar="to",
-                     timevar="time",
                      reference=1,
                      package="VGAM",
                      full=FALSE,
@@ -52,7 +50,6 @@ dtms_fit <- function(data,
   if(is.null(formula)) formula <- dtms_formula(controls=controls,
                                                fromvar=fromvar,
                                                tovar=tovar,
-                                               timevar=timevar,
                                                full=full)
 
   # Make sure environment for formula is correct (ugh)
