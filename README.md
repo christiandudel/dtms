@@ -14,77 +14,75 @@ Christian Dudel, <dudel@demogr.mpg.de>
 
 Peng Li, <li@demogr.mpg.de>
 
-## Overview
-
-The package dtms implements discrete-time multistate models in R. It
-comes with many tools to analyze the results of multistate models. The
-workflow mainly consists of estimating a discrete-time multistate model
-and then applying methods for absorbing Markov chains.
-
-## Features
-
-Data handling: functions for reshaping data, cleaning data, general
-descriptive statistics on the data, and descriptive information on
-censoring.
-
-Estimation of transition probabilities: builds on existing R packages,
-allowing for semiparametric estimation
-([VGAM](https://cran.r-project.org/web/packages/VGAM)), random effects
-and random intercepts
-([mclogit](https://cran.r-project.org/web/packages/mclogit)), and neural
-networks ([nnet](https://cran.r-project.org/web/packages/nnet)); all
-possible for constrained and unconstrained/fully interacted models.
-Functions for descriptive statistics on transition probabilities and for
-plotting them are also available.
-
-Markov chain methods: (partial) state/life expectancy, (partial)
-lifetime risk, (partial) distribution of occupation time, (partial)
-distribution of waiting time to first visit, (partial) distribution of
-waiting time to last exit, based on (partial) distributions
-variance/standard deviation and median of occupancy time and first
-visit/last exit, Markov chains with rewards.
-
-Inference: analytic standard errors and variance-covariance matrix for
-transition probabilities; simulated inference using the bootstrap and
-the block bootstrap.
-
-Other features: simulation of Markov chains using the package
-[markovchain](https://cran.r-project.org/web/packages/markovchain).
-
 ## Disclaimer
 
 This package is currently undergoing development and many functions are
 experimental. The content of this repository will change in the future,
 and functions and features might be removed or changed without warning.
 
+## Overview
+
+The package `dtms` implements discrete-time multistate models in R. It
+comes with many tools to analyze the results of multistate models. The
+workflow mainly consists of estimating a discrete-time multistate model
+and then applying methods for absorbing Markov chains.
+
+Currently, the following features are implemented:
+
+- Data handling: functions for reshaping data, cleaning data, general
+  descriptive statistics, and descriptive information on different types
+  of censoring.
+- Estimation of transition probabilities: builds on existing R packages,
+  allowing for semiparametric estimation
+  ([VGAM](https://cran.r-project.org/web/packages/VGAM)), random effects
+  and random intercepts
+  ([mclogit](https://cran.r-project.org/web/packages/mclogit)), and
+  neural networks
+  ([nnet](https://cran.r-project.org/web/packages/nnet)); all possible
+  for constrained and unconstrained/fully interacted models. Functions
+  for descriptive statistics on transition probabilities and for
+  plotting them are also available.
+- Markov chain methods: (partial) state/life expectancy, (partial)
+  lifetime risk, (partial) distribution of occupation time, (partial)
+  distribution of waiting time to first visit, (partial) distribution of
+  waiting time to last exit, based on (partial) distributions
+  variance/standard deviation and median of occupancy time and first
+  visit/last exit, Markov chains with rewards.
+- Inference: analytic standard errors and variance-covariance matrix for
+  transition probabilities; simulated inference using the bootstrap and
+  the block bootstrap for other quantitites.
+- Other features: simulation of Markov chains using the package
+  [markovchain](https://cran.r-project.org/web/packages/markovchain).
+
 ## Installation
 
-You can install the development version of dtms like this:
+You can install the development version of `dtms` like this:
 
 ``` r
 library(devtools)
 install_github("christiandudel/dtms")
 ```
 
-## Workflow
+## General workflow and basic principles
 
 The basic workflow consists of four main steps. First, the multistate
 model is defined in a general way which describes the states included in
-the model and its timescale. Second, the input data has to be reshaped
-and cleaned. Third, a regression model is fitted to predict transition
-probabilities. Fourth, Markov chain methods are applied to calculate
-statistics to describe the model. These steps are described below. After
-this, we present two examples which show the complete workflow based on
-example data provided with the package.
+the model and its timescale (model setup). Second, the input data has to
+be reshaped and cleaned. Third, a regression model is fitted to predict
+transition probabilities. Fourth, Markov chain methods are applied to
+calculate statistics to describe the model. These steps and the
+corresponding functions are described below. Note that not all arguments
+of each function are described, and the help files for the individual
+functions usually contain useful additional information.
 
-## Model setup
+### Model setup
 
-To use the dtms package, in a first step disrete-time multistate models
-are defined in a abstract way using three components: a list of the
-transient states; a list of the absorbing states; and a list of values
-of the time scale. Moreover, there are two additional components which
-the user not necessarily needs to specify: the step length of the
-timescale, and a separator (see below).
+To use the `dtms` package, in a first step disrete-time multistate
+models are defined in a abstract way using three components: the names
+of the transient states; the names of the absorbing states; and the
+values of the time scale. Moreover, there are two additional components
+which the user not necessarily needs to specify: the step length of the
+timescale, and a separator.
 
 To define these components, the function `dtms()` is used. It has an
 argument for each of the components, but only three are necessary: the
@@ -93,7 +91,7 @@ the values of the time scale. The step length of the timescale is
 implicitly defined by the values of the timescale, and the separator
 uses a default value which users likely don’t want to change in a
 majority of applications. In the first example provided further below,
-the function `dtms()` is used like this:
+the function `dtms()` is called like this:
 
 ``` r
 ## Load package
@@ -107,14 +105,14 @@ simple <- dtms(transient=c("A","B"),
 The arguments `transient` and `absorbing` take the names of the
 transient and absorbing states, respectively, which are specified as
 character vectors. In this case, there are two transient states called
-`A` and `B` and an absorbing state `X`. Each model needs at least one
-transient state and one absorbing state. `timescale` takes the values of
-the timescale which are specified with a numeric vector. In this
-example, the time scale starts at 0 and stops at 19, with a step length
-of 1. The step length has to be consistent along the timescale. For
-instance, a timescale with values 0, 1, 2, 4, 5, 7 is not allowed.
-However, the step length does not need to equal 1; e.g., 0, 2, 4, 6, …
-would be fine.
+`A` and `B`, and one absorbing state called `X`. Each model needs at
+least one transient state and one absorbing state. The argument
+`timescale` takes the values of the timescale which are specified with a
+numeric vector. In this example, the time scale starts at 0 and stops at
+19, with a step length of 1. The step length has to be consistent along
+the timescale. For instance, a timescale with values 0, 1, 2, 4, 5, 7 is
+not allowed. However, the step length does not need to equal 1; e.g., 0,
+2, 4, 6, … would be fine.
 
 The separator is a character string used to construct what we call long
 state names. Its default is `_`. Long state names consist of a
@@ -128,7 +126,7 @@ used: `A_0`, `A_1`, `A_2`, `B_0`, `B_1`, and `B_2`. Due to the temporal
 ordering of states not all transitions between these states are
 possible; e.g., it is not possible to transition from `A_2` to `B_0`.
 
-## Input data
+### Preparing and handling data
 
 The input data has to be panel data in long format. If your data is not
 in this shape, there are many tools already available in R and its
@@ -150,9 +148,9 @@ rows of the data belong to unit `1`. The variable `timevar` has the
 values of the timescale. `statevar` shows the state each unit is
 occupying at a given time. `X` and `Z` are additional covariates.
 
-The dtms package provides tools to reshape this data into what we call
-transition format. For the example data shown above transition format
-looks like this:
+The `dtms` package provides tools to reshape this data into what we call
+transition format. For the example data shown above the transition
+format looks like this:
 
 | idvar | timevar | fromvar | tovar | X   | Y    |
 |:------|:--------|:--------|:------|:----|:-----|
@@ -200,10 +198,10 @@ indicating the states (argument `statevar`).
 
 Note that at this stage, the states captured by the variable specified
 with `statevar` do not necessarily need to match the states in the
-‘dtms’ object. In particular, this means that if there are any states in
-the input data which are not in the ‘dtms’ object, there will be no
+`dtms` object. In particular, this means that if there are any states in
+the input data which are not in the `dtms` object, there will be no
 warning or similar at this stage. However, the function `dtms_clean()`
-described below will remove states not included in the ‘dtms’ object by
+described below will remove states not included in the `dtms` object by
 default.
 
 The original data and the reshaped data can be compared like this:
@@ -237,13 +235,13 @@ gets the name `id`; the variable with the timescale gets the name
 names `from` and `to`. Other names can of course be specified, but they
 have to be used consistently.
 
-Second, the object returned by `dtms_format()` is a standard data frame.
-This comes with benefits and costs. On the upside this means that data
-in transition format can easily be viewed and modified using standard
-tools, making it very accessible to users. The main downside is that it
-does not contain general information on the model or the data, which
-could make the workflow slightly more convenient. We decided to keep
-intermediate steps as accessible as possible.
+Second, the object returned by `dtms_format()` technically is a standard
+data frame. This comes with benefits and costs. On the upside this means
+that data in transition format can easily be viewed and modified using
+standard tools, making it very accessible to users. The main downside is
+that it does not contain general information on the model or the data,
+which could make the workflow slightly more convenient. We decided to
+keep intermediate steps as accessible as possible.
 
 Third, the data in long format contains an additional variable
 (`Gender`). All variables which are not `idvar`, `timevar`, or
@@ -298,7 +296,14 @@ estdata <- dtms_clean(data=estdata,
 #> Dropping  51935  rows starting in absorbing state
 ```
 
-## Estimating transition probabilities
+`dtms_clean()` by default removes transitions starting or ending in a
+missing value; transitions starting in an absorbing state; transitions
+which start at a time not covered by the time scale; and transitions
+which start or end in a state which is not contained in the state space
+in the `dtms` object. This can be changed through some of the arguments
+of `dtms_clean()`.
+
+### Estimating transition probabilities
 
 Getting transition probabilities ready requires three steps. First,
 estimating a regression model for the transition probabilities. Second,
@@ -316,7 +321,7 @@ fit <- dtms_fit(data=estdata)
 ```
 
 This will estimate a model which only uses the starting state as a
-control. Covariates (including time) be included in several ways. A
+control. Covariates (including time) can be included in several ways. A
 convenient way for including covariates is to use the argument
 `controls`. For example, if in a data set there are two variables named
 `Z1` and `Z2`, and time is captured with a variable called `time`, then
@@ -328,8 +333,8 @@ fit <- dtms_fit(data=somedata,
 ```
 
 It is also possible to specify a formula, like is common practice for
-most regression functions. This way you have to specify the (standard)
-names of the timescale and the state variables:
+most regression functions. This way you have to specify the names of the
+state variables:
 
 ``` r
 fit <- dtms_fit(data=somedata,
@@ -345,8 +350,8 @@ functions like `summary()` or `coef()`. In addition to `VGAM`, currently
 `mclogit` and `nnet` are supported. If the package is set to `mclogit`
 the function `mblogit()` is used. If it is `nnet` the function is
 `multinom()`. Arguments of these functions can be passed via
-`dtms_fit()`. For instance, this includes random effects by unit ID
-using the `mclogit` package:
+`dtms_fit()`. For instance, this example includes random effects by unit
+ID using the `mclogit` package and the argument `random` of `mblogit()`:
 
 ``` r
 fit <- dtms_fit(data=somedata,
@@ -356,18 +361,18 @@ fit <- dtms_fit(data=somedata,
 ```
 
 Once a regression model has been estimated, it can be used to predict
-trasition probabilities. If the model includes covariates, the user
+transition probabilities. If the model includes covariates, the user
 needs to specify covariate values which are used in the prediction. If
-no covariates (in addition to the timescale) are included, then no
-values are needed. For each time-constant covariate one value needs to
-be specified, and for time-varying variables a value at each value of
-the timescale has to be provided minus the last value. For instance, if
-the timescale has values 0, 1, 2, and 3, and there is a time-varying
-covariate X, then values for X at 0, 1, and 2 need to be specified.
-Alternatively, predictor values for all values of the time scale can be
-specified. In this case, the last predictor value will be dropped. For a
-time-constant covariate Y only one values is necessary, which is then
-used at all values of the time scale.
+no covariates are included, then no values are needed. For each
+time-constant covariate one value needs to be specified, and for
+time-varying variables a value at each value of the timescale has to be
+provided minus the last value. For instance, if the timescale has values
+0, 1, 2, and 3, and there is a time-varying covariate X, then values for
+X at 0, 1, and 2 need to be specified. Alternatively, predictor values
+for all values of the time scale can be specified. In this case, the
+last predictor value will be dropped. For a time-constant covariate Y
+only one values is necessary, which is then used at all values of the
+time scale.
 
 To predict transition probabilities, the function `dtms_transitions()`
 is used. It has three main arguments: `model`, `dtms`, and `controls`.
@@ -403,7 +408,7 @@ function `dtms_matrix()`. In most cases, this function will only require
 two arguments. First, a data frame with transition probabilities as
 created with `dtms_transitions()` and passed to the argument `probs`;
 and, second, a `dtms` object as created with `dtms()`. For instance, in
-the first long example below, this function is used as follows:
+the first example below, this function is used as follows:
 
 ``` r
 Tp <- dtms_matrix(probs=probs,
@@ -412,25 +417,18 @@ Tp <- dtms_matrix(probs=probs,
 
 This transition matrix can then be used to apply Markov chain methods.
 The matrix itself often will not be of major interest, and it is easier
-to look at transition probabilities in a data frame, as generated by
+to look at transition probabilities in the data frame generated with
 `dtms_transitions()`.
 
-## Markov chain methods
+### Markov chain methods
 
 The dtms package provides several functions which implement Markov chain
 methods and which can be applied to a transition matrix generated with
 `dtms_matrix()`. Most of these functions require at least two arguments.
-First, a transition matrix; and, second, a ‘dtms’ object. For instance,
+First, a transition matrix; and, second, a `dtms` object. For instance,
 to calculate the lifetime spent in the different states, the function
-`dtms_expectancy()` can be used:
-
-``` r
-dtms_expectancy(dtms=simple,
-                matrix=Tp)
-```
-
-This and other functions are demonstrated in more detail in the two
-examples below.
+`dtms_expectancy()`. This and other functions are demonstrated in more
+detail in the two examples below.
 
 ## Example 1: Artificial data
 
@@ -487,16 +485,16 @@ simple <- dtms(transient=c("A","B"),
                timescale=0:19)
 ```
 
-The resulting object of class ‘dtms’ can be passed to other functions of
-the package, as shown below.
+The resulting object of class `dtms` will be passed to other functions
+of the package.
 
-In a second step, we transform the data from long format to what we call
-transition format. This can be done using the function `dtms_format()`.
-In this example, we need to specify the name of the object containing
-the data, and in addition a ‘dtms’ object as created above. Moreover, we
-need to specify which variables contain the unit identifier, which
-variable contains the values of the time scale, and which variable
-contains the information on the state:
+In a second step, we transform the data from long format to transition
+format. This can be done using the function `dtms_format()`. In this
+example, we need to specify the name of the object containing the data,
+and in addition a `dtms` object as created above. Moreover, we need to
+specify which variables contain the unit identifier, which variable
+contains the values of the time scale, and which variable contains the
+information on the state:
 
 ``` r
 ## Reshape to transition format
@@ -550,8 +548,8 @@ estdata <- dtms_clean(data=estdata,
 
 In this example, 1,260 transitions were dropped because they end in a
 missing value. No observations were dropped because the states are not
-covered by the state space, no observations are dropped because they are
-out of the time range specified with the ‘dtms’ object, and no
+covered by the state space; no observations are dropped because they are
+out of the time range specified with the ‘dtms’ object; and no
 observations were dropped because they start in an absorbing state.
 
 A brief overview of the data is provided when using the function

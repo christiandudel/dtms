@@ -2,7 +2,7 @@
 #library(dtms)
 library(devtools)
 load_all()
-source("R/dtms_helpers.R")
+#source("R/dtms_helpers.R")
 
 ## Look at data
 head(simpledata)
