@@ -1,7 +1,7 @@
 ## Load package
 library(devtools)
-load_all()
-#library(dtms)
+#load_all()
+library(dtms)
 library(ggplot2)
 source("R/dtms_helpers.R")
 
@@ -240,8 +240,9 @@ bootresults <- dtms_boot(data=estdata,
                          idvar="id",
                          rep=5,
                          method="block",
-                         seed=321,
                          parallel=TRUE)
+
+summary(bootresults)
 
 wle_men <- unlist(lapply(bootresults,function(x) x[4,1]))
 wle_women <- unlist(lapply(bootresults,function(x) x[8,1]))

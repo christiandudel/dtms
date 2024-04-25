@@ -603,7 +603,7 @@ To predict transition probabilities and to arrange them in a matrix, the
 functions `dtms_transitions()` and `dtms_matrix()` are used. The
 function `dtms_transitions()` needs a ‘dtms’ object as well as a fitted
 model and values for the control variable, while the function
-`dtms_matrix()` requires a ‘dtms’ object and predicted probabilities:
+`dtms_matrix()` requires a `dtms` object and predicted probabilities:
 
 ``` r
 ## Predict probabilities
@@ -642,11 +642,11 @@ occurs. It also shows the same for the highest transition probability,
 and in addition it shows the median and the mean of all transition
 probabilities between two states.
 
-Another useful way to look at the transition probabilies is to plot
-them. To make this easy, the package provides the function dtms_simplify
-which can be applied to an object created with dtms_transitions to make
-it easier to plot. For instance, using ggplot2, a simple plot could look
-like this:
+Another useful way to look at the transition probabilities is to plot
+them. To make this easy, the package provides the function
+`dtms_simplify()` which can be applied to an object created with
+`dtms_transitions()` to make it easier to plot. For instance, using
+ggplot2, a simple plot could look like this:
 
 ``` r
 ## Simple plot
@@ -657,10 +657,10 @@ probs |>  dtms_simplify() |>
           facet_wrap(~from)
 ```
 
-<img src="man/figures/README-example1-probsplot-1.png" width="100%" /> A
-simpler way is available which builds on base-R and does not require
-ggplot2. However, this creates less nice figures and is mainly intended
-as a very quick way of checking results:
+<img src="man/figures/README-example1-probsplot-1.png" width="100%" />
+An even simpler way is available which builds on base-R and does not
+require ggplot2. However, this creates less nice figures and is mainly
+intended as a very quick way of checking results:
 
 ``` r
 ## Simple base plot
@@ -680,16 +680,17 @@ S <- dtms_start(dtms=simple,
 ```
 
 This step is not necessary, but its result can be passed to several of
-the functions used for calculating results, providing additional
-information.
+the functions used for calculating Markov chain methods, providing
+additional information.
 
-Most functions used to calculate results need a transition matrix and a
-‘dtms’ object, and potentially further arguments. The two examples below
-calculate the expected time spent in a state (`dtms_expectancy`) and the
-lifetime risk of ever reaching a state (`dtms_risk`). In the first case,
-the starting distribution of states is passed to the function; this is
-optional. In the second case, one or several states need to be specified
-for which the lifetime risk os be calculated:
+Most functions used to calculate Markov chain methods need a transition
+matrix and a `dtms` object, and potentially further arguments. The two
+examples below calculate the expected time spent in a state
+(`dtms_expectancy()`) and the lifetime risk of ever reaching a state
+(`dtms_risk()`). In the first case, the starting distribution of states
+is passed to the function; this is optional. In the second case, one or
+several states need to be specified for which the lifetime risk will be
+calculated:
 
 ``` r
 ## State expectancies 
@@ -713,11 +714,11 @@ The results of the call of `dtms_expectancy()` show the starting states
 in rows and the states in which the time is spent as columns. For
 instance, around 5.05 time units are spent in state A when starting in
 state A at time 0. The last column shows the total time until
-absorbtion. The last row is shown because the starting distribution was
+absorption. The last row is shown because the starting distribution was
 specified. It shows the average time spent in a state irrespective of
 the starting state. That is, on average 4.93 time units are spent in
-state A, 8.88 time units are spent in state B, for a total of 13.81 time
-units.
+state A, and 8.88 time units are spent in state B, for a total of 13.81
+time units.
 
 The result of the call of `dtms_risk()` above is the lifetime risk of
 ever reaching state A depending on the starting state. Obviously, when
@@ -743,7 +744,7 @@ dtms_expectancy(dtms=simple,
 #> B 0.7377421 0.5341427 0.3529947 0.0
 ```
 
-In the example aboce, we look at the time spent in state A. The results
+In the example above, we look at the time spent in state A. The results
 by row now indicate the remaining life expectancy in state A starting
 from the state in the row at a given time. For instance, if a unit is in
 state A at time 5, an additional 3.51 time units will be spent in state
@@ -753,13 +754,13 @@ The function calls below are all similar in that they provide full
 distributions as a result. Specifically, `dtms_visits()` calculates the
 distribution of the time spent in a state; the mean over this
 distribution is equal to the state expectancy as provided by
-`dtms_expectancy()`, and the one minus the proportion of 0 time units
-spent in a state is equal to the lifetime risk provided by
-`dtms_risk()`. `dtms_first()` calculates the distribution of the waiting
-time until a given state is reached for the first time, conditional on
-ever reaching this state. `dtms_last()` calculates the distribution of
-the waiting time until a state is left for the last time; i.e., there is
-no return back to this state.
+`dtms_expectancy()`, and one minus the proportion of 0 time units spent
+in a state is equal to the lifetime risk provided by `dtms_risk()`.
+`dtms_first()` calculates the distribution of the waiting time until a
+given state is reached for the first time, conditional on ever reaching
+this state. `dtms_last()` calculates the distribution of the waiting
+time until a state is left for the last time; i.e., there is no return
+back to this state.
 
 ``` r
 ## Distribution of visits
@@ -876,8 +877,7 @@ dtms_last(dtms=simple,
 
 The output from these functions tends to be difficult to read, and often
 results on the distribution are used to calculate other statistics. A
-small set of such statistics can be generated using the function
-`summary()`:
+set of such statistics can be generated using the function `summary()`:
 
 ``` r
 ## Distribution of visits
@@ -1278,60 +1278,115 @@ summary(last2w)
 #> start:Retired_50     20.40228 64.97334 8.060604   20.5    NA
 #> AVERAGE              19.73733 70.75006 8.411305   19.5    NA
 #> AVERAGE(COND.)       20.59143 63.49278 7.968235   20.5    NA
-
-# Bootstrap example (not run)
-# bootfun <- function(data,dtms) {
-# 
-#   fit <- dtms_fit(data=data,
-#                   controls=c("Gender","time","time2"),
-#                   package="mclogit")
-# 
-#   probs_m <- dtms_transitions(dtms=dtms,
-#                               model = fit,
-#                               controls = list(Gender=0,
-#                                               time  =50:98,
-#                                               time2 =(50:98)^2))
-# 
-#   probs_w <- dtms_transitions(dtms=dtms,
-#                               model = fit,
-#                               controls = list(Gender=1,
-#                                               time  =50:98,
-#                                               time2 =(50:98)^2))
-# 
-#   Tm <- dtms_matrix(dtms=dtms,
-#                     probs=probs_m)
-# 
-#   Tw <- dtms_matrix(dtms=dtms,
-#                     probs=probs_w)
-# 
-#   Sm <- dtms_start(dtms=dtms,
-#                    data=data,
-#                    variables=list(Gender=0))
-# 
-#   Sw <- dtms_start(dtms=dtms,
-#                    data=data,
-#                    variables=list(Gender=1))
-# 
-#   res1 <- dtms_expectancy(dtms=dtms,
-#                   matrix=Tm,
-#                   start_distr=Sm)
-# 
-#   res2 <- dtms_expectancy(dtms=dtms,
-#                   matrix=Tw,
-#                   start_distr=Sw)
-# 
-#   rbind(res1,res2)
-# 
-# }
-# 
-# bootresults <- dtms_boot(data=estdata,
-#                          dtms=hrs,
-#                          fun=bootfun,
-#                          idvar="id",
-#                          rep=50,
-#                          method="block",
-#                          seed=321,
-#                          parallel=TRUE)
-# 
-# summary(bootresults)
 ```
+
+``` r
+# Bootstrap example (not run)
+bootfun <- function(data,dtms) {
+ 
+   fit <- dtms_fit(data=data,
+                   controls=c("Gender","time","time2"),
+                   package="mclogit")
+ 
+   probs_m <- dtms_transitions(dtms=dtms,
+                               model = fit,
+                               controls = list(Gender=0,
+                                               time  =50:98,
+                                               time2 =(50:98)^2))
+ 
+   probs_w <- dtms_transitions(dtms=dtms,
+                               model = fit,
+                               controls = list(Gender=1,
+                                               time  =50:98,
+                                               time2 =(50:98)^2))
+ 
+   Tm <- dtms_matrix(dtms=dtms,
+                     probs=probs_m)
+ 
+   Tw <- dtms_matrix(dtms=dtms,
+                     probs=probs_w)
+ 
+   Sm <- dtms_start(dtms=dtms,
+                    data=data,
+                    variables=list(Gender=0))
+ 
+   Sw <- dtms_start(dtms=dtms,
+                    data=data,
+                    variables=list(Gender=1))
+ 
+   res1 <- dtms_expectancy(dtms=dtms,
+                   matrix=Tm,
+                   start_distr=Sm)
+ 
+   res2 <- dtms_expectancy(dtms=dtms,
+                   matrix=Tw,
+                   start_distr=Sw)
+ 
+   rbind(res1,res2)
+ 
+}
+ 
+bootresults <- dtms_boot(data=estdata,
+                         dtms=hrs,
+                         fun=bootfun,
+                         idvar="id",
+                         rep=50,
+                         method="block",
+                         parallel=TRUE)
+
+summary(bootresults)
+#> $`2.5%`
+#>                        Working Non-working  Retired    TOTAL
+#> start:Working_50     12.955710    2.910133 13.14677 29.37279
+#> start:Non-working_50  8.290247    6.266970 13.34576 28.40746
+#> start:Retired_50      8.273164    3.690934 14.72766 27.22787
+#> AVERAGE              12.013145    3.378332 13.26444 29.14121
+#> start:Working_50     11.774193    4.215098 16.16511 32.58935
+#> start:Non-working_50  7.089900    7.990541 16.34721 31.98613
+#> start:Retired_50      7.475774    5.214246 17.74550 31.06269
+#> AVERAGE              10.050052    5.378653 16.29157 32.34903
+#> 
+#> $`97.5%`
+#>                        Working Non-working  Retired    TOTAL
+#> start:Working_50     13.579276    3.291617 13.98843 30.40153
+#> start:Non-working_50  9.101399    6.798056 14.24842 29.59022
+#> start:Retired_50      9.165736    4.166263 15.78190 28.72077
+#> AVERAGE              12.743656    3.798678 14.10637 30.18867
+#> start:Working_50     12.374548    4.573804 16.87391 33.42677
+#> start:Non-working_50  7.750580    8.470634 17.15980 32.92732
+#> start:Retired_50      8.152402    5.779747 18.78507 32.08069
+#> AVERAGE              10.813094    5.839632 17.05204 33.18421
+```
+
+To use bootstrap methods, the function `dtms_boot()` is called, and
+results can be conveniently viewed using `summary()`. The function
+`dtms_boot()` needs data in transition format (argument `data`) and a
+`dtms` object. The argument `method` is used to choose the bootstrap
+method; here, we use the block bootstrap. In case the block bootstrap is
+used the argument `idvar` needs to be specified, which takes the name of
+the variable with the unit identifier. The argument `rep` sets the
+number of bootstrap replications, and the argument `parallel` can be set
+to `TRUE` to enable parallel processing using the packages
+[foreach](https://cran.r-project.org/web/packages/foreach) and
+[doParallel](https://cran.r-project.org/web/packages/doParallel).
+
+Further required is the argument `fun`. This is a function which should
+have two arguments, one called `data` and one called `dtms`. These are
+used to pass the corresponding arguments from `dtms_boot()`. Other than
+this the function can contain anything the user is interested in. In the
+example above, the function is called `bootfun`. It estimates transition
+probabilities, puts them into a transition matrix, and then calculates
+state expectancies. Each bootstrap replication of the data is passed to
+the function specified by `fun`, and the results are saved in a list
+with as many entries as there are replications. The format of each entry
+of the list obviously depends on the definition of `fun`.
+
+The result of calling `summary(bootresults)` is by default a list with
+two entries which together provide the bootstrap percentiles, i.e., the
+bootstrap confidence interval. The entries have the structure defined by
+`fun`. In this example, the upper half of each entry are the state
+expectancies for men, while the lower half are the state expectancies
+for women. For instance, the 95% confidence interval for the average
+lifetime spent working ranges from 12.17 years to 12.67 years for men.
+The returned percentiles can be controlled with the arguments of the
+summary method, `dtms_boot_summary()`.

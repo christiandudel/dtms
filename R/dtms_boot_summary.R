@@ -35,8 +35,12 @@ dtms_boot_summary <- function(boot,probs=NULL,alpha=0.05) {
 
     # Format result
     dimwhat <- dim(boot[[1]])
+    colwhat <- colnames(boot[[1]])
+    rowwhat <- rownames(boot[[1]])
     result <- list()
     entry <- matrix(NA,nrow=dimwhat[1],ncol=dimwhat[2])
+    colnames(entry) <- colwhat
+    rownames(entry) <- rowwhat
     for(i in 1:nresults) result[[i]] <- entry
     names(result) <- paste0(probs*100,"%")
 
@@ -58,8 +62,12 @@ dtms_boot_summary <- function(boot,probs=NULL,alpha=0.05) {
 
     # Format result
     nwhat <- length(boot[[1]])
+    nameswhat <- names(boot[[1]])
     result <- list()
-    for(i in 1:nresults) result[[i]] <- numeric(length=nwhat)
+    for(i in 1:nresults) {
+      result[[i]] <- numeric(length=nwhat)
+      names(result[[i]]) <- nameswhat
+    }
     names(result) <- paste0(probs*100,"%")
 
     # Go through results
