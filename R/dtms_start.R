@@ -65,7 +65,7 @@ dtms_start <- function(data,
 
   # Restrict data: States and time
   data <- data[data[,fromvar]%in%start_state,]
-  data <- data[data[,timevar]==start_time,]
+  data <- data[data[,timevar]%in%start_time,]
 
   # Apply restrictions, if any
   varnames <- names(variables)
@@ -74,11 +74,22 @@ dtms_start <- function(data,
   }
 
   # Tabulate
-  result <- data[,fromvar] |> table() |> prop.table()
+  tmp <- data[,fromvar] |> table() |> prop.table()
 
   # Match with starting names
-  result <- result[start_state]
-  result <- as.numeric(result)
+  result <- numeric(length(start_state))
+  names(result) <- start_state
+  result[names(tmp)] <- tmp
+
+  # Fix if issues and procude warning
+  wrong <- which(result%in%c(NA,NaN,Inf,-Inf))
+  if(length(wrong)>0) {
+    warning("Something might have gone wrong with the starting distribution")
+    result[wrong] <- 0
+    result <- result/sum(result)
+  }
+
+  # Proper names
   names(result) <- starting
 
   # Return
