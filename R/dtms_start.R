@@ -79,7 +79,8 @@ dtms_start <- function(data,
   # Match with starting names
   result <- numeric(length(start_state))
   names(result) <- start_state
-  result[names(tmp)] <- tmp
+  matchnames <- names(tmp)[names(tmp)%in%start_state]
+  result[matchnames] <- tmp[matchnames]
 
   # Fix if issues and procude warning
   wrong <- which(result%in%c(NA,NaN,Inf,-Inf))
