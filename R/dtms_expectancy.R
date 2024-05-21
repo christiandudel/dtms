@@ -178,7 +178,7 @@ dtms_expectancy <- function(matrix,
 
     # Matrix with results
     result <- matrix(data=tmp,ncol=ntimes,nrow=nstart,byrow=T)
-    rownames(result) <- dtms$transient
+    rownames(result) <- paste0("start:",starting)
     colnames(result) <- paste(times)
 
   }
