@@ -26,8 +26,8 @@ dtms_proper <- function(dtms) { # dtms=object to be checked
   if(!all(names(dtms)==listnames)) stop(message)
 
   # Check types (and length)
-  if(!is.character(dtms$transient)) stop(message)
-  if(!is.character(dtms$absorbing)) stop(message)
+  if(!is.character(dtms$transient)&!is.numeric(dtms$transient)) stop(message)
+  if(!is.character(dtms$absorbing)&!is.numeric(dtms$absorbing)) stop(message)
   if(!is.character(dtms$sep)) stop(message)
   if(!is.numeric(dtms$timescale) & length(dtms$timescale)>2) stop(message)
   if(!is.numeric(dtms$timestep) & length(dtms$timestep)==1) stop(message)
