@@ -5,18 +5,21 @@
 #'
 #' @details
 #' Per default, the starting distribution is the distribution of transient
-#' states #' at the first value of the time scale in the data. This can be
+#' states at the first value of the time scale in the data. This can be
 #' changed to any value of the time scale, and any set of states. The
 #' distribution can also be conditional on further covariate values which can be
 #' specified with the argument `variables`.
+#'
+#' `variables` takes a named list where each entry of the list is named like
+#' the corresponding variable and with the values to be selected.
 #'
 #' @param data Data frame in transition format, as created with \code{dtms_format}.
 #' @param dtms dtms object, as created with \code{dtms}.
 #' @param variables List (optional), a named list with covariate values which are used to restrict the data.
 #' @param start_state Character (optional), name of starting states. If NULL (default) all transient states will be used.
 #' @param start_time Numeric (optional), value of time scale for start. If NULL (default) first value of time scale will be used.
-#' @param fromvar Character (optional), name of variable with starting state. Default is `from`.
-#' @param timevar Character (optional), name of variable with time scale. Default is `time`.
+#' @param fromvar Character (optional), name of variable in `data` with starting state. Default is `from`.
+#' @param timevar Character (optional), name of variable in `data` with time scale. Default is `time`.
 #'
 #' @return Returns a table of the starting distribution.
 #' @export
@@ -70,7 +73,7 @@ dtms_start <- function(data,
   # Apply restrictions, if any
   varnames <- names(variables)
   for(var in varnames) {
-    data <- data[data[,var]==variables[[var]],]
+    data <- data[data[,var]%in%variables[[var]],]
   }
 
   # Tabulate

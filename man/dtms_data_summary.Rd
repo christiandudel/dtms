@@ -17,19 +17,19 @@ dtms_data_summary(
 
 \item{dtms}{dtms object, as created with \code{dtms}.}
 
-\item{fromvar}{Character (optional), name of variable with starting state. Default is "from".}
+\item{fromvar}{Character (optional), name of variable in `data` with starting state. Default is "from".}
 
-\item{tovar}{Character (optional), name of variable with receiving state. Default is "to".}
+\item{tovar}{Character (optional), name of variable  in `data`with receiving state. Default is "to".}
 
-\item{weights}{Character (optional), name of variable with weights. Default is NULL.}
+\item{weights}{Character (optional), name of variablein `data` with weights. Default is NULL.}
 }
 \value{
 A data frame
 }
 \description{
 Returns a data frame with number of observed transitions (column COUNT),
-relative proportion (column PROP), and raw transition probabilities (column
-PROB).
+relative proportion of a transition relative to all transitions (column
+PROP), and raw transition probabilities Pr(j|i) (column PROB).
 }
 \examples{
 simple <- dtms(transient=c("A","B"),

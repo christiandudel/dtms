@@ -30,7 +30,7 @@
 #' @param start_time Numeric (optional), value of time scale for start. If NULL (default) first value of time scale will be used.
 #' @param end_time Numeric (optional), last value of time scale to consider. If NULL (default) all values of time scale starting from start_time will be used.
 #' @param method Character (optional), do transitions happen mid-interval (`mid`, default) or at the end of the interval (`end`), see details.
-#' @param total Logical, should total of distribution be shown? Default is FALSE, as the total always is 1.
+#' @param total Logical, should total of distribution be shown (always sums to 1)? Default is FALSE.
 #'
 #' @return A table with the distribution of time spent in a subset of states.
 #' @export

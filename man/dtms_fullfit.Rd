@@ -23,11 +23,11 @@ dtms_fullfit(
 
 \item{formula}{Formula (optional). If no formula is specified, it will be build from the information specified with controls, fromvar, tovar, and timevar.}
 
-\item{weights}{Character (optional). Name of variable with survey weights.}
+\item{weights}{Character (optional), name of variable in `data` with survey weights.}
 
-\item{fromvar}{Character (optional), name of variable with starting state. Default is "from".}
+\item{fromvar}{Character (optional), name of variable in `data` with starting state. Default is "from".}
 
-\item{tovar}{Character (optional), name of variable with receiving state. Default is "to".}
+\item{tovar}{Character (optional), name of variable in `data` with receiving state. Default is "to".}
 
 \item{reference}{Numeric or character (optional). Reference level of multinomial logistic regression.}
 
@@ -42,7 +42,7 @@ Returns an object with class depending on the package used.
 This function estimates an unconstrained discrete-time multistate model
 using multinomial logistic regression. This is achieved by interacting
 the starting state with all predictors in the model. It is a wrapper for
-\code{dtms_fit()} with slightly less arguments.
+\code{dtms_fit()} with `full=TRUE` and otherwise slightly less arguments.
 }
 \examples{
 ## Define model: Absorbing and transient states, time scale

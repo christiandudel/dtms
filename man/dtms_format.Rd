@@ -22,13 +22,13 @@ dtms_format(
 
 \item{dtms}{dtms object, as created with \code{dtms}.}
 
-\item{idvar}{Character (optional), name of variable with unit ID. Default is "id".}
+\item{idvar}{Character (optional), name of variable in `data` with unit ID. Default is "id".}
 
-\item{timevar}{Character (optional), name of variable with time scale. Default is "time".}
+\item{timevar}{Character (optional), name of variable in `data` with time scale. Default is "time".}
 
-\item{statevar}{Character (optional), name of variable in 'data' with state, default is 'state'.}
+\item{statevar}{Character (optional), name of variable in `data` with state, default is 'state'.}
 
-\item{fromvar}{Character (optional), name of variable with starting state in reshaped data. Default is "from".}
+\item{fromvar}{Character (optional), name of variable`with starting state in reshaped data. Default is "from".}
 
 \item{tovar}{Character (optional), name of variable with receiving state in reshaped data. Default is "to".}
 
@@ -71,12 +71,13 @@ id \tab time \tab fromvar \tab tovar \tab X \tab Z(t) \cr
 ... \tab ... \tab ... \tab ... \tab ... \tab ...
 }
 
-Covariates do not need to be specified and are handled automatically. The
+Covariates do not need to be specified and are handled implicitly. The
 transition from time t to t+1 takes covariate values from time t. By default
 the variable names of the ID variable and the time variable are changed to
 `id` and `time`, as the other functions of the package use these as default
 names. If renaming the variables is not possible because these variable
-names already appear in the data then the original names are used.
+names already appear in the data then the original names are used. If
+`keepnames=TRUE` the original names for `id` and `time` are kept.
 
 `dtms_format` by default drops gaps in the data, as no transitions are
 observed. For instance, in the following example there is no observation at

@@ -4,14 +4,14 @@
 #' This function estimates an unconstrained discrete-time multistate model
 #' using multinomial logistic regression. This is achieved by interacting
 #' the starting state with all predictors in the model. It is a wrapper for
-#' \code{dtms_fit()} with slightly less arguments.
+#' \code{dtms_fit()} with `full=TRUE` and otherwise slightly less arguments.
 #'
 #' @param data Data frame in transition format, as created with \code{dtms_format}.
 #' @param controls Character (optional), names of control variables
-#' @param fromvar Character (optional), name of variable with starting state. Default is "from".
-#' @param tovar Character (optional), name of variable with receiving state. Default is "to".
+#' @param fromvar Character (optional), name of variable in `data` with starting state. Default is "from".
+#' @param tovar Character (optional), name of variable in `data` with receiving state. Default is "to".
 #' @param formula Formula (optional). If no formula is specified, it will be build from the information specified with controls, fromvar, tovar, and timevar.
-#' @param weights Character (optional). Name of variable with survey weights.
+#' @param weights Character (optional), name of variable in `data` with survey weights.
 #' @param reference Numeric or character (optional). Reference level of multinomial logistic regression.
 #' @param package Character, chooses package for multinomial logistic regression, currently `VGAM`, `nnet`, and `mclogit` are supported. Default is `VGAM`.
 #' @param ... Further arguments passed to estimation functions.

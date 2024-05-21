@@ -43,24 +43,19 @@ Cleaned data frame in transition format.
 }
 \description{
 Cleans data in transition format. It can handle issues regularly occurring
-with such data: #' transitions starting from or ending in missing states,
-observations not covered by the time range, and #' observations starting in
+with such data: transitions starting from or ending in missing states,
+observations not covered by the time range, transitions starting or ending in
+a state which is not in the state space, and observations starting in
 absorbing states.
 }
 \details{
-Data in transition format often includes some transitions which do not
-contribute to the estimation of a multistate model. This includes
-transitions starting or ending with a missing state; transitions which
-are out of the time range of the model; and transitions starting in
-absorbing states.
-
 Transitions starting or ending with a missing state often occur for three
 reasons. First, the function \code{dtms_format} will always create a transition
 with a missing receiving state for the last observation of a unit, whether
-due to #' censoring or not. For instance, if t=20 is the last value of the
-time scale, and a unit is in state A at that #' time, then there will be a
-transition starting at time t=20, starting from state A, and with receiving
-state missing. These transitions can often be safely ignored, in particular
+due to censoring or not. For instance, if t=20 is the last value of the
+time scale, and a unit is in state A at that time, then there will be a
+transition starting at time t=20 from state A, and with receiving
+state missing. Such transitions can usually be safely ignored, in particular
 if there is only one absorbing state. Second, if, say, for a unit the last
 observation is at time t=10 and censored after, there will be a transition
 starting at time t=10 with missing receiving state. Whether such transitions
@@ -69,17 +64,18 @@ these transitions can be dropped. Third, there might be missing values in
 the sequence of states. For instance, a unit might first be in state A, then
 state B, then the state is missing, and then state is again A, giving the
 sequence A, B, NA, A. This implies a transition from B to NA, and from NA to
-A. The function \code{dtms_format} by default will ignore missing observations
-and will not create transitions based on them, but it will if the argument
-`fill` is set to TRUE. Creating these transitions can lead to data sets
-which are much larger than the original data. If they are created,
-\code{dtms_clean} can handle them.
+A.
 
 Transitions which are out of the time range can occur, for instance, when
 the researcher is interested in a shorter time frame than covered by data
 collection. In a clinical trial, the time scale could capture follow-up
 time since start of the trial in months and data might be available for 60
 months. But perhaps the researcher is only interested in the first 36 months.
+
+Transitions which start or end in a state which is not in the state space
+occur when the states in the transition data are not included in the `dtms`
+object. This likely will apply to states which rarely occur and which the
+researcher does not want to combine with other states.
 }
 \examples{
 # Define model

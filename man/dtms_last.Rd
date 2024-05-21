@@ -38,7 +38,7 @@ dtms_last(
 
 \item{method}{Character (optional), do transitions happen mid-interval (`mid`, default) or at the end of the interval (`end`), see details.}
 
-\item{total}{Logical, should total of distribution be shown? Default is FALSE, as the total always is 1.}
+\item{total}{Logical, should total of distribution be shown (always sums to 1)? Default is FALSE.}
 
 \item{rescale}{Logical (optional), should distribution be rescaled to sum to 1? See details. Default is TRUE.}
 }

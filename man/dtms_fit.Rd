@@ -26,9 +26,9 @@ dtms_fit(
 
 \item{weights}{Character (optional). Name of variable with survey weights.}
 
-\item{fromvar}{Character (optional), name of variable with starting state. Default is "from".}
+\item{fromvar}{Character (optional), name of variable in `data` with starting state. Default is "from".}
 
-\item{tovar}{Character (optional), name of variable with receiving state. Default is "to".}
+\item{tovar}{Character (optional), name of variable in `data` with receiving state. Default is "to".}
 
 \item{reference}{Numeric or character (optional). Reference level of multinomial logistic regression.}
 
@@ -44,6 +44,31 @@ Returns an object with class depending on the package used.
 \description{
 This function estimates a constrained discrete-time multistate model
 using multinomial logistic regression.
+}
+\details{
+The argument `data` takes a data set in transition format. The model formula
+can either be specified by using the argument `formula`. Alternatively, it
+can be specified with the arguments `fromvar`, `tovar`, and `controls`. These
+are used if `formula` is not specified. `fromvar` takes the name of the
+variable with the starting state as a character string, `tovar` the same for
+the receiving state, and `controls` is an optional vector of control
+variables. `fromvar` and `tovar` have default values which match other
+functions of this package, making them a convenient alternative to `formula`
+(see example).
+
+If `full=TRUE` a fully interacted model will be estimated in which each
+control variable is interacted with all starting states. This is equivalent
+to a full multistate model in which each transition is a regression equation.
+
+The argument `package` is used choose the package used for estimation.
+Currently, `VGAM` (default), `nnet`, and `mclogit` are supported.
+The functions #' used for estimation are, respectively, `vgam`, `multinom`,
+and `mblogit`. Arguments for these functions are passed via `...`.
+
+The argument `reference` sets the reference category for the multinomial
+logistic regression. Weights for the regression can be passed via the
+arguments `weights`. See the documentation of the package and function
+used for estimation for details.
 }
 \examples{
 ## Define model: Absorbing and transient states, time scale

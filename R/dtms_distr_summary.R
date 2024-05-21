@@ -1,10 +1,10 @@
 #' Summary for distributional results
 #'
 #' @description
-#' This function provides several summary measures based on results obtained
+#' This function provides several summary measures for results obtained
 #' with dtms_visits, dtms_first, and dtms_last.
 #'
-#' @param distr An object of class "dtms_distr" created with \code{dtms_visits}, \code{dtms_first}, or \code{dtms_last}.
+#' @param distr An object of class `dtms_distr` created with \code{dtms_visits}, \code{dtms_first}, or \code{dtms_last}.
 #'
 #' @return A matrix with summary measures
 #' @export

@@ -4,10 +4,10 @@
 #' Provides several summary statistics on transition probabilities.
 #'
 #' @param probs Object with transition probabilities as created with \code{dtms_transitions}.
-#' @param fromvar Character (optional), name of variable with starting state. Default is `from`.
-#' @param tovar Character (optional), name of variable with receiving state. Default is `to`.
-#' @param timevar Character (optional), name of variable with time scale. Default is `time`.
-#' @param Pvar Character (optional), name of variable with transition probabilities. Default is `P`.
+#' @param fromvar Character (optional), name of variable with starting state in `probs`. Default is `from`.
+#' @param tovar Character (optional), name of variable with receiving state in `probs`. Default is `to`.
+#' @param timevar Character (optional), name of variable with time scale in `probs`. Default is `time`.
+#' @param Pvar Character (optional), name of variable with transition probabilities in `probs`. Default is `P`.
 #' @param digits Numeric (optional), number of digits to return, default is 6.
 #' @param format Character (optional), show results in decimal format or percentage, either `decimal` or `percent`. Default is `decimal`.
 #' @param sep Character (optional), separator between short state name and value of time scale. Default is `_`.

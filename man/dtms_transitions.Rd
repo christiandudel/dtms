@@ -28,13 +28,13 @@ dtms_transitions(
 
 \item{dropvar}{Logical (optional), should covariate values used for prediction be returned (see details). Default is `TRUE`.}
 
-\item{timevar}{Character (optional), name of variable with time scale. Default is `time`.}
+\item{timevar}{Character (optional), name of variable with time scale in the returned data frame. Default is `time`.}
 
-\item{fromvar}{Character (optional), name of variable with starting state. Default is `from`.}
+\item{fromvar}{Character (optional), name of variable with starting state in the returned data frame. Default is `from`.}
 
-\item{tovar}{Character (optional), name of variable with receiving state. Default is `to`.}
+\item{tovar}{Character (optional), name of variable with receiving state in the returned data frame. Default is `to`.}
 
-\item{Pvar}{Character (optional), name of variable with transition probabilities. Default is `P`.}
+\item{Pvar}{Character (optional), name of variable with transition probabilities in the returned data frame. Default is `P`.}
 
 \item{se}{Logical (optional), return standard errors of predicted probabilites. Default is `TRUE`.}
 

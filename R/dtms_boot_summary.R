@@ -1,19 +1,61 @@
 #' Summary function for bootstrap results
 #'
 #' @description
-#' Provides bootstrap percentiles for \code{dtms_boot()}.
+#' Provides bootstrap percentiles for bootstrap replications created with
+#' \code{dtms_boot()}.
 #'
 #' @details
-#' Percentiles can be specified with the argument \code{probs}. If it is not
+#' Percentiles can be specified with the argument \code{probs}. This can be as
+#' many percentiles as required by the use.r If it is not
 #' specified, the argument \code{alpha} is used instead. \code{alpha} is the
-#' confidence level for
+#' confidence level for the confidence intervals.
+#'
+#' The function passed to \code{dtms_boot()} needs to either return a numeric
+#' vector or a matrix, otherwise \code{dtms_boot_summary()} returns an error
+#' message.
 #'
 #' @param boot Object created with \code{dtms_boot()}.
 #' @param probs Numeric (optional), vector of percentiles. Default is NULL.
 #' @param alpha Numeric (optional), confidence level. Default is 0.05.
 #'
-#' @return A list
+#' @return Either a vector or a matrix.
 #' @export
+#'
+#' @examples
+#'
+#' ## Define model: Absorbing and transient states, time scale
+#' simple <- dtms(transient=c("A","B"),
+#'                absorbing="X",
+#'                timescale=0:20)
+#' ## Reshape to transition format
+#' estdata <- dtms_format(data=simpledata,
+#'                        dtms=simple,
+#'                        idvar="id",
+#'                        timevar="time",
+#'                        statevar="state")
+#' ## Clean
+#' estdata <- dtms_clean(data=estdata,
+#'                       dtms=simple)
+#' # Bootstrap function
+#' bootfun <- function(data,dtms) {
+#'   fit <- dtms_fit(data=data)
+#'   probs    <- dtms_transitions(dtms=dtms,
+#'                                model = fit)
+#'   Tp <- dtms_matrix(dtms=dtms,
+#'                     probs=probs)
+#'   S <- dtms_start(dtms=dtms,
+#'                   data=data)
+#'   dtms_expectancy(dtms=dtms,
+#'                   matrix=Tp,
+#'                   start_distr=S)
+#' }
+#' # Run bootstrap
+#' bootstrap <- dtms_boot(data=estdata,
+#'                        dtms=simple,
+#'                        fun=bootfun,
+#'                        rep=5)
+#' summary(bootstrap,
+#'         probs=c(0.025,0.5,0.975))
 
 dtms_boot_summary <- function(boot,probs=NULL,alpha=0.05) {
 

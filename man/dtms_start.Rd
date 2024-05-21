@@ -25,9 +25,9 @@ dtms_start(
 
 \item{start_time}{Numeric (optional), value of time scale for start. If NULL (default) first value of time scale will be used.}
 
-\item{fromvar}{Character (optional), name of variable with starting state. Default is `from`.}
+\item{fromvar}{Character (optional), name of variable in `data` with starting state. Default is `from`.}
 
-\item{timevar}{Character (optional), name of variable with time scale. Default is `time`.}
+\item{timevar}{Character (optional), name of variable in `data` with time scale. Default is `time`.}
 }
 \value{
 Returns a table of the starting distribution.
@@ -37,10 +37,13 @@ Tabulates the starting distribution.
 }
 \details{
 Per default, the starting distribution is the distribution of transient
-states #' at the first value of the time scale in the data. This can be
+states at the first value of the time scale in the data. This can be
 changed to any value of the time scale, and any set of states. The
 distribution can also be conditional on further covariate values which can be
 specified with the argument `variables`.
+
+`variables` takes a named list where each entry of the list is named like
+the corresponding variable and with the values to be selected.
 }
 \examples{
 hrs <- dtms(transient=c("Working","Non-working","Retired"),

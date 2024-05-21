@@ -7,10 +7,10 @@
 #'
 #' @param probs Object with transition probabilities as created with \code{dtms_transitions}.
 #' @param dtms dtms object, as created with \code{dtms}.
-#' @param fromvar Character (optional), name of variable with starting state. Default is `from`.
-#' @param tovar Character (optional), name of variable with receiving state. Default is `to`.
-#' @param timevar Character (optional), name of variable with time scale. Default is `time`.
-#' @param Pvar Character (optional), name of variable with transition probabilities. Default is `P`.
+#' @param fromvar Character (optional), name of variable in `probs` with starting state. Default is `from`.
+#' @param tovar Character (optional), name of variable in `probs` with receiving state. Default is `to`.
+#' @param timevar Character (optional), name of variable in `probs` with time scale. Default is `time`.
+#' @param Pvar Character (optional), name of variable in `probs` with transition probabilities. Default is `P`.
 #' @param ... Further arguments passed to plot().
 #'
 #' @export

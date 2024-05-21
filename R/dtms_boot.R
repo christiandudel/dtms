@@ -74,7 +74,8 @@
 #'                        dtms=simple,
 #'                        fun=bootfun,
 #'                        rep=5)
-#' summary(bootstrap,probs=c(0.025,0.5,0.975))
+#' summary(bootstrap,
+#'         probs=c(0.025,0.5,0.975))
 
 dtms_boot <- function(data,
                       dtms,

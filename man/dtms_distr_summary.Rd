@@ -7,13 +7,13 @@
 dtms_distr_summary(distr)
 }
 \arguments{
-\item{distr}{An object of class "dtms_distr" created with \code{dtms_visits}, \code{dtms_first}, or \code{dtms_last}.}
+\item{distr}{An object of class `dtms_distr` created with \code{dtms_visits}, \code{dtms_first}, or \code{dtms_last}.}
 }
 \value{
 A matrix with summary measures
 }
 \description{
-This function provides several summary measures based on results obtained
+This function provides several summary measures for results obtained
 with dtms_visits, dtms_first, and dtms_last.
 }
 \examples{

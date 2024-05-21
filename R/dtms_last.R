@@ -46,7 +46,7 @@
 #' @param end_time Numeric (optional), last value of time scale to consider. If NULL (default) all values of time scale starting from start_time will be used.
 #' @param method Character (optional), do transitions happen mid-interval (`mid`, default) or at the end of the interval (`end`), see details.
 #' @param rescale Logical (optional), should distribution be rescaled to sum to 1? See details. Default is TRUE.
-#' @param total Logical, should total of distribution be shown? Default is FALSE, as the total always is 1.
+#' @param total Logical, should total of distribution be shown (always sums to 1)? Default is FALSE.
 #'
 #' @return Matrix with the distribution(s) of the waiting time.
 #' @export

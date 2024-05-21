@@ -23,13 +23,13 @@ dtms_censoring(
 
 \item{dtms}{dtms object, as created with \code{dtms}.}
 
-\item{fromvar}{Character (optional), name of variable with starting state. Default is "from".}
+\item{fromvar}{Character (optional), name of variable in `data` with starting state. Default is "from".}
 
-\item{tovar}{Character (optional), name of variable with receiving state. Default is "to".}
+\item{tovar}{Character (optional), name of variable in `data` with receiving state. Default is "to".}
 
-\item{timevar}{Character (optional), name of variable with time scale. Default is "time".}
+\item{timevar}{Character (optional), name of variable in `data` with time scale. Default is "time".}
 
-\item{idvar}{Character (optional), name of variable with unit ID. Default is "id".}
+\item{idvar}{Character (optional), name of variable in `data` with unit ID. Default is "id".}
 
 \item{print}{Logical (optional), print counts? Default is TRUE.}
 

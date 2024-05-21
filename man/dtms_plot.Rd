@@ -19,13 +19,13 @@ dtms_plot(
 
 \item{dtms}{dtms object, as created with \code{dtms}.}
 
-\item{fromvar}{Character (optional), name of variable with starting state. Default is `from`.}
+\item{fromvar}{Character (optional), name of variable in `probs` with starting state. Default is `from`.}
 
-\item{tovar}{Character (optional), name of variable with receiving state. Default is `to`.}
+\item{tovar}{Character (optional), name of variable in `probs` with receiving state. Default is `to`.}
 
-\item{timevar}{Character (optional), name of variable with time scale. Default is `time`.}
+\item{timevar}{Character (optional), name of variable in `probs` with time scale. Default is `time`.}
 
-\item{Pvar}{Character (optional), name of variable with transition probabilities. Default is `P`.}
+\item{Pvar}{Character (optional), name of variable in `probs` with transition probabilities. Default is `P`.}
 
 \item{...}{Further arguments passed to plot().}
 }

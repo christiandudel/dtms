@@ -6,7 +6,7 @@
 #'
 #' @details
 #' The resulting distribution is conditional on ever reaching the subset of
-#' states, as it is not a finite number if the set is never reached. If the
+#' states, as it is not defined if the set is never reached. If the
 #' argument `rescale` is set to FALSE, the distribution will not sum to one but
 #' to the lifetime risk of ever reaching the subset.
 #'

@@ -45,10 +45,10 @@
 #' @param alpha Numeric (optional), if CI=TRUE, what confidence level is used? Default is 0.05.
 #' @param dropvar Logical (optional), should covariate values used for prediction be returned (see details). Default is `TRUE`.
 #' @param fromvar Logical (optional), should covariate values be kept in output? Default is `FALSE`.
-#' @param fromvar Character (optional), name of variable with starting state. Default is `from`.
-#' @param tovar Character (optional), name of variable with receiving state. Default is `to`.
-#' @param timevar Character (optional), name of variable with time scale. Default is `time`.
-#' @param Pvar Character (optional), name of variable with transition probabilities. Default is `P`.
+#' @param fromvar Character (optional), name of variable with starting state in the returned data frame. Default is `from`.
+#' @param tovar Character (optional), name of variable with receiving state in the returned data frame. Default is `to`.
+#' @param timevar Character (optional), name of variable with time scale in the returned data frame. Default is `time`.
+#' @param Pvar Character (optional), name of variable with transition probabilities in the returned data frame. Default is `P`.
 #'
 #' @return A data frame with transition probabilities.
 #' @export

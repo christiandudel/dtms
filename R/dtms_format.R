@@ -30,12 +30,13 @@
 #' ... \tab ... \tab ... \tab ... \tab ... \tab ...
 #' }
 #'
-#' Covariates do not need to be specified and are handled automatically. The
+#' Covariates do not need to be specified and are handled implicitly. The
 #' transition from time t to t+1 takes covariate values from time t. By default
 #' the variable names of the ID variable and the time variable are changed to
 #' `id` and `time`, as the other functions of the package use these as default
 #' names. If renaming the variables is not possible because these variable
-#' names already appear in the data then the original names are used.
+#' names already appear in the data then the original names are used. If
+#' `keepnames=TRUE` the original names for `id` and `time` are kept.
 #'
 #' `dtms_format` by default drops gaps in the data, as no transitions are
 #' observed. For instance, in the following example there is no observation at
@@ -73,10 +74,10 @@
 #'
 #' @param data Data frame in long format.
 #' @param dtms dtms object, as created with \code{dtms}.
-#' @param idvar Character (optional), name of variable with unit ID. Default is "id".
-#' @param timevar Character (optional), name of variable with time scale. Default is "time".
-#' @param statevar Character (optional), name of variable in 'data' with state, default is 'state'.
-#' @param fromvar Character (optional), name of variable with starting state in reshaped data. Default is "from".
+#' @param idvar Character (optional), name of variable in `data` with unit ID. Default is "id".
+#' @param timevar Character (optional), name of variable in `data` with time scale. Default is "time".
+#' @param statevar Character (optional), name of variable in `data` with state, default is 'state'.
+#' @param fromvar Character (optional), name of variable`with starting state in reshaped data. Default is "from".
 #' @param tovar Character (optional), name of variable with receiving state in reshaped data. Default is "to".
 #' @param keepnames Logical (optional), keep original names for id and time variable? Default is FALSE; i.e., not keeping original names.
 #' @param fill Logical, fill implicit missing values with explicit NA? Default is FALSE.

@@ -2,14 +2,14 @@
 #'
 #' @description
 #' Returns a data frame with number of observed transitions (column COUNT),
-#' relative proportion (column PROP), and raw transition probabilities (column
-#' PROB).
+#' relative proportion of a transition relative to all transitions (column
+#' PROP), and raw transition probabilities Pr(j|i) (column PROB).
 #'
 #' @param data Data frame, as created with \code{dtms_format}.
 #' @param dtms dtms object, as created with \code{dtms}.
-#' @param fromvar Character (optional), name of variable with starting state. Default is "from".
-#' @param tovar Character (optional), name of variable with receiving state. Default is "to".
-#' @param weights Character (optional), name of variable with weights. Default is NULL.
+#' @param fromvar Character (optional), name of variable in `data` with starting state. Default is "from".
+#' @param tovar Character (optional), name of variable  in `data`with receiving state. Default is "to".
+#' @param weights Character (optional), name of variablein `data` with weights. Default is NULL.
 #'
 #' @return A data frame
 #' @export

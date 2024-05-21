@@ -6,9 +6,9 @@
 #'
 #' @param probs Data frame with transition probabilities, as created with \code{dtms_transitions}.
 #' @param dtms dtms object, as created with \code{dtms}.
-#' @param fromvar Character (optional), name of variable with starting state. Default is "from".
-#' @param tovar Character (optional), name of variable with receiving state. Default is "to".
-#' @param Pvar Character (optional), name of variable with transition probabilities. Default is `P`.
+#' @param fromvar Character (optional), name of variable in `probs` with starting state. Default is "from".
+#' @param tovar Character (optional), name of variable in `probs` with receiving state. Default is "to".
+#' @param Pvar Character (optional), name of variable in `probs` with transition probabilities. Default is `P`.
 #' @param enforcedeath Logical (optional), make sure that every unit moves to absorbing state after last value of time scale? Default is TRUE.
 #' @param rescale Logical (optional), rescale transition probabilities to sum to 1? Default is TRUE.
 #'

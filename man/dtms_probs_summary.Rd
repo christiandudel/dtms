@@ -18,13 +18,13 @@ dtms_probs_summary(
 \arguments{
 \item{probs}{Object with transition probabilities as created with \code{dtms_transitions}.}
 
-\item{fromvar}{Character (optional), name of variable with starting state. Default is `from`.}
+\item{fromvar}{Character (optional), name of variable with starting state in `probs`. Default is `from`.}
 
-\item{tovar}{Character (optional), name of variable with receiving state. Default is `to`.}
+\item{tovar}{Character (optional), name of variable with receiving state in `probs`. Default is `to`.}
 
-\item{timevar}{Character (optional), name of variable with time scale. Default is `time`.}
+\item{timevar}{Character (optional), name of variable with time scale in `probs`. Default is `time`.}
 
-\item{Pvar}{Character (optional), name of variable with transition probabilities. Default is `P`.}
+\item{Pvar}{Character (optional), name of variable with transition probabilities in `probs`. Default is `P`.}
 
 \item{digits}{Numeric (optional), number of digits to return, default is 6.}
 

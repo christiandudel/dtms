@@ -22,8 +22,8 @@ hrsdata
 }
 \description{
 A simulated dataset of individuals' working trajectories during late working life and retirement
-age. The state space consists of three transient states (Employed,Retired,Inactive)
-and one absorbing state (Dead). The age range covers ages 50 to 99. The data is
+age. The state space consists of three transient states (working; retired; not working)
+and one absorbing state (dead). The age range covers ages 50 to 99. The data is
 simulated using transition probabilities published as part of Dudel & Myrskylä (2017).
 }
 \keyword{datasets}

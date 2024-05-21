@@ -77,16 +77,19 @@ dtms_simulate <- function(matrix,
   # Simulate
   for(i in 1:size) {
 
-  initial_state <- sample(starting,
-                          size=1,
-                          prob=start_distr)
+    # Draw initial state
+    initial_state <- sample(starting,
+                            size=1,
+                            prob=start_distr)
 
-  simseq <- markovchain::rmarkovchain(n = ntime-as.numeric(droplast),
-                                      object = sim,
-                                      t0 = initial_state,
-                                      include.t0=T)
+    # Generate rest of sequence
+    simseq <- markovchain::rmarkovchain(n = ntime-as.numeric(droplast),
+                                        object = sim,
+                                        t0 = initial_state,
+                                        include.t0=T)
 
-  simdata <- rbind(simdata,simseq)
+    # Put in data frame
+    simdata <- rbind(simdata,simseq)
 
   }
 

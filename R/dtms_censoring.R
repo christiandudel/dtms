@@ -22,10 +22,10 @@
 #'
 #' @param data Data frame in transition format, as created with \code{dtms_format}.
 #' @param dtms dtms object, as created with \code{dtms}.
-#' @param fromvar Character (optional), name of variable with starting state. Default is "from".
-#' @param tovar Character (optional), name of variable with receiving state. Default is "to".
-#' @param timevar Character (optional), name of variable with time scale. Default is "time".
-#' @param idvar Character (optional), name of variable with unit ID. Default is "id".
+#' @param fromvar Character (optional), name of variable in `data` with starting state. Default is "from".
+#' @param tovar Character (optional), name of variable in `data` with receiving state. Default is "to".
+#' @param timevar Character (optional), name of variable in `data` with time scale. Default is "time".
+#' @param idvar Character (optional), name of variable in `data` with unit ID. Default is "id".
 #' @param print Logical (optional), print counts? Default is TRUE.
 #' @param printlong Logical (optional), print cross-tabulation? Default is FALSE.
 #' @param add Logical (optional), add indicators to data set? Default is FALSE. If TRUE the data frame specified with \code{data} is returned with added columns.

@@ -19,11 +19,11 @@ dtms_matrix(
 
 \item{dtms}{dtms object, as created with \code{dtms}.}
 
-\item{fromvar}{Character (optional), name of variable with starting state. Default is "from".}
+\item{fromvar}{Character (optional), name of variable in `probs` with starting state. Default is "from".}
 
-\item{tovar}{Character (optional), name of variable with receiving state. Default is "to".}
+\item{tovar}{Character (optional), name of variable in `probs` with receiving state. Default is "to".}
 
-\item{Pvar}{Character (optional), name of variable with transition probabilities. Default is `P`.}
+\item{Pvar}{Character (optional), name of variable in `probs` with transition probabilities. Default is `P`.}
 
 \item{enforcedeath}{Logical (optional), make sure that every unit moves to absorbing state after last value of time scale? Default is TRUE.}
 

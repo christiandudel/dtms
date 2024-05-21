@@ -9,9 +9,9 @@ dtms_simplify(probs, fromvar = "from", tovar = "to", sep = "_")
 \arguments{
 \item{probs}{Object with transition probabilities as created with \code{dtms_transitions}.}
 
-\item{fromvar}{Character (optional), name of variable with starting state. Default is `from`.}
+\item{fromvar}{Character (optional), name of variable in `probs` with starting state. Default is `from`.}
 
-\item{tovar}{Character (optional), name of variable with receiving state. Default is `to`.}
+\item{tovar}{Character (optional), name of variable in `probs` with receiving state. Default is `to`.}
 
 \item{sep}{Character (optional), separator between short state name and value of time scale. Default is `_`.}
 }
