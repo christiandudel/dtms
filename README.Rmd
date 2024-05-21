@@ -143,7 +143,9 @@ kable(dat)
 The first variable, `idvar`, contains a unit identifier. The first four
 rows of the data belong to unit `1`. The variable `timevar` has the 
 values of the timescale. `statevar` shows the state each unit is 
-occupying at a given time. `X` and `Z` are additional covariates. 
+occupying at a given time. Ideally, the states are provided as character 
+strings; numeric values will also work, factors are, however, currently not 
+supported. `X` and `Z` are additional covariates. 
 
 The `dtms` package provides tools to reshape this data into what we call
 transition format. For the example data shown above the transition format looks 
