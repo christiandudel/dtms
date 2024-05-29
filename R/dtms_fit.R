@@ -1,7 +1,7 @@
-#' Estimate constrained discrete-time multistate model
+#' Estimate (un)constrained discrete-time multistate model
 #'
 #' @description
-#' This function estimates a constrained discrete-time multistate model
+#' This function estimates a (un)constrained discrete-time multistate model
 #' using multinomial logistic regression.
 #'
 #' @details
@@ -17,7 +17,8 @@
 #'
 #' If `full=TRUE` a fully interacted model will be estimated in which each
 #' control variable is interacted with all starting states. This is equivalent
-#' to a full multistate model in which each transition is a regression equation.
+#' to a full or unconstrained multistate model in which each transition is a
+#' regression equation.
 #'
 #' The argument `package` is used choose the package used for estimation.
 #' Currently, `VGAM` (default), `nnet`, and `mclogit` are supported.

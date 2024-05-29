@@ -130,6 +130,9 @@ dtms_formula <- function(controls, # Arguments the same as for dtms_fit
                          tovar,
                          full) {
 
+  # If fromvar is NULL (not default, needs explicit call)
+  if(is.null(fromvar)) fromvar <- "1"
+
   # Constrained model
   if(!full) {
     formula <- paste0(tovar,"~",fromvar)
@@ -151,5 +154,55 @@ dtms_formula <- function(controls, # Arguments the same as for dtms_fit
 
   # Return
   return(formula)
+
+}
+
+### Get lagged state variable, accounting for gaps in the data
+dtms_lag <- function(data,
+                     dtms,
+                     lag,
+                     fromvar="from",
+                     idvar="id",
+                     timevar="time") {
+
+  # Make data smaller
+  data <- data[,c(idvar,timevar,fromvar)]
+
+  # Get ID values
+  idvalues <- data[,idvar] |> unique()
+
+  # Full data
+  fulldata <- expand.grid(dtms$timescale,idvalues,
+                          stringsAsFactors=FALSE)
+  names(fulldata) <- c(timevar,idvar)
+
+  # Merge with data
+  fulldata <- merge(fulldata,data,
+                    by=c(idvar,timevar),
+                    all=T)
+
+  # shift state
+  stateshift <- by(fulldata[,fromvar],
+                   fulldata[,idvar],function(x) c(rep(NA,min(lag,length(x))),
+                                                  x[-( max(0,(length(x)-(lag-1))): length(x))]))
+
+  # shift time
+  timeshift <- by(fulldata[,timevar],
+                  fulldata[,idvar],function(x) c(rep(NA,min(lag,length(x))),
+                                                 diff(x,lag=lag) ))
+
+  # Unlist
+  stateshift <- unlist(stateshift)
+  timeshift <- unlist(timeshift)
+
+  # drop wrong spacing
+  stateshift[!timeshift%in%c(NA,dtms$timestep*lag)] <- NA
+
+  # Merge back
+  fulldata$stateshift <- stateshift
+  data <- merge(data,fulldata,by=c(idvar,timevar,fromvar),sort=FALSE)
+
+  # Return
+  return(data$stateshift)
 
 }
