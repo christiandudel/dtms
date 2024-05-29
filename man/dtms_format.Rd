@@ -59,8 +59,12 @@ idvar \tab timevar \tab statevar \tab X \tab Z(t) \cr
 ... \tab ... \tab ... \tab ... \tab ...
 }
 
-If it is not in long format it has to be reshaped. `dtms_format` turns this
-into a data frame in transition format:
+If it is not in long format it has to be reshaped. The state variable
+should provide the states as character strings or numbers; factors are not
+supported.
+
+`dtms_format` turns the data set above into a data frame in transition
+format:
 
 \tabular{llllll}{
 id \tab time \tab fromvar \tab tovar \tab X \tab Z(t) \cr

@@ -115,3 +115,9 @@ example2 <- dtms_last(dtms=simple,
                       rescale=T,
                       total=F)
 summary(example2)
+
+## Check relevance of lags
+lags <- dtms_delta(data=estdata,
+                   dtms=simple,
+                   lags=1:4,
+                   controls="time")

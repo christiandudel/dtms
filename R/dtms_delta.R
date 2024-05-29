@@ -5,11 +5,25 @@
 #' different models, or to assess how including lags changes transition
 #' probabilites.
 #'
+#' @details
+#' Here we describe how to compare two models.
+#'
+#' Here we describe how to compare lags, and how to specify lags with 'lags' and
+#' what lags=NULL does.
+#'
+#' Here we discuss keepNA.
+#'
 #' @param data Data frame in transition format, as created with \code{dtms_format}.
+#' @param dtms dtms object, as created with \code{dtms}.
+#' @param model1 Name of object containing a model estimated with \code{dtms_fit}.
+#' @param model2 Name of object containing a model estimated with \code{dtms_fit}.
+#' @param lags Numeric (optional), vector containing the lags as positive integers.
+#' @param keepNA Logical (optional), keep missing values of lags as predictor value? Default is TRUE.
 #' @param controls Character (optional), names of control variables
 #' @param fromvar Character (optional), name of variable in `data` with starting state. Default is "from".
 #' @param tovar Character (optional), name of variable in `data` with receiving state. Default is "to".
-#' @param formula Formula (optional). If no formula is specified, it will be build from the information specified with controls, fromvar, tovar, and timevar.
+#' @param idvar Character (optional), name of variable in `data` with unit ID. Default is "id".
+#' @param timevar Character (optional), name of variable in `data` with time scale. Default is "time".
 #' @param full Logical (optional), estimate fully interacted model? Default is FALSE.
 #' @param package Character, chooses package for multinomial logistic regression, currently `VGAM`, `nnet`, and `mclogit` are supported. Default is `VGAM`.
 #' @param reference Numeric or character (optional). Reference level of multinomial logistic regression.
@@ -33,8 +47,12 @@
 #' ## Clean
 #' estdata <- dtms_clean(data=estdata,
 #'                       dtms=simple)
-#' ## Fit model
-#' fit <- dtms_delta(data=estdata)
+#' ## Fit models
+#' fit1 <- dtms_fit(data=estdata,controls="time")
+#' fit2 <- dtms_fullfit(data=estdata,controls="time")
+#'
+#' ## Compare
+#' dtms_delta(data=estdata,model1=fit1,model2=fit2)
 
 dtms_delta <- function(data,
                        dtms=NULL,
@@ -129,7 +147,7 @@ dtms_delta <- function(data,
   }
 
   # Keep NA?
-  if(!keepNA) data <- na.omit(data)
+  if(!keepNA) data <- stats::na.omit(data)
 
   # Number of models
   nmodels <- length(formulist)
@@ -155,18 +173,18 @@ dtms_delta <- function(data,
     if(package=="VGAM") {
 
       # Estimate
-      fitlist[count] <- VGAM::vgam(formula=model,
-                                   family=VGAM::multinomial(refLevel=reference),
-                                   data=data,
-                                   weights=weights,
-                                   ...)
+      fitlist[[count]] <- VGAM::vgam(formula=model,
+                                     family=VGAM::multinomial(refLevel=reference),
+                                     data=data,
+                                     weights=weights,
+                                     ...)
     }
 
     #nnet
     if(package=="nnet") {
 
       # Estimate
-      fitlist[count] <- nnet::multinom(formula=model,
+      fitlist[[count]] <- nnet::multinom(formula=model,
                                        data=data,
                                        weights=weights,
                                        ...)
@@ -177,7 +195,7 @@ dtms_delta <- function(data,
     if(package=="mclogit") {
 
       # Estimate
-      fitlist[count] <- mclogit::mblogit(formula=model,
+      fitlist[[count]] <- mclogit::mblogit(formula=model,
                                          data=data,
                                          weights=weights,
                                          ...)
@@ -218,6 +236,6 @@ dtms_delta <- function(data,
   }
 
   # Return results
-  return(fitted)
+  return(result)
 
 }

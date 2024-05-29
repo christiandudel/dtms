@@ -21,9 +21,17 @@ dtms(transient, absorbing, timescale, timestep = NULL, sep = "_")
 Returns an object of class 'dtms'
 }
 \description{
-This function creates an object of class 'dtms' to be passed to other functions of the package. It provides
-an abstract definition of a multistate model, including the names of the transient states, the names of the
-absorbing states, the values the time scale can take, and the step length of the time scale.
+This function creates an object of class 'dtms' to be passed to other
+functions of the package.
+}
+\details{
+\code{dtms} provides an abstract definition of a multistate model, including
+the names of the transient states, the names of the absorbing states, the
+values the time scale can take, and the step length of the time scale.
+
+The names of the absorbing and transient states should be provided as
+character strings. However, numeric values also work. Factors are not
+supported
 }
 \examples{
 dtms(transient=c("A","B"),
