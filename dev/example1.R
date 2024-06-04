@@ -121,3 +121,12 @@ lags <- dtms_delta(data=estdata,
                    dtms=simple,
                    lags=1:4,
                    controls="time")
+
+## Compare full model with constrained model
+fullfit <- dtms_fullfit(data=estdata,
+                controls="time",
+                package="mclogit")
+
+dtms_delta(data=estdata,
+           model1=fit,
+           model2=fullfit)

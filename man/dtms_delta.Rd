@@ -11,7 +11,6 @@ dtms_delta(
   model2 = NULL,
   lags = 1:5,
   controls = NULL,
-  weights = NULL,
   fromvar = "from",
   tovar = "to",
   timevar = "time",
@@ -35,8 +34,6 @@ dtms_delta(
 \item{lags}{Numeric (optional), vector containing the lags as positive integers.}
 
 \item{controls}{Character (optional), names of control variables}
-
-\item{weights}{Character (optional). Name of variable with survey weights.}
 
 \item{fromvar}{Character (optional), name of variable in `data` with starting state. Default is "from".}
 
@@ -62,15 +59,33 @@ Vector of values of delta
 \description{
 Calculates delta, either to compare transition probabilities from two
 different models, or to assess how including lags changes transition
-probabilites.
+probabilities.
 }
 \details{
-Here we describe how to compare two models.
+To compare two different models, the arguments `data`, `model1`, and `model2`
+are needed. `data` specifies the data frame used for predicting transition
+probabilities. It needs to have all variables required for predicting based
+on both `model1` and `model2`. The latter are the names of multistate models
+estimated with \code{dtms_fit}.
 
-Here we describe how to compare lags, and how to specify lags with 'lags' and
-what lags=NULL does.
+To compare how the inclusion of different lags of the state variable affects
+predictions, a model needs to be specified using `data` and `dtms`, as well
+as potential covariates with `controls`. The argument `lags` sets which lags
+are included These are always including lower lags; e.g., a model including
+the state at t-3 also has the state at t-2, at t-1, and at t. All resulting
+models are compared to a model which does not control for the current or any
+past state. If `lags=NULL` the Markov model is comapred to this model not
+accounting for states.
 
-Here we discuss keepNA.
+The argument `keepNA` controls how missing values are handled. These will
+often occur for lagged states. For instance, for the first transition
+observed for an individual, the state at time t is known, but not at time
+t-1. In this case, if a first-order lag is used, this observation could either
+be dropped; or, a missing value of the state at time t-1 could be included
+as a predictor. `keepNA=TRUE` will do the latter, while if `FALSE`, all
+observations with missing states are dropped. This is done for all
+models, irrespective of the lag, such that they are based on exactly the
+same observations.
 }
 \examples{
 ## Define model: Absorbing and transient states, time scale
