@@ -6,7 +6,7 @@
 #'
 #' @details
 #' Percentiles can be specified with the argument \code{probs}. This can be as
-#' many percentiles as required by the use.r If it is not
+#' many percentiles as required by the user. If it is not
 #' specified, the argument \code{alpha} is used instead. \code{alpha} is the
 #' confidence level for the confidence intervals.
 #'
