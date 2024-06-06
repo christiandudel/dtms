@@ -58,6 +58,9 @@ transition probabilities; simulated inference using the bootstrap and the block
 bootstrap for other quantitites.
 - Other features: simulation of Markov chains using the package
 [markovchain](https://cran.r-project.org/web/packages/markovchain).
+- Examples: the package comes with two simulated data sets which are used for
+examples. These are described further below. The input data and code for the 
+simulations is available at https://github.com/christiandudel/dtms_data/.
 
 ## Installation
 
