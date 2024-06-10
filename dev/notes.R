@@ -1,4 +1,3 @@
-#######################
 # Bias corrected bootstrap?
 
 install.packages("coxed")
