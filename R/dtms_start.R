@@ -17,7 +17,7 @@
 #' @param dtms dtms object, as created with \code{dtms}.
 #' @param variables List (optional), a named list with covariate values which are used to restrict the data.
 #' @param start_state Character (optional), name of starting states. If NULL (default) all transient states will be used.
-#' @param start_time Numeric (optional), value of time scale for start. If NULL (default) first value of time scale will be used.
+#' @param start_time Numeric (optional), value of time scale for start. If several values are specified, the average distribution over all these values is calculated. In this case the first value specified with this argument is used to construct the long state name. If NULL (default) first value of time scale will be used.
 #' @param fromvar Character (optional), name of variable in `data` with starting state. Default is `from`.
 #' @param timevar Character (optional), name of variable in `data` with time scale. Default is `time`.
 #'
@@ -64,7 +64,7 @@ dtms_start <- function(data,
   if(is.null(start_time)) start_time <- min(dtms$timescale)
 
   # Starting states, long names
-  starting <- dtms_combine(start_state,start_time,sep=dtms$sep)
+  starting <- dtms_combine(start_state,start_time[1],sep=dtms$sep)
 
   # Restrict data: States and time
   data <- data[data[,fromvar]%in%start_state,]

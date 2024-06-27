@@ -23,7 +23,7 @@ dtms_start(
 
 \item{start_state}{Character (optional), name of starting states. If NULL (default) all transient states will be used.}
 
-\item{start_time}{Numeric (optional), value of time scale for start. If NULL (default) first value of time scale will be used.}
+\item{start_time}{Numeric (optional), value of time scale for start. If several values are specified, the average distribution over all these values is calculated. In this case the first value specified with this argument is used to construct the long state name. If NULL (default) first value of time scale will be used.}
 
 \item{fromvar}{Character (optional), name of variable in `data` with starting state. Default is `from`.}
 
