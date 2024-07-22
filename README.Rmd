@@ -113,7 +113,8 @@ timescale which are specified with a numeric vector. In this example, the time
 scale starts at 0 and stops at 19, with a step length of 1. The step length has 
 to be consistent along the timescale. For instance, a timescale with values 
 0, 1, 2, 4, 5, 7 is not allowed. However, the step length does not need to 
-equal 1; e.g., 0, 2, 4, 6, ... would be fine. 
+equal 1; e.g., 0, 2, 4, 6, ... would be fine. Moreover, using the argument 
+`timestep`, several values for the step length can be specified.
 
 The separator is a character string used to construct what we call 
 long state names. Its default is `_`. Long state names consist of a 
