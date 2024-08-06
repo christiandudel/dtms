@@ -250,7 +250,7 @@ wle_women <- unlist(lapply(bootresults,function(x) x[8,1]))
 quantile(wle_men,probs=c(0.025,0.975))
 quantile(wle_women,probs=c(0.025,0.975))
 
-## Comparing constrained vs unconstrained model: AIC
+## Comparing constrained vs unconstrained model: likelihood ratio test
 ## Restricting to men, because we know the true model
 estdatam <- subset(estdata,Gender==0)
 
@@ -264,9 +264,14 @@ fit2 <- dtms_fullfit(data=estdatam,
                      controls=c("time","time2"),
                      package="mclogit")
 
-AIC(fit1)
-AIC(fit2)
-exp((AIC(fit2)-AIC(fit1))/2)
+llfit1 <- logLik(fit1)
+llfit2 <- logLik(fit2)
+
+lldiff <- -2 * (llfit1[1]-llfit2[1])
+dftest <- attr(llfit2,"df")-attr(llfit1,"df")
+
+pchisq(lldiff, df = dftest, lower.tail = FALSE)
+
 
 ## Comparing constrained vs unconstrained model: results
 probs1 <- dtms_transitions(dtms=hrs,

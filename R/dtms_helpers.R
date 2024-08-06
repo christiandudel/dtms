@@ -206,3 +206,29 @@ dtms_lag <- function(data,
   return(data$stateshift)
 
 }
+
+### Carry over absorbing values
+dtms_carry <- function(x,
+                           dtms) {
+
+  # Check if actuion necessary
+  if(any(x%in%dtms$absorbing)) {
+
+    # Length
+    n <- length(x)
+
+    # From where to carry over
+    whichfirst <- which(x%in%dtms$absorbing)[1]
+
+    # What to carry over
+    whichvalue <- x[whichfirst]
+
+    # Carry over
+    x[whichfirst:n] <- whichvalue
+
+    # Return
+    return(x)
+
+  } else return(x)
+
+}

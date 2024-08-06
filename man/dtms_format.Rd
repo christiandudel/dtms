@@ -12,6 +12,7 @@ dtms_format(
   statevar = "state",
   fromvar = "from",
   tovar = "to",
+  absorbing = TRUE,
   keepnames = FALSE,
   fill = FALSE,
   verbose = TRUE
@@ -31,6 +32,8 @@ dtms_format(
 \item{fromvar}{Character (optional), name of variable`with starting state in reshaped data. Default is "from".}
 
 \item{tovar}{Character (optional), name of variable with receiving state in reshaped data. Default is "to".}
+
+\item{absorbing}{Logical (optional), use first observed absorbing state consistently? See details. Default is TRUE.}
 
 \item{keepnames}{Logical (optional), keep original names for id and time variable? Default is FALSE; i.e., not keeping original names.}
 
@@ -116,6 +119,12 @@ id \tab time \tab fromvar \tab tovar \cr
 1 \tab 3 \tab A \tab NA \cr
 1 \tab 4 \tab NA \tab A \cr
 }
+
+The argument \code{absorbing} controls if the first observed absorbing state
+is carried over to later observations. For instance, if a unit is first
+observed to be in transient state 'A' at time 1, then in absorbing state 'X'
+at time 2, and then in transient state 'A' at time 3, \code{absorbing=TRUE}
+will lead to replacement of the state at time 3 with 'X'.
 }
 \examples{
 # Define model

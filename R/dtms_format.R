@@ -76,6 +76,12 @@
 #' 1 \tab 4 \tab NA \tab A \cr
 #' }
 #'
+#' The argument \code{absorbing} controls if the first observed absorbing state
+#' is carried over to later observations. For instance, if a unit is first
+#' observed to be in transient state 'A' at time 1, then in absorbing state 'X'
+#' at time 2, and then in transient state 'A' at time 3, \code{absorbing=TRUE}
+#' will lead to replacement of the state at time 3 with 'X'.
+#'
 #' @param data Data frame in long format.
 #' @param dtms dtms object, as created with \code{dtms}.
 #' @param idvar Character (optional), name of variable in `data` with unit ID. Default is "id".
@@ -83,6 +89,7 @@
 #' @param statevar Character (optional), name of variable in `data` with state, default is 'state'.
 #' @param fromvar Character (optional), name of variable`with starting state in reshaped data. Default is "from".
 #' @param tovar Character (optional), name of variable with receiving state in reshaped data. Default is "to".
+#' @param absorbing Logical (optional), use first observed absorbing state consistently? See details. Default is TRUE.
 #' @param keepnames Logical (optional), keep original names for id and time variable? Default is FALSE; i.e., not keeping original names.
 #' @param fill Logical, fill implicit missing values with explicit NA? Default is FALSE.
 #' @param verbose Logical, create output to console if changing variable names is not possible? Default is TRUE.
@@ -109,6 +116,7 @@ dtms_format <- function(data,
                         statevar="state",
                         fromvar="from",
                         tovar="to",
+                        absorbing=TRUE,
                         keepnames=FALSE,
                         fill=FALSE,
                         verbose=TRUE) {
@@ -150,6 +158,12 @@ dtms_format <- function(data,
                                   idvar=idvar,
                                   timevar=timevar,
                                   timestep=dtms$timestep)
+
+  # Absorbing states carry forward
+  if(absorbing) {
+    tmp <- tapply(data[,statevar],data[,idvar],function(x) dtms_carry(x=x,dtms=dtms))
+    data[,statevar] <- unlist(tmp)
+  }
 
   # Get next state
   data[,tovar] <- NA
