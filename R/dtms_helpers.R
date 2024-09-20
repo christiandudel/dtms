@@ -90,7 +90,7 @@ dtms_combine <- function(values1,values2,sep) {
 
 ### Check if a short state name is in long name
 dtms_in <- function(vector,name,sep) {
-  res <- lapply(strsplit(vector,split=sep),function(y) any(name%in%y) )
+  res <- lapply(strsplit(vector,split=sep),function(y) any(name%in%y[[1]]) )
   res <- unlist(res)
   return(res)
 }
