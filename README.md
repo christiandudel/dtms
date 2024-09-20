@@ -17,8 +17,14 @@ Peng Li, <li@demogr.mpg.de>
 ## Disclaimer
 
 This package is currently undergoing development and many functions are
-experimental. The content of this repository will change in the future,
-and functions and features might be removed or changed without warning.
+experimental. The package comes with no warranty. The content of this
+repository will change in the future, and functions and features might
+be removed or changed without warning.
+
+## Acknowledgements
+
+We thank Alessandro Feraldi, Aapo Hiilamo, Daniel Schneider, and Angelo
+Lorenti for helpful comments and suggestions.
 
 ## Overview
 
@@ -299,8 +305,8 @@ estdata <- dtms_clean(data=estdata,
                       dtms=hrs)
 #> Dropping  0  rows not in state space
 #> Dropping  0  rows not in time range
-#> Dropping  98287  rows starting or ending in NA
-#> Dropping  51935  rows starting in absorbing state
+#> Dropping  81903  rows starting or ending in NA
+#> Dropping  68319  rows starting in absorbing state
 ```
 
 `dtms_clean()` by default removes transitions starting or ending in a
@@ -988,8 +994,8 @@ estdata <- dtms_clean(data=estdata,
                       dtms=hrs)
 #> Dropping  0  rows not in state space
 #> Dropping  0  rows not in time range
-#> Dropping  98287  rows starting or ending in NA
-#> Dropping  51935  rows starting in absorbing state
+#> Dropping  81903  rows starting or ending in NA
+#> Dropping  68319  rows starting in absorbing state
 
 ## Overview
 summary(estdata)
@@ -1339,25 +1345,25 @@ bootresults <- dtms_boot(data=estdata,
 summary(bootresults)
 #> $`2.5%`
 #>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     12.936890    2.929377 13.22011 29.39262
-#> start:Non-working_50  8.267106    6.174776 13.39903 28.32859
-#> start:Retired_50      8.216776    3.632816 14.79832 27.01372
-#> AVERAGE              12.040366    3.405537 13.33090 29.09102
-#> start:Working_50     11.780555    4.195405 16.06667 32.53117
-#> start:Non-working_50  7.141310    7.999651 16.27627 31.88968
-#> start:Retired_50      7.477531    5.275269 17.64406 30.97709
-#> AVERAGE              10.155374    5.439414 16.20569 32.25906
+#> start:Working_50     12.976715    2.914451 13.19478 29.47780
+#> start:Non-working_50  8.438260    6.310822 13.38264 28.55873
+#> start:Retired_50      8.358650    3.676674 14.71894 27.39833
+#> AVERAGE              12.104192    3.391661 13.30926 29.25899
+#> start:Working_50     11.858174    4.158519 16.03366 32.47831
+#> start:Non-working_50  7.191987    7.915756 16.25840 31.90336
+#> start:Retired_50      7.516123    5.263157 17.62478 30.96166
+#> AVERAGE              10.265335    5.370575 16.17048 32.23007
 #> 
 #> $`97.5%`
 #>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     13.574707    3.267562 13.97038 30.33861
-#> start:Non-working_50  9.042198    6.863353 14.23246 29.58136
-#> start:Retired_50      9.192538    4.229923 15.71485 28.62940
-#> AVERAGE              12.724653    3.784487 14.10153 30.12402
-#> start:Working_50     12.370417    4.557565 17.01956 33.47083
-#> start:Non-working_50  7.778770    8.415377 17.28509 32.96314
-#> start:Retired_50      8.169483    5.738954 18.83700 32.25334
-#> AVERAGE              10.796143    5.850692 17.18248 33.26714
+#> start:Working_50     13.618787    3.258158 13.96905 30.61726
+#> start:Non-working_50  9.101741    6.853509 14.22145 29.82509
+#> start:Retired_50      9.167685    4.178463 15.72567 28.82576
+#> AVERAGE              12.778680    3.766378 14.09306 30.40927
+#> start:Working_50     12.528943    4.555078 16.94806 33.43921
+#> start:Non-working_50  7.860168    8.419311 17.20305 32.85954
+#> start:Retired_50      8.409101    5.721397 18.65668 32.20511
+#> AVERAGE              10.942000    5.795919 17.10875 33.21092
 ```
 
 To use bootstrap methods, the function `dtms_boot()` is called, and

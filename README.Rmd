@@ -27,8 +27,14 @@ Peng Li, li@demogr.mpg.de
 ## Disclaimer
 
 This package is currently undergoing development and many functions are 
-experimental. The content of this repository will change in the future, and 
-functions and features might be removed or changed without warning.
+experimental. The package comes with no warranty. The content of this repository 
+will change in the future, and functions and features might be removed or 
+changed without warning.
+
+## Acknowledgements
+
+We thank Alessandro Feraldi, Aapo Hiilamo, Daniel Schneider, and Angelo Lorenti
+for helpful comments and suggestions.
 
 ## Overview
 
