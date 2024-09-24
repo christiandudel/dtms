@@ -58,7 +58,8 @@ Currently, the following features are implemented:
   transition probabilities; simulated inference using the bootstrap and
   the block bootstrap for other quantitites.
 - Other features: simulation of Markov chains using the package
-  [markovchain](https://cran.r-project.org/web/packages/markovchain).
+  [markovchain](https://cran.r-project.org/web/packages/markovchain);
+  limited support of survey weights.
 - Examples: the package comes with two simulated data sets which are
   used for examples. These are described further below. The input data
   and code for the simulations is available at
@@ -143,6 +144,8 @@ The input data has to be panel data in long format. If your data is not
 in this shape, there are many tools already available in R and its
 extensions which allow you to reshape it. An example of data in long
 format could look like this:
+
+    #> Warning: package 'knitr' was built under R version 4.4.1
 
 | idvar | timevar | statevar | X   | Y    |
 |:------|:--------|:---------|:----|:-----|
@@ -1345,25 +1348,25 @@ bootresults <- dtms_boot(data=estdata,
 summary(bootresults)
 #> $`2.5%`
 #>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     12.976715    2.914451 13.19478 29.47780
-#> start:Non-working_50  8.438260    6.310822 13.38264 28.55873
-#> start:Retired_50      8.358650    3.676674 14.71894 27.39833
-#> AVERAGE              12.104192    3.391661 13.30926 29.25899
-#> start:Working_50     11.858174    4.158519 16.03366 32.47831
-#> start:Non-working_50  7.191987    7.915756 16.25840 31.90336
-#> start:Retired_50      7.516123    5.263157 17.62478 30.96166
-#> AVERAGE              10.265335    5.370575 16.17048 32.23007
+#> start:Working_50     13.073081    2.944343 13.20125 29.49686
+#> start:Non-working_50  8.495021    6.268475 13.38085 28.55164
+#> start:Retired_50      8.499703    3.666840 14.74135 27.22235
+#> AVERAGE              12.144002    3.412986 13.31106 29.23324
+#> start:Working_50     11.814902    4.185666 16.04542 32.47166
+#> start:Non-working_50  7.151377    7.932901 16.27134 31.84883
+#> start:Retired_50      7.498821    5.204613 17.66298 30.80398
+#> AVERAGE              10.197553    5.362645 16.20463 32.21008
 #> 
 #> $`97.5%`
 #>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     13.618787    3.258158 13.96905 30.61726
-#> start:Non-working_50  9.101741    6.853509 14.22145 29.82509
-#> start:Retired_50      9.167685    4.178463 15.72567 28.82576
-#> AVERAGE              12.778680    3.766378 14.09306 30.40927
-#> start:Working_50     12.528943    4.555078 16.94806 33.43921
-#> start:Non-working_50  7.860168    8.419311 17.20305 32.85954
-#> start:Retired_50      8.409101    5.721397 18.65668 32.20511
-#> AVERAGE              10.942000    5.795919 17.10875 33.21092
+#> start:Working_50     13.639988    3.233025 13.93237 30.26327
+#> start:Non-working_50  9.141390    6.699979 14.14576 29.46151
+#> start:Retired_50      9.332043    4.131620 15.63830 28.61460
+#> AVERAGE              12.759447    3.791458 14.04218 30.03837
+#> start:Working_50     12.489503    4.592195 16.94139 33.41564
+#> start:Non-working_50  7.781918    8.406197 17.21597 32.89088
+#> start:Retired_50      8.282613    5.813175 18.66566 32.17712
+#> AVERAGE              10.879439    5.833563 17.10355 33.19583
 ```
 
 To use bootstrap methods, the function `dtms_boot()` is called, and

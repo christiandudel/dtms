@@ -11,7 +11,8 @@ dtms_start(
   start_state = NULL,
   start_time = NULL,
   fromvar = "from",
-  timevar = "time"
+  timevar = "time",
+  weights = NULL
 )
 }
 \arguments{
@@ -28,6 +29,8 @@ dtms_start(
 \item{fromvar}{Character (optional), name of variable in `data` with starting state. Default is `from`.}
 
 \item{timevar}{Character (optional), name of variable in `data` with time scale. Default is `time`.}
+
+\item{weights}{Character (optional). Name of variable with survey weights.}
 }
 \value{
 Returns a table of the starting distribution.

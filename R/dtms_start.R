@@ -20,6 +20,7 @@
 #' @param start_time Numeric (optional), value of time scale for start. If several values are specified, the average distribution over all these values is calculated. In this case the first value specified with this argument is used to construct the long state name. If NULL (default) first value of time scale will be used.
 #' @param fromvar Character (optional), name of variable in `data` with starting state. Default is `from`.
 #' @param timevar Character (optional), name of variable in `data` with time scale. Default is `time`.
+#' @param weights Character (optional). Name of variable with survey weights.
 #'
 #' @return Returns a table of the starting distribution.
 #' @export
@@ -54,7 +55,8 @@ dtms_start <- function(data,
                        start_state=NULL,
                        start_time=NULL,
                        fromvar="from",
-                       timevar="time") {
+                       timevar="time",
+                       weights=NULL) {
 
   # Check
   dtms_proper(dtms)
@@ -77,13 +79,21 @@ dtms_start <- function(data,
   }
 
   # Tabulate
-  tmp <- data[,fromvar] |> table() |> prop.table()
+  if(is.null(weights)) {
+    tab <- data[,fromvar] |> table() |> prop.table()
+  } else {
+    # https://stackoverflow.com/questions/18585977/frequency-tables-with-weighted-data-in-r
+    tmp <- stats::aggregate(x = data[,weights], by = list(data[,fromvar]), FUN = sum)
+    tab <- tmp[,2]
+    names(tab) <- tmp[,1]
+    tab <- prop.table(tab)
+  }
 
   # Match with starting names
   result <- numeric(length(start_state))
   names(result) <- start_state
-  matchnames <- names(tmp)[names(tmp)%in%start_state]
-  result[matchnames] <- tmp[matchnames]
+  matchnames <- names(tab)[names(tab)%in%start_state]
+  result[matchnames] <- tab[matchnames]
 
   # Fix if issues and procude warning
   wrong <- which(result%in%c(NA,NaN,Inf,-Inf))
