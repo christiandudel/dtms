@@ -23,7 +23,8 @@ estdata <- dtms_format(data=simpledata,
                        dtms=simple,
                        idvar="id",
                        timevar="time",
-                       statevar="state")
+                       statevar="state",
+                       steplength=TRUE)
 
 ## Look at reshaped data
 head(estdata)

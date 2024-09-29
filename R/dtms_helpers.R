@@ -51,10 +51,11 @@ dtms_consecutive <- function(data,idvar,timevar,timestep) {
   consecutive <- unlist(consecutive)
 
   # TRUE if equal to timestep, FALSE otherwise
-  consecutive <- consecutive%in%timestep
+  result <- data.frame(true=consecutive%in%timestep,
+                       numeric=consecutive)
 
   # Return
-  return(consecutive)
+  return(result)
 
 }
 

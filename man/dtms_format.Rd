@@ -15,7 +15,9 @@ dtms_format(
   absorbing = TRUE,
   keepnames = FALSE,
   fill = FALSE,
-  verbose = TRUE
+  verbose = TRUE,
+  steplength = FALSE,
+  stepvar = "steplength"
 )
 }
 \arguments{
@@ -37,9 +39,13 @@ dtms_format(
 
 \item{keepnames}{Logical (optional), keep original names for id and time variable? Default is FALSE; i.e., not keeping original names.}
 
-\item{fill}{Logical, fill implicit missing values with explicit NA? Default is FALSE.}
+\item{fill}{Logical (optional), fill implicit missing values with explicit NA? Default is FALSE.}
 
-\item{verbose}{Logical, create output to console if changing variable names is not possible? Default is TRUE.}
+\item{verbose}{Logical (optional), create output to console if changing variable names is not possible? Default is TRUE.}
+
+\item{steplength}{Logical (optional), if true, the time to the next state is returned as a variable. Default is FALSE.}
+
+\item{stepvar}{Character (optional), if `steplength==TRUE`, this specifies the name of the variable with the step length. Default is `steplength`.}
 }
 \value{
 A data set reshaped to transition format

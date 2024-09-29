@@ -91,8 +91,10 @@
 #' @param tovar Character (optional), name of variable with receiving state in reshaped data. Default is "to".
 #' @param absorbing Logical (optional), use first observed absorbing state consistently? See details. Default is TRUE.
 #' @param keepnames Logical (optional), keep original names for id and time variable? Default is FALSE; i.e., not keeping original names.
-#' @param fill Logical, fill implicit missing values with explicit NA? Default is FALSE.
-#' @param verbose Logical, create output to console if changing variable names is not possible? Default is TRUE.
+#' @param fill Logical (optional), fill implicit missing values with explicit NA? Default is FALSE.
+#' @param verbose Logical (optional), create output to console if changing variable names is not possible? Default is TRUE.
+#' @param steplength Logical (optional), if true, the time to the next state is returned as a variable. Default is FALSE.
+#' @param stepvar Character (optional), if `steplength==TRUE`, this specifies the name of the variable with the step length. Default is `steplength`.
 #'
 #' @return A data set reshaped to transition format
 #' @export
@@ -119,7 +121,9 @@ dtms_format <- function(data,
                         absorbing=TRUE,
                         keepnames=FALSE,
                         fill=FALSE,
-                        verbose=TRUE) {
+                        verbose=TRUE,
+                        steplength=FALSE,
+                        stepvar="steplength") {
 
   # Transform to data frame, e.g., if tibble
   if(class(data)[1]!="data.frame") data <- as.data.frame(data)
@@ -168,7 +172,8 @@ dtms_format <- function(data,
   # Get next state
   data[,tovar] <- NA
   tovalues <- c(data[-1,statevar],NA)
-  data[consecutive,tovar] <- tovalues[consecutive]
+  data[consecutive$true,tovar] <- tovalues[consecutive$true]
+  if(steplength) data[consecutive$true,stepvar] <- consecutive$numeric[consecutive$true]
 
   # Rename from variable
   data <- dtms_rename(data,statevar,fromvar)
