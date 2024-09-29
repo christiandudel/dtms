@@ -16,8 +16,8 @@
 #' The step length of the time scale can be a vector with several values, which
 #' allows for unevenly spaced observations. Note, however, that some functions
 #' require one specific value for the step length; e.g.,
-#' \code{dtms_transitions()}. If several values are provided the first value
-#' will be used.
+#' \code{dtms_transitions()}. For such functions, if several values are provided
+#' the first value will be used.
 #'
 #' @param transient A character vector of names of the transient states in the state space.
 #' @param absorbing A character vector of names of the absorbing states in the state space.

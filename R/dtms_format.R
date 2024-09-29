@@ -94,7 +94,7 @@
 #' @param fill Logical (optional), fill implicit missing values with explicit NA? Default is FALSE.
 #' @param verbose Logical (optional), create output to console if changing variable names is not possible? Default is TRUE.
 #' @param steplength Logical (optional), if true, the time to the next state is returned as a variable. Default is FALSE.
-#' @param stepvar Character (optional), if `steplength==TRUE`, this specifies the name of the variable with the step length. Default is `steplength`.
+#' @param stepvar Character (optional), if \code{steplength==TRUE}, this specifies the name of the variable with the step length. Default is `steplength`.
 #'
 #' @return A data set reshaped to transition format
 #' @export
