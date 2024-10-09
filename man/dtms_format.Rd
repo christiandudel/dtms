@@ -45,7 +45,7 @@ dtms_format(
 
 \item{steplength}{Logical (optional), if true, the time to the next state is returned as a variable. Default is FALSE.}
 
-\item{stepvar}{Character (optional), if `steplength==TRUE`, this specifies the name of the variable with the step length. Default is `steplength`.}
+\item{stepvar}{Character (optional), if \code{steplength==TRUE}, this specifies the name of the variable with the step length. Default is `steplength`.}
 }
 \value{
 A data set reshaped to transition format

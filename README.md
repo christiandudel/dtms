@@ -146,6 +146,8 @@ in this shape, there are many tools already available in R and its
 extensions which allow you to reshape it. An example of data in long
 format could look like this:
 
+    #> Warning: package 'knitr' was built under R version 4.4.1
+
 | idvar | timevar | statevar | X   | Y    |
 |:------|:--------|:---------|:----|:-----|
 | 1     | 0       | A        | 2   | 1020 |
@@ -1213,8 +1215,7 @@ firstw <- dtms_first(dtms=hrs,
                      start_distr=Sw)  
 
 summary(firstm)
-#> Warning in dtms_distr_summary(distr = object, ...): NAs durch Umwandlung
-#> erzeugt
+#> Warning in dtms_distr_summary(distr = object, ...): NAs introduced by coercion
 #>                          MEAN VARIANCE       SD MEDIAN      RISK0
 #> start:Working_50     14.25887 42.52401 6.521043   14.5 0.00000000
 #> start:Non-working_50 12.31587 50.90513 7.134783   12.5 0.00000000
@@ -1222,8 +1223,7 @@ summary(firstm)
 #> AVERAGE              13.13712 52.58727 7.251708   13.5 0.06011927
 #> AVERAGE(COND.)       13.97744 44.20558 6.648728   13.5 0.00000000
 summary(firstw)
-#> Warning in dtms_distr_summary(distr = object, ...): NAs durch Umwandlung
-#> erzeugt
+#> Warning in dtms_distr_summary(distr = object, ...): NAs introduced by coercion
 #>                          MEAN VARIANCE       SD MEDIAN      RISK0
 #> start:Working_50     14.10717 40.00302 6.324794   14.5 0.00000000
 #> start:Non-working_50 12.54709 46.49749 6.818907   12.5 0.00000000
@@ -1245,8 +1245,7 @@ last1w <- dtms_last(dtms=hrs,
                     start_distr=Sw) 
 
 summary(last1m)
-#> Warning in dtms_distr_summary(distr = object, ...): NAs durch Umwandlung
-#> erzeugt
+#> Warning in dtms_distr_summary(distr = object, ...): NAs introduced by coercion
 #>                          MEAN VARIANCE       SD MEDIAN RISK0
 #> start:Working_50     16.50265 76.98676 8.774210   15.5    NA
 #> start:Non-working_50 18.02302 68.14259 8.254853   17.5    NA
@@ -1254,8 +1253,7 @@ summary(last1m)
 #> AVERAGE              16.73797 75.91238 8.712771   16.5    NA
 #> AVERAGE(COND.)       17.97027 68.47754 8.275116   17.5    NA
 summary(last1w)
-#> Warning in dtms_distr_summary(distr = object, ...): NAs durch Umwandlung
-#> erzeugt
+#> Warning in dtms_distr_summary(distr = object, ...): NAs introduced by coercion
 #>                          MEAN VARIANCE       SD MEDIAN RISK0
 #> start:Working_50     16.15218 87.76963 9.368545   15.5    NA
 #> start:Non-working_50 18.31738 77.06422 8.778623   17.5    NA
@@ -1277,8 +1275,7 @@ last2w <- dtms_last(dtms=hrs,
                     start_distr=Sw)  
 
 summary(last2m)
-#> Warning in dtms_distr_summary(distr = object, ...): NAs durch Umwandlung
-#> erzeugt
+#> Warning in dtms_distr_summary(distr = object, ...): NAs introduced by coercion
 #>                          MEAN VARIANCE       SD MEDIAN RISK0
 #> start:Working_50     18.74988 64.64429 8.040167   18.5    NA
 #> start:Non-working_50 19.72542 56.78054 7.535286   19.5    NA
@@ -1286,8 +1283,7 @@ summary(last2m)
 #> AVERAGE              18.90783 63.49802 7.968565   18.5    NA
 #> AVERAGE(COND.)       19.69276 57.06149 7.553906   19.5    NA
 summary(last2w)
-#> Warning in dtms_distr_summary(distr = object, ...): NAs durch Umwandlung
-#> erzeugt
+#> Warning in dtms_distr_summary(distr = object, ...): NAs introduced by coercion
 #>                          MEAN VARIANCE       SD MEDIAN RISK0
 #> start:Working_50     19.33660 73.65218 8.582085   19.5    NA
 #> start:Non-working_50 20.62023 63.26114 7.953687   20.5    NA
@@ -1353,25 +1349,25 @@ bootresults <- dtms_boot(data=estdata,
 summary(bootresults)
 #> $`2.5%`
 #>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     12.917107    2.917873 13.15863 29.61623
-#> start:Non-working_50  8.337041    6.250899 13.29512 28.54320
-#> start:Retired_50      8.325909    3.676215 14.58733 27.27000
-#> AVERAGE              12.054927    3.423590 13.27397 29.33340
-#> start:Working_50     11.766989    4.163393 16.13783 32.57030
-#> start:Non-working_50  7.110299    7.937349 16.37730 31.95315
-#> start:Retired_50      7.497053    5.236900 17.84936 31.03953
-#> AVERAGE              10.073396    5.392724 16.30101 32.31683
+#> start:Working_50     12.894162    2.947343 13.09014 29.38913
+#> start:Non-working_50  8.387594    6.227711 13.34551 28.47562
+#> start:Retired_50      8.401014    3.651839 14.68429 27.26149
+#> AVERAGE              12.086334    3.423755 13.21312 29.18940
+#> start:Working_50     11.736183    4.231757 16.06648 32.61937
+#> start:Non-working_50  7.068019    7.987851 16.29499 32.00034
+#> start:Retired_50      7.498495    5.305261 17.67697 31.01121
+#> AVERAGE              10.054362    5.417610 16.23108 32.36458
 #> 
 #> $`97.5%`
 #>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     13.714587    3.241471 13.87587 30.29996
-#> start:Non-working_50  9.224344    6.769515 14.12364 29.53975
-#> start:Retired_50      9.282265    4.150135 15.74779 28.59286
-#> AVERAGE              12.891891    3.806492 13.98333 30.09855
-#> start:Working_50     12.374899    4.556082 16.92869 33.52438
-#> start:Non-working_50  7.766811    8.438250 17.17827 32.95892
-#> start:Retired_50      8.099598    5.711885 18.73249 32.12974
-#> AVERAGE              10.749852    5.864441 17.09290 33.26716
+#> start:Working_50     13.546539    3.230641 13.93666 30.30448
+#> start:Non-working_50  9.000754    6.765881 14.14532 29.48352
+#> start:Retired_50      9.137961    4.186399 15.72888 28.70158
+#> AVERAGE              12.714209    3.790094 14.06622 30.08073
+#> start:Working_50     12.350433    4.586234 16.83136 33.29143
+#> start:Non-working_50  7.705777    8.499953 17.11100 32.76570
+#> start:Retired_50      8.171809    5.850099 18.64002 32.12614
+#> AVERAGE              10.761900    5.880621 16.99921 33.05788
 ```
 
 To use bootstrap methods, the function `dtms_boot()` is called, and

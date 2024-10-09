@@ -36,8 +36,8 @@ supported
 The step length of the time scale can be a vector with several values, which
 allows for unevenly spaced observations. Note, however, that some functions
 require one specific value for the step length; e.g.,
-\code{dtms_transitions()}. If several values are provided the first value
-will be used.
+\code{dtms_transitions()}. For such functions, if several values are provided
+the first value will be used.
 }
 \examples{
 dtms(transient=c("A","B"),
