@@ -886,7 +886,7 @@ summary(last2w)
 ```
 
 ```{r example2boot}
-# Bootstrap example (not run)
+# Bootstrap example 
 bootfun <- function(data,dtms) {
  
    fit <- dtms_fit(data=data,

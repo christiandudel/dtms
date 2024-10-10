@@ -1293,7 +1293,7 @@ summary(last2w)
 ```
 
 ``` r
-# Bootstrap example (not run)
+# Bootstrap example 
 bootfun <- function(data,dtms) {
  
    fit <- dtms_fit(data=data,
@@ -1349,25 +1349,25 @@ bootresults <- dtms_boot(data=estdata,
 summary(bootresults)
 #> $`2.5%`
 #>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     12.894162    2.947343 13.09014 29.38913
-#> start:Non-working_50  8.387594    6.227711 13.34551 28.47562
-#> start:Retired_50      8.401014    3.651839 14.68429 27.26149
-#> AVERAGE              12.086334    3.423755 13.21312 29.18940
-#> start:Working_50     11.736183    4.231757 16.06648 32.61937
-#> start:Non-working_50  7.068019    7.987851 16.29499 32.00034
-#> start:Retired_50      7.498495    5.305261 17.67697 31.01121
-#> AVERAGE              10.054362    5.417610 16.23108 32.36458
+#> start:Working_50     13.011186    2.952761 13.05994 29.44667
+#> start:Non-working_50  8.369412    6.273975 13.20393 28.50348
+#> start:Retired_50      8.325156    3.690349 14.48432 27.22123
+#> AVERAGE              12.138547    3.437718 13.16973 29.19654
+#> start:Working_50     11.862846    4.189186 16.14290 32.62564
+#> start:Non-working_50  7.209385    7.900663 16.39790 32.01303
+#> start:Retired_50      7.590951    5.159748 17.78090 31.01295
+#> AVERAGE              10.181973    5.354843 16.30949 32.38474
 #> 
 #> $`97.5%`
 #>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     13.546539    3.230641 13.93666 30.30448
-#> start:Non-working_50  9.000754    6.765881 14.14532 29.48352
-#> start:Retired_50      9.137961    4.186399 15.72888 28.70158
-#> AVERAGE              12.714209    3.790094 14.06622 30.08073
-#> start:Working_50     12.350433    4.586234 16.83136 33.29143
-#> start:Non-working_50  7.705777    8.499953 17.11100 32.76570
-#> start:Retired_50      8.171809    5.850099 18.64002 32.12614
-#> AVERAGE              10.761900    5.880621 16.99921 33.05788
+#> start:Working_50     13.600425    3.227157 13.88470 30.40595
+#> start:Non-working_50  9.115583    6.701629 14.17134 29.53311
+#> start:Retired_50      9.146677    4.099650 15.72129 28.60204
+#> AVERAGE              12.737625    3.744569 13.99629 30.19014
+#> start:Working_50     12.335588    4.610401 16.93400 33.44232
+#> start:Non-working_50  7.764134    8.467395 17.17939 32.90198
+#> start:Retired_50      8.173521    5.725906 18.77388 32.13603
+#> AVERAGE              10.736344    5.859161 17.09053 33.22976
 ```
 
 To use bootstrap methods, the function `dtms_boot()` is called, and
