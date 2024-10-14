@@ -210,9 +210,9 @@ dtms_lag <- function(data,
 
 ### Carry over absorbing values
 dtms_carry <- function(x,
-                           dtms) {
+                       dtms) {
 
-  # Check if actuion necessary
+  # Check if action necessary
   if(any(x%in%dtms$absorbing)) {
 
     # Length

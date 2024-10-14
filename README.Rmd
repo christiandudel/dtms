@@ -14,7 +14,7 @@ knitr::opts_chunk$set(
 # dtms - An R package for discrete-time multistate models
 
 <!-- badges: start -->
-[![R-CMD-check](https://github.com/r-lib/usethis/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/r-lib/usethis/actions/workflows/R-CMD-check.yaml)
+[![R-CMD-check](https://github.com/christiandudel/dtms/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/christiandudel/dtms/actions/workflows/R-CMD-check.yaml)
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 <!-- badges: end -->
 
@@ -34,7 +34,7 @@ changed without warning.
 ## Acknowledgements
 
 We thank Alessandro Feraldi, Aapo Hiilamo, Daniel Schneider, and Angelo Lorenti
-for helpful comments and suggestions.
+for helpful comments and suggestions. All errors remain our own.
 
 ## Overview
 

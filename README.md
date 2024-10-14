@@ -3,7 +3,7 @@
 
 <!-- badges: start -->
 
-[![R-CMD-check](https://github.com/r-lib/usethis/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/r-lib/usethis/actions/workflows/R-CMD-check.yaml)
+[![R-CMD-check](https://github.com/christiandudel/dtms/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/christiandudel/dtms/actions/workflows/R-CMD-check.yaml)
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 <!-- badges: end -->
@@ -24,7 +24,7 @@ be removed or changed without warning.
 ## Acknowledgements
 
 We thank Alessandro Feraldi, Aapo Hiilamo, Daniel Schneider, and Angelo
-Lorenti for helpful comments and suggestions.
+Lorenti for helpful comments and suggestions. All errors remain our own.
 
 ## Overview
 
@@ -1349,25 +1349,25 @@ bootresults <- dtms_boot(data=estdata,
 summary(bootresults)
 #> $`2.5%`
 #>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     13.011186    2.952761 13.05994 29.44667
-#> start:Non-working_50  8.369412    6.273975 13.20393 28.50348
-#> start:Retired_50      8.325156    3.690349 14.48432 27.22123
-#> AVERAGE              12.138547    3.437718 13.16973 29.19654
-#> start:Working_50     11.862846    4.189186 16.14290 32.62564
-#> start:Non-working_50  7.209385    7.900663 16.39790 32.01303
-#> start:Retired_50      7.590951    5.159748 17.78090 31.01295
-#> AVERAGE              10.181973    5.354843 16.30949 32.38474
+#> start:Working_50     13.019393    2.907151 13.03008 29.51594
+#> start:Non-working_50  8.394321    6.146345 13.24405 28.55315
+#> start:Retired_50      8.418307    3.690403 14.57818 27.29616
+#> AVERAGE              12.075661    3.408503 13.16011 29.26459
+#> start:Working_50     11.732160    4.183869 16.09944 32.50521
+#> start:Non-working_50  7.100880    7.942669 16.30970 31.84037
+#> start:Retired_50      7.406992    5.171655 17.70533 30.74484
+#> AVERAGE              10.112699    5.390519 16.24615 32.23541
 #> 
 #> $`97.5%`
 #>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     13.600425    3.227157 13.88470 30.40595
-#> start:Non-working_50  9.115583    6.701629 14.17134 29.53311
-#> start:Retired_50      9.146677    4.099650 15.72129 28.60204
-#> AVERAGE              12.737625    3.744569 13.99629 30.19014
-#> start:Working_50     12.335588    4.610401 16.93400 33.44232
-#> start:Non-working_50  7.764134    8.467395 17.17939 32.90198
-#> start:Retired_50      8.173521    5.725906 18.77388 32.13603
-#> AVERAGE              10.736344    5.859161 17.09053 33.22976
+#> start:Working_50     13.660149    3.213491 13.86091 30.25675
+#> start:Non-working_50  9.231133    6.743277 14.13195 29.46866
+#> start:Retired_50      9.195723    4.122247 15.69114 28.41830
+#> AVERAGE              12.765635    3.784261 13.97406 30.03251
+#> start:Working_50     12.351565    4.533595 17.04346 33.55908
+#> start:Non-working_50  7.729572    8.393432 17.31277 33.00802
+#> start:Retired_50      8.136129    5.744371 18.83405 32.28797
+#> AVERAGE              10.701848    5.826533 17.19410 33.31671
 ```
 
 To use bootstrap methods, the function `dtms_boot()` is called, and
