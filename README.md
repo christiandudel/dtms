@@ -23,8 +23,9 @@ be removed or changed without warning.
 
 ## Acknowledgements
 
-We thank Alessandro Feraldi, Aapo Hiilamo, Daniel Schneider, and Angelo
-Lorenti for helpful comments and suggestions. All errors remain our own.
+We thank Alessandro Feraldi, Aapo Hiilamo, Daniel Schneider, Donata
+Stonkute, and Angelo Lorenti for helpful comments and suggestions. All
+errors remain our own.
 
 ## Overview
 
@@ -35,9 +36,9 @@ and then applying methods for absorbing Markov chains.
 
 Currently, the following features are implemented:
 
-- Data handling: functions for reshaping data, cleaning data, general
-  descriptive statistics, and descriptive information on different types
-  of censoring.
+- Data handling: functions for reshaping data, editing states, cleaning
+  data, general descriptive statistics, and descriptive information on
+  different types of censoring.
 - Estimation of transition probabilities: builds on existing R packages,
   allowing for semiparametric estimation
   ([VGAM](https://cran.r-project.org/web/packages/VGAM)), random effects
@@ -1349,25 +1350,25 @@ bootresults <- dtms_boot(data=estdata,
 summary(bootresults)
 #> $`2.5%`
 #>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     13.019393    2.907151 13.03008 29.51594
-#> start:Non-working_50  8.394321    6.146345 13.24405 28.55315
-#> start:Retired_50      8.418307    3.690403 14.57818 27.29616
-#> AVERAGE              12.075661    3.408503 13.16011 29.26459
-#> start:Working_50     11.732160    4.183869 16.09944 32.50521
-#> start:Non-working_50  7.100880    7.942669 16.30970 31.84037
-#> start:Retired_50      7.406992    5.171655 17.70533 30.74484
-#> AVERAGE              10.112699    5.390519 16.24615 32.23541
+#> start:Working_50     12.946904    2.927615 13.18437 29.38753
+#> start:Non-working_50  8.364985    6.270463 13.34105 28.38067
+#> start:Retired_50      8.336368    3.663367 14.49838 27.08087
+#> AVERAGE              12.046573    3.383916 13.28481 29.13100
+#> start:Working_50     11.714407    4.164647 16.12206 32.61287
+#> start:Non-working_50  7.087647    7.863929 16.35414 31.95105
+#> start:Retired_50      7.490092    5.203149 17.76730 30.99017
+#> AVERAGE              10.119096    5.315627 16.27439 32.34414
 #> 
 #> $`97.5%`
 #>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     13.660149    3.213491 13.86091 30.25675
-#> start:Non-working_50  9.231133    6.743277 14.13195 29.46866
-#> start:Retired_50      9.195723    4.122247 15.69114 28.41830
-#> AVERAGE              12.765635    3.784261 13.97406 30.03251
-#> start:Working_50     12.351565    4.533595 17.04346 33.55908
-#> start:Non-working_50  7.729572    8.393432 17.31277 33.00802
-#> start:Retired_50      8.136129    5.744371 18.83405 32.28797
-#> AVERAGE              10.701848    5.826533 17.19410 33.31671
+#> start:Working_50     13.515592    3.258229 13.85693 30.29823
+#> start:Non-working_50  9.103562    6.726516 14.09522 29.51247
+#> start:Retired_50      9.159718    4.052111 15.62897 28.51461
+#> AVERAGE              12.677305    3.790985 13.97326 30.10712
+#> start:Working_50     12.395790    4.577067 17.11299 33.52474
+#> start:Non-working_50  7.746498    8.370886 17.39674 32.98055
+#> start:Retired_50      8.208546    5.684295 18.94471 32.04125
+#> AVERAGE              10.853551    5.814931 17.27781 33.28394
 ```
 
 To use bootstrap methods, the function `dtms_boot()` is called, and

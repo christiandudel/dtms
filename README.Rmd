@@ -33,8 +33,9 @@ changed without warning.
 
 ## Acknowledgements
 
-We thank Alessandro Feraldi, Aapo Hiilamo, Daniel Schneider, and Angelo Lorenti
-for helpful comments and suggestions. All errors remain our own.
+We thank Alessandro Feraldi, Aapo Hiilamo, Daniel Schneider, Donata Stonkute, 
+and Angelo Lorenti for helpful comments and suggestions. All errors remain 
+our own.
 
 ## Overview
 
@@ -45,9 +46,9 @@ then applying methods for absorbing Markov chains.
 
 Currently, the following features are implemented:
 
-- Data handling: functions for reshaping data, cleaning data, general 
-descriptive statistics, and descriptive information on different types of 
-censoring. 
+- Data handling: functions for reshaping data, editing states, cleaning data, 
+general descriptive statistics, and descriptive information on different types 
+of censoring. 
 - Estimation of transition probabilities: builds on existing R packages, allowing 
 for semiparametric estimation ([VGAM](https://cran.r-project.org/web/packages/VGAM)), 
 random effects and random intercepts ([mclogit](https://cran.r-project.org/web/packages/mclogit)), 
