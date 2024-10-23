@@ -233,3 +233,58 @@ dtms_carry <- function(x,
   } else return(x)
 
 }
+
+### Move states forward
+dtms_forward_help <- function(x, # Vector of states
+                              state, # State name as character string
+                              overwrite="missing", # transient, missing, absorbing, all
+                              dtms=NULL) {
+
+  # Length
+  nx <- length(x)
+
+  # Find appearances
+  whichfirst <- which(x==state)
+
+  # Stop if no appearance
+  if(length(whichfirst)==0) return(x)
+
+  # Get first
+  whichfirst <- min(whichfirst)
+
+  # Replace: both missing and absorbing
+  if(overwrite=="all") {
+    dochange <- whichfirst:nx
+    x[dochange] <- state
+  }
+
+  # Replace: only missing
+  if(overwrite=="missing") {
+    whichabsorbing <- which(x%in%dtms$absorbing)
+    dochange <- whichfirst:nx
+    dochange <- setdiff(dochange,whichabsorbing)
+    x[dochange] <- state
+  }
+
+  # Replace: only absorbing
+  if(overwrite=="absorbing") {
+    whichmissing <- which(is.na(x))
+    dochange <- whichfirst:nx
+    dochange <- setdiff(dochange,whichmissing)
+    x[dochange] <- state
+  }
+
+  # Do not replace absorbing or missing
+  if(overwrite=="transient") {
+    whichabsorbing <- which(x%in%dtms$absorbing)
+    whichmissing <- which(is.na(x))
+    whichboth <- union(whichabsorbing,whichmissing)
+    dochange <- whichfirst:nx
+    dochange <- setdiff(dochange,whichboth)
+    x[dochange] <- state
+  }
+
+  # Return
+  return(x)
+
+}
