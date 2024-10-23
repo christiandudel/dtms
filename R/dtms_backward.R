@@ -1,12 +1,12 @@
-#' Carry states forward
+#' Carry states backward
 #'
 #' @description
-#' This function carries a state forward after its first occurrence.
+#' This function carries a state backward after its first occurrence.
 #'
 #' @details
-#' This function carries a state forward after its first occurrence.
-#' For instance, carrying the state "A" forward in the sequence `B, B, A, B, B`
-#' will give the sequence `B, B, A, A, A`.
+#' This function carries a state backward after its first occurrence.
+#' For instance, carrying the state "A" backward in the sequence `B, B, A, B, B`
+#' will give the sequence `A, A, A, B, B`.
 #'
 #' The data frame has to be in long format and not in transition format; i.e.,
 #' usually, this function will be applied before \code{dtms_format}.
@@ -14,19 +14,19 @@
 #' The argument `overwrite` is used to control what type of information is
 #' replaced. If `overwrite==transient`, then only transient states are replaced
 #' while missing values and absorbing states remain unchanged. For example,
-#' carrying forward state "A" in the sequence `B, B, A, B, NA, X, X` with X
-#' being an absorbing state will give `B, B, A, A, NA, X, X`. If
+#' carrying backward state "A" in the sequence `B, NA, B, B, X, A, X` with X
+#' being an absorbing state will give `A, NA, A, A, X, A, X`. If
 #' `overwrite==missing` then in addition to transient states also missing values
-#' are replaced and for the example sequence `B, B, A, A, A, X, X` would be
+#' are replaced and for the example sequence `A, A, A, A, X, A, X` would be
 #' returned. If `overwrite==absorbing` then in addition to transient states
 #' absorbing states will be replaced; for the example sequence the result would
-#' be `B, B, A, A, NA, A, A`. Finally, if `overwrite==all` then all values in
-#' the sequence will be replaced: `B, B, A, A, A, A, A`.
+#' be `A, NA, A, A, A, A, X`. Finally, if `overwrite==all` then all values in
+#' the sequence will be replaced: `A, A, A, A, A, A, X`.
 #'
-#' @seealso [func(dtms_backward)]
+#' @seealso [func(dtms_forward)]
 #'
 #' @param data A data frame in long format.
-#' @param state Character, name of the state to be carried forward.
+#' @param state Character, name of the state to be carried backward
 #' @param statevar Character (optional), name of the variable in the data frame with the states. Default is "state".
 #' @param idvar Character (optional), name of variable with unit ID. Default is `id`.
 #' @param timevar Character (optional), name of variable with time scale. Default is `time`.
@@ -41,13 +41,13 @@
 #' absorbing="X",
 #' timescale=0:19)
 #'
-#' dtms_forward(data=simpledata,
+#' dtms_backward(data=simpledata,
 #'              state="A",
 #'              dtms=simple,
 #'              overwrite="transient")
 
 
-dtms_forward <- function(data,
+dtms_backward <- function(data,
                          state,
                          statevar="state",
                          idvar="id",
@@ -66,7 +66,7 @@ dtms_forward <- function(data,
   # Apply helper
   tmp <- tapply(data[,statevar],
                 data[,idvar],
-                function(x) dtms_forward_help(x=x,
+                function(x) dtms_backward_help(x=x,
                                               state=state,
                                               overwrite=overwrite,
                                               dtms=dtms))
