@@ -6,7 +6,7 @@
 \title{simpledata: an artificial dataset with abstract trajectories}
 \format{
 `simpledata`
-A data frame with 10,529 rows and 3 columns:
+A data frame with 12,179 rows and 3 columns:
 \describe{
   \item{id}{Identifier of the units}
   \item{time}{Time scale}

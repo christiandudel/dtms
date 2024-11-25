@@ -75,8 +75,8 @@ simulations is available at https://github.com/christiandudel/dtms_data/.
 
 You can install the development version of `dtms` like this:
 ``` r
-library(devtools)
-install_github("christiandudel/dtms")
+install.packages("remotes)
+remotes::install_github("christiandudel/dtms")
 ```
 
 ## General workflow and basic principles

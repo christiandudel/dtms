@@ -72,8 +72,8 @@ Currently, the following features are implemented:
 You can install the development version of `dtms` like this:
 
 ``` r
-library(devtools)
-install_github("christiandudel/dtms")
+install.packages("remotes)
+remotes::install_github("christiandudel/dtms")
 ```
 
 ## General workflow and basic principles
@@ -1350,25 +1350,25 @@ bootresults <- dtms_boot(data=estdata,
 summary(bootresults)
 #> $`2.5%`
 #>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     12.946904    2.927615 13.18437 29.38753
-#> start:Non-working_50  8.364985    6.270463 13.34105 28.38067
-#> start:Retired_50      8.336368    3.663367 14.49838 27.08087
-#> AVERAGE              12.046573    3.383916 13.28481 29.13100
-#> start:Working_50     11.714407    4.164647 16.12206 32.61287
-#> start:Non-working_50  7.087647    7.863929 16.35414 31.95105
-#> start:Retired_50      7.490092    5.203149 17.76730 30.99017
-#> AVERAGE              10.119096    5.315627 16.27439 32.34414
+#> start:Working_50     13.071488    2.910760 13.13311 29.29079
+#> start:Non-working_50  8.478556    6.237244 13.32895 28.31474
+#> start:Retired_50      8.571643    3.697626 14.78010 27.11610
+#> AVERAGE              12.211009    3.394600 13.26482 29.03144
+#> start:Working_50     11.763176    4.200854 16.14544 32.50941
+#> start:Non-working_50  7.110086    7.935607 16.31169 31.92190
+#> start:Retired_50      7.455320    5.098127 17.75951 31.01116
+#> AVERAGE              10.139424    5.391872 16.27815 32.23000
 #> 
 #> $`97.5%`
 #>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     13.515592    3.258229 13.85693 30.29823
-#> start:Non-working_50  9.103562    6.726516 14.09522 29.51247
-#> start:Retired_50      9.159718    4.052111 15.62897 28.51461
-#> AVERAGE              12.677305    3.790985 13.97326 30.10712
-#> start:Working_50     12.395790    4.577067 17.11299 33.52474
-#> start:Non-working_50  7.746498    8.370886 17.39674 32.98055
-#> start:Retired_50      8.208546    5.684295 18.94471 32.04125
-#> AVERAGE              10.853551    5.814931 17.27781 33.28394
+#> start:Working_50     13.597377    3.169328 13.96293 30.43487
+#> start:Non-working_50  9.094305    6.641456 14.24729 29.64821
+#> start:Retired_50      9.207125    4.065230 15.75910 28.69742
+#> AVERAGE              12.736971    3.715823 14.09557 30.23908
+#> start:Working_50     12.361810    4.551899 16.99314 33.43818
+#> start:Non-working_50  7.770075    8.488123 17.27872 32.91101
+#> start:Retired_50      8.215118    5.800420 18.91121 32.16486
+#> AVERAGE              10.737475    5.795964 17.16600 33.22184
 ```
 
 To use bootstrap methods, the function `dtms_boot()` is called, and
