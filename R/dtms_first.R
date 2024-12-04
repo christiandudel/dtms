@@ -21,7 +21,10 @@
 #' happen at the middle of the time interval; and the option `end` assumes
 #' that instead transitions happen at the end of the interval. In this latter
 #' case the distribution of the time spent in a state is equivalent to the
-#' number of visits to that state.
+#' number of visits to that state. The calculation takes the step length of
+#' the time scale into account as specified by the `dtms` object. If the
+#' step length is not one fixed value, the first entry of `dtms$timestep` will
+#' be used.
 #'
 #' If a distribution of the starting states is provided with `start_distr` the
 #' output table has two additional rows. One shows the distribution
@@ -157,8 +160,8 @@ dtms_first  <- function(matrix,
   rownames(result) <- paste0("start:",starting)
 
   # Get times right (interval length, mid interval vs end of interval)
-  steps <- past_steps*dtms$timestep
-  if(method=="end") steps[-1] <- steps[-1]+0.5*dtms$timestep
+  steps <- past_steps*dtms$timestep[1]
+  if(method=="end") steps[-1] <- steps[-1]+0.5*dtms$timestep[1]
   colnames(result) <- paste(steps)[-length(steps)]
 
   # Average
