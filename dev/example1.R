@@ -96,7 +96,7 @@ dtms_expectancy(dtms=simple,
                 matrix=Tp,
                 start_distr=S)
 
-## Lifetime risk
+## Niave lifetime risk
 dtms_risk(dtms=simple,
           matrix=Tp,
           risk="A")
@@ -131,3 +131,35 @@ fullfit <- dtms_fullfit(data=estdata,
 dtms_delta(data=estdata,
            model1=fit,
            model2=fullfit)
+
+## Correct lifetime risk
+riskdata <- dtms_forward(data=simpledata,
+                         state="A",
+                         dtms=simple)
+
+riskdata <- dtms_format(data=riskdata,
+                       dtms=simple,
+                       idvar="id",
+                       timevar="time",
+                       statevar="state",
+                       steplength=TRUE)
+
+
+riskfit <- dtms_fit(data=riskdata,
+                controls="time",
+                package="mclogit")
+
+riskprobs <- dtms_transitions(dtms=simple,
+                          controls=list(time=simple$timescale),
+                          model = riskfit)
+
+riskTp <- dtms_matrix(dtms=simple,
+                  probs=riskprobs)
+
+dtms_risk(dtms=simple,
+          matrix=Tp,
+          risk="A")
+
+dtms_risk(dtms=simple,
+          matrix=riskTp,
+          risk="A")

@@ -147,7 +147,7 @@ in this shape, there are many tools already available in R and its
 extensions which allow you to reshape it. An example of data in long
 format could look like this:
 
-    #> Warning: package 'knitr' was built under R version 4.4.1
+    #> Warning: Paket 'knitr' wurde unter R Version 4.4.2 erstellt
 
 | idvar | timevar | statevar | X   | Y    |
 |:------|:--------|:---------|:----|:-----|
@@ -741,7 +741,72 @@ time units.
 The result of the call of `dtms_risk()` above is the lifetime risk of
 ever reaching state A depending on the starting state. Obviously, when
 starting in state A at time 0, this risk amounts to 1. When starting in
-state B, the risk is also very high and around 97%.
+state B, the risk is also very high and around 97%. Note that for
+consistent estimation the Markov assumption has to hold. `dtms_risk()`
+can also be used such that the Markov assumption is not necessary, but
+this requires additional data editing and use of the function
+`dtms_forward()`. In particular, the latter function can be used to
+create an absorbing set which contains the state of interest plus all
+absorbing states. This has to be done early in the data editing process,
+and all following editing and estimation steps have to be repeated:
+
+``` r
+riskdata <- dtms_forward(data=simpledata,
+                         state="A",
+                         dtms=simple)
+
+riskdata <- dtms_format(data=riskdata,
+                       dtms=simple,
+                       idvar="id",
+                       timevar="time",
+                       statevar="state",
+                       steplength=TRUE)
+#> Kept original name for time 
+#> Kept original name for id
+
+
+riskfit <- dtms_fit(data=riskdata,
+                controls="time",
+                package="mclogit")
+#> 
+#> Iteration 1 - deviance = 7050.355 - criterion = 0.581805
+#> Iteration 2 - deviance = 5963.42 - criterion = 0.1822641
+#> Iteration 3 - deviance = 5669.152 - criterion = 0.05190602
+#> Iteration 4 - deviance = 5575.976 - criterion = 0.01670986
+#> Iteration 5 - deviance = 5542.374 - criterion = 0.006062637
+#> Iteration 6 - deviance = 5530.065 - criterion = 0.002225857
+#> Iteration 7 - deviance = 5525.541 - criterion = 0.0008186344
+#> Iteration 8 - deviance = 5523.878 - criterion = 0.0003011458
+#> Iteration 9 - deviance = 5523.266 - criterion = 0.0001107837
+#> Iteration 10 - deviance = 5523.041 - criterion = 4.07548e-05
+#> Iteration 11 - deviance = 5522.958 - criterion = 1.499282e-05
+#> Iteration 12 - deviance = 5522.928 - criterion = 5.515548e-06
+#> Iteration 13 - deviance = 5522.916 - criterion = 2.029056e-06
+#> Iteration 14 - deviance = 5522.912 - criterion = 7.464479e-07
+#> Iteration 15 - deviance = 5522.911 - criterion = 2.746028e-07
+#> Iteration 16 - deviance = 5522.91 - criterion = 1.010207e-07
+#> Iteration 17 - deviance = 5522.91 - criterion = 3.716345e-08
+#> Iteration 18 - deviance = 5522.91 - criterion = 1.367167e-08
+#> Iteration 19 - deviance = 5522.91 - criterion = 5.029526e-09
+#> converged
+
+riskprobs <- dtms_transitions(dtms=simple,
+                          controls=list(time=simple$timescale),
+                          model = riskfit)
+
+riskTp <- dtms_matrix(dtms=simple,
+                  probs=riskprobs)
+
+dtms_risk(dtms=simple,
+          matrix=riskTp,
+          risk="A")
+#>       A_0       B_0 
+#> 1.0000000 0.9703459
+```
+
+In this example, the results of the naive use of `dtms_risk()` and the
+more elaborate approach using `dtms_forward()` lead to very similar
+results.
 
 It is also possible to calculate state expectancies conditional on
 values of the time scale. For this, a single transient state has to be
@@ -1216,7 +1281,8 @@ firstw <- dtms_first(dtms=hrs,
                      start_distr=Sw)  
 
 summary(firstm)
-#> Warning in dtms_distr_summary(distr = object, ...): NAs introduced by coercion
+#> Warning in dtms_distr_summary(distr = object, ...): NAs durch Umwandlung
+#> erzeugt
 #>                          MEAN VARIANCE       SD MEDIAN      RISK0
 #> start:Working_50     14.25887 42.52401 6.521043   14.5 0.00000000
 #> start:Non-working_50 12.31587 50.90513 7.134783   12.5 0.00000000
@@ -1224,7 +1290,8 @@ summary(firstm)
 #> AVERAGE              13.13712 52.58727 7.251708   13.5 0.06011927
 #> AVERAGE(COND.)       13.97744 44.20558 6.648728   13.5 0.00000000
 summary(firstw)
-#> Warning in dtms_distr_summary(distr = object, ...): NAs introduced by coercion
+#> Warning in dtms_distr_summary(distr = object, ...): NAs durch Umwandlung
+#> erzeugt
 #>                          MEAN VARIANCE       SD MEDIAN      RISK0
 #> start:Working_50     14.10717 40.00302 6.324794   14.5 0.00000000
 #> start:Non-working_50 12.54709 46.49749 6.818907   12.5 0.00000000
@@ -1246,7 +1313,8 @@ last1w <- dtms_last(dtms=hrs,
                     start_distr=Sw) 
 
 summary(last1m)
-#> Warning in dtms_distr_summary(distr = object, ...): NAs introduced by coercion
+#> Warning in dtms_distr_summary(distr = object, ...): NAs durch Umwandlung
+#> erzeugt
 #>                          MEAN VARIANCE       SD MEDIAN RISK0
 #> start:Working_50     16.50265 76.98676 8.774210   15.5    NA
 #> start:Non-working_50 18.02302 68.14259 8.254853   17.5    NA
@@ -1254,7 +1322,8 @@ summary(last1m)
 #> AVERAGE              16.73797 75.91238 8.712771   16.5    NA
 #> AVERAGE(COND.)       17.97027 68.47754 8.275116   17.5    NA
 summary(last1w)
-#> Warning in dtms_distr_summary(distr = object, ...): NAs introduced by coercion
+#> Warning in dtms_distr_summary(distr = object, ...): NAs durch Umwandlung
+#> erzeugt
 #>                          MEAN VARIANCE       SD MEDIAN RISK0
 #> start:Working_50     16.15218 87.76963 9.368545   15.5    NA
 #> start:Non-working_50 18.31738 77.06422 8.778623   17.5    NA
@@ -1276,7 +1345,8 @@ last2w <- dtms_last(dtms=hrs,
                     start_distr=Sw)  
 
 summary(last2m)
-#> Warning in dtms_distr_summary(distr = object, ...): NAs introduced by coercion
+#> Warning in dtms_distr_summary(distr = object, ...): NAs durch Umwandlung
+#> erzeugt
 #>                          MEAN VARIANCE       SD MEDIAN RISK0
 #> start:Working_50     18.74988 64.64429 8.040167   18.5    NA
 #> start:Non-working_50 19.72542 56.78054 7.535286   19.5    NA
@@ -1284,7 +1354,8 @@ summary(last2m)
 #> AVERAGE              18.90783 63.49802 7.968565   18.5    NA
 #> AVERAGE(COND.)       19.69276 57.06149 7.553906   19.5    NA
 summary(last2w)
-#> Warning in dtms_distr_summary(distr = object, ...): NAs introduced by coercion
+#> Warning in dtms_distr_summary(distr = object, ...): NAs durch Umwandlung
+#> erzeugt
 #>                          MEAN VARIANCE       SD MEDIAN RISK0
 #> start:Working_50     19.33660 73.65218 8.582085   19.5    NA
 #> start:Non-working_50 20.62023 63.26114 7.953687   20.5    NA
@@ -1292,6 +1363,108 @@ summary(last2w)
 #> AVERAGE              19.73733 70.75006 8.411305   19.5    NA
 #> AVERAGE(COND.)       20.59143 63.49278 7.968235   20.5    NA
 ```
+
+As already noted in the first example, consistent estimation of the
+lifetime risk of reaching a state requires a different setup:
+
+``` r
+riskdata <- dtms_forward(data=hrsdata,
+                         state="Retired",
+                         dtms=hrs,
+                         idvar="ID",
+                         timevar="Age",
+                         statevar="State")
+
+riskdata <- dtms_format(data=riskdata,
+                       dtms=hrs,
+                       idvar="ID",
+                       timevar="Age",
+                       statevar="State")
+
+riskdata <- dtms_clean(data=riskdata,
+                       dtms=hrs)
+#> Dropping  0  rows not in state space
+#> Dropping  0  rows not in time range
+#> Dropping  59719  rows starting or ending in NA
+#> Dropping  68319  rows starting in absorbing state
+
+riskdata$time2 <- riskdata$time^2
+
+riskfit <- dtms_fit(data=riskdata,
+                controls=c("Gender","time","time2"),
+                package="mclogit")
+#> 
+#> Iteration 1 - deviance = 85313.14 - criterion = 0.9818182
+#> Iteration 2 - deviance = 73020.05 - criterion = 0.168352
+#> Iteration 3 - deviance = 69050.83 - criterion = 0.05748246
+#> Iteration 4 - deviance = 67662.88 - criterion = 0.02051277
+#> Iteration 5 - deviance = 67164.12 - criterion = 0.007425986
+#> Iteration 6 - deviance = 66917.11 - criterion = 0.003691294
+#> Iteration 7 - deviance = 66805.61 - criterion = 0.001668999
+#> Iteration 8 - deviance = 66778.81 - criterion = 0.0004012381
+#> Iteration 9 - deviance = 66769.97 - criterion = 0.0001324614
+#> Iteration 10 - deviance = 66766.72 - criterion = 4.865712e-05
+#> Iteration 11 - deviance = 66765.53 - criterion = 1.789762e-05
+#> Iteration 12 - deviance = 66765.09 - criterion = 6.583857e-06
+#> Iteration 13 - deviance = 66764.93 - criterion = 2.422023e-06
+#> Iteration 14 - deviance = 66764.87 - criterion = 8.910069e-07
+#> Iteration 15 - deviance = 66764.84 - criterion = 3.277824e-07
+#> Iteration 16 - deviance = 66764.84 - criterion = 1.205843e-07
+#> Iteration 17 - deviance = 66764.83 - criterion = 4.436046e-08
+#> Iteration 18 - deviance = 66764.83 - criterion = 1.63193e-08
+#> Iteration 19 - deviance = 66764.83 - criterion = 6.003535e-09
+#> converged
+
+riskprobs <- dtms_transitions(dtms=hrs,
+                            model = riskfit,
+                            controls = list(Gender=0,
+                                            time  =50:98,
+                                            time2 =(50:98)^2),
+                            CI=TRUE)
+
+
+riskTp <- dtms_matrix(dtms=hrs,
+                      probs=riskprobs)
+
+dtms_risk(dtms=hrs,
+          matrix=riskTp,
+          risk="Retired")
+#>     Working_50 Non-working_50     Retired_50 
+#>      0.8861793      0.8951606      1.0000000
+```
+
+To use bootstrap methods, the function `dtms_boot()` is called, and
+results can be conveniently viewed using `summary()`. The function
+`dtms_boot()` needs data in transition format (argument `data`) and a
+`dtms` object. The argument `method` is used to choose the bootstrap
+method; here, we use the block bootstrap. In case the block bootstrap is
+used the argument `idvar` needs to be specified, which takes the name of
+the variable with the unit identifier. The argument `rep` sets the
+number of bootstrap replications, and the argument `parallel` can be set
+to `TRUE` to enable parallel processing using the packages
+[foreach](https://cran.r-project.org/web/packages/foreach) and
+[doParallel](https://cran.r-project.org/web/packages/doParallel).
+
+Further required is the argument `fun`. This is a function which should
+have two arguments, one called `data` and one called `dtms`. These are
+used to pass the corresponding arguments from `dtms_boot()`. Other than
+this the function can contain anything the user is interested in. In the
+example above, the function is called `bootfun`. It estimates transition
+probabilities, puts them into a transition matrix, and then calculates
+state expectancies. Each bootstrap replication of the data is passed to
+the function specified by `fun`, and the results are saved in a list
+with as many entries as there are replications. The format of each entry
+of the list obviously depends on the definition of `fun`.
+
+The result of calling `summary(bootresults)` is by default a list with
+two entries which together provide the bootstrap percentiles, i.e., the
+bootstrap confidence interval. The entries have the structure defined by
+`fun`. In this example, the upper half of each entry are the state
+expectancies for men, while the lower half are the state expectancies
+for women. For instance, the 95% confidence interval for the average
+lifetime spent working ranges from 12.17 years to 12.67 years for men.
+The returned percentiles can be controlled with the arguments of the
+summary method, `dtms_boot_summary()`.
 
 ``` r
 # Bootstrap example 
@@ -1350,56 +1523,23 @@ bootresults <- dtms_boot(data=estdata,
 summary(bootresults)
 #> $`2.5%`
 #>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     13.071488    2.910760 13.13311 29.29079
-#> start:Non-working_50  8.478556    6.237244 13.32895 28.31474
-#> start:Retired_50      8.571643    3.697626 14.78010 27.11610
-#> AVERAGE              12.211009    3.394600 13.26482 29.03144
-#> start:Working_50     11.763176    4.200854 16.14544 32.50941
-#> start:Non-working_50  7.110086    7.935607 16.31169 31.92190
-#> start:Retired_50      7.455320    5.098127 17.75951 31.01116
-#> AVERAGE              10.139424    5.391872 16.27815 32.23000
+#> start:Working_50     12.992422    2.906526 13.02964 29.40140
+#> start:Non-working_50  8.442450    6.235260 13.24058 28.46245
+#> start:Retired_50      8.391669    3.683065 14.63825 27.23631
+#> AVERAGE              12.081367    3.408749 13.14243 29.14675
+#> start:Working_50     11.769791    4.179658 16.05152 32.57546
+#> start:Non-working_50  7.136234    7.898564 16.27969 32.00754
+#> start:Retired_50      7.541150    5.194747 17.74703 31.07489
+#> AVERAGE              10.141719    5.364961 16.19951 32.33876
 #> 
 #> $`97.5%`
 #>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     13.597377    3.169328 13.96293 30.43487
-#> start:Non-working_50  9.094305    6.641456 14.24729 29.64821
-#> start:Retired_50      9.207125    4.065230 15.75910 28.69742
-#> AVERAGE              12.736971    3.715823 14.09557 30.23908
-#> start:Working_50     12.361810    4.551899 16.99314 33.43818
-#> start:Non-working_50  7.770075    8.488123 17.27872 32.91101
-#> start:Retired_50      8.215118    5.800420 18.91121 32.16486
-#> AVERAGE              10.737475    5.795964 17.16600 33.22184
+#> start:Working_50     13.734838    3.245037 13.96204 30.36489
+#> start:Non-working_50  9.275605    6.693964 14.21747 29.57895
+#> start:Retired_50      9.369191    4.111591 15.80541 28.62511
+#> AVERAGE              12.853655    3.821563 14.10148 30.14246
+#> start:Working_50     12.332389    4.566727 16.92546 33.40401
+#> start:Non-working_50  7.734707    8.405128 17.20321 32.88440
+#> start:Retired_50      8.150699    5.728033 18.65892 32.06437
+#> AVERAGE              10.789388    5.799987 17.08793 33.18495
 ```
-
-To use bootstrap methods, the function `dtms_boot()` is called, and
-results can be conveniently viewed using `summary()`. The function
-`dtms_boot()` needs data in transition format (argument `data`) and a
-`dtms` object. The argument `method` is used to choose the bootstrap
-method; here, we use the block bootstrap. In case the block bootstrap is
-used the argument `idvar` needs to be specified, which takes the name of
-the variable with the unit identifier. The argument `rep` sets the
-number of bootstrap replications, and the argument `parallel` can be set
-to `TRUE` to enable parallel processing using the packages
-[foreach](https://cran.r-project.org/web/packages/foreach) and
-[doParallel](https://cran.r-project.org/web/packages/doParallel).
-
-Further required is the argument `fun`. This is a function which should
-have two arguments, one called `data` and one called `dtms`. These are
-used to pass the corresponding arguments from `dtms_boot()`. Other than
-this the function can contain anything the user is interested in. In the
-example above, the function is called `bootfun`. It estimates transition
-probabilities, puts them into a transition matrix, and then calculates
-state expectancies. Each bootstrap replication of the data is passed to
-the function specified by `fun`, and the results are saved in a list
-with as many entries as there are replications. The format of each entry
-of the list obviously depends on the definition of `fun`.
-
-The result of calling `summary(bootresults)` is by default a list with
-two entries which together provide the bootstrap percentiles, i.e., the
-bootstrap confidence interval. The entries have the structure defined by
-`fun`. In this example, the upper half of each entry are the state
-expectancies for men, while the lower half are the state expectancies
-for women. For instance, the 95% confidence interval for the average
-lifetime spent working ranges from 12.17 years to 12.67 years for men.
-The returned percentiles can be controlled with the arguments of the
-summary method, `dtms_boot_summary()`.

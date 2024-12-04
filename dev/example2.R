@@ -295,3 +295,41 @@ dtms_expectancy(dtms=hrs,
 
 dtms_expectancy(dtms=hrs,
                 matrix=T2)
+
+## Correct lifetime risk
+riskdata <- dtms_forward(data=hrsdata,
+                         state="Retired",
+                         dtms=hrs,
+                         idvar="ID",
+                         timevar="Age",
+                         statevar="State")
+
+riskdata <- dtms_format(data=riskdata,
+                       dtms=hrs,
+                       idvar="ID",
+                       timevar="Age",
+                       statevar="State")
+
+riskdata <- dtms_clean(data=riskdata,
+                       dtms=hrs)
+
+riskdata$time2 <- riskdata$time^2
+
+riskfit <- dtms_fit(data=riskdata,
+                controls=c("Gender","time","time2"),
+                package="mclogit")
+
+riskprobs <- dtms_transitions(dtms=hrs,
+                            model = riskfit,
+                            controls = list(Gender=0,
+                                            time  =50:98,
+                                            time2 =(50:98)^2),
+                            CI=TRUE)
+
+
+riskTp <- dtms_matrix(dtms=hrs,
+                      probs=riskprobs)
+
+dtms_risk(dtms=hrs,
+          matrix=riskTp,
+          risk="Retired")

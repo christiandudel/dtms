@@ -589,7 +589,43 @@ time units.
 The result of the call of `dtms_risk()` above is the lifetime risk of ever
 reaching state A depending on the starting state. Obviously, when starting in 
 state A at time 0, this risk amounts to 1. When starting in state B, the risk is
-also very high and around 97%. 
+also very high and around 97%. Note that for consistent estimation the
+Markov assumption has to hold. `dtms_risk()` can also be used such that the 
+Markov assumption is not necessary, but this requires additional data editing
+and use of the function `dtms_forward()`. In particular, the latter function
+can be used to create an absorbing set which contains the state of interest
+plus all absorbing states. This has to be done early in the data editing 
+process, and all following editing and estimation steps have to be repeated:
+```{r example1-risk}
+riskdata <- dtms_forward(data=simpledata,
+                         state="A",
+                         dtms=simple)
+
+riskdata <- dtms_format(data=riskdata,
+                       dtms=simple,
+                       idvar="id",
+                       timevar="time",
+                       statevar="state",
+                       steplength=TRUE)
+
+
+riskfit <- dtms_fit(data=riskdata,
+                controls="time",
+                package="mclogit")
+
+riskprobs <- dtms_transitions(dtms=simple,
+                          controls=list(time=simple$timescale),
+                          model = riskfit)
+
+riskTp <- dtms_matrix(dtms=simple,
+                  probs=riskprobs)
+
+dtms_risk(dtms=simple,
+          matrix=riskTp,
+          risk="A")
+```
+In this example, the results of the naive use of `dtms_risk()` and the more 
+elaborate approach using `dtms_forward()` lead to very similar results. 
 
 It is also possible to calculate state expectancies conditional on values of
 the time scale. For this, a single transient state has to be specified for 
@@ -886,6 +922,77 @@ summary(last2m)
 summary(last2w)
 ```
 
+As already noted in the first example, consistent estimation of the lifetime
+risk of reaching a state requires a different setup:
+```{r example2lifetime}
+riskdata <- dtms_forward(data=hrsdata,
+                         state="Retired",
+                         dtms=hrs,
+                         idvar="ID",
+                         timevar="Age",
+                         statevar="State")
+
+riskdata <- dtms_format(data=riskdata,
+                       dtms=hrs,
+                       idvar="ID",
+                       timevar="Age",
+                       statevar="State")
+
+riskdata <- dtms_clean(data=riskdata,
+                       dtms=hrs)
+
+riskdata$time2 <- riskdata$time^2
+
+riskfit <- dtms_fit(data=riskdata,
+                controls=c("Gender","time","time2"),
+                package="mclogit")
+
+riskprobs <- dtms_transitions(dtms=hrs,
+                            model = riskfit,
+                            controls = list(Gender=0,
+                                            time  =50:98,
+                                            time2 =(50:98)^2),
+                            CI=TRUE)
+
+
+riskTp <- dtms_matrix(dtms=hrs,
+                      probs=riskprobs)
+
+dtms_risk(dtms=hrs,
+          matrix=riskTp,
+          risk="Retired")
+```
+
+To use bootstrap methods, the function `dtms_boot()` is called, and results can
+be conveniently viewed using `summary()`. The function `dtms_boot()` needs
+data in transition format (argument `data`) and a `dtms` object. The argument 
+`method` is used to choose the bootstrap method; here, we use the block 
+bootstrap. In case the block bootstrap is used the argument `idvar` needs to be
+specified, which takes the name of the variable with the unit identifier. The 
+argument `rep` sets the number of bootstrap replications, and the argument
+`parallel` can be set to `TRUE` to enable parallel processing using the
+packages [foreach](https://cran.r-project.org/web/packages/foreach) and 
+[doParallel](https://cran.r-project.org/web/packages/doParallel).
+
+Further required is the argument `fun`. This is a function which should have two 
+arguments, one called `data` and one called `dtms`. These are used to pass the
+corresponding arguments from `dtms_boot()`. Other than this the function can 
+contain anything the user is interested in. In the example above, the function
+is called `bootfun`. It estimates transition probabilities, puts them into a
+transition matrix, and then calculates state expectancies. Each bootstrap 
+replication of the data is passed to the function specified by `fun`, and 
+the results are saved in a list with as many entries as there are replications.
+The format of each entry of the list obviously depends on the definition of 
+`fun`. 
+
+The result of calling `summary(bootresults)` is by default a list with two 
+entries which together provide the bootstrap percentiles, i.e., the bootstrap
+confidence interval. The entries have the structure defined by `fun`. In this
+example, the upper half of each entry are the state expectancies for men, while
+the lower half are the state expectancies for women. For instance, the 95%
+confidence interval for the average lifetime spent working ranges from
+12.17 years to 12.67 years for men. The returned percentiles can be controlled
+with the arguments of the summary method, `dtms_boot_summary()`.
 ```{r example2boot}
 # Bootstrap example 
 bootfun <- function(data,dtms) {
@@ -942,33 +1049,4 @@ bootresults <- dtms_boot(data=estdata,
 
 summary(bootresults)
 ```
-To use bootstrap methods, the function `dtms_boot()` is called, and results can
-be conveniently viewed using `summary()`. The function `dtms_boot()` needs
-data in transition format (argument `data`) and a `dtms` object. The argument 
-`method` is used to choose the bootstrap method; here, we use the block 
-bootstrap. In case the block bootstrap is used the argument `idvar` needs to be
-specified, which takes the name of the variable with the unit identifier. The 
-argument `rep` sets the number of bootstrap replications, and the argument
-`parallel` can be set to `TRUE` to enable parallel processing using the
-packages [foreach](https://cran.r-project.org/web/packages/foreach) and 
-[doParallel](https://cran.r-project.org/web/packages/doParallel).
 
-Further required is the argument `fun`. This is a function which should have two 
-arguments, one called `data` and one called `dtms`. These are used to pass the
-corresponding arguments from `dtms_boot()`. Other than this the function can 
-contain anything the user is interested in. In the example above, the function
-is called `bootfun`. It estimates transition probabilities, puts them into a
-transition matrix, and then calculates state expectancies. Each bootstrap 
-replication of the data is passed to the function specified by `fun`, and 
-the results are saved in a list with as many entries as there are replications.
-The format of each entry of the list obviously depends on the definition of 
-`fun`. 
-
-The result of calling `summary(bootresults)` is by default a list with two 
-entries which together provide the bootstrap percentiles, i.e., the bootstrap
-confidence interval. The entries have the structure defined by `fun`. In this
-example, the upper half of each entry are the state expectancies for men, while
-the lower half are the state expectancies for women. For instance, the 95%
-confidence interval for the average lifetime spent working ranges from
-12.17 years to 12.67 years for men. The returned percentiles can be controlled
-with the arguments of the summary method, `dtms_boot_summary()`.
