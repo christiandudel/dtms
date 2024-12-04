@@ -163,3 +163,11 @@ dtms_risk(dtms=simple,
 dtms_risk(dtms=simple,
           matrix=riskTp,
           risk="A")
+
+## Duration indicator
+
+test <- dtms_duration(data=estdata,
+              dtms=simple,
+              newname="test")
+
+head(test)

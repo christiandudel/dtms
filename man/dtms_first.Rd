@@ -62,7 +62,10 @@ transitions can be selected with the option `mid` and imply that transitions
 happen at the middle of the time interval; and the option `end` assumes
 that instead transitions happen at the end of the interval. In this latter
 case the distribution of the time spent in a state is equivalent to the
-number of visits to that state.
+number of visits to that state. The calculation takes the step length of
+the time scale into account as specified by the `dtms` object. If the
+step length is not one fixed value, the first entry of `dtms$timestep` will
+be used.
 
 If a distribution of the starting states is provided with `start_distr` the
 output table has two additional rows. One shows the distribution

@@ -340,3 +340,40 @@ dtms_backward_help <- function(x, # Vector of states
   return(x)
 
 }
+
+### Duration helper
+dtms_duration_help <- function(states, # Vector of states of one unit
+                               time, # Vector of time scale values
+                               dtms, # dtms object
+                               ignoreleft) { # TRUE or FALSE, as per dtms_duration
+
+  # Get lengths
+  lengths <- rle(states)
+  duration <- unlist(lapply(lengths$length, function(x) 1:x))
+
+  # Change if leftcensoring
+  if(!ignoreleft & time[1]==dtms$timescale[1]) duration[1:lengths[1]] <- NA
+
+  # Remove gaps
+  timediffs <- diff(time)
+  timediffs <- c(FALSE,!timediffs%in%dtms$timestep)
+
+  # Go through all gaps
+  if(any(timediffs)) {
+
+    # Find entries
+    dropwhich <- which(timediffs)
+    cumlengths <- cumsum(lengths$length)
+    cumwhere <- c(1,cumlengths[-length(cumlengths)]+1)
+
+    # Loop and replace
+    for(drop in dropwhich) {
+      whichlengths <- which(cumlengths>=drop)[c(1,2)]
+      from <- drop
+      to <- cumwhere[whichlengths[2]]-1
+      if(is.na(to)) to <- cumwhere[whichlengths[1]]
+      duration[from:to] <- NA
+    }
+  }
+
+}
