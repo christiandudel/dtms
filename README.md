@@ -36,9 +36,10 @@ and then applying methods for absorbing Markov chains.
 
 Currently, the following features are implemented:
 
-- Data handling: functions for reshaping data, editing states, cleaning
-  data, general descriptive statistics, and descriptive information on
-  different types of censoring.
+- Data handling: functions for reshaping data, cleaning data, editing
+  states, generating indicators of duration and censoring, general
+  descriptive statistics, and descriptive information on different types
+  of censoring.
 - Estimation of transition probabilities: builds on existing R packages,
   allowing for semiparametric estimation
   ([VGAM](https://cran.r-project.org/web/packages/VGAM)), random effects
@@ -1523,23 +1524,23 @@ bootresults <- dtms_boot(data=estdata,
 summary(bootresults)
 #> $`2.5%`
 #>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     12.992422    2.906526 13.02964 29.40140
-#> start:Non-working_50  8.442450    6.235260 13.24058 28.46245
-#> start:Retired_50      8.391669    3.683065 14.63825 27.23631
-#> AVERAGE              12.081367    3.408749 13.14243 29.14675
-#> start:Working_50     11.769791    4.179658 16.05152 32.57546
-#> start:Non-working_50  7.136234    7.898564 16.27969 32.00754
-#> start:Retired_50      7.541150    5.194747 17.74703 31.07489
-#> AVERAGE              10.141719    5.364961 16.19951 32.33876
+#> start:Working_50     12.927171    2.930409 13.06750 29.42829
+#> start:Non-working_50  8.377691    6.306791 13.25127 28.46348
+#> start:Retired_50      8.329249    3.738485 14.57443 27.03051
+#> AVERAGE              12.024595    3.418983 13.17720 29.17172
+#> start:Working_50     11.847637    4.205578 16.15414 32.55705
+#> start:Non-working_50  7.134919    7.931143 16.40721 31.97414
+#> start:Retired_50      7.419209    5.255238 17.77583 31.08955
+#> AVERAGE              10.157002    5.408285 16.31124 32.29875
 #> 
 #> $`97.5%`
 #>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     13.734838    3.245037 13.96204 30.36489
-#> start:Non-working_50  9.275605    6.693964 14.21747 29.57895
-#> start:Retired_50      9.369191    4.111591 15.80541 28.62511
-#> AVERAGE              12.853655    3.821563 14.10148 30.14246
-#> start:Working_50     12.332389    4.566727 16.92546 33.40401
-#> start:Non-working_50  7.734707    8.405128 17.20321 32.88440
-#> start:Retired_50      8.150699    5.728033 18.65892 32.06437
-#> AVERAGE              10.789388    5.799987 17.08793 33.18495
+#> start:Working_50     13.520122    3.247147 14.04154 30.35561
+#> start:Non-working_50  9.095530    6.765351 14.28980 29.55887
+#> start:Retired_50      9.191787    4.175273 15.74506 28.53725
+#> AVERAGE              12.685929    3.799476 14.15191 30.14615
+#> start:Working_50     12.354917    4.546654 17.00954 33.40198
+#> start:Non-working_50  7.758359    8.446628 17.31423 32.89884
+#> start:Retired_50      8.170065    5.720216 18.87768 32.09702
+#> AVERAGE              10.788999    5.802635 17.18389 33.18791
 ```
