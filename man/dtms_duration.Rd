@@ -8,27 +8,55 @@ dtms_duration(
   data,
   dtms,
   newname = "duration",
-  fromvar = "from",
+  statevar = "state",
   idvar = "id",
   timevar = "time",
-  ignoreleft = TRUE
+  ignoreleft = TRUE,
+  vector = FALSE
 )
 }
 \arguments{
-\item{data}{A data set in transition format}
+\item{data}{A data frame in long format.}
 
 \item{dtms}{dtms object, as created with \code{dtms}.}
 
-\item{newname}{Name of new variable}
+\item{newname}{Character (optional), name of new variable if data set is returned. Default is "duration".}
 
-\item{fromvar}{Character (optional), name of variable in `data` with starting state. Default is "from".}
+\item{statevar}{Character (optional), name of the variable in the data frame with the states. Default is `state`.}
 
-\item{idvar}{Character (optional), name of variable in `data` with unit ID. Default is "id".}
+\item{idvar}{Character (optional), name of variable with unit ID. Default is `id`.}
 
-\item{timevar}{Character (optional), name of variable in `data` with time scale. Default is "time".}
+\item{timevar}{Character (optional), name of variable with time scale. Default is `time`.}
 
 \item{ignoreleft}{Logical (optional), ignore left censoring and start counting at the first observation? Default is TRUE.}
+
+\item{vector}{Logical (optional), return vector (if TRUE) or data frame (if FALSE). Default is FALSE}
+}
+\value{
+The data frame specified with `data` with an additional column (if `vector=FALSE`) or a vector (if `vector=TRUE`).
 }
 \description{
-Generate variable with duration
+This function creates a variable which measures the duration in a state.
+}
+\details{
+Counting starts with 1 and the first occurence in a state. For instance,
+if for an unit the sequence of states A, A, A, B, B, A, C is observed,
+the duration variable would include 1, 2, 3, 1, 2, 1, 1.
+
+The argument `ignoreleft` controls how left censoring is handled; i.e., what
+happens when for a unit there are no observations at the beginning of the
+time scale. If `TRUE`, left censoring is ignored, and counting starts at
+the first observation for a unit. For instance, if the time scale starts
+at t=0, but the first observation for a unit is at time t=2, and the
+sequence of states is again A, A, A, B, B, A, C, then `ignoreleft=TRUE`
+returns 1, 2, 3, 1, 2, 1, 1. If `ignoreleft=FALSE`, then the function
+would return NA, NA, NA, 1, 2, 1, 1.
+}
+\examples{
+simple <- dtms(transient=c("A","B"),
+absorbing="X",
+timescale=0:19)
+
+dtms_duration(data=simpledata,
+              dtms=simple)
 }

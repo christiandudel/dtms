@@ -32,8 +32,9 @@
 #' @param timevar Character (optional), name of variable with time scale. Default is `time`.
 #' @param dtms dtms object (optional), as created with \code{dtms}. Not required if `overwrite==transient`.
 #' @param overwrite Character (optional), one of `transient`, `missing`, `absorbing`, and `all`, see details. Default is `transient`.
+#' @param vector Logical (optional), return vector (if TRUE) or data frame (if FALSE). Default is FALSE
 #'
-#' @return A data frame
+#' @return The data frame specified with `data` and the edited state variable (if `vector=FALSE`) or a vector (if `vector=TRUE`).
 #' @export
 #'
 #' @examples
@@ -46,14 +47,14 @@
 #'              dtms=simple,
 #'              overwrite="transient")
 
-
 dtms_backward <- function(data,
                          state,
                          statevar="state",
                          idvar="id",
                          timevar="time",
                          dtms=NULL,
-                         overwrite="missing") {
+                         overwrite="missing",
+                         vector=FALSE) {
 
   # Check dtms only if specified
   if(!is.null(dtms)) dtms_proper(dtms)
@@ -70,6 +71,9 @@ dtms_backward <- function(data,
                                               state=state,
                                               overwrite=overwrite,
                                               dtms=dtms))
+
+  # Return vector
+  if(vector) return(unlist(tmp))
 
   # Assign new values
   data[,statevar] <- unlist(tmp)

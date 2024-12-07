@@ -376,4 +376,7 @@ dtms_duration_help <- function(states, # Vector of states of one unit
     }
   }
 
+  # Return
+  return(duration)
+
 }

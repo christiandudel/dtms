@@ -11,7 +11,8 @@ dtms_forward(
   idvar = "id",
   timevar = "time",
   dtms = NULL,
-  overwrite = "missing"
+  overwrite = "missing",
+  vector = FALSE
 )
 }
 \arguments{
@@ -28,9 +29,11 @@ dtms_forward(
 \item{dtms}{dtms object (optional), as created with \code{dtms}. Not required if `overwrite==transient`.}
 
 \item{overwrite}{Character (optional), one of `transient`, `missing`, `absorbing`, and `all`, see details. Default is `transient`.}
+
+\item{vector}{Logical (optional), return vector (if TRUE) or data frame (if FALSE). Default is FALSE}
 }
 \value{
-A data frame
+The data frame specified with `data` and the edited state variable (if `vector=FALSE`) or a vector (if `vector=TRUE`).
 }
 \description{
 This function carries a state forward after its first occurrence.
