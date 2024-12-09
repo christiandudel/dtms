@@ -58,7 +58,7 @@ Currently, the following features are implemented:
   visit/last exit, Markov chains with rewards.
 - Inference: analytic standard errors and variance-covariance matrix for
   transition probabilities; simulated inference using the bootstrap and
-  the block bootstrap for other quantitites.
+  the block bootstrap for other quantities, supports parallel computing.
 - Other features: simulation of Markov chains using the package
   [markovchain](https://cran.r-project.org/web/packages/markovchain);
   limited support of survey weights; limited support of irregular time
@@ -1526,23 +1526,23 @@ bootresults <- dtms_boot(data=estdata,
 summary(bootresults)
 #> $`2.5%`
 #>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     12.987157    2.917293 12.97527 29.39579
-#> start:Non-working_50  8.442168    6.303444 13.13111 28.36886
-#> start:Retired_50      8.343357    3.685489 14.58557 27.06086
-#> AVERAGE              12.134466    3.425438 13.08280 29.14027
-#> start:Working_50     11.868246    4.185950 15.99177 32.54790
-#> start:Non-working_50  7.217190    7.934959 16.20991 31.89045
-#> start:Retired_50      7.601674    5.235204 17.60941 30.95952
-#> AVERAGE              10.237660    5.379377 16.14486 32.29454
+#> start:Working_50     13.008616    2.893558 13.06767 29.41369
+#> start:Non-working_50  8.429415    6.195044 13.24530 28.47233
+#> start:Retired_50      8.374361    3.641126 14.69889 27.06436
+#> AVERAGE              12.161742    3.387835 13.17384 29.17031
+#> start:Working_50     11.748826    4.232756 15.97504 32.48190
+#> start:Non-working_50  7.162062    7.875781 16.18391 31.86537
+#> start:Retired_50      7.438582    5.232291 17.51879 30.77556
+#> AVERAGE              10.121954    5.425613 16.10938 32.22665
 #> 
 #> $`97.5%`
 #>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     13.578787    3.234002 13.87410 30.33129
-#> start:Non-working_50  9.109268    6.775624 14.14367 29.58055
-#> start:Retired_50      9.271725    4.125874 15.72089 28.69502
-#> AVERAGE              12.740260    3.793941 13.98642 30.15799
-#> start:Working_50     12.417498    4.541304 16.99230 33.46111
-#> start:Non-working_50  7.784264    8.426780 17.24144 32.92232
-#> start:Retired_50      8.181781    5.723649 18.81272 32.21291
-#> AVERAGE              10.816763    5.807695 17.15596 33.22015
+#> start:Working_50     13.655330    3.179947 13.96333 30.30114
+#> start:Non-working_50  9.108363    6.679706 14.16027 29.47535
+#> start:Retired_50      9.176514    4.129869 15.74140 28.42576
+#> AVERAGE              12.846808    3.702501 14.08410 30.06368
+#> start:Working_50     12.283664    4.576546 16.93945 33.34219
+#> start:Non-working_50  7.680032    8.507829 17.20022 32.86383
+#> start:Retired_50      8.029257    5.789527 18.77112 32.07844
+#> AVERAGE              10.655636    5.828968 17.08847 33.14172
 ```
