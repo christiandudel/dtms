@@ -351,7 +351,7 @@ dtms_duration_help <- function(states, # Vector of states of one unit
   lengths <- rle(states)
   duration <- unlist(lapply(lengths$length, function(x) 1:x))
 
-  # Change if leftcensoring
+  # Change if left censoring
   if(!ignoreleft & time[1]==dtms$timescale[1]) duration[1:lengths[1]] <- NA
 
   # Remove gaps
@@ -368,10 +368,13 @@ dtms_duration_help <- function(states, # Vector of states of one unit
 
     # Loop and replace
     for(drop in dropwhich) {
+
+      # Which entries need to be replaced
       whichlengths <- which(cumlengths>=drop)[c(1,2)]
       from <- drop
       to <- cumwhere[whichlengths[2]]-1
       if(is.na(to)) to <- cumwhere[whichlengths[1]]
+      # Replace
       duration[from:to] <- NA
     }
   }

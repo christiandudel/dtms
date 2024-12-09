@@ -169,4 +169,4 @@ dtms_risk(dtms=simple,
 durationdata <- dtms_duration(data=simpledata,
                               dtms=simple)
 
-head(test)
+head(durationdata)
