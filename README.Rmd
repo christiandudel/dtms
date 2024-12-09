@@ -39,16 +39,17 @@ our own.
 
 ## Overview
 
-The package `dtms` implements discrete-time multistate models in R. It comes with 
-many tools to analyze the results of multistate models. 
-The workflow mainly consists of estimating a discrete-time multistate model and 
-then applying methods for absorbing Markov chains. 
+The package `dtms` implements discrete-time multistate models in R. It comes 
+with many tools to analyze the results of multistate models. The workflow mainly 
+consists of estimating a discrete-time multistate model and then applying 
+methods for absorbing Markov chains. 
 
 Currently, the following features are implemented:
 
 - Data handling: functions for reshaping data, cleaning data, editing states, 
-generating indicators of duration and censoring, general descriptive statistics, 
-and descriptive information on different types of censoring. 
+generating indicators of duration and number of occurrences of a state, 
+indicators of censoring, general descriptive statistics, and descriptive 
+information on different types of censoring. 
 - Estimation of transition probabilities: builds on existing R packages, allowing 
 for semiparametric estimation ([VGAM](https://cran.r-project.org/web/packages/VGAM)), 
 random effects and random intercepts ([mclogit](https://cran.r-project.org/web/packages/mclogit)), 
@@ -70,6 +71,8 @@ support of survey weights; limited support of irregular time intervals.
 - Examples: the package comes with two simulated data sets which are used for
 examples. These are described further below. The input data and code for the 
 simulations is available at https://github.com/christiandudel/dtms_data/.
+
+The documentation provided below does currently not cover all features. 
 
 ## Installation
 
