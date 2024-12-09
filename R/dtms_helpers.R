@@ -352,7 +352,7 @@ dtms_duration_help <- function(states, # Vector of states of one unit
   duration <- unlist(lapply(lengths$length, function(x) 1:x))
 
   # Change if left censoring
-  if(!ignoreleft & time[1]==dtms$timescale[1]) duration[1:lengths[1]] <- NA
+  if(!ignoreleft & time[1]!=dtms$timescale[1]) duration[1:lengths[1]] <- NA
 
   # Remove gaps
   timediffs <- diff(time)
@@ -381,5 +381,59 @@ dtms_duration_help <- function(states, # Vector of states of one unit
 
   # Return
   return(duration)
+
+}
+
+
+## Occurrence helper
+dtms_occurrence_help <- function(states, # Vector of states of one unit
+                                time, # Vector of time scale values
+                                dtms, # dtms object
+                                ignoreleft) { # TRUE or FALSE, as per dtms_occurence
+
+  # Change if left censoring
+  if(!ignoreleft & time[1]!=dtms$timescale[1]) {
+    result <- rep(NA,length(states))
+    return(result)
+  }
+
+  # Get states of spells
+  spells <- rle(states)$values
+
+  # Count occurence of spells
+  if(any(is.na(spells))) occurences <- table(spells,useNA="always") else occurences <- table(spells)
+
+  # Start counting from 1
+  expanded_occurences <- lapply(occurences,function(x) 1:x)
+
+  # Get names, vectorize
+  names_expanded <- names(expanded_occurences)
+  occurences <- unlist(expanded_occurences)
+
+  # Match ordering
+  ordering <- unlist(lapply(names_expanded,function(x) {
+    if(is.na(x)) which(is.na(spells)) else which(x==spells)
+  }))
+
+  # Get counts in right order
+  result <- numeric(length(occurences))
+  result[ordering] <- occurences
+
+  # Repeat counts for each observation in spell
+  result <- inverse.rle(list(values=result,lengths=rle(states)$lengths))
+
+  # Handle gaps: find if any
+  timediffs <- diff(time)
+  timediffs <- c(!timediffs%in%dtms$timestep)
+
+  # If gap fill with NA starting from first gap
+  if(any(timediffs)) {
+      dropwhich <- min(which(timediffs))
+      nresult <- length(result)
+      result[(dropwhich+1):nresult] <- NA
+    }
+
+  # Return result
+  return(result)
 
 }

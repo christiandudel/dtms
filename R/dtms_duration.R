@@ -17,6 +17,11 @@
 #' returns 1, 2, 3, 1, 2, 1, 1. If `ignoreleft=FALSE`, then the function
 #' would return NA, NA, NA, 1, 2, 1, 1.
 #'
+#' The function handles gaps in the data by setting the duration to NA. For
+#' instance, if a unit is observed at times 1, 2, 4, 5, and 6, but not at time
+#' 3, and the states are A, A, B, C, C, then the duration variable will
+#' have the values 1, 2, NA, 1, 2.
+#'
 #' @param data A data frame in long format.
 #' @param dtms dtms object, as created with \code{dtms}.
 #' @param statevar Character (optional), name of the variable in the data frame with the states. Default is `state`.
@@ -53,7 +58,7 @@ dtms_duration <- function(data,
                      data[,timevar])
   data <- data[dataorder,]
 
-  # Apply helper ### ISSUE HERE
+  # Apply helper
   tmp <- tapply(data[,c(statevar,timevar)],
                 data[,idvar],
                 function(x) dtms_duration_help(states=x[,1],

@@ -170,3 +170,9 @@ durationdata <- dtms_duration(data=simpledata,
                               dtms=simple)
 
 head(durationdata)
+
+## Occurrence indicator
+occurrencedata <- dtms_occurrence(data=simpledata,
+                                  dtms=simple)
+
+head(occurrencedata)
