@@ -11,8 +11,8 @@
 #' confidence level for the confidence intervals.
 #'
 #' The function passed to \code{dtms_boot()} needs to either return a numeric
-#' vector or a matrix, otherwise \code{dtms_boot_summary()} returns an error
-#' message.
+#' vector, a matrix, or a data.frame, otherwise \code{dtms_boot_summary()}
+#' returns an error #' message. A data.frame will be transformed into a matrix.
 #'
 #' @param boot Object created with \code{dtms_boot()}.
 #' @param probs Numeric (optional), vector of percentiles. Default is NULL.
@@ -70,10 +70,15 @@ dtms_boot_summary <- function(boot,probs=NULL,alpha=0.05) {
   nresults <- length(probs)
 
   # Check
-  if(!what%in%c("matrix","numeric")) stop("Format not supported")
+  if(!what%in%c("matrix","numeric","data.frame")) stop("Format not supported")
 
   # If matrix
-  if(what=="matrix") {
+  if(what%in%c("matrix","data.frame")) {
+
+    # Turn into matrix
+    if(what=="data.frame") {
+      boot <- lapply(boot, data.matrix)
+    }
 
     # Format result
     dimwhat <- dim(boot[[1]])

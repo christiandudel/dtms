@@ -27,8 +27,8 @@ specified, the argument \code{alpha} is used instead. \code{alpha} is the
 confidence level for the confidence intervals.
 
 The function passed to \code{dtms_boot()} needs to either return a numeric
-vector or a matrix, otherwise \code{dtms_boot_summary()} returns an error
-message.
+vector, a matrix, or a data.frame, otherwise \code{dtms_boot_summary()}
+returns an error #' message. A data.frame will be transformed into a matrix.
 }
 \examples{
 
