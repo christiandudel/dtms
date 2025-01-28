@@ -301,8 +301,8 @@ dtms_backward_help <- function(x, # Vector of states
   # Stop if no appearance
   if(length(whichfirst)==0) return(x)
 
-  # Get first
-  whichfirst <- min(whichfirst)
+  # Get last
+  whichfirst <- max(whichfirst)
 
   # Replace: both missing and absorbing
   if(overwrite=="all") {

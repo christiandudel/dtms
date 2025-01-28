@@ -150,7 +150,7 @@ in this shape, there are many tools already available in R and its
 extensions which allow you to reshape it. An example of data in long
 format could look like this:
 
-    #> Warning: Paket 'knitr' wurde unter R Version 4.4.2 erstellt
+    #> Warning: package 'knitr' was built under R version 4.4.2
 
 | idvar | timevar | statevar | X   | Y    |
 |:------|:--------|:---------|:----|:-----|
@@ -750,47 +750,37 @@ can also be used such that the Markov assumption is not necessary, but
 this requires additional data editing and use of the function
 `dtms_forward()`. In particular, the latter function can be used to
 create an absorbing set which contains the state of interest plus all
-absorbing states. This has to be done early in the data editing process,
-and all following editing and estimation steps have to be repeated:
+absorbing states. This has to be done in the data editing process, and
+all following editing and estimation steps have to be repeated:
 
 ``` r
-riskdata <- dtms_forward(data=simpledata,
+riskdata <- dtms_forward(data=estdata,
                          state="A",
                          dtms=simple)
-
-riskdata <- dtms_format(data=riskdata,
-                       dtms=simple,
-                       idvar="id",
-                       timevar="time",
-                       statevar="state",
-                       steplength=TRUE)
-#> Kept original name for time 
-#> Kept original name for id
-
 
 riskfit <- dtms_fit(data=riskdata,
                 controls="time",
                 package="mclogit")
 #> 
-#> Iteration 1 - deviance = 7050.355 - criterion = 0.581805
-#> Iteration 2 - deviance = 5963.42 - criterion = 0.1822641
-#> Iteration 3 - deviance = 5669.152 - criterion = 0.05190602
-#> Iteration 4 - deviance = 5575.976 - criterion = 0.01670986
-#> Iteration 5 - deviance = 5542.374 - criterion = 0.006062637
-#> Iteration 6 - deviance = 5530.065 - criterion = 0.002225857
-#> Iteration 7 - deviance = 5525.541 - criterion = 0.0008186344
-#> Iteration 8 - deviance = 5523.878 - criterion = 0.0003011458
-#> Iteration 9 - deviance = 5523.266 - criterion = 0.0001107837
-#> Iteration 10 - deviance = 5523.041 - criterion = 4.07548e-05
-#> Iteration 11 - deviance = 5522.958 - criterion = 1.499282e-05
-#> Iteration 12 - deviance = 5522.928 - criterion = 5.515548e-06
-#> Iteration 13 - deviance = 5522.916 - criterion = 2.029056e-06
-#> Iteration 14 - deviance = 5522.912 - criterion = 7.464479e-07
-#> Iteration 15 - deviance = 5522.911 - criterion = 2.746028e-07
-#> Iteration 16 - deviance = 5522.91 - criterion = 1.010207e-07
-#> Iteration 17 - deviance = 5522.91 - criterion = 3.716345e-08
-#> Iteration 18 - deviance = 5522.91 - criterion = 1.367167e-08
-#> Iteration 19 - deviance = 5522.91 - criterion = 5.029526e-09
+#> Iteration 1 - deviance = 6381.024 - criterion = 0.7477243
+#> Iteration 2 - deviance = 5222.033 - criterion = 0.2219381
+#> Iteration 3 - deviance = 4899.832 - criterion = 0.06575636
+#> Iteration 4 - deviance = 4804.59 - criterion = 0.01982266
+#> Iteration 5 - deviance = 4771.139 - criterion = 0.007010997
+#> Iteration 6 - deviance = 4758.893 - criterion = 0.00257315
+#> Iteration 7 - deviance = 4754.393 - criterion = 0.0009464568
+#> Iteration 8 - deviance = 4752.738 - criterion = 0.000348183
+#> Iteration 9 - deviance = 4752.13 - criterion = 0.0001280896
+#> Iteration 10 - deviance = 4751.906 - criterion = 4.712157e-05
+#> Iteration 11 - deviance = 4751.823 - criterion = 1.733506e-05
+#> Iteration 12 - deviance = 4751.793 - criterion = 6.377213e-06
+#> Iteration 13 - deviance = 4751.782 - criterion = 2.346046e-06
+#> Iteration 14 - deviance = 4751.778 - criterion = 8.63062e-07
+#> Iteration 15 - deviance = 4751.776 - criterion = 3.175028e-07
+#> Iteration 16 - deviance = 4751.776 - criterion = 1.168027e-07
+#> Iteration 17 - deviance = 4751.776 - criterion = 4.296933e-08
+#> Iteration 18 - deviance = 4751.776 - criterion = 1.580753e-08
+#> Iteration 19 - deviance = 4751.776 - criterion = 5.815266e-09
 #> converged
 
 riskprobs <- dtms_transitions(dtms=simple,
@@ -804,7 +794,7 @@ dtms_risk(dtms=simple,
           matrix=riskTp,
           risk="A")
 #>       A_0       B_0 
-#> 1.0000000 0.9703459
+#> 1.0000000 0.9742659
 ```
 
 In this example, the results of the naive use of `dtms_risk()` and the
@@ -1284,8 +1274,7 @@ firstw <- dtms_first(dtms=hrs,
                      start_distr=Sw)  
 
 summary(firstm)
-#> Warning in dtms_distr_summary(distr = object, ...): NAs durch Umwandlung
-#> erzeugt
+#> Warning in dtms_distr_summary(distr = object, ...): NAs introduced by coercion
 #>                          MEAN VARIANCE       SD MEDIAN      RISK0
 #> start:Working_50     14.25887 42.52401 6.521043   14.5 0.00000000
 #> start:Non-working_50 12.31587 50.90513 7.134783   12.5 0.00000000
@@ -1293,8 +1282,7 @@ summary(firstm)
 #> AVERAGE              13.13712 52.58727 7.251708   13.5 0.06011927
 #> AVERAGE(COND.)       13.97744 44.20558 6.648728   13.5 0.00000000
 summary(firstw)
-#> Warning in dtms_distr_summary(distr = object, ...): NAs durch Umwandlung
-#> erzeugt
+#> Warning in dtms_distr_summary(distr = object, ...): NAs introduced by coercion
 #>                          MEAN VARIANCE       SD MEDIAN      RISK0
 #> start:Working_50     14.10717 40.00302 6.324794   14.5 0.00000000
 #> start:Non-working_50 12.54709 46.49749 6.818907   12.5 0.00000000
@@ -1316,8 +1304,7 @@ last1w <- dtms_last(dtms=hrs,
                     start_distr=Sw) 
 
 summary(last1m)
-#> Warning in dtms_distr_summary(distr = object, ...): NAs durch Umwandlung
-#> erzeugt
+#> Warning in dtms_distr_summary(distr = object, ...): NAs introduced by coercion
 #>                          MEAN VARIANCE       SD MEDIAN RISK0
 #> start:Working_50     16.50265 76.98676 8.774210   15.5    NA
 #> start:Non-working_50 18.02302 68.14259 8.254853   17.5    NA
@@ -1325,8 +1312,7 @@ summary(last1m)
 #> AVERAGE              16.73797 75.91238 8.712771   16.5    NA
 #> AVERAGE(COND.)       17.97027 68.47754 8.275116   17.5    NA
 summary(last1w)
-#> Warning in dtms_distr_summary(distr = object, ...): NAs durch Umwandlung
-#> erzeugt
+#> Warning in dtms_distr_summary(distr = object, ...): NAs introduced by coercion
 #>                          MEAN VARIANCE       SD MEDIAN RISK0
 #> start:Working_50     16.15218 87.76963 9.368545   15.5    NA
 #> start:Non-working_50 18.31738 77.06422 8.778623   17.5    NA
@@ -1348,8 +1334,7 @@ last2w <- dtms_last(dtms=hrs,
                     start_distr=Sw)  
 
 summary(last2m)
-#> Warning in dtms_distr_summary(distr = object, ...): NAs durch Umwandlung
-#> erzeugt
+#> Warning in dtms_distr_summary(distr = object, ...): NAs introduced by coercion
 #>                          MEAN VARIANCE       SD MEDIAN RISK0
 #> start:Working_50     18.74988 64.64429 8.040167   18.5    NA
 #> start:Non-working_50 19.72542 56.78054 7.535286   19.5    NA
@@ -1357,8 +1342,7 @@ summary(last2m)
 #> AVERAGE              18.90783 63.49802 7.968565   18.5    NA
 #> AVERAGE(COND.)       19.69276 57.06149 7.553906   19.5    NA
 summary(last2w)
-#> Warning in dtms_distr_summary(distr = object, ...): NAs durch Umwandlung
-#> erzeugt
+#> Warning in dtms_distr_summary(distr = object, ...): NAs introduced by coercion
 #>                          MEAN VARIANCE       SD MEDIAN RISK0
 #> start:Working_50     19.33660 73.65218 8.582085   19.5    NA
 #> start:Non-working_50 20.62023 63.26114 7.953687   20.5    NA
@@ -1526,23 +1510,23 @@ bootresults <- dtms_boot(data=estdata,
 summary(bootresults)
 #> $`2.5%`
 #>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     13.008616    2.893558 13.06767 29.41369
-#> start:Non-working_50  8.429415    6.195044 13.24530 28.47233
-#> start:Retired_50      8.374361    3.641126 14.69889 27.06436
-#> AVERAGE              12.161742    3.387835 13.17384 29.17031
-#> start:Working_50     11.748826    4.232756 15.97504 32.48190
-#> start:Non-working_50  7.162062    7.875781 16.18391 31.86537
-#> start:Retired_50      7.438582    5.232291 17.51879 30.77556
-#> AVERAGE              10.121954    5.425613 16.10938 32.22665
+#> start:Working_50     12.966188    2.909587 13.16512 29.46710
+#> start:Non-working_50  8.404588    6.208739 13.35753 28.47656
+#> start:Retired_50      8.422508    3.643875 14.66208 27.10893
+#> AVERAGE              12.109604    3.396398 13.27196 29.20984
+#> start:Working_50     11.882462    4.182473 16.02120 32.54653
+#> start:Non-working_50  7.150076    7.870702 16.23182 31.96439
+#> start:Retired_50      7.588275    5.223289 17.60331 30.96286
+#> AVERAGE              10.247456    5.362829 16.17669 32.30925
 #> 
 #> $`97.5%`
 #>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     13.655330    3.179947 13.96333 30.30114
-#> start:Non-working_50  9.108363    6.679706 14.16027 29.47535
-#> start:Retired_50      9.176514    4.129869 15.74140 28.42576
-#> AVERAGE              12.846808    3.702501 14.08410 30.06368
-#> start:Working_50     12.283664    4.576546 16.93945 33.34219
-#> start:Non-working_50  7.680032    8.507829 17.20022 32.86383
-#> start:Retired_50      8.029257    5.789527 18.77112 32.07844
-#> AVERAGE              10.655636    5.828968 17.08847 33.14172
+#> start:Working_50     13.597566    3.243071 13.87937 30.40913
+#> start:Non-working_50  9.125704    6.784510 14.12104 29.57663
+#> start:Retired_50      9.160842    4.162234 15.61955 28.50062
+#> AVERAGE              12.738689    3.770195 14.00414 30.18429
+#> start:Working_50     12.366049    4.539682 17.00949 33.42698
+#> start:Non-working_50  7.748977    8.456705 17.24670 32.94065
+#> start:Retired_50      8.204105    5.817339 18.69539 32.19421
+#> AVERAGE              10.789838    5.843801 17.16793 33.22048
 ```

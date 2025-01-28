@@ -597,20 +597,12 @@ Markov assumption has to hold. `dtms_risk()` can also be used such that the
 Markov assumption is not necessary, but this requires additional data editing
 and use of the function `dtms_forward()`. In particular, the latter function
 can be used to create an absorbing set which contains the state of interest
-plus all absorbing states. This has to be done early in the data editing 
+plus all absorbing states. This has to be done in the data editing 
 process, and all following editing and estimation steps have to be repeated:
 ```{r example1-risk}
-riskdata <- dtms_forward(data=simpledata,
+riskdata <- dtms_forward(data=estdata,
                          state="A",
                          dtms=simple)
-
-riskdata <- dtms_format(data=riskdata,
-                       dtms=simple,
-                       idvar="id",
-                       timevar="time",
-                       statevar="state",
-                       steplength=TRUE)
-
 
 riskfit <- dtms_fit(data=riskdata,
                 controls="time",

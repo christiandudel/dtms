@@ -6,10 +6,12 @@
 #' @details
 #' This function carries a state forward after its first occurrence.
 #' For instance, carrying the state "A" forward in the sequence `B, B, A, B, B`
-#' will give the sequence `B, B, A, A, A`.
+#' will give the sequence `B, B, A, A, A`. The sequence `C, B, C, A, B, A, A, B`
+#' will give `C, B, C, A, A, A, A, A`.
 #'
-#' The data frame has to be in long format and not in transition format; i.e.,
-#' usually, this function will be applied before \code{dtms_format}.
+#' This function works with data frames in transition format and in long format.
+#' The default is transition format, using the arguments `fromvar` and `tovar`.
+#' If, however, the argument `statevar` is specified, it is used instead.
 #'
 #' The argument `overwrite` is used to control what type of information is
 #' replaced. If `overwrite==transient`, then only transient states are replaced
@@ -27,12 +29,14 @@
 #'
 #' @param data A data frame in long format.
 #' @param state Character, name of the state to be carried forward.
-#' @param statevar Character (optional), name of the variable in the data frame with the states. Default is "state".
+#' @param fromvar Character (optional), name of variable with starting state. Default is `from`.
+#' @param tovar Character (optional), name of variable with receiving state. Default is `to`.
+#' @param statevar Character (optional), name of the variable in the data frame in long format with the states. Default is NULL.
 #' @param idvar Character (optional), name of variable with unit ID. Default is `id`.
 #' @param timevar Character (optional), name of variable with time scale. Default is `time`.
 #' @param dtms dtms object (optional), as created with \code{dtms}. Not required if `overwrite==transient`.
 #' @param overwrite Character (optional), one of `transient`, `missing`, `absorbing`, and `all`, see details. Default is `transient`.
-#' @param vector Logical (optional), return vector (if TRUE) or data frame (if FALSE). Default is FALSE
+#' @param vector Logical (optional), return vector (if TRUE) or data frame (if FALSE). Default is FALSE. Argument is only used if argument `statevar` is specified.
 #'
 #' @return The data frame specified with `data` and the edited state variable (if `vector=FALSE`) or a vector (if `vector=TRUE`).
 #' @export
@@ -43,13 +47,16 @@
 #' timescale=0:19)
 #'
 #' dtms_forward(data=simpledata,
+#'              statevar="state",
 #'              state="A",
 #'              dtms=simple,
 #'              overwrite="transient")
 
 dtms_forward <- function(data,
                          state,
-                         statevar="state",
+                         fromvar="from",
+                         tovar="to",
+                         statevar=NULL,
                          idvar="id",
                          timevar="time",
                          dtms=NULL,
@@ -64,19 +71,49 @@ dtms_forward <- function(data,
                      data[,timevar])
   data <- data[dataorder,]
 
-  # Apply helper
-  tmp <- tapply(data[,statevar],
-                data[,idvar],
-                function(x) dtms_forward_help(x=x,
-                                              state=state,
-                                              overwrite=overwrite,
-                                              dtms=dtms))
+  # Apply helper for transition format
+  if(is.null(statevar)) {
 
-  # Return vector
-  if(vector) return(unlist(tmp))
+    # Move starting state
+    data[,tovar][data[,fromvar]==state] <- state
 
-  # Assign new values
-  data[,statevar] <- unlist(tmp)
+    # Carry forward starting state
+    tmp1 <- tapply(data[,fromvar],
+                   data[,idvar],
+                   function(x) dtms_forward_help(x=x,
+                                                 state=state,
+                                                 overwrite=overwrite,
+                                                 dtms=dtms))
+    # Carry forward receiving state
+    tmp2 <- tapply(data[,tovar],
+                   data[,idvar],
+                   function(x) dtms_forward_help(x=x,
+                                                 state=state,
+                                                 overwrite=overwrite,
+                                                 dtms=dtms))
+
+    # Assign new values
+    data[,fromvar] <- unlist(tmp1)
+    data[,tovar] <- unlist(tmp2)
+
+
+  } else {
+
+    # Apply helper for long format
+    tmp <- tapply(data[,statevar],
+                  data[,idvar],
+                  function(x) dtms_forward_help(x=x,
+                                                state=state,
+                                                overwrite=overwrite,
+                                                dtms=dtms))
+
+    # Return vector
+    if(vector) return(unlist(tmp))
+
+    # Assign new values
+    data[,statevar] <- unlist(tmp)
+
+  }
 
   # Return
   return(data)
