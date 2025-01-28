@@ -297,23 +297,9 @@ dtms_expectancy(dtms=hrs,
                 matrix=T2)
 
 ## Correct lifetime risk
-riskdata <- dtms_forward(data=hrsdata,
+riskdata <- dtms_forward(data=estdata,
                          state="Retired",
-                         dtms=hrs,
-                         idvar="ID",
-                         timevar="Age",
-                         statevar="State")
-
-riskdata <- dtms_format(data=riskdata,
-                       dtms=hrs,
-                       idvar="ID",
-                       timevar="Age",
-                       statevar="State")
-
-riskdata <- dtms_clean(data=riskdata,
-                       dtms=hrs)
-
-riskdata$time2 <- riskdata$time^2
+                         dtms=hrs)
 
 riskfit <- dtms_fit(data=riskdata,
                 controls=c("Gender","time","time2"),

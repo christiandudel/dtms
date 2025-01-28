@@ -133,17 +133,9 @@ dtms_delta(data=estdata,
            model2=fullfit)
 
 ## Correct lifetime risk
-riskdata <- dtms_forward(data=simpledata,
+riskdata <- dtms_forward(data=estdata,
                          state="A",
                          dtms=simple)
-
-riskdata <- dtms_format(data=riskdata,
-                       dtms=simple,
-                       idvar="id",
-                       timevar="time",
-                       statevar="state",
-                       steplength=TRUE)
-
 
 riskfit <- dtms_fit(data=riskdata,
                 controls="time",
