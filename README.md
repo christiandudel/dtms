@@ -150,7 +150,7 @@ in this shape, there are many tools already available in R and its
 extensions which allow you to reshape it. An example of data in long
 format could look like this:
 
-    #> Warning: package 'knitr' was built under R version 4.4.2
+    #> Warning: Paket 'knitr' wurde unter R Version 4.4.2 erstellt
 
 | idvar | timevar | statevar | X   | Y    |
 |:------|:--------|:---------|:----|:-----|
@@ -198,12 +198,12 @@ example provided below `dtms_format()` is used like this:
 ## Load package
 library(dtms)
 ## Define model: Absorbing and transient states, time scale
-hrs <- dtms(transient=c("Working","Non-working","Retired"),
-            absorbing="Dead",
-            timescale=50:99)
+work <- dtms(transient=c("Working","Non-working","Retired"),
+             absorbing="Dead",
+             timescale=50:99)
 ## Reshape
-estdata <- dtms_format(data=hrsdata,
-                       dtms=hrs,
+estdata <- dtms_format(data=workdata,
+                       dtms=work,
                        idvar="ID",
                        timevar="Age",
                        statevar="State")
@@ -228,7 +228,7 @@ default.
 The original data and the reshaped data can be compared like this:
 
 ``` r
-hrsdata |> subset(ID==3) |> head()
+workdata |> subset(ID==3) |> head()
 #>     ID Gender Age       State
 #> 101  3      1  50     Working
 #> 102  3      1  51     Working
@@ -291,7 +291,7 @@ transitions only contain missing values. This is because in the original
 data these values are missing:
 
 ``` r
-hrsdata |> subset(ID==1) |> head()
+workdata |> subset(ID==1) |> head()
 #>   ID Gender Age State
 #> 1  1      1  50  <NA>
 #> 2  1      1  51  <NA>
@@ -310,7 +310,7 @@ Such missing values and a few other things can be removed as follows:
 
 ``` r
 estdata <- dtms_clean(data=estdata,
-                      dtms=hrs)
+                      dtms=work)
 #> Dropping  0  rows not in state space
 #> Dropping  0  rows not in time range
 #> Dropping  81903  rows starting or ending in NA
@@ -1003,9 +1003,9 @@ the second example below.
 
 ## Example 2: Working trajectories during late working life
 
-Here we provide an example using simulated data based on the Health and
-Retirement Study (HRS). The simulations are are conducted using
-transition probabilities estimated from the HRS and published by Dudel &
+Here we provide an example using simulated working trajectories. The
+simulations are are conducted using transition probabilities estimated
+from the US Health and Retirement Study (HRS) and published by Dudel &
 Myrskylä (2017) who studied working trajectories in late working life
 and old age. These transition probabilities are used to simulate
 artificial but realistic trajectories. There are three transient states
@@ -1031,12 +1031,12 @@ library(dtms)
 library(ggplot2)
 
 ## Define model: Absorbing and transient states, time scale
-hrs <- dtms(transient=c("Working","Non-working","Retired"),
-            absorbing="Dead",
-            timescale=50:99)
+work <- dtms(transient=c("Working","Non-working","Retired"),
+             absorbing="Dead",
+             timescale=50:99)
 
 ## Quick look at data
-head(hrsdata)
+head(workdata)
 #>   ID Gender Age State
 #> 1  1      1  50  <NA>
 #> 2  1      1  51  <NA>
@@ -1046,15 +1046,15 @@ head(hrsdata)
 #> 6  1      1  55  <NA>
 
 ## Reshape
-estdata <- dtms_format(data=hrsdata,
-                       dtms=hrs,
+estdata <- dtms_format(data=workdata,
+                       dtms=work,
                        idvar="ID",
                        timevar="Age",
                        statevar="State")
 
 ## Drop dead-to-dead transitions etc
 estdata <- dtms_clean(data=estdata,
-                      dtms=hrs)
+                      dtms=work)
 #> Dropping  0  rows not in state space
 #> Dropping  0  rows not in time range
 #> Dropping  81903  rows starting or ending in NA
@@ -1078,14 +1078,14 @@ summary(estdata)
 
 ## Basic censoring
 dtms_censoring(data=estdata,
-               dtms=hrs)
+               dtms=work)
 #> Units with left censoring:  2036 
 #> Units with gaps:  1720 
 #> Units with right censoring:  1323
 
 ## More advanced censoring example
 estdata <- dtms_censoring(data=estdata,
-                          dtms=hrs,
+                          dtms=work,
                           add=T,
                           addtype="obs")
 #> Units with left censoring:  2036 
@@ -1111,7 +1111,7 @@ fit <- dtms_fit(data=estdata,
 ## Transition probabilities by gender
   
 # Men
-probs_m <- dtms_transitions(dtms=hrs,
+probs_m <- dtms_transitions(dtms=work,
                             model = fit,
                             controls = list(Gender=0,
                                             time  =50:98,
@@ -1119,7 +1119,7 @@ probs_m <- dtms_transitions(dtms=hrs,
                             CI=TRUE)
   
 # Women
-probs_w <- dtms_transitions(dtms=hrs,
+probs_w <- dtms_transitions(dtms=work,
                             model = fit,
                             controls = list(Gender=1,
                                             time  =50:98,
@@ -1169,23 +1169,23 @@ probs_m |>  dtms_simplify() |>
 ``` r
  
 ## Transition matrices
-Tm <- dtms_matrix(dtms=hrs,
+Tm <- dtms_matrix(dtms=work,
                   probs=probs_m)
   
-Tw <- dtms_matrix(dtms=hrs,
+Tw <- dtms_matrix(dtms=work,
                   probs=probs_w)
 
 ## Starting distributions
-Sm <- dtms_start(dtms=hrs,
+Sm <- dtms_start(dtms=work,
                  data=estdata,
                  variables=list(Gender=0))
   
-Sw <- dtms_start(dtms=hrs,
+Sw <- dtms_start(dtms=work,
                  data=estdata,
                  variables=list(Gender=1))
   
 ## State expectancies
-dtms_expectancy(dtms=hrs,
+dtms_expectancy(dtms=work,
                 matrix=Tm,
                 start_distr=Sm)
 #>                        Working Non-working  Retired    TOTAL
@@ -1194,7 +1194,7 @@ dtms_expectancy(dtms=hrs,
 #> start:Retired_50      8.821763    3.905134 15.19067 27.91757
 #> AVERAGE              12.445981    3.589228 13.65526 29.69047
     
-dtms_expectancy(dtms=hrs,
+dtms_expectancy(dtms=work,
                 matrix=Tw,
                 start_distr=Sw)
 #>                        Working Non-working  Retired    TOTAL
@@ -1206,12 +1206,12 @@ dtms_expectancy(dtms=hrs,
 ## Variant: ignoring retirement as a starting state (shown only for men)
 limited <- c("Working","Non-working")
 
-Smwr <- dtms_start(dtms=hrs,
+Smwr <- dtms_start(dtms=work,
                    data=estdata,
                    start_state=limited,
                    variables=list(Gender=0))
 
-dtms_expectancy(dtms=hrs,
+dtms_expectancy(dtms=work,
                 matrix=Tm,
                 start_state=limited,
                 start_distr=Smwr)
@@ -1221,14 +1221,14 @@ dtms_expectancy(dtms=hrs,
 #> AVERAGE              12.650574    3.571394 13.56859 29.79056
 
 ## Lifetime risk of reaching retirement
-dtms_risk(dtms=hrs,
+dtms_risk(dtms=work,
           matrix=Tm,
           risk="Retired",
           start_distr=Sm)
 #>     Working_50 Non-working_50     Retired_50        AVERAGE AVERAGE(COND.) 
 #>      0.8828701      0.8806115      1.0000000      0.8888186      0.8825422
   
-dtms_risk(dtms=hrs,
+dtms_risk(dtms=work,
           matrix=Tw,
           risk="Retired",
           start_distr=Sw)
@@ -1236,12 +1236,12 @@ dtms_risk(dtms=hrs,
 #>      0.9172407      0.9159547      1.0000000      0.9207352      0.9168268
   
 ## Distribution of visits
-visitsm <- dtms_visits(dtms=hrs,
+visitsm <- dtms_visits(dtms=work,
                        matrix=Tm,
                        risk="Retired",
                        start_distr=Sm)
   
-visitsw <- dtms_visits(dtms=hrs,
+visitsw <- dtms_visits(dtms=work,
                        matrix=Tw,
                        risk="Retired",
                        start_distr=Sw,
@@ -1263,18 +1263,19 @@ summary(visitsw)
 #> AVERAGE(COND.)       17.52865 113.9856 10.67640     18 0.08317318
   
 ## First visit
-firstm <- dtms_first(dtms=hrs,
+firstm <- dtms_first(dtms=work,
                      matrix=Tm,
                      risk="Retired",
                      start_distr=Sm)  
   
-firstw <- dtms_first(dtms=hrs,
+firstw <- dtms_first(dtms=work,
                      matrix=Tw,
                      risk="Retired",
                      start_distr=Sw)  
 
 summary(firstm)
-#> Warning in dtms_distr_summary(distr = object, ...): NAs introduced by coercion
+#> Warning in dtms_distr_summary(distr = object, ...): NAs durch Umwandlung
+#> erzeugt
 #>                          MEAN VARIANCE       SD MEDIAN      RISK0
 #> start:Working_50     14.25887 42.52401 6.521043   14.5 0.00000000
 #> start:Non-working_50 12.31587 50.90513 7.134783   12.5 0.00000000
@@ -1282,7 +1283,8 @@ summary(firstm)
 #> AVERAGE              13.13712 52.58727 7.251708   13.5 0.06011927
 #> AVERAGE(COND.)       13.97744 44.20558 6.648728   13.5 0.00000000
 summary(firstw)
-#> Warning in dtms_distr_summary(distr = object, ...): NAs introduced by coercion
+#> Warning in dtms_distr_summary(distr = object, ...): NAs durch Umwandlung
+#> erzeugt
 #>                          MEAN VARIANCE       SD MEDIAN      RISK0
 #> start:Working_50     14.10717 40.00302 6.324794   14.5 0.00000000
 #> start:Non-working_50 12.54709 46.49749 6.818907   12.5 0.00000000
@@ -1293,18 +1295,19 @@ summary(firstw)
 ## Last exit
   
 # Leaving work to any state
-last1m <- dtms_last(dtms=hrs,
+last1m <- dtms_last(dtms=work,
                     matrix=Tm,
                     risk="Working",
                     start_distr=Sm)  
   
-last1w <- dtms_last(dtms=hrs,
+last1w <- dtms_last(dtms=work,
                     matrix=Tw,
                     risk="Working",
                     start_distr=Sw) 
 
 summary(last1m)
-#> Warning in dtms_distr_summary(distr = object, ...): NAs introduced by coercion
+#> Warning in dtms_distr_summary(distr = object, ...): NAs durch Umwandlung
+#> erzeugt
 #>                          MEAN VARIANCE       SD MEDIAN RISK0
 #> start:Working_50     16.50265 76.98676 8.774210   15.5    NA
 #> start:Non-working_50 18.02302 68.14259 8.254853   17.5    NA
@@ -1312,7 +1315,8 @@ summary(last1m)
 #> AVERAGE              16.73797 75.91238 8.712771   16.5    NA
 #> AVERAGE(COND.)       17.97027 68.47754 8.275116   17.5    NA
 summary(last1w)
-#> Warning in dtms_distr_summary(distr = object, ...): NAs introduced by coercion
+#> Warning in dtms_distr_summary(distr = object, ...): NAs durch Umwandlung
+#> erzeugt
 #>                          MEAN VARIANCE       SD MEDIAN RISK0
 #> start:Working_50     16.15218 87.76963 9.368545   15.5    NA
 #> start:Non-working_50 18.31738 77.06422 8.778623   17.5    NA
@@ -1321,20 +1325,21 @@ summary(last1w)
 #> AVERAGE(COND.)       18.26738 77.33095 8.793802   17.5    NA
   
 # Leaving work for retirement
-last2m <- dtms_last(dtms=hrs,
+last2m <- dtms_last(dtms=work,
                     matrix=Tm,
                     risk="Working",
                     risk_to="Retired",
                     start_distr=Sm)  
   
-last2w <- dtms_last(dtms=hrs,
+last2w <- dtms_last(dtms=work,
                     matrix=Tw,
                     risk="Working",
                     risk_to="Retired",
                     start_distr=Sw)  
 
 summary(last2m)
-#> Warning in dtms_distr_summary(distr = object, ...): NAs introduced by coercion
+#> Warning in dtms_distr_summary(distr = object, ...): NAs durch Umwandlung
+#> erzeugt
 #>                          MEAN VARIANCE       SD MEDIAN RISK0
 #> start:Working_50     18.74988 64.64429 8.040167   18.5    NA
 #> start:Non-working_50 19.72542 56.78054 7.535286   19.5    NA
@@ -1342,7 +1347,8 @@ summary(last2m)
 #> AVERAGE              18.90783 63.49802 7.968565   18.5    NA
 #> AVERAGE(COND.)       19.69276 57.06149 7.553906   19.5    NA
 summary(last2w)
-#> Warning in dtms_distr_summary(distr = object, ...): NAs introduced by coercion
+#> Warning in dtms_distr_summary(distr = object, ...): NAs durch Umwandlung
+#> erzeugt
 #>                          MEAN VARIANCE       SD MEDIAN RISK0
 #> start:Working_50     19.33660 73.65218 8.582085   19.5    NA
 #> start:Non-working_50 20.62023 63.26114 7.953687   20.5    NA
@@ -1355,21 +1361,21 @@ As already noted in the first example, consistent estimation of the
 lifetime risk of reaching a state requires a different setup:
 
 ``` r
-riskdata <- dtms_forward(data=hrsdata,
+riskdata <- dtms_forward(data=workdata,
                          state="Retired",
-                         dtms=hrs,
+                         dtms=work,
                          idvar="ID",
                          timevar="Age",
                          statevar="State")
 
 riskdata <- dtms_format(data=riskdata,
-                       dtms=hrs,
+                       dtms=work,
                        idvar="ID",
                        timevar="Age",
                        statevar="State")
 
 riskdata <- dtms_clean(data=riskdata,
-                       dtms=hrs)
+                       dtms=work)
 #> Dropping  0  rows not in state space
 #> Dropping  0  rows not in time range
 #> Dropping  59719  rows starting or ending in NA
@@ -1402,7 +1408,7 @@ riskfit <- dtms_fit(data=riskdata,
 #> Iteration 19 - deviance = 66764.83 - criterion = 6.003535e-09
 #> converged
 
-riskprobs <- dtms_transitions(dtms=hrs,
+riskprobs <- dtms_transitions(dtms=work,
                             model = riskfit,
                             controls = list(Gender=0,
                                             time  =50:98,
@@ -1410,10 +1416,10 @@ riskprobs <- dtms_transitions(dtms=hrs,
                             CI=TRUE)
 
 
-riskTp <- dtms_matrix(dtms=hrs,
+riskTp <- dtms_matrix(dtms=work,
                       probs=riskprobs)
 
-dtms_risk(dtms=hrs,
+dtms_risk(dtms=work,
           matrix=riskTp,
           risk="Retired")
 #>     Working_50 Non-working_50     Retired_50 
@@ -1500,7 +1506,7 @@ bootfun <- function(data,dtms) {
 }
  
 bootresults <- dtms_boot(data=estdata,
-                         dtms=hrs,
+                         dtms=work,
                          fun=bootfun,
                          idvar="id",
                          rep=50,
@@ -1510,23 +1516,23 @@ bootresults <- dtms_boot(data=estdata,
 summary(bootresults)
 #> $`2.5%`
 #>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     12.966188    2.909587 13.16512 29.46710
-#> start:Non-working_50  8.404588    6.208739 13.35753 28.47656
-#> start:Retired_50      8.422508    3.643875 14.66208 27.10893
-#> AVERAGE              12.109604    3.396398 13.27196 29.20984
-#> start:Working_50     11.882462    4.182473 16.02120 32.54653
-#> start:Non-working_50  7.150076    7.870702 16.23182 31.96439
-#> start:Retired_50      7.588275    5.223289 17.60331 30.96286
-#> AVERAGE              10.247456    5.362829 16.17669 32.30925
+#> start:Working_50     12.960172    2.932487 13.12955 29.51513
+#> start:Non-working_50  8.436781    6.303589 13.30196 28.58817
+#> start:Retired_50      8.362599    3.736341 14.75058 27.40805
+#> AVERAGE              12.057130    3.444084 13.23731 29.29180
+#> start:Working_50     11.711454    4.207502 16.04367 32.52712
+#> start:Non-working_50  7.033145    7.977845 16.24707 31.90479
+#> start:Retired_50      7.469309    5.322355 17.66006 31.02394
+#> AVERAGE              10.053232    5.459133 16.17371 32.24375
 #> 
 #> $`97.5%`
 #>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     13.597566    3.243071 13.87937 30.40913
-#> start:Non-working_50  9.125704    6.784510 14.12104 29.57663
-#> start:Retired_50      9.160842    4.162234 15.61955 28.50062
-#> AVERAGE              12.738689    3.770195 14.00414 30.18429
-#> start:Working_50     12.366049    4.539682 17.00949 33.42698
-#> start:Non-working_50  7.748977    8.456705 17.24670 32.94065
-#> start:Retired_50      8.204105    5.817339 18.69539 32.19421
-#> AVERAGE              10.789838    5.843801 17.16793 33.22048
+#> start:Working_50     13.684361    3.213318 13.98772 30.37050
+#> start:Non-working_50  9.197160    6.758678 14.22344 29.54729
+#> start:Retired_50      9.331777    4.130763 15.80038 28.73037
+#> AVERAGE              12.850965    3.769855 14.12044 30.14762
+#> start:Working_50     12.385090    4.581502 17.00070 33.51501
+#> start:Non-working_50  7.802640    8.425560 17.28757 33.01120
+#> start:Retired_50      8.168055    5.718305 18.86797 32.22520
+#> AVERAGE              10.750256    5.866853 17.17165 33.30323
 ```

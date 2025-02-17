@@ -12,14 +12,14 @@
 #' }
 "simpledata"
 
-#' hrsdata: simulated working trajectories based on the Health and Retirement Study
+#' workdata: simulated working trajectories
 #'
 #' A simulated dataset of individuals' working trajectories during late working life and retirement
 #' age. The state space consists of three transient states (working; retired; not working)
 #' and one absorbing state (dead). The age range covers ages 50 to 99. The data is
 #' simulated using transition probabilities published as part of Dudel & Myrskylä (2017).
 #'
-#' @format `hrsdata`
+#' @format `workdata`
 #' A data frame with 250,000 rows and 4 columns:
 #' \describe{
 #'   \item{ID}{Person identifier}
@@ -28,5 +28,5 @@
 #'   \item{State}{The state occupied by an unit at a given age}
 #' }
 #' @source <https://doi.org/10.1007/s13524-017-0619-6>
-"hrsdata"
+"workdata"
 

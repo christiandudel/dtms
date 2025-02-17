@@ -27,25 +27,25 @@
 #'
 #' @examples
 ## Define model: Absorbing and transient states, time scale
-#' hrs <- dtms(transient=c("Working","Non-working","Retired"),
-#'             absorbing="Dead",
-#'             timescale=50:99)
+#' work <- dtms(transient=c("Working","Non-working","Retired"),
+#'              absorbing="Dead",
+#'              timescale=50:99)
 #' ## Reshape
-#' estdata <- dtms_format(data=hrsdata,
-#'                        dtms=hrs,
+#' estdata <- dtms_format(data=workdata,
+#'                        dtms=work,
 #'                        idvar="ID",
 #'                        timevar="Age",
 #'                        statevar="State")
 #' ## Drop dead-to-dead transitions etc
 #' estdata <- dtms_clean(data=estdata,
-#'                       dtms=hrs)
+#'                       dtms=work)
 #' ## Starting distributions
 #' # Men
-#' Sm <- dtms_start(dtms=hrs,
+#' Sm <- dtms_start(dtms=work,
 #'                  data=estdata,
 #'                  variables=list(Gender=0))
 #' # Women
-#' Sw <- dtms_start(dtms=hrs,
+#' Sw <- dtms_start(dtms=work,
 #'                  data=estdata,
 #'                  variables=list(Gender=1))
 

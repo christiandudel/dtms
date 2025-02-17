@@ -6,34 +6,34 @@ library(ggplot2)
 source("R/dtms_helpers.R")
 
 ## Define model: Absorbing and transient states, time scale
-hrs <- dtms(transient=c("Working","Non-working","Retired"),
+work <- dtms(transient=c("Working","Non-working","Retired"),
             absorbing="Dead",
             timescale=50:99)
 
 ## Quick look at data
-head(hrsdata)
+head(workdata)
 
 ## Reshape
-estdata <- dtms_format(data=hrsdata,
-                       dtms=hrs,
+estdata <- dtms_format(data=workdata,
+                       dtms=work,
                        idvar="ID",
                        timevar="Age",
                        statevar="State")
 
 ## Drop dead-to-dead transitions etc
 estdata <- dtms_clean(data=estdata,
-                      dtms=hrs)
+                      dtms=work)
 
 ## Overview
 summary(estdata)
 
 ## Basic censoring
 dtms_censoring(data=estdata,
-               dtms=hrs)
+               dtms=work)
 
 ## More advanced censoring example
 estdata <- dtms_censoring(data=estdata,
-                          dtms=hrs,
+                          dtms=work,
                           add=T,
                           addtype="obs")
 
@@ -53,7 +53,7 @@ fit <- dtms_fit(data=estdata,
 ## Transition probabilities by gender
 
 # Men
-probs_m <- dtms_transitions(dtms=hrs,
+probs_m <- dtms_transitions(dtms=work,
                             model = fit,
                             controls = list(Gender=0,
                                             time  =50:98,
@@ -61,7 +61,7 @@ probs_m <- dtms_transitions(dtms=hrs,
                             CI=TRUE)
 
 # Women
-probs_w <- dtms_transitions(dtms=hrs,
+probs_w <- dtms_transitions(dtms=work,
                             model = fit,
                             controls = list(Gender=1,
                                             time  =50:98,
@@ -80,61 +80,61 @@ probs_m |>  dtms_simplify() |>
 
 
 ## Transition matrices
-Tm <- dtms_matrix(dtms=hrs,
+Tm <- dtms_matrix(dtms=work,
                   probs=probs_m)
 
-Tw <- dtms_matrix(dtms=hrs,
+Tw <- dtms_matrix(dtms=work,
                   probs=probs_w)
 
 ## Starting distributions
-Sm <- dtms_start(dtms=hrs,
+Sm <- dtms_start(dtms=work,
                  data=estdata,
                  variables=list(Gender=0))
 
-Sw <- dtms_start(dtms=hrs,
+Sw <- dtms_start(dtms=work,
                  data=estdata,
                  variables=list(Gender=1))
 
 ## State expectancies
-dtms_expectancy(dtms=hrs,
+dtms_expectancy(dtms=work,
                 matrix=Tm,
                 start_distr=Sm)
 
-dtms_expectancy(dtms=hrs,
+dtms_expectancy(dtms=work,
                 matrix=Tw,
                 start_distr=Sw)
 
 ## A variant: ignoring retirement as a starting state (shown only for men)
 limited <- c("Working","Non-working")
 
-Smwr <- dtms_start(dtms=hrs,
+Smwr <- dtms_start(dtms=work,
                    data=estdata,
                    start_state=limited,
                    variables=list(Gender=0))
 
-dtms_expectancy(dtms=hrs,
+dtms_expectancy(dtms=work,
                 matrix=Tm,
                 start_state=limited,
                 start_distr=Smwr)
 
 ## Lifetime risk of reaching retirement
-dtms_risk(dtms=hrs,
+dtms_risk(dtms=work,
           matrix=Tm,
           risk="Retired",
           start_distr=Sm)
 
-dtms_risk(dtms=hrs,
+dtms_risk(dtms=work,
           matrix=Tw,
           risk="Retired",
           start_distr=Sw)
 
 ## Distribution of visits
-visitsm <- dtms_visits(dtms=hrs,
+visitsm <- dtms_visits(dtms=work,
                        matrix=Tm,
                        risk="Retired",
                        start_distr=Sm)
 
-visitsw <- dtms_visits(dtms=hrs,
+visitsw <- dtms_visits(dtms=work,
                        matrix=Tw,
                        risk="Retired",
                        start_distr=Sw,
@@ -144,12 +144,12 @@ summary(visitsm)
 summary(visitsw)
 
 ## First visit
-firstm <- dtms_first(dtms=hrs,
+firstm <- dtms_first(dtms=work,
                      matrix=Tm,
                      risk="Retired",
                      start_distr=Sm)
 
-firstw <- dtms_first(dtms=hrs,
+firstw <- dtms_first(dtms=work,
                      matrix=Tw,
                      risk="Retired",
                      start_distr=Sw)
@@ -160,12 +160,12 @@ summary(firstw)
 ## Last exit
 
 # Leaving employment to any state
-last1m <- dtms_last(dtms=hrs,
+last1m <- dtms_last(dtms=work,
                     matrix=Tm,
                     risk="Working",
                     start_distr=Sm)
 
-last1w <- dtms_last(dtms=hrs,
+last1w <- dtms_last(dtms=work,
                     matrix=Tw,
                     risk="Working",
                     start_distr=Sw)
@@ -174,13 +174,13 @@ summary(last1m)
 summary(last1w)
 
 # Leaving employment for retirement
-last2m <- dtms_last(dtms=hrs,
+last2m <- dtms_last(dtms=work,
                     matrix=Tm,
                     risk="Working",
                     risk_to="Retired",
                     start_distr=Sm)
 
-last2w <- dtms_last(dtms=hrs,
+last2w <- dtms_last(dtms=work,
                     matrix=Tw,
                     risk="Working",
                     risk_to="Retired",
@@ -235,7 +235,7 @@ bootfun <- function(data,dtms) {
 }
 
 bootresults <- dtms_boot(data=estdata,
-                         dtms=hrs,
+                         dtms=work,
                          fun=bootfun,
                          idvar="id",
                          rep=5,
@@ -274,38 +274,38 @@ pchisq(lldiff, df = dftest, lower.tail = FALSE)
 
 
 ## Comparing constrained vs unconstrained model: results
-probs1 <- dtms_transitions(dtms=hrs,
+probs1 <- dtms_transitions(dtms=work,
                            model = fit1,
                            controls = list(Gender=0,
                                            time  =50:98,
                                            time2 =(50:98)^2))
-T1 <- dtms_matrix(dtms=hrs,
+T1 <- dtms_matrix(dtms=work,
                   probs=probs1)
 
-probs2 <- dtms_transitions(dtms=hrs,
+probs2 <- dtms_transitions(dtms=work,
                            model = fit2,
                            controls = list(Gender=0,
                                             time  =50:98,
                                             time2 =(50:98)^2))
-T2 <- dtms_matrix(dtms=hrs,
+T2 <- dtms_matrix(dtms=work,
                   probs=probs2)
 
-dtms_expectancy(dtms=hrs,
+dtms_expectancy(dtms=work,
                 matrix=T1)
 
-dtms_expectancy(dtms=hrs,
+dtms_expectancy(dtms=work,
                 matrix=T2)
 
 ## Correct lifetime risk
 riskdata <- dtms_forward(data=estdata,
                          state="Retired",
-                         dtms=hrs)
+                         dtms=work)
 
 riskfit <- dtms_fit(data=riskdata,
                 controls=c("Gender","time","time2"),
                 package="mclogit")
 
-riskprobs <- dtms_transitions(dtms=hrs,
+riskprobs <- dtms_transitions(dtms=work,
                             model = riskfit,
                             controls = list(Gender=0,
                                             time  =50:98,
@@ -313,9 +313,9 @@ riskprobs <- dtms_transitions(dtms=hrs,
                             CI=TRUE)
 
 
-riskTp <- dtms_matrix(dtms=hrs,
+riskTp <- dtms_matrix(dtms=work,
                       probs=riskprobs)
 
-dtms_risk(dtms=hrs,
+dtms_risk(dtms=work,
           matrix=riskTp,
           risk="Retired")
