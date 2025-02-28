@@ -53,9 +53,10 @@ Currently, the following features are implemented:
 - Markov chain methods: (partial) state/life expectancy, (partial)
   lifetime risk, (partial) distribution of occupation time, (partial)
   distribution of waiting time to first visit, (partial) distribution of
-  waiting time to last exit, based on (partial) distributions
-  variance/standard deviation and median of occupancy time and first
-  visit/last exit, Markov chains with rewards.
+  waiting time to last exit, (partial) distribution of waiting time to
+  absorption, based on (partial) distributions variance/standard
+  deviation and median of occupancy time and first visit/last exit,
+  Markov chains with rewards.
 - Inference: analytic standard errors and variance-covariance matrix for
   transition probabilities; simulated inference using the bootstrap and
   the block bootstrap for other quantities, supports parallel computing.
@@ -150,7 +151,7 @@ in this shape, there are many tools already available in R and its
 extensions which allow you to reshape it. An example of data in long
 format could look like this:
 
-    #> Warning: Paket 'knitr' wurde unter R Version 4.4.2 erstellt
+    #> Warning: package 'knitr' was built under R version 4.4.2
 
 | idvar | timevar | statevar | X   | Y    |
 |:------|:--------|:---------|:----|:-----|
@@ -1274,8 +1275,7 @@ firstw <- dtms_first(dtms=work,
                      start_distr=Sw)  
 
 summary(firstm)
-#> Warning in dtms_distr_summary(distr = object, ...): NAs durch Umwandlung
-#> erzeugt
+#> Warning in dtms_distr_summary(distr = object, ...): NAs introduced by coercion
 #>                          MEAN VARIANCE       SD MEDIAN      RISK0
 #> start:Working_50     14.25887 42.52401 6.521043   14.5 0.00000000
 #> start:Non-working_50 12.31587 50.90513 7.134783   12.5 0.00000000
@@ -1283,8 +1283,7 @@ summary(firstm)
 #> AVERAGE              13.13712 52.58727 7.251708   13.5 0.06011927
 #> AVERAGE(COND.)       13.97744 44.20558 6.648728   13.5 0.00000000
 summary(firstw)
-#> Warning in dtms_distr_summary(distr = object, ...): NAs durch Umwandlung
-#> erzeugt
+#> Warning in dtms_distr_summary(distr = object, ...): NAs introduced by coercion
 #>                          MEAN VARIANCE       SD MEDIAN      RISK0
 #> start:Working_50     14.10717 40.00302 6.324794   14.5 0.00000000
 #> start:Non-working_50 12.54709 46.49749 6.818907   12.5 0.00000000
@@ -1306,8 +1305,7 @@ last1w <- dtms_last(dtms=work,
                     start_distr=Sw) 
 
 summary(last1m)
-#> Warning in dtms_distr_summary(distr = object, ...): NAs durch Umwandlung
-#> erzeugt
+#> Warning in dtms_distr_summary(distr = object, ...): NAs introduced by coercion
 #>                          MEAN VARIANCE       SD MEDIAN RISK0
 #> start:Working_50     16.50265 76.98676 8.774210   15.5    NA
 #> start:Non-working_50 18.02302 68.14259 8.254853   17.5    NA
@@ -1315,8 +1313,7 @@ summary(last1m)
 #> AVERAGE              16.73797 75.91238 8.712771   16.5    NA
 #> AVERAGE(COND.)       17.97027 68.47754 8.275116   17.5    NA
 summary(last1w)
-#> Warning in dtms_distr_summary(distr = object, ...): NAs durch Umwandlung
-#> erzeugt
+#> Warning in dtms_distr_summary(distr = object, ...): NAs introduced by coercion
 #>                          MEAN VARIANCE       SD MEDIAN RISK0
 #> start:Working_50     16.15218 87.76963 9.368545   15.5    NA
 #> start:Non-working_50 18.31738 77.06422 8.778623   17.5    NA
@@ -1338,8 +1335,7 @@ last2w <- dtms_last(dtms=work,
                     start_distr=Sw)  
 
 summary(last2m)
-#> Warning in dtms_distr_summary(distr = object, ...): NAs durch Umwandlung
-#> erzeugt
+#> Warning in dtms_distr_summary(distr = object, ...): NAs introduced by coercion
 #>                          MEAN VARIANCE       SD MEDIAN RISK0
 #> start:Working_50     18.74988 64.64429 8.040167   18.5    NA
 #> start:Non-working_50 19.72542 56.78054 7.535286   19.5    NA
@@ -1347,8 +1343,7 @@ summary(last2m)
 #> AVERAGE              18.90783 63.49802 7.968565   18.5    NA
 #> AVERAGE(COND.)       19.69276 57.06149 7.553906   19.5    NA
 summary(last2w)
-#> Warning in dtms_distr_summary(distr = object, ...): NAs durch Umwandlung
-#> erzeugt
+#> Warning in dtms_distr_summary(distr = object, ...): NAs introduced by coercion
 #>                          MEAN VARIANCE       SD MEDIAN RISK0
 #> start:Working_50     19.33660 73.65218 8.582085   19.5    NA
 #> start:Non-working_50 20.62023 63.26114 7.953687   20.5    NA
@@ -1516,23 +1511,23 @@ bootresults <- dtms_boot(data=estdata,
 summary(bootresults)
 #> $`2.5%`
 #>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     12.960172    2.932487 13.12955 29.51513
-#> start:Non-working_50  8.436781    6.303589 13.30196 28.58817
-#> start:Retired_50      8.362599    3.736341 14.75058 27.40805
-#> AVERAGE              12.057130    3.444084 13.23731 29.29180
-#> start:Working_50     11.711454    4.207502 16.04367 32.52712
-#> start:Non-working_50  7.033145    7.977845 16.24707 31.90479
-#> start:Retired_50      7.469309    5.322355 17.66006 31.02394
-#> AVERAGE              10.053232    5.459133 16.17371 32.24375
+#> start:Working_50     13.030891    2.906493 13.11683 29.51889
+#> start:Non-working_50  8.398140    6.242517 13.31942 28.50092
+#> start:Retired_50      8.315580    3.696493 14.76206 27.17239
+#> AVERAGE              12.131892    3.409914 13.24449 29.24220
+#> start:Working_50     11.735562    4.201171 16.10815 32.60676
+#> start:Non-working_50  7.128035    7.978284 16.33321 31.90106
+#> start:Retired_50      7.530768    5.246215 17.71422 31.02225
+#> AVERAGE              10.095333    5.378307 16.25377 32.32287
 #> 
 #> $`97.5%`
 #>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     13.684361    3.213318 13.98772 30.37050
-#> start:Non-working_50  9.197160    6.758678 14.22344 29.54729
-#> start:Retired_50      9.331777    4.130763 15.80038 28.73037
-#> AVERAGE              12.850965    3.769855 14.12044 30.14762
-#> start:Working_50     12.385090    4.581502 17.00070 33.51501
-#> start:Non-working_50  7.802640    8.425560 17.28757 33.01120
-#> start:Retired_50      8.168055    5.718305 18.86797 32.22520
-#> AVERAGE              10.750256    5.866853 17.17165 33.30323
+#> start:Working_50     13.650858    3.251417 13.96040 30.37139
+#> start:Non-working_50  9.154680    6.728461 14.24964 29.57568
+#> start:Retired_50      9.391682    4.061035 15.78859 28.79069
+#> AVERAGE              12.834655    3.789385 14.10306 30.19615
+#> start:Working_50     12.407510    4.574345 16.92464 33.44934
+#> start:Non-working_50  7.814163    8.459553 17.19875 32.97219
+#> start:Retired_50      8.234536    5.769158 18.73381 32.21028
+#> AVERAGE              10.836186    5.818638 17.09349 33.24876
 ```
