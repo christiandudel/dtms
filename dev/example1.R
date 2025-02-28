@@ -96,6 +96,10 @@ dtms_expectancy(dtms=simple,
                 matrix=Tp,
                 start_distr=S)
 
+# Time to being absorbed
+dtms_absorbed(matrix=Tp,dtms=simple,start_distr=S)
+summary(dtms_absorbed(matrix=Tp,dtms=simple,start_distr=S)) # Life expectancy
+
 ## Niave lifetime risk
 dtms_risk(dtms=simple,
           matrix=Tp,
