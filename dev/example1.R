@@ -97,14 +97,21 @@ dtms_expectancy(dtms=simple,
                 start_distr=S)
 
 # Time to being absorbed
-dtms_absorbed(matrix=Tp,dtms=simple,start_distr=S)
-
-# Survivorship function
-test <- dtms_absorbed(matrix=Tp,dtms=simple,start_distr=S)
-survivors <- c(1,1-cumsum(test[3,]))
-plot(0:20,survivors,type="l")
+dtms_absorbed(matrix=Tp,
+              dtms=simple,
+              start_distr=S)
 
 summary(dtms_absorbed(matrix=Tp,dtms=simple,start_distr=S)) # Life expectancy
+
+# Survivorship function
+dtms_survivor(matrix=Tp,
+              dtms=simple,
+              start_distr=S)
+
+dtms_survivor(matrix=Tp,
+              dtms=simple,
+              start_distr=S,
+              start_time=5)
 
 ## Niave lifetime risk
 dtms_risk(dtms=simple,

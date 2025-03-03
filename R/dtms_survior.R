@@ -1,20 +1,10 @@
-#' Calculate the distribution of the time until entering an absorbing state
+#' Calculate the survivorship function
 #'
 #' @description
-#' Calculates the distribution of the time until entering any of the absorbing
-#' states.
+#' Calculates the proportion of units surviving up to certain values of the
+#' time scale.
 #'
 #' @details
-#' In a discrete-time model, the time spent in a state depends on assumptions
-#' about when transitions happen. Currently, this functions supports two
-#' variants which can be specified with the argument `method`: mid-interval
-#' transitions can be selected with the option `mid` and imply that transitions
-#' happen at the middle of the time interval; and the option `end` assumes
-#' that instead transitions happen at the end of the interval. The calculation
-#' takes the step length of the time scale into account as specified by the
-#' `dtms` object. If the #' step length is not one fixed value, the first entry
-#' of `dtms$timestep` will be used.
-#'
 #' If a distribution of the starting states is provided with `start_distr` the
 #' output table has an additional row, showing the waiting time distribution
 #' unconditional on the starting state.
@@ -25,9 +15,8 @@
 #' @param start_state Character (optional), name of starting states. If NULL (default) all transient states will be used.
 #' @param start_time Numeric (optional), value of time scale for start. If NULL (default) first value of time scale will be used.
 #' @param end_time Numeric (optional), last value of time scale to consider. If NULL (default) all values of time scale starting from start_time will be used.
-#' @param method Character (optional), do transitions happen mid-interval (`mid`, default) or at the end of the interval (`end`), see details.
 #'
-#' @return A table with the distribution of time until entering any of the absorbing states.
+#' @return A table with the survivorship function.
 #' @export
 #'
 #' @examples
@@ -56,18 +45,17 @@
 #' S <- dtms_start(dtms=simple,
 #'                 data=estdata)
 #' ## Distribution of visits
-#' dtms_absorbed(dtms=simple,
+#' dtms_survivor(dtms=simple,
 #'               matrix=Tp,
 #'               start_distr=S)
 
 
-dtms_absorbed <- function(matrix,
+dtms_survivor <- function(matrix,
                           dtms,
                           start_distr=NULL,
                           start_state=NULL,
                           start_time=NULL,
-                          end_time=NULL,
-                          method="mid") {
+                          end_time=NULL) {
 
   # Check
   dtms_proper(dtms)
@@ -98,12 +86,25 @@ dtms_absorbed <- function(matrix,
     distr <- cbind(distr,rowSums(dtms_mtexp(Umat,step-1)-dtms_mtexp(Umat,step)))
   }
 
-  # Name
-  if(method=="mid") colnames(distr) <- paste((c(1:max_steps)-0.5)*dtms$timestep[1])
-  if(method=="end") colnames(distr) <- paste(c(1:max_steps)*dtms$timestep[1])
+  # Edit to survivor function
+  distr <- apply(distr,1,function(x) 1-cumsum(x))
+  distr <- t(distr)
+  distr <- cbind(1,distr)
+  colnames(distr) <- 0:(dim(distr)[2]-1)
 
   # Select starting states
   result <- distr[starting,]
+
+  # Shift states starting after t=0
+  statenames <- rownames(result)
+  for(state in statenames) {
+    shorttime <- dtms_gettime(state,sep=dtms$sep)
+    wherestart <- which(dtms$timescale==shorttime)
+    whatlength <- length(wherestart:length(dtms$timescale))
+    movevalues <- result[state,1:whatlength]
+    result[state,wherestart:length(dtms$timescale)] <- movevalues
+    result[state,1:(wherestart-1)] <- 1
+  }
 
   # Average
   if(!is.null(start_distr)) {
