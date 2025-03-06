@@ -9,6 +9,6 @@ usethis::use_data(simpledata,overwrite=TRUE)
 
 ### Import simulated working data
 # based on: https://doi.org/10.1007/s13524-017-0619-6
-load(url("https://github.com/christiandudel/dtms_data/raw/main/Output/hrs.rda"))
+load(url("https://github.com/christiandudel/dtms_data/raw/main/Output/work.rda"))
 workdata <- as.data.frame(simdata)
 usethis::use_data(workdata,overwrite=TRUE)
