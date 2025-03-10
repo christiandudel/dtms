@@ -12,8 +12,6 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 
 Christian Dudel, <dudel@demogr.mpg.de>
 
-Peng Li, <li@demogr.mpg.de>
-
 ## Disclaimer
 
 This package is currently undergoing development and many functions are
@@ -23,9 +21,9 @@ be removed or changed without warning.
 
 ## Acknowledgements
 
-We thank Alessandro Feraldi, Aapo Hiilamo, Daniel Schneider, Donata
-Stonkute, and Angelo Lorenti for helpful comments and suggestions. All
-errors remain our own.
+We thank Peng Li, Alessandro Feraldi, Aapo Hiilamo, Daniel Schneider,
+Donata Stonkute, and Angelo Lorenti for helpful comments, suggestions,
+and code snippets. All errors remain our own.
 
 ## Overview
 
@@ -55,8 +53,8 @@ Currently, the following features are implemented:
   distribution of waiting time to first visit, (partial) distribution of
   waiting time to last exit, (partial) distribution of waiting time to
   absorption, based on (partial) distributions variance/standard
-  deviation and median of occupancy time and first visit/last exit,
-  Markov chains with rewards.
+  deviation and median of occupancy time/first visit/last exit/time to
+  absorption, survivorship function, Markov chains with rewards.
 - Inference: analytic standard errors and variance-covariance matrix for
   transition probabilities; simulated inference using the bootstrap and
   the block bootstrap for other quantities, supports parallel computing.
@@ -1511,23 +1509,23 @@ bootresults <- dtms_boot(data=estdata,
 summary(bootresults)
 #> $`2.5%`
 #>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     13.030891    2.906493 13.11683 29.51889
-#> start:Non-working_50  8.398140    6.242517 13.31942 28.50092
-#> start:Retired_50      8.315580    3.696493 14.76206 27.17239
-#> AVERAGE              12.131892    3.409914 13.24449 29.24220
-#> start:Working_50     11.735562    4.201171 16.10815 32.60676
-#> start:Non-working_50  7.128035    7.978284 16.33321 31.90106
-#> start:Retired_50      7.530768    5.246215 17.71422 31.02225
-#> AVERAGE              10.095333    5.378307 16.25377 32.32287
+#> start:Working_50     12.992311    2.924063 13.18360 29.42307
+#> start:Non-working_50  8.376235    6.264535 13.37934 28.46530
+#> start:Retired_50      8.306941    3.709461 14.73057 27.17025
+#> AVERAGE              12.132629    3.414141 13.30789 29.17361
+#> start:Working_50     11.718516    4.187246 16.06298 32.47714
+#> start:Non-working_50  7.000634    7.979723 16.24607 31.81509
+#> start:Retired_50      7.451652    5.230861 17.58359 30.81799
+#> AVERAGE              10.051704    5.365430 16.20503 32.18371
 #> 
 #> $`97.5%`
 #>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     13.650858    3.251417 13.96040 30.37139
-#> start:Non-working_50  9.154680    6.728461 14.24964 29.57568
-#> start:Retired_50      9.391682    4.061035 15.78859 28.79069
-#> AVERAGE              12.834655    3.789385 14.10306 30.19615
-#> start:Working_50     12.407510    4.574345 16.92464 33.44934
-#> start:Non-working_50  7.814163    8.459553 17.19875 32.97219
-#> start:Retired_50      8.234536    5.769158 18.73381 32.21028
-#> AVERAGE              10.836186    5.818638 17.09349 33.24876
+#> start:Working_50     13.568265    3.209632 13.79892 30.35783
+#> start:Non-working_50  9.050847    6.765028 14.06732 29.58235
+#> start:Retired_50      9.236835    4.126683 15.53882 28.67159
+#> AVERAGE              12.740164    3.751763 13.92438 30.15850
+#> start:Working_50     12.403986    4.575680 16.99440 33.37241
+#> start:Non-working_50  7.771565    8.478014 17.30133 32.82917
+#> start:Retired_50      8.176143    5.769403 18.86668 32.09198
+#> AVERAGE              10.785887    5.859130 17.18084 33.15656
 ```

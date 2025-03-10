@@ -22,8 +22,6 @@ knitr::opts_chunk$set(
 
 Christian Dudel, dudel@demogr.mpg.de
 
-Peng Li, li@demogr.mpg.de 
-
 ## Disclaimer
 
 This package is currently undergoing development and many functions are 
@@ -33,9 +31,9 @@ changed without warning.
 
 ## Acknowledgements
 
-We thank Alessandro Feraldi, Aapo Hiilamo, Daniel Schneider, Donata Stonkute, 
-and Angelo Lorenti for helpful comments and suggestions. All errors remain 
-our own.
+We thank Peng Li,  Alessandro Feraldi, Aapo Hiilamo, Daniel Schneider, 
+Donata Stonkute, and Angelo Lorenti for helpful comments, suggestions, and code
+snippets. All errors remain our own.
 
 ## Overview
 
