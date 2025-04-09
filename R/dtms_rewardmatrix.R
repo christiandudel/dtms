@@ -14,6 +14,8 @@
 #' @return A matrix with rewards.
 #' @export
 #'
+#' @seealso [dtms_reward()]
+#'
 #' @examples
 #' ## Define model: Absorbing and transient states, time scale
 #' simple <- dtms(transient=c("A","B"),

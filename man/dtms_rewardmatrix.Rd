@@ -40,3 +40,6 @@ simple <- dtms(transient=c("A","B"),
                timescale=0:20)
 dtms_rewardmatrix(dtms=simple,receiving="B",reward=0.3)
 }
+\seealso{
+[dtms_reward()]
+}

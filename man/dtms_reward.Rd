@@ -49,3 +49,6 @@ dtms_reward(dtms=simple,
             matrix=Tp,
             reward=Rw)
 }
+\seealso{
+[dtms_rewardmatrix()]
+}
