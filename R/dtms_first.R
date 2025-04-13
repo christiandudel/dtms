@@ -45,6 +45,9 @@
 #' @return A table of the distribution of the time needed to reach the subset of states
 #' @export
 #'
+#' @seealso
+#' \code{\link{dtms_distr_summary}} to help with summarizing the resulting distribution.
+#'
 #' @examples
 #' ## Define model: Absorbing and transient states, time scale
 #' simple <- dtms(transient=c("A","B"),

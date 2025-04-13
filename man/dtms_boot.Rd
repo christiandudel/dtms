@@ -108,3 +108,6 @@ bootstrap <- dtms_boot(data=estdata,
 summary(bootstrap,
         probs=c(0.025,0.5,0.975))
 }
+\seealso{
+\code{\link{dtms_boot_summary}} to help with summarizing the results.
+}

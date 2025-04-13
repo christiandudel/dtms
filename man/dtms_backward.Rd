@@ -78,5 +78,5 @@ dtms_backward(data=simpledata,
               overwrite="transient")
 }
 \seealso{
-[func(dtms_forward)]
+\code{\link{dtms_forward}} to carry states forward.
 }

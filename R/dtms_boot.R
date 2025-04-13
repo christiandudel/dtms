@@ -42,6 +42,9 @@
 #' @return A list of results, see details
 #' @export
 #'
+#' @seealso
+#' \code{\link{dtms_boot_summary}} to help with summarizing the results.
+#'
 #' @examples
 #' ## Define model: Absorbing and transient states, time scale
 #' simple <- dtms(transient=c("A","B"),

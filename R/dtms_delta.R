@@ -6,11 +6,21 @@
 #' probabilities.
 #'
 #' @details
+#' Delta is the weighted average absolute difference between the predicted
+#' transition probabilities from two multistate models. It can attain values
+#' between 0 and 1, where 0 indicates perfect similarity and 1 indicates that
+#' the two models always give predictions at the opposite extremes; i.e., for
+#' all predicted probabilities, one model predicts a probability of 0 and the
+#' other predicts a probability of 1.
+#'
+#' This function is designed to use delta to assess the impact of including
+#' different lags of the state variable in the model.
+#'
 #' To compare two different models, the arguments `data`, `model1`, and `model2`
 #' are needed. `data` specifies the data frame used for predicting transition
 #' probabilities. It needs to have all variables required for predicting based
-#' on both `model1` and `model2`. The latter are the names of multistate models
-#' estimated with \code{dtms_fit}.
+#' on both `model1` and `model2`. The latter two arguments are the names of
+#' multistate models estimated with \code{dtms_fit}.
 #'
 #' To compare how the inclusion of different lags of the state variable affects
 #' predictions, a model needs to be specified using `data` and `dtms`, as well
@@ -19,7 +29,7 @@
 #' the state at t-3 also has the state at t-2, at t-1, and at t. All resulting
 #' models are compared to a model which does not control for the current or any
 #' past state. If `lags=NULL` the Markov model is comapred to this model not
-#' accounting for states.
+#' accounting for the current state or any past states.
 #'
 #' The argument `keepNA` controls how missing values are handled. These will
 #' often occur for lagged states. For instance, for the first transition

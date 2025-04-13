@@ -103,3 +103,6 @@ dtms_first(dtms=simple,
            risk="A",
            start_distr=S)
 }
+\seealso{
+\code{\link{dtms_distr_summary}} to help with summarizing the resulting distribution.
+}

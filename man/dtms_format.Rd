@@ -144,3 +144,7 @@ idvar="id",
 timevar="time",
 statevar="state")
 }
+\seealso{
+\code{\link{dtms_data_summary}} to summarize data in transition format.
+\code{\link{dtms_censoring}} for descriptives on censoring.
+}

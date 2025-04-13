@@ -95,3 +95,6 @@ dtms_visits(dtms=simple,
             start_distr=S,
             total=TRUE)
 }
+\seealso{
+\code{\link{dtms_distr_summary}} to help with summarizing the resulting distribution.
+}

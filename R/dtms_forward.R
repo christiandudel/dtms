@@ -25,7 +25,8 @@
 #' be `B, B, A, A, NA, A, A`. Finally, if `overwrite==all` then all values in
 #' the sequence will be replaced: `B, B, A, A, A, A, A`.
 #'
-#' @seealso [func(dtms_backward)]
+#' @seealso
+#' \code{\link{dtms_backward}} to carry states backward.
 #'
 #' @param data A data frame in long format.
 #' @param state Character, name of the state to be carried forward.

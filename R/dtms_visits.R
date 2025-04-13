@@ -38,6 +38,9 @@
 #' @return A table with the distribution of time spent in a subset of states.
 #' @export
 #'
+#' @seealso
+#' \code{\link{dtms_distr_summary}} to help with summarizing the resulting distribution.
+#'
 #' @examples
 #' ## Define model: Absorbing and transient states, time scale
 #' simple <- dtms(transient=c("A","B"),
