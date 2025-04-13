@@ -74,7 +74,7 @@ simulations is available at https://github.com/christiandudel/dtms_data/.
 
 The documentation provided below does currently not cover all features. 
 
-## Installation
+## Installation 
 
 You can install the development version of `dtms` like this:
 ``` r

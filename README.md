@@ -74,7 +74,7 @@ The documentation provided below does currently not cover all features.
 You can install the development version of `dtms` like this:
 
 ``` r
-install.packages("remotes)
+install.packages("remotes")
 remotes::install_github("christiandudel/dtms")
 ```
 
@@ -149,7 +149,7 @@ in this shape, there are many tools already available in R and its
 extensions which allow you to reshape it. An example of data in long
 format could look like this:
 
-    #> Warning: package 'knitr' was built under R version 4.4.2
+    #> Warning: Paket 'knitr' wurde unter R Version 4.4.2 erstellt
 
 | idvar | timevar | statevar | X   | Y    |
 |:------|:--------|:---------|:----|:-----|
@@ -1273,7 +1273,8 @@ firstw <- dtms_first(dtms=work,
                      start_distr=Sw)  
 
 summary(firstm)
-#> Warning in dtms_distr_summary(distr = object, ...): NAs introduced by coercion
+#> Warning in dtms_distr_summary(distr = object, ...): NAs durch Umwandlung
+#> erzeugt
 #>                          MEAN VARIANCE       SD MEDIAN      RISK0
 #> start:Working_50     14.25887 42.52401 6.521043   14.5 0.00000000
 #> start:Non-working_50 12.31587 50.90513 7.134783   12.5 0.00000000
@@ -1281,7 +1282,8 @@ summary(firstm)
 #> AVERAGE              13.13712 52.58727 7.251708   13.5 0.06011927
 #> AVERAGE(COND.)       13.97744 44.20558 6.648728   13.5 0.00000000
 summary(firstw)
-#> Warning in dtms_distr_summary(distr = object, ...): NAs introduced by coercion
+#> Warning in dtms_distr_summary(distr = object, ...): NAs durch Umwandlung
+#> erzeugt
 #>                          MEAN VARIANCE       SD MEDIAN      RISK0
 #> start:Working_50     14.10717 40.00302 6.324794   14.5 0.00000000
 #> start:Non-working_50 12.54709 46.49749 6.818907   12.5 0.00000000
@@ -1303,7 +1305,8 @@ last1w <- dtms_last(dtms=work,
                     start_distr=Sw) 
 
 summary(last1m)
-#> Warning in dtms_distr_summary(distr = object, ...): NAs introduced by coercion
+#> Warning in dtms_distr_summary(distr = object, ...): NAs durch Umwandlung
+#> erzeugt
 #>                          MEAN VARIANCE       SD MEDIAN RISK0
 #> start:Working_50     16.50265 76.98676 8.774210   15.5    NA
 #> start:Non-working_50 18.02302 68.14259 8.254853   17.5    NA
@@ -1311,7 +1314,8 @@ summary(last1m)
 #> AVERAGE              16.73797 75.91238 8.712771   16.5    NA
 #> AVERAGE(COND.)       17.97027 68.47754 8.275116   17.5    NA
 summary(last1w)
-#> Warning in dtms_distr_summary(distr = object, ...): NAs introduced by coercion
+#> Warning in dtms_distr_summary(distr = object, ...): NAs durch Umwandlung
+#> erzeugt
 #>                          MEAN VARIANCE       SD MEDIAN RISK0
 #> start:Working_50     16.15218 87.76963 9.368545   15.5    NA
 #> start:Non-working_50 18.31738 77.06422 8.778623   17.5    NA
@@ -1333,7 +1337,8 @@ last2w <- dtms_last(dtms=work,
                     start_distr=Sw)  
 
 summary(last2m)
-#> Warning in dtms_distr_summary(distr = object, ...): NAs introduced by coercion
+#> Warning in dtms_distr_summary(distr = object, ...): NAs durch Umwandlung
+#> erzeugt
 #>                          MEAN VARIANCE       SD MEDIAN RISK0
 #> start:Working_50     18.74988 64.64429 8.040167   18.5    NA
 #> start:Non-working_50 19.72542 56.78054 7.535286   19.5    NA
@@ -1341,7 +1346,8 @@ summary(last2m)
 #> AVERAGE              18.90783 63.49802 7.968565   18.5    NA
 #> AVERAGE(COND.)       19.69276 57.06149 7.553906   19.5    NA
 summary(last2w)
-#> Warning in dtms_distr_summary(distr = object, ...): NAs introduced by coercion
+#> Warning in dtms_distr_summary(distr = object, ...): NAs durch Umwandlung
+#> erzeugt
 #>                          MEAN VARIANCE       SD MEDIAN RISK0
 #> start:Working_50     19.33660 73.65218 8.582085   19.5    NA
 #> start:Non-working_50 20.62023 63.26114 7.953687   20.5    NA
@@ -1509,23 +1515,23 @@ bootresults <- dtms_boot(data=estdata,
 summary(bootresults)
 #> $`2.5%`
 #>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     12.992311    2.924063 13.18360 29.42307
-#> start:Non-working_50  8.376235    6.264535 13.37934 28.46530
-#> start:Retired_50      8.306941    3.709461 14.73057 27.17025
-#> AVERAGE              12.132629    3.414141 13.30789 29.17361
-#> start:Working_50     11.718516    4.187246 16.06298 32.47714
-#> start:Non-working_50  7.000634    7.979723 16.24607 31.81509
-#> start:Retired_50      7.451652    5.230861 17.58359 30.81799
-#> AVERAGE              10.051704    5.365430 16.20503 32.18371
+#> start:Working_50     12.849022    2.847954 13.16070 29.46910
+#> start:Non-working_50  8.268026    6.145123 13.27140 28.42953
+#> start:Retired_50      8.275208    3.585176 14.48438 26.98939
+#> AVERAGE              11.965562    3.332850 13.24822 29.17870
+#> start:Working_50     11.747561    4.200103 16.03296 32.49657
+#> start:Non-working_50  7.127560    7.967146 16.22421 31.86486
+#> start:Retired_50      7.539754    5.183664 17.56111 30.85482
+#> AVERAGE              10.136488    5.380913 16.16549 32.21976
 #> 
 #> $`97.5%`
 #>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     13.568265    3.209632 13.79892 30.35783
-#> start:Non-working_50  9.050847    6.765028 14.06732 29.58235
-#> start:Retired_50      9.236835    4.126683 15.53882 28.67159
-#> AVERAGE              12.740164    3.751763 13.92438 30.15850
-#> start:Working_50     12.403986    4.575680 16.99440 33.37241
-#> start:Non-working_50  7.771565    8.478014 17.30133 32.82917
-#> start:Retired_50      8.176143    5.769403 18.86668 32.09198
-#> AVERAGE              10.785887    5.859130 17.18084 33.15656
+#> start:Working_50     13.601262    3.249637 13.95731 30.29396
+#> start:Non-working_50  9.194868    6.756624 14.19945 29.52042
+#> start:Retired_50      9.226872    4.124567 15.58979 28.48318
+#> AVERAGE              12.771509    3.787082 14.06875 30.07965
+#> start:Working_50     12.402265    4.547327 16.99341 33.37622
+#> start:Non-working_50  7.771534    8.483727 17.29568 32.86990
+#> start:Retired_50      8.095325    5.840458 18.72101 32.06012
+#> AVERAGE              10.810508    5.845310 17.18022 33.14909
 ```
