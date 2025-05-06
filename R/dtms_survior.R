@@ -100,9 +100,9 @@ dtms_survivor <- function(matrix,
   for(state in statenames) {
     shorttime <- dtms_gettime(state,sep=dtms$sep)
     wherestart <- which(dtms$timescale==shorttime)
-    whatlength <- length(wherestart:length(dtms$timescale))
+    whatlength <- length(wherestart:max_steps)
     movevalues <- result[state,1:whatlength]
-    result[state,wherestart:length(dtms$timescale)] <- movevalues
+    result[state,wherestart:max_steps] <- movevalues
     result[state,1:(wherestart-1)] <- 1
   }
 

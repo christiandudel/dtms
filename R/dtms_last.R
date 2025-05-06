@@ -124,7 +124,7 @@ dtms_last <- function(matrix,
 
   # Get maxtime
   if(is.null(end_time)) maxtime <- length(timescale_reduced)-1 else
-    maxtime <- which(end_time==timescale_reduced)
+    maxtime <- which(end_time==timescale_reduced)-1
 
   # Generate t
   if(is.null(start_time)) t <- 0 else

@@ -73,8 +73,8 @@ dtms_risk <- function(matrix,
   if(!is.null(end_time)) {
     times <- dtms_gettime(allstates,dtms$sep)
     times <- times<=end_time
-    times[!is.logical(times)] <- F
-    selector <- selector & times
+    times[is.na(times)] <- FALSE
+    selectorU <- selectorU & times
   }
 
   # Invert selection

@@ -92,6 +92,11 @@ dtms_expectancy(dtms=simple,
                 start_distr=S)
 
 dtms_expectancy(dtms=simple,
+                matrix=Tp,
+                start_time=5,
+                end_time=7)
+
+dtms_expectancy(dtms=simple,
                 risk="A",
                 matrix=Tp,
                 start_distr=S)
@@ -100,6 +105,11 @@ dtms_expectancy(dtms=simple,
 dtms_absorbed(matrix=Tp,
               dtms=simple,
               start_distr=S)
+
+dtms_absorbed(matrix=Tp,
+              dtms=simple,
+              start_time=5,
+              end_time=5)
 
 summary(dtms_absorbed(matrix=Tp,dtms=simple,start_distr=S)) # Life expectancy
 
@@ -111,11 +121,18 @@ dtms_survivor(matrix=Tp,
 dtms_survivor(matrix=Tp,
               dtms=simple,
               start_distr=S,
-              start_time=5)
+              start_time=5,
+              end_time=7)
 
 ## Niave lifetime risk
 dtms_risk(dtms=simple,
           matrix=Tp,
+          risk="A")
+
+dtms_risk(dtms=simple,
+          matrix=Tp,
+          start_time=5,
+          end_time=7,
           risk="A")
 
 ## Distribution of visits
@@ -125,6 +142,12 @@ example <- dtms_visits(dtms=simple,
                        start_distr=S)
 summary(example)
 
+dtms_visits(dtms=simple,
+            matrix=Tp,
+            risk="A",
+            start_time=5,
+            end_time=7)
+
 ## Distribution of waiting time to last exit
 example2 <- dtms_last(dtms=simple,
                       matrix=Tp,
@@ -133,6 +156,19 @@ example2 <- dtms_last(dtms=simple,
                       rescale=T,
                       total=F)
 summary(example2)
+
+dtms_last(dtms=simple,
+          matrix=Tp,
+          risk="A",
+          start_time=5,
+          end_time=7)
+
+dtms_first(dtms=simple,
+          matrix=Tp,
+          risk="A",
+          start_time=5,
+          end_time=7)
+
 
 ## Check relevance of lags
 lags <- dtms_delta(data=estdata,

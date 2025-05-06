@@ -32,8 +32,8 @@ changed without warning.
 ## Acknowledgements
 
 We thank Peng Li,  Alessandro Feraldi, Aapo Hiilamo, Daniel Schneider, 
-Donata Stonkute, and Angelo Lorenti for helpful comments, suggestions, and code
-snippets. All errors remain our own.
+Donata Stonkute, Marcus Ebeling, and Angelo Lorenti for helpful comments, 
+suggestions, and code snippets. All errors remain our own.
 
 ## Overview
 

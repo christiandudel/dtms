@@ -136,7 +136,8 @@ dtms_first  <- function(matrix,
   end <- 0
 
   # Loop to generate results
-  for(i in 1:maxtime) {
+  totalsteps <- length(t:maxtime)
+  for(i in 1:totalsteps) {
     past_steps <- c(past_steps,upcoming)
     tmp <- vector("list",1)
     tmp[[1]] <- t(dtms_mtexp(P_E,upcoming-0.5)%*%
