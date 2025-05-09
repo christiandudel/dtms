@@ -133,6 +133,7 @@ dtms_risk(dtms=simple,
           matrix=Tp,
           start_time=5,
           end_time=7,
+          start_state="B",
           risk="A")
 
 ## Distribution of visits

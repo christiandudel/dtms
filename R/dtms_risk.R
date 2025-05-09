@@ -109,7 +109,7 @@ dtms_risk <- function(matrix,
 
   # Get results in shape
   result <- rep(1,length(starting))
-  whererisk <- !dtms$transient%in%risk
+  whererisk <- !start_state%in%risk
   result[whererisk] <- results[starting[whererisk],"Risk"]
   names(result) <- starting
 
