@@ -35,6 +35,14 @@ We thank Peng Li,  Alessandro Feraldi, Aapo Hiilamo, Daniel Schneider,
 Donata Stonkute, Marcus Ebeling, and Angelo Lorenti for helpful comments, 
 suggestions, and code snippets. All errors remain our own.
 
+## Citation
+
+If you use this package in your work, please use the following citation (or
+a variation):
+
+Dudel, C. (2025). dtms: discrete-time multistate models in R. R package version 
+`r packageVersion("dtms")`, available at https://github.com/christiandudel/dtms
+
 ## Overview
 
 The package `dtms` implements discrete-time multistate models in R. It comes 
