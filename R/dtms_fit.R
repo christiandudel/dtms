@@ -72,6 +72,9 @@ dtms_fit <- function(data,
                      full=FALSE,
                      ...) {
 
+  # Require package used for estimation (requireNamespace does not help here)
+  require(package,character.only=TRUE,quietly=TRUE)
+
   # Build formula if not specified
   if(is.null(formula)) formula <- dtms_formula(controls=controls,
                                                fromvar=fromvar,

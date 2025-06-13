@@ -48,7 +48,7 @@ Dudel, C. (2025). dtms: discrete-time multistate models in R. R package version
 The package `dtms` implements discrete-time multistate models in R. It comes 
 with many tools to analyze the results of multistate models. The workflow mainly 
 consists of estimating a discrete-time multistate model and then applying 
-methods for absorbing Markov chains. 
+methods for absorbing Markov chains.  
 
 Currently, the following features are implemented:
 

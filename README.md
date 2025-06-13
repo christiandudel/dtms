@@ -31,7 +31,7 @@ If you use this package in your work, please use the following citation
 (or a variation):
 
 Dudel, C. (2025). dtms: discrete-time multistate models in R. R package
-version 0.3.4, available at <https://github.com/christiandudel/dtms>
+version 0.3.1, available at <https://github.com/christiandudel/dtms>
 
 ## Overview
 
@@ -1520,23 +1520,23 @@ bootresults <- dtms_boot(data=estdata,
 summary(bootresults)
 #> $`2.5%`
 #>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     13.035394    2.957073 13.04366 29.43717
-#> start:Non-working_50  8.393701    6.332437 13.17579 28.45016
-#> start:Retired_50      8.404385    3.759847 14.48143 27.09845
-#> AVERAGE              12.109361    3.473425 13.13789 29.16480
-#> start:Working_50     11.858728    4.089100 16.14761 32.62118
-#> start:Non-working_50  7.234557    7.826508 16.36158 32.03516
-#> start:Retired_50      7.590017    5.057891 17.71022 30.98864
-#> AVERAGE              10.120980    5.235516 16.28729 32.36513
+#> start:Working_50     12.947237    2.938809 13.00350 29.30397
+#> start:Non-working_50  8.345496    6.261257 13.22828 28.29887
+#> start:Retired_50      8.402339    3.711568 14.55758 27.07775
+#> AVERAGE              12.111092    3.460848 13.11541 29.03985
+#> start:Working_50     11.789847    4.248817 16.11114 32.52906
+#> start:Non-working_50  7.142026    8.053488 16.32419 31.96838
+#> start:Retired_50      7.532310    5.239567 17.70932 31.05200
+#> AVERAGE              10.189003    5.459393 16.23541 32.29870
 #> 
 #> $`97.5%`
 #>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     13.604208    3.226925 13.96962 30.36380
-#> start:Non-working_50  9.130518    6.757586 14.20631 29.59568
-#> start:Retired_50      9.308309    4.171351 15.68495 28.57230
-#> AVERAGE              12.759835    3.775207 14.09630 30.15751
-#> start:Working_50     12.441154    4.658975 16.82365 33.37784
-#> start:Non-working_50  7.863954    8.590656 17.09783 32.84808
-#> start:Retired_50      8.171372    5.862383 18.61772 32.09945
-#> AVERAGE              10.838962    5.917279 16.98043 33.13899
+#> start:Working_50     13.614006    3.206979 13.94862 30.38433
+#> start:Non-working_50  9.101414    6.679373 14.26369 29.57414
+#> start:Retired_50      9.148888    4.161952 15.84699 28.63868
+#> AVERAGE              12.713152    3.756374 14.09072 30.17893
+#> start:Working_50     12.337813    4.553917 16.99797 33.44150
+#> start:Non-working_50  7.773604    8.431921 17.29013 32.99617
+#> start:Retired_50      8.188777    5.767817 18.80327 32.26994
+#> AVERAGE              10.723669    5.827537 17.17969 33.25018
 ```

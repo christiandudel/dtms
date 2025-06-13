@@ -42,13 +42,13 @@ estdata |>
   table() |>
   prop.table(margin=1)
 
-## Add age squared
+## Add age squared (used below)
 estdata$time2 <- estdata$time^2
 
-## Fit model
+## Fit model with spline
 fit <- dtms_fit(data=estdata,
-                controls=c("Gender","time","time2"),
-                package="mclogit")
+                controls=c("Gender","s(time)"),
+                package="VGAM")
 
 ## Transition probabilities by gender
 
