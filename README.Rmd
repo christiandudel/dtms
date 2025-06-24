@@ -20,7 +20,7 @@ knitr::opts_chunk$set(
 
 ## Authors
 
-Christian Dudel, dudel@demogr.mpg.de
+Christian Dudel, dudel@demogr.mpg.de 
 
 ## Disclaimer
 
