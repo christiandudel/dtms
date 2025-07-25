@@ -44,10 +44,9 @@ Currently, the following features are implemented:
 
 - Data handling: functions for reshaping data, cleaning data, editing
   states, generating indicators of duration and number of occurrences of
-  a state, indicators of censoring, general descriptive statistics, and
-  descriptive information on different types of censoring.
-- Estimation of transition probabilities: builds on existing R packages,
-  allowing for semiparametric estimation
+  a state, indicators of censoring, descriptive information on different
+  types of censoring, and other general descriptive statistics.
+- Estimation of transition probabilities: semiparametric estimation
   ([VGAM](https://cran.r-project.org/web/packages/VGAM)), random effects
   and random intercepts
   ([mclogit](https://cran.r-project.org/web/packages/mclogit)), and
@@ -56,20 +55,22 @@ Currently, the following features are implemented:
   for constrained and unconstrained/fully interacted models. Functions
   for descriptive statistics on transition probabilities and for
   plotting them are also available.
-- Markov chain methods: (partial) state/life expectancy, (partial)
-  lifetime risk, (partial) distribution of occupation time, (partial)
-  distribution of waiting time to first visit, (partial) distribution of
-  waiting time to last exit, (partial) distribution of waiting time to
-  absorption, based on (partial) distributions variance/standard
-  deviation and median of occupancy time/first visit/last exit/time to
-  absorption, survivorship function, Markov chains with rewards.
+- Markov chain methods: survivorship function, (partial) state/life
+  expectancy, (partial) lifetime risk, (partial) distribution of
+  occupation time, (partial) distribution of waiting time to first
+  visit, (partial) distribution of waiting time to last exit, (partial)
+  distribution of waiting time to absorption, based on (partial)
+  distributions variance/standard deviation and median of occupancy
+  time/first visit/last exit/time to absorption, Markov chains with
+  rewards.
 - Inference: analytic standard errors and variance-covariance matrix for
   transition probabilities; simulated inference using the bootstrap and
-  the block bootstrap for other quantities, supports parallel computing.
+  the block bootstrap for other quantities, supporting parallel
+  computing.
 - Other features: simulation of Markov chains using the package
   [markovchain](https://cran.r-project.org/web/packages/markovchain);
-  limited support of survey weights; limited support of irregular time
-  intervals.
+  survey weights (experimental); irregular time intervals
+  (experimental).
 - Examples: the package comes with two simulated data sets which are
   used for examples. These are described further below. The input data
   and code for the simulations is available at
@@ -1520,23 +1521,58 @@ bootresults <- dtms_boot(data=estdata,
 summary(bootresults)
 #> $`2.5%`
 #>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     13.086006    2.947224 13.00296 29.37140
-#> start:Non-working_50  8.488297    6.240119 13.13482 28.27001
-#> start:Retired_50      8.507106    3.636732 14.53426 26.96950
-#> AVERAGE              12.201183    3.431235 13.11324 29.07818
-#> start:Working_50     11.750882    4.198394 16.09090 32.59104
-#> start:Non-working_50  7.198394    7.929736 16.35089 32.00206
-#> start:Retired_50      7.416582    5.207605 17.72310 30.97318
-#> AVERAGE              10.124823    5.353695 16.25634 32.33190
+#> start:Working_50     12.983063    2.954183 13.09256 29.38032
+#> start:Non-working_50  8.503088    6.272442 13.24360 28.47507
+#> start:Retired_50      8.433342    3.733966 14.69171 27.24157
+#> AVERAGE              12.135878    3.462715 13.20772 29.14377
+#> start:Working_50     11.786478    4.211970 16.06987 32.54560
+#> start:Non-working_50  7.161701    7.997588 16.31365 31.96381
+#> start:Retired_50      7.504938    5.252168 17.78136 31.11718
+#> AVERAGE              10.167464    5.407793 16.21938 32.30730
 #> 
 #> $`97.5%`
 #>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     13.711903    3.212994 13.86623 30.39906
-#> start:Non-working_50  9.221357    6.733372 14.13364 29.55472
-#> start:Retired_50      9.412416    4.105567 15.65218 28.57459
-#> AVERAGE              12.866624    3.735265 14.01401 30.17032
-#> start:Working_50     12.426145    4.561718 16.94152 33.54511
-#> start:Non-working_50  7.852745    8.400924 17.24000 33.02846
-#> start:Retired_50      8.242298    5.750345 18.81452 32.34276
-#> AVERAGE              10.805124    5.817568 17.12799 33.33844
+#> start:Working_50     13.771992    3.221036 13.94718 30.45991
+#> start:Non-working_50  9.231257    6.749518 14.24285 29.66043
+#> start:Retired_50      9.336062    4.086849 15.86649 28.79388
+#> AVERAGE              12.875189    3.750553 14.08882 30.25464
+#> start:Working_50     12.383147    4.595006 16.84708 33.27894
+#> start:Non-working_50  7.745058    8.406654 17.08888 32.76140
+#> start:Retired_50      8.179991    5.786781 18.73401 31.99330
+#> AVERAGE              10.756496    5.831868 16.99020 33.06379
 ```
+
+## References
+
+Papers using `dtms` for substantive questions:
+
+- Hiilamo, A., Hermansen, Å. (2025): Financial strain in Norway: the
+  lifetime risk of and expected time spent in payment problems. MPIDR
+  Working Paper WP-2025-006.
+  <https://dx.doi.org/10.4054/MPIDR-WP-2025-006>
+
+- Feraldi, A., Dudel, C. (2025): Smoking and the length of working life:
+  an examination using the U.S. Health and Retirement Study. MPIDR
+  Working Paper WP-2025-017.
+  <https://dx.doi.org/10.4054/MPIDR-WP-2025-017>
+
+- Lam, A. A., Keenan, K., Kulu, H., Myrskylä, M. (2024): Working longer
+  despite poorer health? Inequalities in working and health expectancies
+  at older ages in South Korea. MPIDR Working Paper WP-2024-022.
+  <https://dx.doi.org/10.4054/MPIDR-WP-2024-022>
+
+Methodological papers:
+
+- Schneider, D. C. (2023): Statistical inference for discrete-time
+  multistate models: asymptotic covariance matrices, partial age ranges,
+  and group contrasts. MPIDR Working Paper WP-2023-041.
+  <https://dx.doi.org/10.4054/MPIDR-WP-2023-041>
+
+- Dudel, C. (2021): Expanding the Markov chain tool box: distributions
+  of occupation times and waiting times. Sociological Methods & Research
+  50: 401-428.
+  <https://journals.sagepub.com/doi/full/10.1177/0049124118782541>
+
+- Dudel, C., Myrskylä, M. (2020): Estimating the number and length of
+  episodes in disability using a Markov chain approach. Population
+  Health Metrics 18: 15. <https://doi.org/10.1186/s12963-020-00217-0>
