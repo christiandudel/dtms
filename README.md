@@ -1521,30 +1521,36 @@ bootresults <- dtms_boot(data=estdata,
 summary(bootresults)
 #> $`2.5%`
 #>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     12.983063    2.954183 13.09256 29.38032
-#> start:Non-working_50  8.503088    6.272442 13.24360 28.47507
-#> start:Retired_50      8.433342    3.733966 14.69171 27.24157
-#> AVERAGE              12.135878    3.462715 13.20772 29.14377
-#> start:Working_50     11.786478    4.211970 16.06987 32.54560
-#> start:Non-working_50  7.161701    7.997588 16.31365 31.96381
-#> start:Retired_50      7.504938    5.252168 17.78136 31.11718
-#> AVERAGE              10.167464    5.407793 16.21938 32.30730
+#> start:Working_50     12.944690    2.890201 12.99703 29.32483
+#> start:Non-working_50  8.397799    6.215022 13.19390 28.36680
+#> start:Retired_50      8.298747    3.709435 14.63407 27.18881
+#> AVERAGE              12.083547    3.395665 13.11809 29.05648
+#> start:Working_50     11.834749    4.202261 15.98087 32.64341
+#> start:Non-working_50  7.197474    7.968290 16.24687 32.03595
+#> start:Retired_50      7.560576    5.288032 17.63213 31.13312
+#> AVERAGE              10.230612    5.371778 16.13284 32.39166
 #> 
 #> $`97.5%`
 #>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     13.771992    3.221036 13.94718 30.45991
-#> start:Non-working_50  9.231257    6.749518 14.24285 29.66043
-#> start:Retired_50      9.336062    4.086849 15.86649 28.79388
-#> AVERAGE              12.875189    3.750553 14.08882 30.25464
-#> start:Working_50     12.383147    4.595006 16.84708 33.27894
-#> start:Non-working_50  7.745058    8.406654 17.08888 32.76140
-#> start:Retired_50      8.179991    5.786781 18.73401 31.99330
-#> AVERAGE              10.756496    5.831868 16.99020 33.06379
+#> start:Working_50     13.580624    3.275361 13.92319 30.29808
+#> start:Non-working_50  9.114966    6.782989 14.19916 29.46277
+#> start:Retired_50      9.216645    4.156983 15.73194 28.47733
+#> AVERAGE              12.767639    3.825484 14.07213 30.07462
+#> start:Working_50     12.385812    4.522798 16.90449 33.38725
+#> start:Non-working_50  7.800952    8.344169 17.15512 32.84786
+#> start:Retired_50      8.149272    5.711205 18.71468 32.05844
+#> AVERAGE              10.865433    5.759698 17.05261 33.16593
 ```
 
 ## References
 
 Papers using `dtms` for substantive questions:
+
+- Hiilamo, A., Pitkänen, J., Moretti, M., Martikainen, P., Myrskylä, M.
+  (2025): Children’s out-of-home care in Finland, 1993–2020: lifetime
+  risks, expectancies, exit routes, and number of placements for
+  synthetic cohorts. Child Abuse & Neglect Volume 169(1): 107626.
+  <https://doi.org/10.1016/j.chiabu.2025.107626>
 
 - Hiilamo, A., Hermansen, Å. (2025): Financial strain in Norway: the
   lifetime risk of and expected time spent in payment problems. MPIDR

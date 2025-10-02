@@ -1057,6 +1057,11 @@ summary(bootresults)
 
 Papers using `dtms` for substantive questions:
 
+- Hiilamo, A., Pitkänen, J., Moretti, M., Martikainen, P., Myrskylä, M. (2025): 
+Children's out-of-home care in Finland, 1993–2020: lifetime risks, expectancies, 
+exit routes, and number of placements for synthetic cohorts. Child Abuse & 
+Neglect Volume 169(1): 107626. https://doi.org/10.1016/j.chiabu.2025.107626
+
 - Hiilamo, A., Hermansen, Å. (2025): Financial strain in Norway: the lifetime 
 risk of and expected time spent in payment problems. MPIDR Working Paper 
 WP-2025-006. https://dx.doi.org/10.4054/MPIDR-WP-2025-006 
