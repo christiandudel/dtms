@@ -22,6 +22,25 @@
 #' @export
 #'
 #' @examples
+#' ## Define model: Absorbing and transient states, time scale
+#' simple <- dtms(transient=c("A","B"),
+#'                absorbing="X",
+#'                timescale=0:20)
+#' ## Reshape to transition format
+#' estdata <- dtms_format(data=simpledata,
+#'                        dtms=simple,
+#'                        idvar="id",
+#'                        timevar="time",
+#'                        statevar="state")
+#' ## Clean
+#' estdata <- dtms_clean(data=estdata,
+#'                       dtms=simple)
+#' ## Aggregate
+#' aggdata <- dtms_aggregate(estdata)
+#' ## Fit model
+#' fit <- dtms_fit(data=aggdata,
+#'                 weights="count")
+
 dtms_aggregate <- function(data,
                            weights=NULL,
                            idvar="id",
@@ -47,20 +66,18 @@ dtms_aggregate <- function(data,
   }
 
   # Formula for aggregate
-  aggformula <- as.formula(aggformula)
+  aggformula <- stats::as.formula(aggformula)
 
   # Warning if missing values
   drops <- data |>
-    na.omit() |>
-    attributes(x=_) |>
-    getElement(object=_,"na.action") |>
-    length()
+    stats::na.omit() |> dim()
+  drops <- dim(data)[1]-drops[1]
   if(drops>0) warning(paste("Dropping",drops,"rows with missing values"))
 
   # Aggregate
-  tmp <- aggregate(by=aggformula,
-                   x=data,
-                   FUN=sum)
+  tmp <- stats::aggregate(by=aggformula,
+                          x=data,
+                          FUN=sum)
 
   # Return
   return(tmp)

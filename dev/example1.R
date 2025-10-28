@@ -42,12 +42,12 @@ dtms_censoring(data=estdata,
                dtms=simple)
 
 # More advanced censoring example
-estdata <- dtms_censoring(data=estdata,
+censdata <- dtms_censoring(data=estdata,
                           dtms=simple,
                           add=T,
                           addtype="obs")
 
-estdata |>
+censdata |>
   subset(subset=to!="X",select=c(RIGHT,to)) |>
   table() |>
   prop.table(margin=1)
@@ -58,7 +58,15 @@ summary(estdata)
 ## Fit basic model (only starting state as predictor)
 fit <- dtms_fit(data=estdata,
                 controls="time",
-                package="mclogit")
+                package="VGAM")
+
+## Fitting model with aggregated data
+aggdata <- dtms_aggregate(estdata)
+fit_agg <- dtms_fit(data=aggdata,
+                 weights="count",
+                controls="time",
+                package="VGAM")
+
 
 ## Predict probabilities
 probs <- dtms_transitions(dtms=simple,
