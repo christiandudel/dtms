@@ -1532,26 +1532,119 @@ bootresults <- dtms_boot(data=estdata,
 summary(bootresults)
 #> $`2.5%`
 #>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     12.990483    2.924505 13.02708 29.48234
-#> start:Non-working_50  8.407142    6.278129 13.21908 28.51538
-#> start:Retired_50      8.498879    3.672504 14.64583 27.41201
-#> AVERAGE              12.120105    3.411177 13.13366 29.24947
-#> start:Working_50     11.794698    4.196682 16.01791 32.54895
-#> start:Non-working_50  7.157482    8.005769 16.19268 31.86809
-#> start:Retired_50      7.573145    5.250187 17.56697 31.02617
-#> AVERAGE              10.172093    5.381941 16.15673 32.26889
+#> start:Working_50     12.895350    2.898510 13.21413 29.53375
+#> start:Non-working_50  8.392748    6.232761 13.36916 28.55773
+#> start:Retired_50      8.531473    3.656582 14.62779 27.26778
+#> AVERAGE              12.089278    3.374098 13.31740 29.26636
+#> start:Working_50     11.812667    4.167168 16.13884 32.56488
+#> start:Non-working_50  7.228743    7.881819 16.35273 31.90221
+#> start:Retired_50      7.533129    5.112392 17.63597 30.87865
+#> AVERAGE              10.224440    5.319537 16.27710 32.30333
 #> 
 #> $`97.5%`
 #>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     13.653668    3.229194 14.05036 30.49534
-#> start:Non-working_50  9.226813    6.747802 14.23811 29.63480
-#> start:Retired_50      9.301341    4.113949 15.81147 28.76944
-#> AVERAGE              12.831517    3.772731 14.17034 30.27878
-#> start:Working_50     12.428526    4.611274 17.15882 33.60411
-#> start:Non-working_50  7.673660    8.466955 17.40748 33.08010
-#> start:Retired_50      8.132744    5.757217 18.87929 32.31345
-#> AVERAGE              10.752379    5.854871 17.30820 33.40163
+#> start:Working_50     13.637220    3.217664 13.95692 30.40877
+#> start:Non-working_50  9.176787    6.652805 14.18072 29.58703
+#> start:Retired_50      9.319277    4.079035 15.81236 28.66232
+#> AVERAGE              12.851245    3.700846 14.08014 30.23607
+#> start:Working_50     12.341688    4.545928 16.95609 33.41298
+#> start:Non-working_50  7.748482    8.393736 17.21918 32.96553
+#> start:Retired_50      8.153961    5.761321 18.78071 32.32384
+#> AVERAGE              10.763027    5.837519 17.14436 33.23562
 ```
+
+## Using dtms with irregular intervals
+
+Longitudinal data is often not observed in regular intervals, but only
+irregular. For instance, respondents in a biannual longitudinal survey
+might not be interviewed exactly every two years, but sometimes only one
+and a half years might have passed, or two and a half years, or
+something in between. This applies, for instance, to the U.S. Health and
+Retirement Study (HRS).
+
+A complete application showing how to handle irregular intervals with
+`dtms` using HRS data cab be found online:
+<https://github.com/christiandudel/hrs_hwle> The basic steps are as
+follows, using the HRS code as an example. First, the `dtms`object used
+for transforming the data using `dtms_format()` needs to include not
+one, but several values for the steplength:
+
+``` r
+hrsdtms <- dtms(transient=c("working","not-working"),
+                absorbing="dead",
+                timescale=seq(50,98,1),
+                timestep=1:3)
+```
+
+Here, values 1, 2, and 3 are used. Using this object with
+`dtms_format()` will keep all transitions which have an interval of 1,
+2, or 3 time units. If in another application observations are every
+half year with a maximum interval of 3 and a half years, the argument
+could be set to `seq(0.5,3.5,by=0.5)`. Moreover the values of the
+timescale are set to increase by units of 1 from 50 to 98, as
+respondents in the HRS cover the population aged 50 and older, and age
+is measured in completed years; 98 is used as the highest age in which
+transitions can start. Already note that this `dtms` object will not be
+used to predict transition probabilities.
+
+Second, using this `dtms`object with `dtms_format()` should use the
+argument `steplength=TRUE`, like:
+
+``` r
+estdata <- dtms_format(data=hrsdata,
+                       dtms=hrsdtms,
+                       steplength=TRUE)
+```
+
+In the resulting data set, there will be a variable called `steplength`
+which for each transition indicates the interval. The name of this
+variable can be controlled using the argument `stepvar`.
+
+Third, the interval should be included as a predictor when estimating
+the transition probabilities:
+
+``` r
+fit <- dtms_fit(data=somedata,
+                controls=c("time","steplength"))
+```
+
+The above example will include the interval width as a linear predictor.
+Whether this is meaningful, or some other specification should be used,
+will depend on the specific application.
+
+Fourth, a new `dtms` object is created which is used for predicting
+transition probabilities:
+
+``` r
+hrspredict <- dtms(transient=c("working","not-working"),
+                     absorbing="dead",
+                     timescale=seq(50,98,2))
+```
+
+In contrast to the previous `dtms` object, this uses only one fixed
+interval length. Which fixed value is used is a choice of the user, and
+will likely depend on the distribution of the intervals; if, for
+instance, most observations are two years apart, and only a few one or
+three years, then using a fixed interval of two years will be most
+supported by the data. This `dtms` object is next combined with
+`dtms_transitions`:
+
+``` r
+dtms_transitions(dtms=hrspredict,
+                 model=fit,
+                 controls=list(time=seq(50,98,2),
+                               steplength=2))
+```
+
+This predicts transition probabilities transitioning from age 50 to age
+52, from age 52 to age 54, and so on up to transitioning from 98 to 100
+and then dying; thus it also uses a fixed interval of 2, which is
+explicit not only in the values of the time scale used for prediction,
+but also the value for the variable `steplength`. The resulting
+transition probabilities can be used like any other transition
+probabilities.
+
+## Using dtms with register data
 
 ## References
 

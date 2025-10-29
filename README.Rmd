@@ -1055,6 +1055,85 @@ bootresults <- dtms_boot(data=estdata,
 summary(bootresults)
 ```
 
+## Using dtms with irregular intervals 
+
+Longitudinal data is often not observed in regular intervals, but only 
+irregular. For instance, respondents in a biannual longitudinal survey might 
+not be interviewed exactly every two years, but sometimes only one and a half
+years might have passed, or two and a half years, or something in between. This
+applies, for instance, to the U.S. Health and Retirement Study (HRS). 
+
+A complete application showing how to handle irregular intervals with `dtms` 
+using HRS data cab be found online: https://github.com/christiandudel/hrs_hwle
+The basic steps are as follows, using the HRS code as an example. 
+First, the `dtms`object used for transforming the data using `dtms_format()` 
+needs to include not one, but several values for
+the steplength:
+```r
+hrsdtms <- dtms(transient=c("working","not-working"),
+                absorbing="dead",
+                timescale=seq(50,98,1),
+                timestep=1:3)
+```
+Here, values 1, 2, and 3 are used. Using this object with `dtms_format()` will 
+keep all transitions which have an interval of 1, 2, or 3 time units. If in 
+another application observations are every half year with a maximum interval of
+3 and a half years, the argument could be set to `seq(0.5,3.5,by=0.5)`. Moreover
+the values of the timescale are set to increase by units of 1 from 50 to 98, as 
+respondents in the HRS cover the population aged 50 and older, and age is 
+measured in completed years; 98 is used as the highest age in which 
+transitions can start. Already note that this `dtms` object will not be used
+to predict transition probabilities. 
+
+Second, using this `dtms`object with `dtms_format()` should use the argument 
+`steplength=TRUE`, like: 
+```r
+estdata <- dtms_format(data=hrsdata,
+                       dtms=hrsdtms,
+                       steplength=TRUE)
+```
+In the resulting data set, there will be a variable called `steplength` which
+for each transition indicates the interval. The name of this variable can be
+controlled using the argument `stepvar`. 
+
+Third, the interval should be included as a predictor when estimating the
+transition probabilities: 
+```r
+fit <- dtms_fit(data=somedata,
+                controls=c("time","steplength"))
+```
+The above example will include the interval width as a linear predictor. Whether
+this is meaningful, or some other specification should be used, will depend on 
+the specific application. 
+
+Fourth, a new `dtms` object is created which is used for predicting transition
+probabilities: 
+```r
+hrspredict <- dtms(transient=c("working","not-working"),
+                     absorbing="dead",
+                     timescale=seq(50,98,2))
+```
+In contrast to the previous `dtms` object, this uses only one fixed interval 
+length. Which fixed value is used is a choice of the user, and will likely 
+depend on the distribution of the intervals; if, for instance, most observations
+are two years apart, and only a few one or three years, then using a fixed
+interval of two years will be most supported by the data. This `dtms` object is 
+next combined with `dtms_transitions`: 
+```r
+dtms_transitions(dtms=hrspredict,
+                 model=fit,
+                 controls=list(time=seq(50,98,2),
+                               steplength=2))
+```
+This predicts transition probabilities transitioning from age 50 to age 52,
+from age 52 to age 54, and so on up to transitioning from 98 to 100 and then 
+dying; thus it also uses a fixed interval of 2, which is explicit not only
+in the values of the time scale used for prediction, but also the value for
+the variable `steplength`. The resulting transition probabilities can be used
+like any other transition probabilities. 
+
+## Using dtms with register data
+
 ## References
 
 Papers using `dtms` for substantive questions:
