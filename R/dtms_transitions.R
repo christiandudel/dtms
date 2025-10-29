@@ -29,12 +29,8 @@
 #'
 #' The argument `dropvar` controls whether the covariate values used for
 #' prediction are dropped. If `FALSE` each row of the resulting data frame will
-#' have the covariate values #' which were used to predict the corresponding
+#' have the covariate values which were used to predict the corresponding
 #' probability.
-#'
-#' The argument `separator` sets the separator used to create state names. State
-#' names are either a combination of the name of a transient state and a value
-#' of the time scale, or the name of an absorbing state.
 #'
 #' @param model Model estimated with \code{dtms_fit}.
 #' @param dtms dtms object, as created with \code{dtms}.
@@ -44,7 +40,6 @@
 #' @param CI Logical (optional), return confidence intervals? See details. Default is FALSE.
 #' @param alpha Numeric (optional), if CI=TRUE, what confidence level is used? Default is 0.05.
 #' @param dropvar Logical (optional), should covariate values used for prediction be returned (see details). Default is `TRUE`.
-#' @param fromvar Logical (optional), should covariate values be kept in output? Default is `FALSE`.
 #' @param fromvar Character (optional), name of variable with starting state in the returned data frame. Default is `from`.
 #' @param tovar Character (optional), name of variable with receiving state in the returned data frame. Default is `to`.
 #' @param timevar Character (optional), name of variable with time scale in the returned data frame. Default is `time`.

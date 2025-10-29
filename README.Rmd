@@ -52,12 +52,14 @@ methods for absorbing Markov chains.
 
 Currently, the following features are implemented:
 
-- Data handling: functions for reshaping data, cleaning data, editing states, 
-generating indicators of duration and number of occurrences of a state, 
-indicators of censoring, descriptive information on different types of 
+- Data handling: functions for reshaping and aggregating data, cleaning data, 
+editing states, generating indicators of duration and number of occurrences of 
+a state, indicators of censoring, descriptive information on different types of 
 censoring, and other general descriptive statistics. 
-- Estimation of transition probabilities: semiparametric estimation ([VGAM](https://cran.r-project.org/web/packages/VGAM)), random effects and 
-random intercepts ([mclogit](https://cran.r-project.org/web/packages/mclogit)), 
+- Estimation of transition probabilities: nonparametric estimation;
+semiparametric estimation ([VGAM](https://cran.r-project.org/web/packages/VGAM)), 
+random effects and random intercepts 
+([mclogit](https://cran.r-project.org/web/packages/mclogit)), 
 and neural networks ([nnet](https://cran.r-project.org/web/packages/nnet)); all
 possible for constrained and unconstrained/fully interacted models. Functions 
 for descriptive statistics on transition probabilities and for plotting them

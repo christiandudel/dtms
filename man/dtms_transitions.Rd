@@ -76,12 +76,8 @@ uses a normal approximation and results below 0 or above 1 are possible.
 
 The argument `dropvar` controls whether the covariate values used for
 prediction are dropped. If `FALSE` each row of the resulting data frame will
-have the covariate values #' which were used to predict the corresponding
+have the covariate values which were used to predict the corresponding
 probability.
-
-The argument `separator` sets the separator used to create state names. State
-names are either a combination of the name of a transient state and a value
-of the time scale, or the name of an absorbing state.
 }
 \examples{
 ## Define model: Absorbing and transient states, time scale

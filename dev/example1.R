@@ -55,6 +55,10 @@ censdata |>
 ## Summary of data
 summary(estdata)
 
+## Nonparametric estimates
+np <- dtms_nonparametric(data=estdata,
+                         dtms=simple)
+
 ## Fit basic model (only starting state as predictor)
 fit <- dtms_fit(data=estdata,
                 controls="time",
