@@ -1532,25 +1532,25 @@ bootresults <- dtms_boot(data=estdata,
 summary(bootresults)
 #> $`2.5%`
 #>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     12.895350    2.898510 13.21413 29.53375
-#> start:Non-working_50  8.392748    6.232761 13.36916 28.55773
-#> start:Retired_50      8.531473    3.656582 14.62779 27.26778
-#> AVERAGE              12.089278    3.374098 13.31740 29.26636
-#> start:Working_50     11.812667    4.167168 16.13884 32.56488
-#> start:Non-working_50  7.228743    7.881819 16.35273 31.90221
-#> start:Retired_50      7.533129    5.112392 17.63597 30.87865
-#> AVERAGE              10.224440    5.319537 16.27710 32.30333
+#> start:Working_50     13.065665    2.928579 13.22485 29.61264
+#> start:Non-working_50  8.446031    6.310464 13.39414 28.70031
+#> start:Retired_50      8.494008    3.716834 14.68289 27.32929
+#> AVERAGE              12.185356    3.399959 13.33556 29.38704
+#> start:Working_50     11.753669    4.199079 16.17423 32.56527
+#> start:Non-working_50  7.126672    8.022916 16.38743 31.91186
+#> start:Retired_50      7.489865    5.254149 17.76854 30.98020
+#> AVERAGE              10.177115    5.433460 16.31258 32.27845
 #> 
 #> $`97.5%`
 #>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     13.637220    3.217664 13.95692 30.40877
-#> start:Non-working_50  9.176787    6.652805 14.18072 29.58703
-#> start:Retired_50      9.319277    4.079035 15.81236 28.66232
-#> AVERAGE              12.851245    3.700846 14.08014 30.23607
-#> start:Working_50     12.341688    4.545928 16.95609 33.41298
-#> start:Non-working_50  7.748482    8.393736 17.21918 32.96553
-#> start:Retired_50      8.153961    5.761321 18.78071 32.32384
-#> AVERAGE              10.763027    5.837519 17.14436 33.23562
+#> start:Working_50     13.674201    3.226315 13.97319 30.45034
+#> start:Non-working_50  9.232042    6.771681 14.22740 29.60953
+#> start:Retired_50      9.376733    4.146022 15.82339 28.72641
+#> AVERAGE              12.814081    3.828547 14.09799 30.22685
+#> start:Working_50     12.342747    4.572556 16.93912 33.46097
+#> start:Non-working_50  7.656669    8.457672 17.23646 32.99397
+#> start:Retired_50      8.218868    5.749497 18.84622 32.30801
+#> AVERAGE              10.750220    5.861689 17.10845 33.25730
 ```
 
 ## Using dtms with irregular intervals
@@ -1563,7 +1563,7 @@ something in between. This applies, for instance, to the U.S. Health and
 Retirement Study (HRS).
 
 A complete application showing how to handle irregular intervals with
-`dtms` using HRS data cab be found online:
+`dtms` using HRS data can be found online:
 <https://github.com/christiandudel/hrs_hwle> The basic steps are as
 follows, using the HRS code as an example. First, the `dtms`object used
 for transforming the data using `dtms_format()` needs to include not
@@ -1680,8 +1680,7 @@ Methodological papers:
 
 - Dudel, C. (2021): Expanding the Markov chain tool box: distributions
   of occupation times and waiting times. Sociological Methods & Research
-  50: 401-428.
-  <https://journals.sagepub.com/doi/full/10.1177/0049124118782541>
+  50: 401-428. <https://doi.org/10.1177/0049124118782541>
 
 - Dudel, C., Myrskylä, M. (2020): Estimating the number and length of
   episodes in disability using a Markov chain approach. Population

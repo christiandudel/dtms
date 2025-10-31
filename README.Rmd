@@ -1064,7 +1064,7 @@ years might have passed, or two and a half years, or something in between. This
 applies, for instance, to the U.S. Health and Retirement Study (HRS). 
 
 A complete application showing how to handle irregular intervals with `dtms` 
-using HRS data cab be found online: https://github.com/christiandudel/hrs_hwle
+using HRS data can be found online: https://github.com/christiandudel/hrs_hwle
 The basic steps are as follows, using the HRS code as an example. 
 First, the `dtms`object used for transforming the data using `dtms_format()` 
 needs to include not one, but several values for
@@ -1164,7 +1164,7 @@ MPIDR Working Paper WP-2023-041. https://dx.doi.org/10.4054/MPIDR-WP-2023-041
 
 - Dudel, C. (2021): Expanding the Markov chain tool box: distributions of 
 occupation times and waiting times. Sociological Methods & Research 50: 401-428.
-https://journals.sagepub.com/doi/full/10.1177/0049124118782541 
+https://doi.org/10.1177/0049124118782541
 
 - Dudel, C., Myrskylä, M. (2020): Estimating the number and length of episodes 
 in disability using a Markov chain approach. Population Health Metrics 18: 15.
