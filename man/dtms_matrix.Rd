@@ -11,7 +11,8 @@ dtms_matrix(
   tovar = "to",
   Pvar = "P",
   enforcedeath = T,
-  rescale = T
+  rescale = T,
+  reshapesep = ":"
 )
 }
 \arguments{
@@ -28,6 +29,8 @@ dtms_matrix(
 \item{enforcedeath}{Logical (optional), make sure that every unit moves to absorbing state after last value of time scale? Default is TRUE.}
 
 \item{rescale}{Logical (optional), rescale transition probabilities to sum to 1? Default is TRUE.}
+
+\item{reshapesep}{Character (optional), used in re-arranging the transition probabilities; should not appear in any state name. Default is `:`.}
 }
 \value{
 Returns a transition matrix.

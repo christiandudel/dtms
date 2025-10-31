@@ -11,6 +11,7 @@
 #' @param Pvar Character (optional), name of variable in `probs` with transition probabilities. Default is `P`.
 #' @param enforcedeath Logical (optional), make sure that every unit moves to absorbing state after last value of time scale? Default is TRUE.
 #' @param rescale Logical (optional), rescale transition probabilities to sum to 1? Default is TRUE.
+#' @param reshapesep Character (optional), used in re-arranging the transition probabilities; should not appear in any state name. Default is `:`.
 #'
 #' @return Returns a transition matrix.
 #' @export
@@ -43,7 +44,8 @@ dtms_matrix <- function(probs,
                         tovar="to",
                         Pvar="P",
                         enforcedeath=T,
-                        rescale=T) {
+                        rescale=T,
+                        reshapesep=":") {
 
   # Check
   dtms_proper(dtms)
@@ -69,7 +71,8 @@ dtms_matrix <- function(probs,
   Tm <- stats::reshape(probs[,c("from","to","P")],
                   timevar="to",
                   idvar="from",
-                  direction="wide")
+                  direction="wide",
+                  sep=reshapesep)
 
   # Edit a bit
   Tm[is.na(Tm)] <- 0
@@ -81,7 +84,7 @@ dtms_matrix <- function(probs,
   rownames(Tm) <- keepnames
 
   # Column names
-  oldnames <- strsplit(colnames(Tm),split="[.]")
+  oldnames <- strsplit(colnames(Tm),split=paste0("[",reshapesep,"]"))
   oldnames <- lapply(oldnames,function(x) x[2])
   colnames(Tm) <- unlist(oldnames)
 
