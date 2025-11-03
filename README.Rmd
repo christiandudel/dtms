@@ -40,8 +40,8 @@ suggestions, and code snippets. All errors remain our own.
 If you use this package in your work, please use the following citation (or
 a variation):
 
-Dudel, C. (2025). dtms: discrete-time multistate models in R. R package version 
-`r packageVersion("dtms")`, available at https://github.com/christiandudel/dtms
+Dudel, C. (`r format(Sys.time(), "%Y")`). dtms: discrete-time multistate models 
+in R. R package version `r packageVersion("dtms")`, available at  https://github.com/christiandudel/dtms
 
 ## Overview
 
@@ -1164,11 +1164,10 @@ used with the `weights` argument of functions such as `dtms_fit()`.
 
 Sometimes it is possible to import existing code to a secure data environment.
 In such a case, one of the two files in the folder `combined` on GitHub can
-be used. The file `all.R` is all code from `dtms`, including the documentation. 
-Sourcing it should provide almost the full functionality of the package; 
-dependencies are still required, though. The file `selected.R` only includes
-a subset of the functions and removes most of the documentation, but is much 
-smaller than `all.R`. 
+be used. The file `all.R` is all code from `dtms`. Sourcing it should provide 
+a lot of the functionality of the package; dependencies are still required, 
+though. The file `selected.R` only includes a subset of the functions and 
+removes most of the documentation, but is much smaller than `all.R`. 
 
 ```{r, echo=FALSE, results=FALSE}
 # Dump all code in one file

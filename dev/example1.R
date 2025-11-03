@@ -234,3 +234,22 @@ occurrencedata <- dtms_occurrence(data=simpledata,
                                   dtms=simple)
 
 head(occurrencedata)
+
+
+## Dummy variables as predictors
+library(tidyverse)
+estdata$timedummies <- cut_width(estdata$time,
+                                 width=5,
+                                 boundary=0,
+                                 closed="left")
+
+fitd <- dtms_fit(data=estdata,
+                controls=c("timedummies"))
+
+probsd <- dtms_transitions(model=fitd,
+                           dtms=simple,
+                           controls=list(timedummies=cut_width(0:19,
+                                                               width=5,
+                                                               boundary=0,
+                                                               closed="left")))
+plot(probs,dtms=simple)
