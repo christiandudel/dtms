@@ -1529,25 +1529,25 @@ bootresults <- dtms_boot(data=estdata,
 summary(bootresults)
 #> $`2.5%`
 #>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     13.026937    2.967431 13.03738 29.41740
-#> start:Non-working_50  8.381799    6.303295 13.20534 28.37538
-#> start:Retired_50      8.332479    3.724085 14.61642 27.17691
-#> AVERAGE              12.134645    3.445966 13.14483 29.15843
-#> start:Working_50     11.703689    4.203726 16.11441 32.58715
-#> start:Non-working_50  7.162206    7.946254 16.31078 31.92684
-#> start:Retired_50      7.449256    5.230530 17.77028 30.95155
-#> AVERAGE              10.081603    5.398646 16.26828 32.32485
+#> start:Working_50     12.970346    2.909204 13.14155 29.45246
+#> start:Non-working_50  8.458152    6.242688 13.31360 28.50721
+#> start:Retired_50      8.477251    3.709794 14.57746 27.07424
+#> AVERAGE              12.110578    3.404137 13.25433 29.21866
+#> start:Working_50     11.703638    4.109833 15.81989 32.26902
+#> start:Non-working_50  7.095503    7.859836 16.04222 31.69875
+#> start:Retired_50      7.442783    5.133782 17.30761 30.64910
+#> AVERAGE              10.100418    5.267604 15.95102 32.02694
 #> 
 #> $`97.5%`
 #>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     13.593270    3.232104 13.97338 30.41964
-#> start:Non-working_50  9.160386    6.739416 14.24993 29.69153
-#> start:Retired_50      9.235336    4.165048 15.85773 28.77016
-#> AVERAGE              12.719694    3.789951 14.10388 30.22988
-#> start:Working_50     12.388419    4.548741 17.04300 33.49933
-#> start:Non-working_50  7.839616    8.395207 17.27513 32.93624
-#> start:Retired_50      8.221036    5.759645 18.82055 32.20362
-#> AVERAGE              10.822836    5.774852 17.18171 33.24251
+#> start:Working_50     13.821218    3.238227 13.96704 30.42900
+#> start:Non-working_50  9.331569    6.681050 14.16470 29.62579
+#> start:Retired_50      9.404988    4.064861 15.74616 28.68891
+#> AVERAGE              12.967771    3.752298 14.08879 30.22513
+#> start:Working_50     12.492368    4.543428 17.00229 33.34007
+#> start:Non-working_50  7.967018    8.375257 17.25350 32.83149
+#> start:Retired_50      8.337479    5.713473 18.71813 32.06538
+#> AVERAGE              10.882938    5.783999 17.15929 33.11127
 ```
 
 ## Using dtms with irregular intervals
@@ -1675,11 +1675,12 @@ potentially further covariates. These counts can then be used with the
 
 Sometimes it is possible to import existing code to a secure data
 environment. In such a case, one of the two files in the folder
-`combined` on GitHub can be used. The file `all.R` is all code from
-`dtms`. Sourcing it should provide a lot of the functionality of the
-package; dependencies are still required, though. The file `selected.R`
-only includes a subset of the functions and removes most of the
-documentation, but is much smaller than `all.R`.
+`combined` on GitHub can be used. The file `all.R` is (almost) all code
+from `dtms`. Sourcing it should provide a lot of the functionality of
+the package; dependencies are still required, though. The file
+`selected.R` only includes a subset of the functions and removes most of
+the documentation, but is much smaller than `all.R`. Again dependencies
+might be required.
 
 ## References
 
