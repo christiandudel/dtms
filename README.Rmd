@@ -83,6 +83,31 @@ simulations is available at https://github.com/christiandudel/dtms_data/.
 
 The documentation provided below does currently not cover all features. 
 
+## Content 
+
+Currently, the following topics are covered in this documentation
+
+- Installation
+- General workflow and basic principles
+-- Model setup 
+-- Preparing and handling data
+-- Estimating transition probabilities
+-- Markov chain methods
+- Example 1: artificial data
+-- Data description
+-- Model setup 
+-- Preparing and handling data
+-- Estimating transition probabilities
+-- Markov chain methods
+- Example 2: simulated working trajectories
+-- Data description
+-- Analysis
+-- Variance estimation
+- Using dtms with irregular intervals 
+- Combining dtms with other software
+- Using dtms with secure data environments
+- References
+
 ## Installation 
 
 You can install the development version of `dtms` like this:
@@ -397,6 +422,8 @@ in the two examples below.
 
 ## Example 1: Artificial data
 
+### Data description
+
 This is a basic example using artificial data which is provided with the 
 package. The state space consists of two transient states (A, B), and one 
 absorbing state (X). The time scale goes from 0 to 20. Transition probabilities 
@@ -425,6 +452,8 @@ identifier; 'time' contains the value of the time scale; and 'state' contains
 the state the unit occupied at a given time. In total, there are 993 units, 
 each of them contributing to the total of 12,173 observations. 
 
+### Model setup
+
 To work with this data set, we first define a basic discrete-time multistate 
 model. This is done with the function `dtms()` and requires us to specify the
 names of the transient states, the names of the absorbing states, and the 
@@ -437,6 +466,8 @@ simple <- dtms(transient=c("A","B"),
 ```
 The resulting object of class `dtms` will be passed to other functions of the 
 package.
+
+### Data handling
 
 In a second step, we transform the data from long format to transition format. 
 This can be done using the function `dtms_format()`. In this 
@@ -499,6 +530,8 @@ series of observations, and the number of units with right censoring:
 dtms_censoring(data=estdata,
                dtms=simple)
 ```
+
+### Estimating transition probabilities
 
 To estimate the transition probabilities of the multistate model, the function 
 `dtms_fit()` is used. In this simple example, it is sufficient to specify the 
@@ -570,6 +603,8 @@ S <- dtms_start(dtms=simple,
 This step is not necessary, but its result can be passed to several of
 the functions used for calculating Markov chain methods, providing additional 
 information.
+
+### Markov chain methods
 
 Most functions used to calculate Markov chain methods need a transition matrix 
 and a `dtms` object, and potentially further arguments. The two examples below 
@@ -714,7 +749,9 @@ bootstrap and the block bootstrap. Both methods are provided by the function
 `dtms_boot()`. How to use `dtms_transitions()` and `dtms_boot()` for inference
 is demonstrated in the second example below.
 
-## Example 2: Working trajectories during late working life
+## Example 2: Simulated working trajectories
+
+### Data description
 
 Here we provide an example using simulated working trajectories. The 
 simulations are are conducted using transition 
@@ -729,6 +766,8 @@ individuals. Note that the actual HRS data is collected every two years and
 while the simulated data is annual. The data set also contains each individual's 
 gender, and the transition probabilities underlying the simulated trajectories 
 differ between men and women.
+
+### Analysis
 
 The workflow is similar to the previous example. First, a 'dtms' model is 
 defined using the function `dtms'. Second, the data is brought into 
@@ -968,6 +1007,8 @@ dtms_risk(dtms=work,
           risk="Retired")
 ```
 
+### Variance estimation
+
 To use bootstrap methods, the function `dtms_boot()` is called, and results can
 be conveniently viewed using `summary()`. The function `dtms_boot()` needs
 data in transition format (argument `data`) and a `dtms` object. The argument 
@@ -1136,15 +1177,15 @@ like any other transition probabilities.
 
 `dtms` can easily be used without doing the full workflow in `dtms` itself. For
 instance, transition probabilities could be calculated with a different software
-and `dtms`is then only used to calculate state expectancies or similar 
+and `dtms` could then only used to calculate state expectancies or similar 
 indicators. 
 
 To do this, two things need to be kept in mind. The first is that objects from
-the `dtms` package have a specific structure, and for data or results from
-other software to work with `dtms` requires them to have the correct structure.
-For instance, the function `dtms_transitions()` outputs transition probabilities
-in a certain way. Users who want to import transition probabilities should
-arrange their transition probabilities the same way.
+the `dtms` package have a specific structure, and data or results from
+other software need to have the correct structure. For instance, the function
+`dtms_transitions()` outputs transition probabilities in a certain way. 
+Users who want to import transition probabilities should arrange these
+probabilities the same way.
 
 Second, most objects generated by `dtms` have specific object 
 classes. For instance, objects generated by `dtms_transitions()` and 

@@ -80,6 +80,24 @@ Currently, the following features are implemented:
 
 The documentation provided below does currently not cover all features.
 
+## Content
+
+Currently, the following topics are covered in this documentation
+
+- Installation
+- General workflow and basic principles – Model setup – Preparing and
+  handling data – Estimating transition probabilities – Markov chain
+  methods
+- Example 1: artificial data – Data description – Model setup –
+  Preparing and handling data – Estimating transition probabilities –
+  Markov chain methods
+- Example 2: simulated working trajectories – Data description –
+  Analysis – Variance estimation
+- Using dtms with irregular intervals
+- Combining dtms with other software
+- Using dtms with secure data environments
+- References
+
 ## Installation
 
 You can install the development version of `dtms` like this:
@@ -461,6 +479,8 @@ detail in the two examples below.
 
 ## Example 1: Artificial data
 
+### Data description
+
 This is a basic example using artificial data which is provided with the
 package. The state space consists of two transient states (A, B), and
 one absorbing state (X). The time scale goes from 0 to 20. Transition
@@ -502,6 +522,8 @@ unit identifier; ‘time’ contains the value of the time scale; and
 there are 993 units, each of them contributing to the total of 12,173
 observations.
 
+### Model setup
+
 To work with this data set, we first define a basic discrete-time
 multistate model. This is done with the function `dtms()` and requires
 us to specify the names of the transient states, the names of the
@@ -516,6 +538,8 @@ simple <- dtms(transient=c("A","B"),
 
 The resulting object of class `dtms` will be passed to other functions
 of the package.
+
+### Data handling
 
 In a second step, we transform the data from long format to transition
 format. This can be done using the function `dtms_format()`. In this
@@ -617,6 +641,8 @@ dtms_censoring(data=estdata,
 #> Units with right censoring:  325
 ```
 
+### Estimating transition probabilities
+
 To estimate the transition probabilities of the multistate model, the
 function `dtms_fit()` is used. In this simple example, it is sufficient
 to specify the name of the object with the transition data and the time
@@ -711,6 +737,8 @@ S <- dtms_start(dtms=simple,
 This step is not necessary, but its result can be passed to several of
 the functions used for calculating Markov chain methods, providing
 additional information.
+
+### Markov chain methods
 
 Most functions used to calculate Markov chain methods need a transition
 matrix and a `dtms` object, and potentially further arguments. The two
@@ -1014,7 +1042,9 @@ methods are provided by the function `dtms_boot()`. How to use
 `dtms_transitions()` and `dtms_boot()` for inference is demonstrated in
 the second example below.
 
-## Example 2: Working trajectories during late working life
+## Example 2: Simulated working trajectories
+
+### Data description
 
 Here we provide an example using simulated working trajectories. The
 simulations are are conducted using transition probabilities estimated
@@ -1028,6 +1058,8 @@ individuals. Note that the actual HRS data is collected every two years
 and while the simulated data is annual. The data set also contains each
 individual’s gender, and the transition probabilities underlying the
 simulated trajectories differ between men and women.
+
+### Analysis
 
 The workflow is similar to the previous example. First, a ‘dtms’ model
 is defined using the function \`dtms’. Second, the data is brought into
@@ -1439,6 +1471,8 @@ dtms_risk(dtms=work,
 #>      0.8861793      0.8951606      1.0000000
 ```
 
+### Variance estimation
+
 To use bootstrap methods, the function `dtms_boot()` is called, and
 results can be conveniently viewed using `summary()`. The function
 `dtms_boot()` needs data in transition format (argument `data`) and a
@@ -1529,25 +1563,25 @@ bootresults <- dtms_boot(data=estdata,
 summary(bootresults)
 #> $`2.5%`
 #>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     12.970346    2.909204 13.14155 29.45246
-#> start:Non-working_50  8.458152    6.242688 13.31360 28.50721
-#> start:Retired_50      8.477251    3.709794 14.57746 27.07424
-#> AVERAGE              12.110578    3.404137 13.25433 29.21866
-#> start:Working_50     11.703638    4.109833 15.81989 32.26902
-#> start:Non-working_50  7.095503    7.859836 16.04222 31.69875
-#> start:Retired_50      7.442783    5.133782 17.30761 30.64910
-#> AVERAGE              10.100418    5.267604 15.95102 32.02694
+#> start:Working_50     13.083884    2.906221 13.06635 29.54639
+#> start:Non-working_50  8.551354    6.186175 13.19595 28.57333
+#> start:Retired_50      8.485867    3.661331 14.49178 27.30433
+#> AVERAGE              12.210637    3.404438 13.17694 29.29021
+#> start:Working_50     11.790623    4.211846 16.26058 32.67664
+#> start:Non-working_50  7.190121    7.957422 16.47786 32.10281
+#> start:Retired_50      7.463101    5.213244 17.83333 31.03456
+#> AVERAGE              10.134944    5.412936 16.40220 32.42253
 #> 
 #> $`97.5%`
 #>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     13.821218    3.238227 13.96704 30.42900
-#> start:Non-working_50  9.331569    6.681050 14.16470 29.62579
-#> start:Retired_50      9.404988    4.064861 15.74616 28.68891
-#> AVERAGE              12.967771    3.752298 14.08879 30.22513
-#> start:Working_50     12.492368    4.543428 17.00229 33.34007
-#> start:Non-working_50  7.967018    8.375257 17.25350 32.83149
-#> start:Retired_50      8.337479    5.713473 18.71813 32.06538
-#> AVERAGE              10.882938    5.783999 17.15929 33.11127
+#> start:Working_50     13.598799    3.169017 13.96062 30.30379
+#> start:Non-working_50  9.227161    6.695647 14.19998 29.46763
+#> start:Retired_50      9.353510    4.040648 15.74295 28.56830
+#> AVERAGE              12.737962    3.711493 14.09760 30.09004
+#> start:Working_50     12.383196    4.541238 16.96275 33.36330
+#> start:Non-working_50  7.766490    8.434640 17.23384 32.84761
+#> start:Retired_50      8.184561    5.694955 18.80187 32.09215
+#> AVERAGE              10.765884    5.806469 17.14247 33.12936
 ```
 
 ## Using dtms with irregular intervals
@@ -1645,16 +1679,15 @@ probabilities.
 
 `dtms` can easily be used without doing the full workflow in `dtms`
 itself. For instance, transition probabilities could be calculated with
-a different software and `dtms`is then only used to calculate state
+a different software and `dtms` could then only used to calculate state
 expectancies or similar indicators.
 
 To do this, two things need to be kept in mind. The first is that
-objects from the `dtms` package have a specific structure, and for data
-or results from other software to work with `dtms` requires them to have
-the correct structure. For instance, the function `dtms_transitions()`
-outputs transition probabilities in a certain way. Users who want to
-import transition probabilities should arrange their transition
-probabilities the same way.
+objects from the `dtms` package have a specific structure, and data or
+results from other software need to have the correct structure. For
+instance, the function `dtms_transitions()` outputs transition
+probabilities in a certain way. Users who want to import transition
+probabilities should arrange these probabilities the same way.
 
 Second, most objects generated by `dtms` have specific object classes.
 For instance, objects generated by `dtms_transitions()` and
