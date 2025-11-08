@@ -89,21 +89,21 @@ Currently, the following topics are covered in this documentation
 
 - Installation
 - General workflow and basic principles
--- Model setup 
--- Preparing and handling data
--- Estimating transition probabilities
--- Markov chain methods
+    + Model setup 
+    + Preparing and handling data
+    + Estimating transition probabilities
+    + Markov chain methods
 - Example 1: artificial data
--- Data description
--- Model setup 
--- Preparing and handling data
--- Estimating transition probabilities
--- Markov chain methods
+    + Data description
+    + Model setup 
+    + Preparing and handling data
+    + Estimating transition probabilities
+    + Markov chain methods
 - Example 2: simulated working trajectories
--- Data description
--- Analysis
--- Variance estimation
-- Using dtms with irregular intervals 
+    + Data description
+    + Analysis
+    + Variance estimation
+- Irregular intervals 
 - Combining dtms with other software
 - Using dtms with secure data environments
 - References

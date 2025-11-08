@@ -85,15 +85,22 @@ The documentation provided below does currently not cover all features.
 Currently, the following topics are covered in this documentation
 
 - Installation
-- General workflow and basic principles – Model setup – Preparing and
-  handling data – Estimating transition probabilities – Markov chain
-  methods
-- Example 1: artificial data – Data description – Model setup –
-  Preparing and handling data – Estimating transition probabilities –
-  Markov chain methods
-- Example 2: simulated working trajectories – Data description –
-  Analysis – Variance estimation
-- Using dtms with irregular intervals
+- General workflow and basic principles
+  - Model setup
+  - Preparing and handling data
+  - Estimating transition probabilities
+  - Markov chain methods
+- Example 1: artificial data
+  - Data description
+  - Model setup
+  - Preparing and handling data
+  - Estimating transition probabilities
+  - Markov chain methods
+- Example 2: simulated working trajectories
+  - Data description
+  - Analysis
+  - Variance estimation
+- Irregular intervals
 - Combining dtms with other software
 - Using dtms with secure data environments
 - References
@@ -1563,25 +1570,25 @@ bootresults <- dtms_boot(data=estdata,
 summary(bootresults)
 #> $`2.5%`
 #>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     13.083884    2.906221 13.06635 29.54639
-#> start:Non-working_50  8.551354    6.186175 13.19595 28.57333
-#> start:Retired_50      8.485867    3.661331 14.49178 27.30433
-#> AVERAGE              12.210637    3.404438 13.17694 29.29021
-#> start:Working_50     11.790623    4.211846 16.26058 32.67664
-#> start:Non-working_50  7.190121    7.957422 16.47786 32.10281
-#> start:Retired_50      7.463101    5.213244 17.83333 31.03456
-#> AVERAGE              10.134944    5.412936 16.40220 32.42253
+#> start:Working_50     12.969170    2.946710 13.16953 29.55097
+#> start:Non-working_50  8.407150    6.307396 13.34279 28.57953
+#> start:Retired_50      8.412023    3.702658 14.72966 27.37603
+#> AVERAGE              12.121121    3.447206 13.27754 29.28691
+#> start:Working_50     11.770010    4.201679 16.10399 32.62929
+#> start:Non-working_50  7.123563    7.928308 16.33637 31.98447
+#> start:Retired_50      7.479771    5.246458 17.79347 31.10039
+#> AVERAGE              10.160296    5.391762 16.25332 32.36078
 #> 
 #> $`97.5%`
 #>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     13.598799    3.169017 13.96062 30.30379
-#> start:Non-working_50  9.227161    6.695647 14.19998 29.46763
-#> start:Retired_50      9.353510    4.040648 15.74295 28.56830
-#> AVERAGE              12.737962    3.711493 14.09760 30.09004
-#> start:Working_50     12.383196    4.541238 16.96275 33.36330
-#> start:Non-working_50  7.766490    8.434640 17.23384 32.84761
-#> start:Retired_50      8.184561    5.694955 18.80187 32.09215
-#> AVERAGE              10.765884    5.806469 17.14247 33.12936
+#> start:Working_50     13.575941    3.222807 13.84776 30.20722
+#> start:Non-working_50  9.110468    6.734669 14.09412 29.40339
+#> start:Retired_50      9.143968    4.127108 15.60387 28.36118
+#> AVERAGE              12.722405    3.781848 13.97828 29.99441
+#> start:Working_50     12.453745    4.566864 16.99932 33.44452
+#> start:Non-working_50  7.804297    8.454975 17.27357 32.88969
+#> start:Retired_50      8.270090    5.738882 18.82048 32.20606
+#> AVERAGE              10.816508    5.780966 17.16652 33.21453
 ```
 
 ## Using dtms with irregular intervals
