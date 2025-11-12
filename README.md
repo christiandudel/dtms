@@ -31,7 +31,7 @@ If you use this package in your work, please use the following citation
 (or a variation):
 
 Dudel, C. (2025). dtms: discrete-time multistate models in R. R package
-version 0.3.7, available at <https://github.com/christiandudel/dtms>
+version 0.3.5, available at <https://github.com/christiandudel/dtms>
 
 ## Overview
 
@@ -1326,8 +1326,7 @@ firstw <- dtms_first(dtms=work,
                      start_distr=Sw)  
 
 summary(firstm)
-#> Warning in dtms_distr_summary(distr = object, ...): NAs durch Umwandlung
-#> erzeugt
+#> Warning in dtms_distr_summary(distr = object, ...): NAs introduced by coercion
 #>                          MEAN VARIANCE       SD MEDIAN      RISK0
 #> start:Working_50     14.25887 42.52413 6.521053   14.5 0.00000000
 #> start:Non-working_50 12.31587 50.90524 7.134791   12.5 0.00000000
@@ -1335,8 +1334,7 @@ summary(firstm)
 #> AVERAGE              13.13713 52.58739 7.251716   13.5 0.06011926
 #> AVERAGE(COND.)       13.97744 44.20570 6.648737   13.5 0.00000000
 summary(firstw)
-#> Warning in dtms_distr_summary(distr = object, ...): NAs durch Umwandlung
-#> erzeugt
+#> Warning in dtms_distr_summary(distr = object, ...): NAs introduced by coercion
 #>                          MEAN VARIANCE       SD MEDIAN      RISK0
 #> start:Working_50     14.10718 40.00327 6.324814   14.5 0.00000000
 #> start:Non-working_50 12.54709 46.49771 6.818923   12.5 0.00000000
@@ -1358,8 +1356,7 @@ last1w <- dtms_last(dtms=work,
                     start_distr=Sw) 
 
 summary(last1m)
-#> Warning in dtms_distr_summary(distr = object, ...): NAs durch Umwandlung
-#> erzeugt
+#> Warning in dtms_distr_summary(distr = object, ...): NAs introduced by coercion
 #>                          MEAN VARIANCE       SD MEDIAN RISK0
 #> start:Working_50     16.50265 76.98676 8.774210   15.5    NA
 #> start:Non-working_50 18.02302 68.14259 8.254853   17.5    NA
@@ -1367,8 +1364,7 @@ summary(last1m)
 #> AVERAGE              16.73797 75.91238 8.712771   16.5    NA
 #> AVERAGE(COND.)       17.97027 68.47754 8.275116   17.5    NA
 summary(last1w)
-#> Warning in dtms_distr_summary(distr = object, ...): NAs durch Umwandlung
-#> erzeugt
+#> Warning in dtms_distr_summary(distr = object, ...): NAs introduced by coercion
 #>                          MEAN VARIANCE       SD MEDIAN RISK0
 #> start:Working_50     16.15218 87.76963 9.368545   15.5    NA
 #> start:Non-working_50 18.31738 77.06422 8.778623   17.5    NA
@@ -1390,8 +1386,7 @@ last2w <- dtms_last(dtms=work,
                     start_distr=Sw)  
 
 summary(last2m)
-#> Warning in dtms_distr_summary(distr = object, ...): NAs durch Umwandlung
-#> erzeugt
+#> Warning in dtms_distr_summary(distr = object, ...): NAs introduced by coercion
 #>                          MEAN VARIANCE       SD MEDIAN RISK0
 #> start:Working_50     18.74988 64.64429 8.040167   18.5    NA
 #> start:Non-working_50 19.72542 56.78054 7.535286   19.5    NA
@@ -1399,8 +1394,7 @@ summary(last2m)
 #> AVERAGE              18.90783 63.49802 7.968565   18.5    NA
 #> AVERAGE(COND.)       19.69276 57.06149 7.553906   19.5    NA
 summary(last2w)
-#> Warning in dtms_distr_summary(distr = object, ...): NAs durch Umwandlung
-#> erzeugt
+#> Warning in dtms_distr_summary(distr = object, ...): NAs introduced by coercion
 #>                          MEAN VARIANCE       SD MEDIAN RISK0
 #> start:Working_50     19.33660 73.65218 8.582085   19.5    NA
 #> start:Non-working_50 20.62023 63.26114 7.953687   20.5    NA
@@ -1570,25 +1564,25 @@ bootresults <- dtms_boot(data=estdata,
 summary(bootresults)
 #> $`2.5%`
 #>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     12.969170    2.946710 13.16953 29.55097
-#> start:Non-working_50  8.407150    6.307396 13.34279 28.57953
-#> start:Retired_50      8.412023    3.702658 14.72966 27.37603
-#> AVERAGE              12.121121    3.447206 13.27754 29.28691
-#> start:Working_50     11.770010    4.201679 16.10399 32.62929
-#> start:Non-working_50  7.123563    7.928308 16.33637 31.98447
-#> start:Retired_50      7.479771    5.246458 17.79347 31.10039
-#> AVERAGE              10.160296    5.391762 16.25332 32.36078
+#> start:Working_50     13.027111    2.917580 13.18544 29.46857
+#> start:Non-working_50  8.483431    6.269246 13.26474 28.34093
+#> start:Retired_50      8.406719    3.715340 14.63665 27.07383
+#> AVERAGE              12.169058    3.450685 13.26579 29.17974
+#> start:Working_50     11.765995    4.233728 16.10671 32.59493
+#> start:Non-working_50  7.105853    7.979484 16.30210 32.07353
+#> start:Retired_50      7.411987    5.210598 17.68557 30.98511
+#> AVERAGE              10.082227    5.429166 16.23917 32.35578
 #> 
 #> $`97.5%`
 #>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     13.575941    3.222807 13.84776 30.20722
-#> start:Non-working_50  9.110468    6.734669 14.09412 29.40339
-#> start:Retired_50      9.143968    4.127108 15.60387 28.36118
-#> AVERAGE              12.722405    3.781848 13.97828 29.99441
-#> start:Working_50     12.453745    4.566864 16.99932 33.44452
-#> start:Non-working_50  7.804297    8.454975 17.27357 32.88969
-#> start:Retired_50      8.270090    5.738882 18.82048 32.20606
-#> AVERAGE              10.816508    5.780966 17.16652 33.21453
+#> start:Working_50     13.653372    3.223444 14.08771 30.40601
+#> start:Non-working_50  9.150639    6.750686 14.30660 29.58953
+#> start:Retired_50      9.239235    4.131469 15.62659 28.49331
+#> AVERAGE              12.820168    3.759309 14.21257 30.17806
+#> start:Working_50     12.281845    4.616786 16.93534 33.42463
+#> start:Non-working_50  7.687136    8.457582 17.20335 32.84186
+#> start:Retired_50      8.163383    5.806967 18.72468 32.06217
+#> AVERAGE              10.708743    5.793324 17.09537 33.17589
 ```
 
 ## Using dtms with irregular intervals
@@ -1725,6 +1719,11 @@ might be required.
 ## References
 
 Papers using `dtms` for substantive questions:
+
+- Moretti, M., Korhonen, K., van Raalte, A., Riffe, T., Martikainen, P.
+  (2025): Evolution of widowhood lifespan and its gender and educational
+  inequalities in Finland over three decades. Demography 65(2):
+  1635-1660. <https://doi.org/10.1215/00703370-12269717>
 
 - Hiilamo, A., Pitkänen, J., Moretti, M., Martikainen, P., Myrskylä, M.
   (2025): Children’s out-of-home care in Finland, 1993–2020: lifetime

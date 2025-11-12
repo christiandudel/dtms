@@ -1249,6 +1249,11 @@ for(i in 1:nfiles) {
 
 Papers using `dtms` for substantive questions:
 
+- Moretti, M., Korhonen, K., van Raalte, A., Riffe, T., Martikainen, P. (2025):
+Evolution of widowhood lifespan and its gender and educational inequalities in 
+Finland over three decades. Demography 65(2): 1635-1660. 
+https://doi.org/10.1215/00703370-12269717
+
 - Hiilamo, A., Pitkänen, J., Moretti, M., Martikainen, P., Myrskylä, M. (2025): 
 Children's out-of-home care in Finland, 1993–2020: lifetime risks, expectancies, 
 exit routes, and number of placements for synthetic cohorts. Child Abuse & 
