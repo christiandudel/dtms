@@ -13,8 +13,7 @@ dtms_nonparametric(
   Pvar = "P",
   weights = NULL,
   se = TRUE,
-  vcov = FALSE,
-  CI = FALSE,
+  ci = FALSE,
   alpha = 0.05
 )
 }
@@ -33,13 +32,11 @@ dtms_nonparametric(
 
 \item{weights}{Character (optional). Name of variable with survey weights.}
 
-\item{se}{Logical (optional), return standard errors of predicted probabilites. Default is `TRUE`.}
+\item{se}{Logical (optional), return standard errors of predicted probabilities. Default is `TRUE`.}
 
-\item{vcov}{Logical (optional), return variance-covariance matrix of predicted probabilites. Default is `FALSE`.}
+\item{ci}{Logical (optional), return confidence intervals? See details. Default is FALSE.}
 
-\item{CI}{Logical (optional), return confidence intervals? See details. Default is FALSE.}
-
-\item{alpha}{Numeric (optional), if CI=TRUE, what confidence level is used? Default is 0.05.}
+\item{alpha}{Numeric (optional), if ci=TRUE, what confidence level is used? Default is 0.05.}
 }
 \value{
 A data frame with transition probabilities.
@@ -53,7 +50,9 @@ The argument `data` takes a data set in transition format. Predicted
 transition probabilities are returned as a data frame, and not
 as a transition matrix. While the latter is required for applying Markov
 chain methods, the data frame is more convenient for viewing and
-analyzing the transition probabilities themselves.
+analyzing the transition probabilities themselves. Standard errors are
+approximated using binomial standard errors. In case of small cell counts
+this might be inaccurate.
 }
 \examples{
 ## Define model: Absorbing and transient states, time scale

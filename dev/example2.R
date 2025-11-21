@@ -58,7 +58,7 @@ probs_m <- dtms_transitions(dtms=work,
                             controls = list(Gender=0,
                                             time  =50:98,
                                             time2 =(50:98)^2),
-                            CI=TRUE)
+                            ci=TRUE)
 
 # Women
 probs_w <- dtms_transitions(dtms=work,
@@ -310,7 +310,7 @@ riskprobs <- dtms_transitions(dtms=work,
                             controls = list(Gender=0,
                                             time  =50:98,
                                             time2 =(50:98)^2),
-                            CI=TRUE)
+                            ci=TRUE)
 
 
 riskTp <- dtms_matrix(dtms=work,

@@ -15,7 +15,7 @@ dtms_transitions(
   Pvar = "P",
   se = TRUE,
   vcov = FALSE,
-  CI = FALSE,
+  ci = FALSE,
   alpha = 0.05
 )
 }
@@ -36,13 +36,13 @@ dtms_transitions(
 
 \item{Pvar}{Character (optional), name of variable with transition probabilities in the returned data frame. Default is `P`.}
 
-\item{se}{Logical (optional), return standard errors of predicted probabilites. Default is `TRUE`.}
+\item{se}{Logical (optional), return standard errors of predicted probabilities. Default is `TRUE`.}
 
-\item{vcov}{Logical (optional), return variance-covariance matrix of predicted probabilites. Default is `FALSE`.}
+\item{vcov}{Logical (optional), return variance-covariance matrix of predicted probabilities. Default is `FALSE`.}
 
-\item{CI}{Logical (optional), return confidence intervals? See details. Default is FALSE.}
+\item{ci}{Logical (optional), return confidence intervals? See details. Default is FALSE.}
 
-\item{alpha}{Numeric (optional), if CI=TRUE, what confidence level is used? Default is 0.05.}
+\item{alpha}{Numeric (optional), if ci=TRUE, what confidence level is used? Default is 0.05.}
 }
 \value{
 A data frame with transition probabilities.
@@ -71,7 +71,7 @@ is dismissed.
 
 If `vcov=TRUE` the full variance-covariance matrix of the transition
 probabilities will be returned instead of the transition probabilities. If
-`CI=TRUE`, confidence intervals will be returned. Note that the calculation
+`ci=TRUE`, confidence intervals will be returned. Note that the calculation
 uses a normal approximation and results below 0 or above 1 are possible.
 
 The argument `dropvar` controls whether the covariate values used for

@@ -31,7 +31,7 @@ If you use this package in your work, please use the following citation
 (or a variation):
 
 Dudel, C. (2025). dtms: discrete-time multistate models in R. R package
-version 0.3.5, available at <https://github.com/christiandudel/dtms>
+version 0.3.7, available at <https://github.com/christiandudel/dtms>
 
 ## Overview
 
@@ -1168,7 +1168,7 @@ probs_m <- dtms_transitions(dtms=work,
                             controls = list(Gender=0,
                                             time  =50:98,
                                             time2 =(50:98)^2),
-                            CI=TRUE)
+                            ci=TRUE)
   
 # Women
 probs_w <- dtms_transitions(dtms=work,
@@ -1176,7 +1176,7 @@ probs_w <- dtms_transitions(dtms=work,
                             controls = list(Gender=1,
                                             time  =50:98,
                                             time2 =(50:98)^2),
-                            CI=TRUE)
+                            ci=TRUE)
 
 # Overview
 summary(probs_m)
@@ -1211,7 +1211,7 @@ summary(probs_w)
 # Plotting, men as example
 probs_m |>  dtms_simplify() |> 
             ggplot(aes(x=time,y=P,color=to)) + 
-            geom_ribbon(aes(ymin = CIlow, ymax = CIup,fill=to),alpha=0.5) +
+            geom_ribbon(aes(ymin = cilow, ymax = ciup,fill=to),alpha=0.5) +
             geom_line() + 
             facet_wrap(~from)
 ```
@@ -1459,7 +1459,7 @@ riskprobs <- dtms_transitions(dtms=work,
                             controls = list(Gender=0,
                                             time  =50:98,
                                             time2 =(50:98)^2),
-                            CI=TRUE)
+                            ci=TRUE)
 
 
 riskTp <- dtms_matrix(dtms=work,
@@ -1564,25 +1564,25 @@ bootresults <- dtms_boot(data=estdata,
 summary(bootresults)
 #> $`2.5%`
 #>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     13.027111    2.917580 13.18544 29.46857
-#> start:Non-working_50  8.483431    6.269246 13.26474 28.34093
-#> start:Retired_50      8.406719    3.715340 14.63665 27.07383
-#> AVERAGE              12.169058    3.450685 13.26579 29.17974
-#> start:Working_50     11.765995    4.233728 16.10671 32.59493
-#> start:Non-working_50  7.105853    7.979484 16.30210 32.07353
-#> start:Retired_50      7.411987    5.210598 17.68557 30.98511
-#> AVERAGE              10.082227    5.429166 16.23917 32.35578
+#> start:Working_50     13.054600    2.920645 13.15766 29.37464
+#> start:Non-working_50  8.528714    6.205426 13.31474 28.40180
+#> start:Retired_50      8.410600    3.610070 14.64937 27.14306
+#> AVERAGE              12.150645    3.418316 13.26331 29.10259
+#> start:Working_50     11.709034    4.229206 16.10587 32.60146
+#> start:Non-working_50  7.171318    7.959658 16.34931 31.99388
+#> start:Retired_50      7.430800    5.183405 17.82142 30.95791
+#> AVERAGE              10.124211    5.416659 16.25373 32.34776
 #> 
 #> $`97.5%`
 #>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     13.653372    3.223444 14.08771 30.40601
-#> start:Non-working_50  9.150639    6.750686 14.30660 29.58953
-#> start:Retired_50      9.239235    4.131469 15.62659 28.49331
-#> AVERAGE              12.820168    3.759309 14.21257 30.17806
-#> start:Working_50     12.281845    4.616786 16.93534 33.42463
-#> start:Non-working_50  7.687136    8.457582 17.20335 32.84186
-#> start:Retired_50      8.163383    5.806967 18.72468 32.06217
-#> AVERAGE              10.708743    5.793324 17.09537 33.17589
+#> start:Working_50     13.629996    3.231005 13.84899 30.36382
+#> start:Non-working_50  9.153926    6.766005 14.06646 29.59187
+#> start:Retired_50      9.385682    4.118288 15.53822 28.66506
+#> AVERAGE              12.815866    3.807483 13.95898 30.13756
+#> start:Working_50     12.343120    4.537980 16.87071 33.38019
+#> start:Non-working_50  7.748757    8.427629 17.17239 32.86510
+#> start:Retired_50      8.242330    5.750572 18.77860 32.06253
+#> AVERAGE              10.714059    5.776566 17.04183 33.15394
 ```
 
 ## Using dtms with irregular intervals

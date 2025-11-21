@@ -834,7 +834,7 @@ probs_m <- dtms_transitions(dtms=work,
                             controls = list(Gender=0,
                                             time  =50:98,
                                             time2 =(50:98)^2),
-                            CI=TRUE)
+                            ci=TRUE)
   
 # Women
 probs_w <- dtms_transitions(dtms=work,
@@ -842,7 +842,7 @@ probs_w <- dtms_transitions(dtms=work,
                             controls = list(Gender=1,
                                             time  =50:98,
                                             time2 =(50:98)^2),
-                            CI=TRUE)
+                            ci=TRUE)
 
 # Overview
 summary(probs_m)
@@ -851,7 +851,7 @@ summary(probs_w)
 # Plotting, men as example
 probs_m |>  dtms_simplify() |> 
             ggplot(aes(x=time,y=P,color=to)) + 
-            geom_ribbon(aes(ymin = CIlow, ymax = CIup,fill=to),alpha=0.5) +
+            geom_ribbon(aes(ymin = cilow, ymax = ciup,fill=to),alpha=0.5) +
             geom_line() + 
             facet_wrap(~from)
  
@@ -996,7 +996,7 @@ riskprobs <- dtms_transitions(dtms=work,
                             controls = list(Gender=0,
                                             time  =50:98,
                                             time2 =(50:98)^2),
-                            CI=TRUE)
+                            ci=TRUE)
 
 
 riskTp <- dtms_matrix(dtms=work,

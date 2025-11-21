@@ -151,8 +151,7 @@ dtms_nonparametric <- function(data,
                                Pvar="P",
                                weights=NULL,
                                se=TRUE,
-                               vcov=FALSE,
-                               CI=FALSE,
+                               ci=FALSE,
                                alpha=0.05) {
   # Check
   dtms_proper(dtms)
@@ -189,7 +188,17 @@ dtms_nonparametric <- function(data,
   # Calculate
   model_frame[,Pvar] <- model_frame$COUNT.x/model_frame$COUNT.y
   # Standard error/confidence interval/vcov?
-  if(se|CI) {
+  if(se|ci) {
+    P <- model_frame$P
+    N <- model_frame$COUNT.y
+    error <- sqrt( (P*(1-P))/N)
+    if(se) model_frame$se <- error
+    if(ci) {
+      z <- (1-alpha/2)
+      z <- stats::qnorm(z)
+      model_frame$cilow <- model_frame[,Pvar]-z*error
+      model_frame$ciup <- model_frame[,Pvar]+z*error
+    }
   }
   # Warning if empty cells etc cause missing values
   if(any(is.na(model_frame[,Pvar]))) warning("Some probabilities are missing")
@@ -305,7 +314,7 @@ dtms_transitions <- function(model,
                              Pvar="P",
                              se=TRUE,
                              vcov=FALSE,
-                             CI=FALSE,
+                             ci=FALSE,
                              alpha=0.05) {
   # Check
   dtms_proper(dtms)
@@ -358,7 +367,7 @@ dtms_transitions <- function(model,
                                 direction="long",
                                 v.names=Pvar)
   # SE/CI/vcov
-  if(se|vcov|CI) {
+  if(se|vcov|ci) {
     # Simplify starting state (needed for model.matrix below)
     model_frame[,fromvar] <- dtms_simplify(model_frame)$from
     # Coefficients
@@ -450,12 +459,12 @@ dtms_transitions <- function(model,
     # SE
     if(se) model_frame$se <- sqrt(diag(Vp))
     # CI
-    if (CI) {
+    if(ci) {
       z <- (1-alpha/2)
       z <- stats::qnorm(z)
-      se <- sqrt(diag(Vp))
-      model_frame$CIlow <- model_frame[,Pvar]-z*se
-      model_frame$CIup <- model_frame[,Pvar]+z*se
+      error <- sqrt(diag(Vp))
+      model_frame$cilow <- model_frame[,Pvar]-z*error
+      model_frame$ciup <- model_frame[,Pvar]+z*error
     }
   }
   # Values of receiving state (state name + time)
@@ -469,7 +478,7 @@ dtms_transitions <- function(model,
   rownames(model_frame) <- NULL
   # Drop covariate values for prediction
   if(dropvar) {
-    model_frame <- model_frame[,names(model_frame)%in%c(fromvar,tovar,timevar,Pvar,"se","CIlow","CIup")]
+    model_frame <- model_frame[,names(model_frame)%in%c(fromvar,tovar,timevar,Pvar,"se","cilow","ciup")]
   }
   # Class
   class(model_frame) <- c("dtms_probs","data.frame")

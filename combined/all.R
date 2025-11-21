@@ -3332,7 +3332,9 @@ plot.dtms_probs <- function(x,...) {
 #' transition probabilities are returned as a data frame, and not
 #' as a transition matrix. While the latter is required for applying Markov
 #' chain methods, the data frame is more convenient for viewing and
-#' analyzing the transition probabilities themselves.
+#' analyzing the transition probabilities themselves. Standard errors are
+#' approximated using binomial standard errors. In case of small cell counts
+#' this might be inaccurate.
 #'
 #' @param data Data frame in transition format, as created with \code{dtms_format}.
 #' @param dtms dtms object, as created with \code{dtms}.
@@ -3341,10 +3343,9 @@ plot.dtms_probs <- function(x,...) {
 #' @param timevar Character (optional), name of variable with time scale in `data`. Default is `time`.
 #' @param Pvar Character (optional), name of variable with transition probabilities in the returned data frame. Default is `P`.
 #' @param weights Character (optional). Name of variable with survey weights.
-#' @param se Logical (optional), return standard errors of predicted probabilites. Default is `TRUE`.
-#' @param vcov Logical (optional), return variance-covariance matrix of predicted probabilites. Default is `FALSE`.
-#' @param CI Logical (optional), return confidence intervals? See details. Default is FALSE.
-#' @param alpha Numeric (optional), if CI=TRUE, what confidence level is used? Default is 0.05.
+#' @param se Logical (optional), return standard errors of predicted probabilities. Default is `TRUE`.
+#' @param ci Logical (optional), return confidence intervals? See details. Default is FALSE.
+#' @param alpha Numeric (optional), if ci=TRUE, what confidence level is used? Default is 0.05.
 #'
 #' @returns A data frame with transition probabilities.
 #' @export
@@ -3375,8 +3376,7 @@ dtms_nonparametric <- function(data,
                                Pvar="P",
                                weights=NULL,
                                se=TRUE,
-                               vcov=FALSE,
-                               CI=FALSE,
+                               ci=FALSE,
                                alpha=0.05) {
 
   # Check
@@ -3426,7 +3426,20 @@ dtms_nonparametric <- function(data,
   model_frame[,Pvar] <- model_frame$COUNT.x/model_frame$COUNT.y
 
   # Standard error/confidence interval/vcov?
-  if(se|CI) {
+  if(se|ci) {
+
+    P <- model_frame$P
+    N <- model_frame$COUNT.y
+    error <- sqrt( (P*(1-P))/N)
+
+    if(se) model_frame$se <- error
+    if(ci) {
+      z <- (1-alpha/2)
+      z <- stats::qnorm(z)
+      model_frame$cilow <- model_frame[,Pvar]-z*error
+      model_frame$ciup <- model_frame[,Pvar]+z*error
+
+    }
 
   }
 
@@ -4445,7 +4458,7 @@ dtms_survivor <- function(matrix,
 #'
 #' If `vcov=TRUE` the full variance-covariance matrix of the transition
 #' probabilities will be returned instead of the transition probabilities. If
-#' `CI=TRUE`, confidence intervals will be returned. Note that the calculation
+#' `ci=TRUE`, confidence intervals will be returned. Note that the calculation
 #' uses a normal approximation and results below 0 or above 1 are possible.
 #'
 #' The argument `dropvar` controls whether the covariate values used for
@@ -4456,10 +4469,10 @@ dtms_survivor <- function(matrix,
 #' @param model Model estimated with \code{dtms_fit}.
 #' @param dtms dtms object, as created with \code{dtms}.
 #' @param controls List (optional) with values for predictors (see details).
-#' @param se Logical (optional), return standard errors of predicted probabilites. Default is `TRUE`.
-#' @param vcov Logical (optional), return variance-covariance matrix of predicted probabilites. Default is `FALSE`.
-#' @param CI Logical (optional), return confidence intervals? See details. Default is FALSE.
-#' @param alpha Numeric (optional), if CI=TRUE, what confidence level is used? Default is 0.05.
+#' @param se Logical (optional), return standard errors of predicted probabilities. Default is `TRUE`.
+#' @param vcov Logical (optional), return variance-covariance matrix of predicted probabilities. Default is `FALSE`.
+#' @param ci Logical (optional), return confidence intervals? See details. Default is FALSE.
+#' @param alpha Numeric (optional), if ci=TRUE, what confidence level is used? Default is 0.05.
 #' @param dropvar Logical (optional), should covariate values used for prediction be returned (see details). Default is `TRUE`.
 #' @param fromvar Character (optional), name of variable with starting state in the returned data frame. Default is `from`.
 #' @param tovar Character (optional), name of variable with receiving state in the returned data frame. Default is `to`.
@@ -4499,7 +4512,7 @@ dtms_transitions <- function(model,
                              Pvar="P",
                              se=TRUE,
                              vcov=FALSE,
-                             CI=FALSE,
+                             ci=FALSE,
                              alpha=0.05) {
 
   # Check
@@ -4570,7 +4583,7 @@ dtms_transitions <- function(model,
                                 v.names=Pvar)
 
   # SE/CI/vcov
-  if(se|vcov|CI) {
+  if(se|vcov|ci) {
 
     # Simplify starting state (needed for model.matrix below)
     model_frame[,fromvar] <- dtms_simplify(model_frame)$from
@@ -4690,12 +4703,12 @@ dtms_transitions <- function(model,
     if(se) model_frame$se <- sqrt(diag(Vp))
 
     # CI
-    if (CI) {
+    if(ci) {
       z <- (1-alpha/2)
       z <- stats::qnorm(z)
-      se <- sqrt(diag(Vp))
-      model_frame$CIlow <- model_frame[,Pvar]-z*se
-      model_frame$CIup <- model_frame[,Pvar]+z*se
+      error <- sqrt(diag(Vp))
+      model_frame$cilow <- model_frame[,Pvar]-z*error
+      model_frame$ciup <- model_frame[,Pvar]+z*error
     }
 
   }
@@ -4713,7 +4726,7 @@ dtms_transitions <- function(model,
 
   # Drop covariate values for prediction
   if(dropvar) {
-    model_frame <- model_frame[,names(model_frame)%in%c(fromvar,tovar,timevar,Pvar,"se","CIlow","CIup")]
+    model_frame <- model_frame[,names(model_frame)%in%c(fromvar,tovar,timevar,Pvar,"se","cilow","ciup")]
   }
 
   # Class

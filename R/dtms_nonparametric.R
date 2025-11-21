@@ -9,7 +9,9 @@
 #' transition probabilities are returned as a data frame, and not
 #' as a transition matrix. While the latter is required for applying Markov
 #' chain methods, the data frame is more convenient for viewing and
-#' analyzing the transition probabilities themselves.
+#' analyzing the transition probabilities themselves. Standard errors are
+#' approximated using binomial standard errors. In case of small cell counts
+#' this might be inaccurate.
 #'
 #' @param data Data frame in transition format, as created with \code{dtms_format}.
 #' @param dtms dtms object, as created with \code{dtms}.
@@ -18,10 +20,9 @@
 #' @param timevar Character (optional), name of variable with time scale in `data`. Default is `time`.
 #' @param Pvar Character (optional), name of variable with transition probabilities in the returned data frame. Default is `P`.
 #' @param weights Character (optional). Name of variable with survey weights.
-#' @param se Logical (optional), return standard errors of predicted probabilites. Default is `TRUE`.
-#' @param vcov Logical (optional), return variance-covariance matrix of predicted probabilites. Default is `FALSE`.
-#' @param CI Logical (optional), return confidence intervals? See details. Default is FALSE.
-#' @param alpha Numeric (optional), if CI=TRUE, what confidence level is used? Default is 0.05.
+#' @param se Logical (optional), return standard errors of predicted probabilities. Default is `TRUE`.
+#' @param ci Logical (optional), return confidence intervals? See details. Default is FALSE.
+#' @param alpha Numeric (optional), if ci=TRUE, what confidence level is used? Default is 0.05.
 #'
 #' @returns A data frame with transition probabilities.
 #' @export
@@ -52,8 +53,7 @@ dtms_nonparametric <- function(data,
                                Pvar="P",
                                weights=NULL,
                                se=TRUE,
-                               vcov=FALSE,
-                               CI=FALSE,
+                               ci=FALSE,
                                alpha=0.05) {
 
   # Check
@@ -103,7 +103,20 @@ dtms_nonparametric <- function(data,
   model_frame[,Pvar] <- model_frame$COUNT.x/model_frame$COUNT.y
 
   # Standard error/confidence interval/vcov?
-  if(se|CI) {
+  if(se|ci) {
+
+    P <- model_frame$P
+    N <- model_frame$COUNT.y
+    error <- sqrt( (P*(1-P))/N)
+
+    if(se) model_frame$se <- error
+    if(ci) {
+      z <- (1-alpha/2)
+      z <- stats::qnorm(z)
+      model_frame$cilow <- model_frame[,Pvar]-z*error
+      model_frame$ciup <- model_frame[,Pvar]+z*error
+
+    }
 
   }
 

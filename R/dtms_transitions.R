@@ -24,7 +24,7 @@
 #'
 #' If `vcov=TRUE` the full variance-covariance matrix of the transition
 #' probabilities will be returned instead of the transition probabilities. If
-#' `CI=TRUE`, confidence intervals will be returned. Note that the calculation
+#' `ci=TRUE`, confidence intervals will be returned. Note that the calculation
 #' uses a normal approximation and results below 0 or above 1 are possible.
 #'
 #' The argument `dropvar` controls whether the covariate values used for
@@ -35,10 +35,10 @@
 #' @param model Model estimated with \code{dtms_fit}.
 #' @param dtms dtms object, as created with \code{dtms}.
 #' @param controls List (optional) with values for predictors (see details).
-#' @param se Logical (optional), return standard errors of predicted probabilites. Default is `TRUE`.
-#' @param vcov Logical (optional), return variance-covariance matrix of predicted probabilites. Default is `FALSE`.
-#' @param CI Logical (optional), return confidence intervals? See details. Default is FALSE.
-#' @param alpha Numeric (optional), if CI=TRUE, what confidence level is used? Default is 0.05.
+#' @param se Logical (optional), return standard errors of predicted probabilities. Default is `TRUE`.
+#' @param vcov Logical (optional), return variance-covariance matrix of predicted probabilities. Default is `FALSE`.
+#' @param ci Logical (optional), return confidence intervals? See details. Default is FALSE.
+#' @param alpha Numeric (optional), if ci=TRUE, what confidence level is used? Default is 0.05.
 #' @param dropvar Logical (optional), should covariate values used for prediction be returned (see details). Default is `TRUE`.
 #' @param fromvar Character (optional), name of variable with starting state in the returned data frame. Default is `from`.
 #' @param tovar Character (optional), name of variable with receiving state in the returned data frame. Default is `to`.
@@ -78,7 +78,7 @@ dtms_transitions <- function(model,
                              Pvar="P",
                              se=TRUE,
                              vcov=FALSE,
-                             CI=FALSE,
+                             ci=FALSE,
                              alpha=0.05) {
 
   # Check
@@ -149,7 +149,7 @@ dtms_transitions <- function(model,
                                 v.names=Pvar)
 
   # SE/CI/vcov
-  if(se|vcov|CI) {
+  if(se|vcov|ci) {
 
     # Simplify starting state (needed for model.matrix below)
     model_frame[,fromvar] <- dtms_simplify(model_frame)$from
@@ -269,12 +269,12 @@ dtms_transitions <- function(model,
     if(se) model_frame$se <- sqrt(diag(Vp))
 
     # CI
-    if (CI) {
+    if(ci) {
       z <- (1-alpha/2)
       z <- stats::qnorm(z)
-      se <- sqrt(diag(Vp))
-      model_frame$CIlow <- model_frame[,Pvar]-z*se
-      model_frame$CIup <- model_frame[,Pvar]+z*se
+      error <- sqrt(diag(Vp))
+      model_frame$cilow <- model_frame[,Pvar]-z*error
+      model_frame$ciup <- model_frame[,Pvar]+z*error
     }
 
   }
@@ -292,7 +292,7 @@ dtms_transitions <- function(model,
 
   # Drop covariate values for prediction
   if(dropvar) {
-    model_frame <- model_frame[,names(model_frame)%in%c(fromvar,tovar,timevar,Pvar,"se","CIlow","CIup")]
+    model_frame <- model_frame[,names(model_frame)%in%c(fromvar,tovar,timevar,Pvar,"se","cilow","ciup")]
   }
 
   # Class
