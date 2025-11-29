@@ -101,6 +101,7 @@ Currently, the following topics are covered in this documentation
   - Analysis
   - Variance estimation
 - Irregular intervals
+- Splines, random effects, and random slopes
 - Combining dtms with other software
 - Using dtms with secure data environments
 - References
@@ -124,7 +125,7 @@ transition probabilities. Fourth, Markov chain methods are applied to
 calculate statistics to describe the model. These steps and the
 corresponding functions are described below. Note that not all arguments
 of each function are described, and the help files for the individual
-functions usually contain useful additional information.
+functions contain useful additional information.
 
 ### Model setup
 
@@ -1326,7 +1327,8 @@ firstw <- dtms_first(dtms=work,
                      start_distr=Sw)  
 
 summary(firstm)
-#> Warning in dtms_distr_summary(distr = object, ...): NAs introduced by coercion
+#> Warning in dtms_distr_summary(distr = object, ...): NAs durch Umwandlung
+#> erzeugt
 #>                          MEAN VARIANCE       SD MEDIAN      RISK0
 #> start:Working_50     14.25887 42.52413 6.521053   14.5 0.00000000
 #> start:Non-working_50 12.31587 50.90524 7.134791   12.5 0.00000000
@@ -1334,7 +1336,8 @@ summary(firstm)
 #> AVERAGE              13.13713 52.58739 7.251716   13.5 0.06011926
 #> AVERAGE(COND.)       13.97744 44.20570 6.648737   13.5 0.00000000
 summary(firstw)
-#> Warning in dtms_distr_summary(distr = object, ...): NAs introduced by coercion
+#> Warning in dtms_distr_summary(distr = object, ...): NAs durch Umwandlung
+#> erzeugt
 #>                          MEAN VARIANCE       SD MEDIAN      RISK0
 #> start:Working_50     14.10718 40.00327 6.324814   14.5 0.00000000
 #> start:Non-working_50 12.54709 46.49771 6.818923   12.5 0.00000000
@@ -1356,7 +1359,8 @@ last1w <- dtms_last(dtms=work,
                     start_distr=Sw) 
 
 summary(last1m)
-#> Warning in dtms_distr_summary(distr = object, ...): NAs introduced by coercion
+#> Warning in dtms_distr_summary(distr = object, ...): NAs durch Umwandlung
+#> erzeugt
 #>                          MEAN VARIANCE       SD MEDIAN RISK0
 #> start:Working_50     16.50265 76.98676 8.774210   15.5    NA
 #> start:Non-working_50 18.02302 68.14259 8.254853   17.5    NA
@@ -1364,7 +1368,8 @@ summary(last1m)
 #> AVERAGE              16.73797 75.91238 8.712771   16.5    NA
 #> AVERAGE(COND.)       17.97027 68.47754 8.275116   17.5    NA
 summary(last1w)
-#> Warning in dtms_distr_summary(distr = object, ...): NAs introduced by coercion
+#> Warning in dtms_distr_summary(distr = object, ...): NAs durch Umwandlung
+#> erzeugt
 #>                          MEAN VARIANCE       SD MEDIAN RISK0
 #> start:Working_50     16.15218 87.76963 9.368545   15.5    NA
 #> start:Non-working_50 18.31738 77.06422 8.778623   17.5    NA
@@ -1386,7 +1391,8 @@ last2w <- dtms_last(dtms=work,
                     start_distr=Sw)  
 
 summary(last2m)
-#> Warning in dtms_distr_summary(distr = object, ...): NAs introduced by coercion
+#> Warning in dtms_distr_summary(distr = object, ...): NAs durch Umwandlung
+#> erzeugt
 #>                          MEAN VARIANCE       SD MEDIAN RISK0
 #> start:Working_50     18.74988 64.64429 8.040167   18.5    NA
 #> start:Non-working_50 19.72542 56.78054 7.535286   19.5    NA
@@ -1394,7 +1400,8 @@ summary(last2m)
 #> AVERAGE              18.90783 63.49802 7.968565   18.5    NA
 #> AVERAGE(COND.)       19.69276 57.06149 7.553906   19.5    NA
 summary(last2w)
-#> Warning in dtms_distr_summary(distr = object, ...): NAs introduced by coercion
+#> Warning in dtms_distr_summary(distr = object, ...): NAs durch Umwandlung
+#> erzeugt
 #>                          MEAN VARIANCE       SD MEDIAN RISK0
 #> start:Working_50     19.33660 73.65218 8.582085   19.5    NA
 #> start:Non-working_50 20.62023 63.26114 7.953687   20.5    NA
@@ -1564,25 +1571,25 @@ bootresults <- dtms_boot(data=estdata,
 summary(bootresults)
 #> $`2.5%`
 #>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     13.054600    2.920645 13.15766 29.37464
-#> start:Non-working_50  8.528714    6.205426 13.31474 28.40180
-#> start:Retired_50      8.410600    3.610070 14.64937 27.14306
-#> AVERAGE              12.150645    3.418316 13.26331 29.10259
-#> start:Working_50     11.709034    4.229206 16.10587 32.60146
-#> start:Non-working_50  7.171318    7.959658 16.34931 31.99388
-#> start:Retired_50      7.430800    5.183405 17.82142 30.95791
-#> AVERAGE              10.124211    5.416659 16.25373 32.34776
+#> start:Working_50     13.004594    2.957965 13.17961 29.47073
+#> start:Non-working_50  8.403190    6.271139 13.35294 28.53197
+#> start:Retired_50      8.470949    3.728510 14.73836 27.28964
+#> AVERAGE              12.114872    3.483532 13.28677 29.24113
+#> start:Working_50     11.783198    4.234241 16.11183 32.63204
+#> start:Non-working_50  7.080122    7.988489 16.32368 32.02722
+#> start:Retired_50      7.525537    5.254884 17.72113 30.98556
+#> AVERAGE              10.093395    5.398159 16.25548 32.38182
 #> 
 #> $`97.5%`
 #>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     13.629996    3.231005 13.84899 30.36382
-#> start:Non-working_50  9.153926    6.766005 14.06646 29.59187
-#> start:Retired_50      9.385682    4.118288 15.53822 28.66506
-#> AVERAGE              12.815866    3.807483 13.95898 30.13756
-#> start:Working_50     12.343120    4.537980 16.87071 33.38019
-#> start:Non-working_50  7.748757    8.427629 17.17239 32.86510
-#> start:Retired_50      8.242330    5.750572 18.77860 32.06253
-#> AVERAGE              10.714059    5.776566 17.04183 33.15394
+#> start:Working_50     13.653605    3.283214 13.96409 30.56449
+#> start:Non-working_50  9.165822    6.816940 14.20582 29.89820
+#> start:Retired_50      9.323807    4.184264 15.72399 28.94743
+#> AVERAGE              12.826091    3.815908 14.08937 30.39215
+#> start:Working_50     12.394608    4.600227 17.02381 33.46269
+#> start:Non-working_50  7.799312    8.504280 17.23098 33.03286
+#> start:Retired_50      8.287149    5.800703 18.72387 32.32104
+#> AVERAGE              10.846178    5.831810 17.15576 33.27259
 ```
 
 ## Using dtms with irregular intervals
@@ -1675,6 +1682,30 @@ explicit not only in the values of the time scale used for prediction,
 but also the value for the variable `steplength`. The resulting
 transition probabilities can be used like any other transition
 probabilities.
+
+## Splines, random effects, and random slopes
+
+`dtms` builds on the packages `VGAM` and `mclogit` to allow
+semiparametric models with splines and models with random effects and
+random slopes. Splines can be fitted using the function `s()` either
+within the argument `controls` or the argument `formula` of
+`dtms_fit()`:
+
+``` r
+fit <- dtms_fit(data=estdata,
+                controls=c("s(time)"),
+                package="VGAM")
+```
+
+Random effects and slopes can be specified using the argument `random`
+which is passed to the underlying function from `mclogit`:
+
+``` r
+fit <- dtms_fit(data=estdata,
+                controls=c("time"),
+                package="mclogit",
+                random=~1|id)
+```
 
 ## Combining dtms with other software
 

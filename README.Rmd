@@ -104,6 +104,7 @@ Currently, the following topics are covered in this documentation
     + Analysis
     + Variance estimation
 - Irregular intervals 
+- Splines, random effects, and random slopes
 - Combining dtms with other software
 - Using dtms with secure data environments
 - References
@@ -120,12 +121,12 @@ remotes::install_github("christiandudel/dtms")
 
 The basic workflow consists of four main steps. First, the multistate model is
 defined in a general way which describes the states included in the model and
-its timescale (model setup). Second, the input data has to be reshaped and cleaned. Third,
-a regression model is fitted to predict transition probabilities. Fourth, 
-Markov chain methods are applied to calculate statistics to describe the model.
-These steps and the corresponding functions are described below. Note that
-not all arguments of each function are described, and the help files for the
-individual functions usually contain useful additional information.
+its timescale (model setup). Second, the input data has to be reshaped and 
+cleaned. Third, a regression model is fitted to predict transition 
+probabilities. Fourth, Markov chain methods are applied to calculate statistics 
+to describe the model. These steps and the corresponding functions are described 
+below. Note that not all arguments of each function are described, and the help 
+files for the individual functions contain useful additional information.
 
 ### Model setup
 
@@ -1172,6 +1173,26 @@ dying; thus it also uses a fixed interval of 2, which is explicit not only
 in the values of the time scale used for prediction, but also the value for
 the variable `steplength`. The resulting transition probabilities can be used
 like any other transition probabilities. 
+
+## Splines, random effects, and random slopes
+
+`dtms` builds on the packages `VGAM` and `mclogit` to allow semiparametric 
+models with splines and models with random effects and random slopes. Splines
+can be fitted using the function `s()` either within the argument `controls` 
+or the argument `formula` of `dtms_fit()`:
+```r
+fit <- dtms_fit(data=estdata,
+                controls=c("s(time)"),
+                package="VGAM")
+```
+Random effects and slopes can be specified using the argument `random` which 
+is passed to the underlying function from `mclogit`:
+```r
+fit <- dtms_fit(data=estdata,
+                controls=c("time"),
+                package="mclogit",
+                random=~1|id)
+```
 
 ## Combining dtms with other software
 

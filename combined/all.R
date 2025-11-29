@@ -2001,7 +2001,7 @@ dtms_first  <- function(matrix,
 #'
 #' The argument `package` is used choose the package used for estimation.
 #' Currently, `VGAM` (default), `nnet`, and `mclogit` are supported.
-#' The functions #' used for estimation are, respectively, `vgam`, `multinom`,
+#' The functions used for estimation are, respectively, `vgam`, `multinom`,
 #' and `mblogit`. Arguments for these functions are passed via `...`.
 #'
 #' The argument `reference` sets the reference category for the multinomial
