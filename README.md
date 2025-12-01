@@ -1327,8 +1327,7 @@ firstw <- dtms_first(dtms=work,
                      start_distr=Sw)  
 
 summary(firstm)
-#> Warning in dtms_distr_summary(distr = object, ...): NAs durch Umwandlung
-#> erzeugt
+#> Warning in dtms_distr_summary(distr = object, ...): NAs introduced by coercion
 #>                          MEAN VARIANCE       SD MEDIAN      RISK0
 #> start:Working_50     14.25887 42.52413 6.521053   14.5 0.00000000
 #> start:Non-working_50 12.31587 50.90524 7.134791   12.5 0.00000000
@@ -1336,8 +1335,7 @@ summary(firstm)
 #> AVERAGE              13.13713 52.58739 7.251716   13.5 0.06011926
 #> AVERAGE(COND.)       13.97744 44.20570 6.648737   13.5 0.00000000
 summary(firstw)
-#> Warning in dtms_distr_summary(distr = object, ...): NAs durch Umwandlung
-#> erzeugt
+#> Warning in dtms_distr_summary(distr = object, ...): NAs introduced by coercion
 #>                          MEAN VARIANCE       SD MEDIAN      RISK0
 #> start:Working_50     14.10718 40.00327 6.324814   14.5 0.00000000
 #> start:Non-working_50 12.54709 46.49771 6.818923   12.5 0.00000000
@@ -1359,8 +1357,7 @@ last1w <- dtms_last(dtms=work,
                     start_distr=Sw) 
 
 summary(last1m)
-#> Warning in dtms_distr_summary(distr = object, ...): NAs durch Umwandlung
-#> erzeugt
+#> Warning in dtms_distr_summary(distr = object, ...): NAs introduced by coercion
 #>                          MEAN VARIANCE       SD MEDIAN RISK0
 #> start:Working_50     16.50265 76.98676 8.774210   15.5    NA
 #> start:Non-working_50 18.02302 68.14259 8.254853   17.5    NA
@@ -1368,8 +1365,7 @@ summary(last1m)
 #> AVERAGE              16.73797 75.91238 8.712771   16.5    NA
 #> AVERAGE(COND.)       17.97027 68.47754 8.275116   17.5    NA
 summary(last1w)
-#> Warning in dtms_distr_summary(distr = object, ...): NAs durch Umwandlung
-#> erzeugt
+#> Warning in dtms_distr_summary(distr = object, ...): NAs introduced by coercion
 #>                          MEAN VARIANCE       SD MEDIAN RISK0
 #> start:Working_50     16.15218 87.76963 9.368545   15.5    NA
 #> start:Non-working_50 18.31738 77.06422 8.778623   17.5    NA
@@ -1391,8 +1387,7 @@ last2w <- dtms_last(dtms=work,
                     start_distr=Sw)  
 
 summary(last2m)
-#> Warning in dtms_distr_summary(distr = object, ...): NAs durch Umwandlung
-#> erzeugt
+#> Warning in dtms_distr_summary(distr = object, ...): NAs introduced by coercion
 #>                          MEAN VARIANCE       SD MEDIAN RISK0
 #> start:Working_50     18.74988 64.64429 8.040167   18.5    NA
 #> start:Non-working_50 19.72542 56.78054 7.535286   19.5    NA
@@ -1400,8 +1395,7 @@ summary(last2m)
 #> AVERAGE              18.90783 63.49802 7.968565   18.5    NA
 #> AVERAGE(COND.)       19.69276 57.06149 7.553906   19.5    NA
 summary(last2w)
-#> Warning in dtms_distr_summary(distr = object, ...): NAs durch Umwandlung
-#> erzeugt
+#> Warning in dtms_distr_summary(distr = object, ...): NAs introduced by coercion
 #>                          MEAN VARIANCE       SD MEDIAN RISK0
 #> start:Working_50     19.33660 73.65218 8.582085   19.5    NA
 #> start:Non-working_50 20.62023 63.26114 7.953687   20.5    NA
@@ -1571,25 +1565,25 @@ bootresults <- dtms_boot(data=estdata,
 summary(bootresults)
 #> $`2.5%`
 #>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     13.004594    2.957965 13.17961 29.47073
-#> start:Non-working_50  8.403190    6.271139 13.35294 28.53197
-#> start:Retired_50      8.470949    3.728510 14.73836 27.28964
-#> AVERAGE              12.114872    3.483532 13.28677 29.24113
-#> start:Working_50     11.783198    4.234241 16.11183 32.63204
-#> start:Non-working_50  7.080122    7.988489 16.32368 32.02722
-#> start:Retired_50      7.525537    5.254884 17.72113 30.98556
-#> AVERAGE              10.093395    5.398159 16.25548 32.38182
+#> start:Working_50     12.968855    2.945669 13.23273 29.61813
+#> start:Non-working_50  8.389055    6.223305 13.41601 28.67393
+#> start:Retired_50      8.388575    3.686434 14.79390 27.23160
+#> AVERAGE              12.146070    3.405560 13.35228 29.35574
+#> start:Working_50     11.736126    4.166565 16.13064 32.57409
+#> start:Non-working_50  7.155871    7.957069 16.34378 31.92024
+#> start:Retired_50      7.463770    5.286629 17.76226 30.85975
+#> AVERAGE              10.116608    5.397986 16.26931 32.30191
 #> 
 #> $`97.5%`
 #>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     13.653605    3.283214 13.96409 30.56449
-#> start:Non-working_50  9.165822    6.816940 14.20582 29.89820
-#> start:Retired_50      9.323807    4.184264 15.72399 28.94743
-#> AVERAGE              12.826091    3.815908 14.08937 30.39215
-#> start:Working_50     12.394608    4.600227 17.02381 33.46269
-#> start:Non-working_50  7.799312    8.504280 17.23098 33.03286
-#> start:Retired_50      8.287149    5.800703 18.72387 32.32104
-#> AVERAGE              10.846178    5.831810 17.15576 33.27259
+#> start:Working_50     13.597376    3.212745 13.97313 30.37288
+#> start:Non-working_50  9.075586    6.734771 14.27209 29.61468
+#> start:Retired_50      9.243976    4.131156 15.77548 28.69295
+#> AVERAGE              12.731005    3.755891 14.10781 30.18179
+#> start:Working_50     12.345672    4.552212 17.11506 33.48374
+#> start:Non-working_50  7.708707    8.388790 17.40913 32.92162
+#> start:Retired_50      8.115265    5.772565 18.96224 32.21323
+#> AVERAGE              10.778010    5.790031 17.30665 33.22643
 ```
 
 ## Using dtms with irregular intervals
@@ -1749,34 +1743,6 @@ might be required.
 
 ## References
 
-Papers using `dtms` for substantive questions:
-
-- Moretti, M., Korhonen, K., van Raalte, A., Riffe, T., Martikainen, P.
-  (2025): Evolution of widowhood lifespan and its gender and educational
-  inequalities in Finland over three decades. Demography 65(2):
-  1635-1660. <https://doi.org/10.1215/00703370-12269717>
-
-- Hiilamo, A., Pitkänen, J., Moretti, M., Martikainen, P., Myrskylä, M.
-  (2025): Children’s out-of-home care in Finland, 1993–2020: lifetime
-  risks, expectancies, exit routes, and number of placements for
-  synthetic cohorts. Child Abuse & Neglect 169(1): 107626.
-  <https://doi.org/10.1016/j.chiabu.2025.107626>
-
-- Hiilamo, A., Hermansen, Å. (2025): Financial strain in Norway: the
-  lifetime risk of and expected time spent in payment problems. MPIDR
-  Working Paper WP-2025-006.
-  <https://dx.doi.org/10.4054/MPIDR-WP-2025-006>
-
-- Feraldi, A., Dudel, C. (2025): Smoking and the length of working life:
-  an examination using the U.S. Health and Retirement Study. MPIDR
-  Working Paper WP-2025-017.
-  <https://dx.doi.org/10.4054/MPIDR-WP-2025-017>
-
-- Lam, A. A., Keenan, K., Kulu, H., Myrskylä, M. (2024): Working longer
-  despite poorer health? Inequalities in working and health expectancies
-  at older ages in South Korea. MPIDR Working Paper WP-2024-022.
-  <https://dx.doi.org/10.4054/MPIDR-WP-2024-022>
-
 Methodological papers:
 
 - Schneider, D. C. (2023): Statistical inference for discrete-time
@@ -1791,3 +1757,31 @@ Methodological papers:
 - Dudel, C., Myrskylä, M. (2020): Estimating the number and length of
   episodes in disability using a Markov chain approach. Population
   Health Metrics 18: 15. <https://doi.org/10.1186/s12963-020-00217-0>
+
+Papers using `dtms` for substantive questions:
+
+- Moretti, M., Korhonen, K., van Raalte, A., Riffe, T., Martikainen, P.
+  (2025): Evolution of widowhood lifespan and its gender and educational
+  inequalities in Finland over three decades. Demography 65(2):
+  1635-1660. <https://doi.org/10.1215/00703370-12269717>
+
+- Feraldi, A., Sharma, S., Guidici, C. (2025): Gender gap in cancer-free
+  life expectancy in the United States: the association with smoking,
+  poor diet, and physical inactivity. Journal of Aging and Health.
+  <https://doi.org/10.1177/08982643251404299>
+
+- Hiilamo, A., Pitkänen, J., Moretti, M., Martikainen, P., Myrskylä, M.
+  (2025): Children’s out-of-home care in Finland, 1993–2020: lifetime
+  risks, expectancies, exit routes, and number of placements for
+  synthetic cohorts. Child Abuse & Neglect 169(1): 107626.
+  <https://doi.org/10.1016/j.chiabu.2025.107626>
+
+- Feraldi, A., Dudel, C. (2025): Smoking and the length of working life:
+  an examination using the U.S. Health and Retirement Study. MPIDR
+  Working Paper WP-2025-017.
+  <https://dx.doi.org/10.4054/MPIDR-WP-2025-017>
+
+- Lam, A. A., Keenan, K., Kulu, H., Myrskylä, M. (2024): Working longer
+  despite poorer health? Inequalities in working and health expectancies
+  at older ages in South Korea. MPIDR Working Paper WP-2024-022.
+  <https://dx.doi.org/10.4054/MPIDR-WP-2024-022>
