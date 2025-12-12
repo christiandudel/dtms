@@ -11,6 +11,8 @@ dtms_boot(
   rep,
   method = "simple",
   idvar = "id",
+  weights = NULL,
+  slack = 1,
   verbose = FALSE,
   progress = FALSE,
   parallel = FALSE,
@@ -28,9 +30,13 @@ dtms_boot(
 
 \item{rep}{Numeric, number of bootstrap replications.}
 
-\item{method}{Character (optional), either "simple" for simple bootstrap or "block" for block bootstrap. Default is "simple".}
+\item{method}{Character (optional), either "simple" for simple bootstrap, "block" for block bootstrap, or "weights" for a weight-based parametric bootstrap. Default is "simple".}
 
 \item{idvar}{Character (optional), name of ID variable in `data' identifying units. Only required for block bootstrap. Default is "id".}
+
+\item{weights}{Character (optional), name of variable with weights. Only used if `method=weights`. Default is NULL.}
+
+\item{slack}{Numeric (optional), used to in parametric resampling to replace 0. Default is 1.}
 
 \item{verbose}{Logical (optional), print output which might be generated when running `fun`? Default is FALSE.}
 
@@ -63,12 +69,16 @@ The result of this function is a list with as many entries as there are
 replications. Each entry is the result of calling `fun` for the respective
 replication.
 
-Two methods are implemented and selected with the argument `method`. A simple
+Three methods are implemented and selected with the argument `method`. A simple
 resampling bootstrap, which assumes that the rows in `data` are independent
-of each other. And the block bootstrap which allows for dependent
-observations; e.g., different units each contributing several transitions.
-If the block bootstrap is used the argument `idvar` sets which variable in
-`data` contains information the unit/cluster identifier.
+of each other (`method=simple`). The block bootstrap which allows for
+dependent observations; e.g., different units each contributing
+several transitions (`method=block`). Moreover, a parametric bootstrap using
+weights is also supported, assuming that observations are i.i.d. multinomial
+(`method=weights`). If the block bootstrap is used the argument `idvar` sets
+which variable in #' `data` contains information the unit/cluster identifier.
+In case the parametric bootstrap is used the argument `weights` is used to
+specify the name of the variable with the weights.
 
 For parallel computing the packages `foreach` and `doParallel` (and their
 dependcies are used). See the documentation of these packages for details.
@@ -87,6 +97,7 @@ estdata <- dtms_format(data=simpledata,
 ## Clean
 estdata <- dtms_clean(data=estdata,
                       dtms=simple)
+# Simple resampling bootstrap
 # Bootstrap function
 bootfun <- function(data,dtms) {
   fit <- dtms_fit(data=data)
@@ -105,6 +116,32 @@ bootstrap <- dtms_boot(data=estdata,
                        dtms=simple,
                        fun=bootfun,
                        rep=5)
+summary(bootstrap,
+        probs=c(0.025,0.5,0.975))
+# Parametric bootstrap
+aggdata <- dtms_aggregate(estdata)
+# Bootstrap function
+bootfun <- function(data,dtms) {
+  fit <- dtms_fit(data=data,weights="count")
+  probs    <- dtms_transitions(dtms=dtms,
+                               model = fit)
+  Tp <- dtms_matrix(dtms=dtms,
+                    probs=probs)
+  S <- dtms_start(dtms=dtms,
+                  data=data,
+                  weights="count")
+  dtms_expectancy(dtms=dtms,
+                  matrix=Tp,
+                  start_distr=S)
+}
+# Bootstrap
+bootstrap <- dtms_boot(data=aggdata,
+                       dtms=simple,
+                       fun=bootfun,
+                       rep=5,
+                       weights="count",
+                       method="weights")
+# Results
 summary(bootstrap,
         probs=c(0.025,0.5,0.975))
 }

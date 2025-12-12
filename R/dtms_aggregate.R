@@ -40,10 +40,6 @@
 #' ## Fit model
 #' fit <- dtms_fit(data=aggdata,
 #'                 weights="count")
-#' ## Basic resampling (can be extended for basic bootstrap)
-#' aggdata$newcount <- rmultinom(1,size=sum(aggdata$count),prob=aggdata$count)
-#' fit <- dtms_fit(data=aggdata,
-#'                 weights="count")
 
 dtms_aggregate <- function(data,
                            weights=NULL,

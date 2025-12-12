@@ -72,8 +72,9 @@ based on (partial) distributions variance/standard deviation and median of
 occupancy time/first visit/last exit/time to absorption, Markov chains with
 rewards.
 - Inference: analytic standard errors and variance-covariance matrix for 
-transition probabilities; simulated inference using the bootstrap and the block
-bootstrap for other quantities, supporting parallel computing.
+transition probabilities; simulated inference using the bootstrap, the block
+bootstrap, and parametric bootstrap for other quantities, supporting parallel 
+computing.
 - Other features: simulation of Markov chains using the package
 [markovchain](https://cran.r-project.org/web/packages/markovchain); survey 
 weights (experimental); irregular time intervals (experimental).
@@ -1265,6 +1266,14 @@ dependencies might be required.
 #    
 # }
 ```
+
+## Using dtms with large data sets
+
+With large data sets the execution time of the functions from this package
+can be very high. A way to reduce the computational demands is by using
+the function `dtms_aggregate()` and for inference the parametric bootstrap, as
+described in the respective help pages. Depending on the data this can reduce 
+the time needed for computations by 80% to 90%.
 
 ## References
 

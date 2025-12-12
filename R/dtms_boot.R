@@ -16,12 +16,16 @@
 #' replications. Each entry is the result of calling `fun` for the respective
 #' replication.
 #'
-#' Two methods are implemented and selected with the argument `method`. A simple
+#' Three methods are implemented and selected with the argument `method`. A simple
 #' resampling bootstrap, which assumes that the rows in `data` are independent
-#' of each other. And the block bootstrap which allows for dependent
-#' observations; e.g., different units each contributing several transitions.
-#' If the block bootstrap is used the argument `idvar` sets which variable in
-#' `data` contains information the unit/cluster identifier.
+#' of each other (`method=simple`). The block bootstrap which allows for
+#' dependent observations; e.g., different units each contributing
+#' several transitions (`method=block`). Moreover, a parametric bootstrap using
+#' weights is also supported, assuming that observations are i.i.d. multinomial
+#' (`method=weights`). If the block bootstrap is used the argument `idvar` sets
+#' which variable in #' `data` contains information the unit/cluster identifier.
+#' In case the parametric bootstrap is used the argument `weights` is used to
+#' specify the name of the variable with the weights.
 #'
 #' For parallel computing the packages `foreach` and `doParallel` (and their
 #' dependcies are used). See the documentation of these packages for details.
@@ -30,8 +34,10 @@
 #' @param dtms dtms object, as created with \code{dtms}.
 #' @param fun Function to be repeatedly applied, see details.
 #' @param rep Numeric, number of bootstrap replications.
-#' @param method Character (optional), either "simple" for simple bootstrap or "block" for block bootstrap. Default is "simple".
+#' @param method Character (optional), either "simple" for simple bootstrap, "block" for block bootstrap, or "weights" for a weight-based parametric bootstrap. Default is "simple".
 #' @param idvar Character (optional), name of ID variable in `data' identifying units. Only required for block bootstrap. Default is "id".
+#' @param weights Character (optional), name of variable with weights. Only used if `method=weights`. Default is NULL.
+#' @param slack Numeric (optional), used to in parametric resampling to replace 0. Default is 1.
 #' @param verbose Logical (optional), print output which might be generated when running `fun`? Default is FALSE.
 #' @param progress Logical (optional), indicate progress if simple bootstrap? Default is FALSE.
 #' @param parallel Logical (optional), use parallel processing? Default is FALSE.
@@ -59,6 +65,7 @@
 #' ## Clean
 #' estdata <- dtms_clean(data=estdata,
 #'                       dtms=simple)
+#' # Simple resampling bootstrap
 #' # Bootstrap function
 #' bootfun <- function(data,dtms) {
 #'   fit <- dtms_fit(data=data)
@@ -79,6 +86,33 @@
 #'                        rep=5)
 #' summary(bootstrap,
 #'         probs=c(0.025,0.5,0.975))
+#' # Parametric bootstrap
+#' aggdata <- dtms_aggregate(estdata)
+#' # Bootstrap function
+#' bootfun <- function(data,dtms) {
+#'   fit <- dtms_fit(data=data,weights="count")
+#'   probs    <- dtms_transitions(dtms=dtms,
+#'                                model = fit)
+#'   Tp <- dtms_matrix(dtms=dtms,
+#'                     probs=probs)
+#'   S <- dtms_start(dtms=dtms,
+#'                   data=data,
+#'                   weights="count")
+#'   dtms_expectancy(dtms=dtms,
+#'                   matrix=Tp,
+#'                   start_distr=S)
+#' }
+#' # Bootstrap
+#' bootstrap <- dtms_boot(data=aggdata,
+#'                        dtms=simple,
+#'                        fun=bootfun,
+#'                        rep=5,
+#'                        weights="count",
+#'                        method="weights")
+#' # Results
+#' summary(bootstrap,
+#'         probs=c(0.025,0.5,0.975))
+
 
 dtms_boot <- function(data,
                       dtms,
@@ -86,6 +120,8 @@ dtms_boot <- function(data,
                       rep,
                       method="simple",
                       idvar="id",
+                      weights=NULL,
+                      slack=1,
                       verbose=FALSE,
                       progress=FALSE,
                       parallel=FALSE,
@@ -111,6 +147,8 @@ dtms_boot <- function(data,
 
   }
 
+  if(method=="weights") n <- sum(data[,weights])
+
   # Parallel version
   if(parallel) {
 
@@ -135,10 +173,25 @@ dtms_boot <- function(data,
         sampleids <- sample(ids,size=nids,replace=TRUE)
         samplerows <- unlist(rowsid[paste(sampleids)])
         newdata <- data[samplerows,]
-        dim(newdata)
       }
 
-      fun(newdata,dtms)
+      # Simple parametric
+      if(method=="weights") {
+        newweights <- stats::rmultinom(1,
+                                       size=sum(data[,weights]),
+                                       prob=data[,weights])
+        newweights <- as.numeric(newweights)
+        # Replace 0 values
+        if(any(newweights==0)) {
+          newweights[newweights==0] <- slack
+          newweights <- newweights* (n/sum(newweights))
+        }
+        newweights <- as.numeric(newweights)
+        newdata[,weights] <- newweights
+      }
+
+      # Run
+      fun(newdata,dtms,...)
 
     }
 
@@ -171,11 +224,26 @@ dtms_boot <- function(data,
       sampleids <- sample(ids,size=nids,replace=TRUE)
       samplerows <- unlist(rowsid[paste(sampleids)])
       newdata <- data[samplerows,]
-      dim(newdata)
     }
 
-    if(verbose) result[[i]] <- fun(newdata,dtms,...) else
-      utils::capture.output(result[[i]] <- fun(newdata,dtms,...),file=nullfile())
+    # Parametric/weight-based
+    if(method=="weights") {
+      # Resample
+      newweights <- stats::rmultinom(1,
+                                     size=sum(data[,weights]),
+                                     prob=data[,weights])
+      newweights <- as.numeric(newweights)
+      # Replace 0 values
+      if(any(newweights==0)) {
+        newweights[newweights==0] <- slack
+        newweights <- newweights* (n/sum(newweights))
+      }
+      newdata <- data
+      newdata[,weights] <- newweights
+    }
+
+    if(verbose) result[[i]] <- fun(newdata,dtms,...)
+    if(!verbose) utils::capture.output(result[[i]] <- fun(newdata,dtms,...),file=nullfile())
 
   }
 

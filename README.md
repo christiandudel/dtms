@@ -66,9 +66,9 @@ Currently, the following features are implemented:
   time/first visit/last exit/time to absorption, Markov chains with
   rewards.
 - Inference: analytic standard errors and variance-covariance matrix for
-  transition probabilities; simulated inference using the bootstrap and
-  the block bootstrap for other quantities, supporting parallel
-  computing.
+  transition probabilities; simulated inference using the bootstrap, the
+  block bootstrap, and parametric bootstrap for other quantities,
+  supporting parallel computing.
 - Other features: simulation of Markov chains using the package
   [markovchain](https://cran.r-project.org/web/packages/markovchain);
   survey weights (experimental); irregular time intervals
@@ -1565,25 +1565,25 @@ bootresults <- dtms_boot(data=estdata,
 summary(bootresults)
 #> $`2.5%`
 #>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     12.970160    2.919006 13.08216 29.25773
-#> start:Non-working_50  8.326175    6.284716 13.23797 28.29028
-#> start:Retired_50      8.379590    3.713971 14.62452 27.02598
-#> AVERAGE              12.076212    3.419679 13.18230 29.01182
-#> start:Working_50     11.768487    4.195695 16.06943 32.62339
-#> start:Non-working_50  7.114713    7.976746 16.34227 32.00321
-#> start:Retired_50      7.399536    5.173309 17.75405 30.94237
-#> AVERAGE              10.092380    5.398961 16.22899 32.34240
+#> start:Working_50     13.056963    2.958121 13.08399 29.48888
+#> start:Non-working_50  8.489222    6.300018 13.25526 28.56882
+#> start:Retired_50      8.477901    3.696004 14.57810 27.38364
+#> AVERAGE              12.182711    3.411170 13.19951 29.25730
+#> start:Working_50     11.749329    4.210917 16.12313 32.63340
+#> start:Non-working_50  7.154711    7.954416 16.33558 32.02490
+#> start:Retired_50      7.507443    5.196711 17.77937 31.03950
+#> AVERAGE              10.067164    5.381056 16.26299 32.37742
 #> 
 #> $`97.5%`
 #>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     13.548587    3.246240 14.07148 30.33719
-#> start:Non-working_50  9.061772    6.829958 14.37406 29.46999
-#> start:Retired_50      9.286859    4.172312 15.84341 28.49572
-#> AVERAGE              12.678711    3.783048 14.20544 30.13769
-#> start:Working_50     12.366880    4.556777 17.03443 33.53279
-#> start:Non-working_50  7.728631    8.444142 17.31721 32.99209
-#> start:Retired_50      8.215863    5.741559 18.79704 32.31382
-#> AVERAGE              10.708262    5.835802 17.19900 33.31797
+#> start:Working_50     13.633533    3.241788 14.04802 30.44382
+#> start:Non-working_50  9.128934    6.748745 14.25318 29.71789
+#> start:Retired_50      9.210906    4.056874 15.86068 28.65957
+#> AVERAGE              12.758225    3.754981 14.15919 30.22561
+#> start:Working_50     12.321908    4.543815 16.91763 33.30745
+#> start:Non-working_50  7.756951    8.407206 17.17833 32.80040
+#> start:Retired_50      8.260527    5.709906 18.74857 32.02949
+#> AVERAGE              10.777090    5.789486 17.09441 33.07881
 ```
 
 ## Using dtms with irregular intervals
@@ -1740,6 +1740,15 @@ the package; dependencies are still required, though. The file
 `selected.R` only includes a subset of the functions and removes most of
 the documentation, but is much smaller than `all.R`. Again dependencies
 might be required.
+
+## Using dtms with large data sets
+
+With large data sets the execution time of the functions from this
+package can be very high. A way to reduce the computational demands is
+by using the function `dtms_aggregate()` and for inference the
+parametric bootstrap, as described in the respective help pages.
+Depending on the data this can reduce the time needed for computations
+by 80% to 90%.
 
 ## References
 
