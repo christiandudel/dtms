@@ -72,8 +72,8 @@ based on (partial) distributions variance/standard deviation and median of
 occupancy time/first visit/last exit/time to absorption, Markov chains with
 rewards.
 - Inference: analytic standard errors and variance-covariance matrix for 
-transition probabilities; simulated inference using the bootstrap, the block
-bootstrap, and parametric bootstrap for other quantities, supporting parallel 
+transition probabilities; for all quantities inference using the 
+bootstrap, the block bootstrap, and parametric bootstrap, supporting parallel 
 computing.
 - Other features: simulation of Markov chains using the package
 [markovchain](https://cran.r-project.org/web/packages/markovchain); survey 
@@ -108,6 +108,7 @@ Currently, the following topics are covered in this documentation
 - Splines, random effects, and random slopes
 - Combining dtms with other software
 - Using dtms with secure data environments
+- Using dtms with large data sets
 - References
 
 ## Installation 

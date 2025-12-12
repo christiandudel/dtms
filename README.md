@@ -66,9 +66,9 @@ Currently, the following features are implemented:
   time/first visit/last exit/time to absorption, Markov chains with
   rewards.
 - Inference: analytic standard errors and variance-covariance matrix for
-  transition probabilities; simulated inference using the bootstrap, the
-  block bootstrap, and parametric bootstrap for other quantities,
-  supporting parallel computing.
+  transition probabilities; for all quantities inference using the
+  bootstrap, the block bootstrap, and parametric bootstrap, supporting
+  parallel computing.
 - Other features: simulation of Markov chains using the package
   [markovchain](https://cran.r-project.org/web/packages/markovchain);
   survey weights (experimental); irregular time intervals
@@ -104,6 +104,7 @@ Currently, the following topics are covered in this documentation
 - Splines, random effects, and random slopes
 - Combining dtms with other software
 - Using dtms with secure data environments
+- Using dtms with large data sets
 - References
 
 ## Installation
@@ -1565,25 +1566,25 @@ bootresults <- dtms_boot(data=estdata,
 summary(bootresults)
 #> $`2.5%`
 #>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     13.056963    2.958121 13.08399 29.48888
-#> start:Non-working_50  8.489222    6.300018 13.25526 28.56882
-#> start:Retired_50      8.477901    3.696004 14.57810 27.38364
-#> AVERAGE              12.182711    3.411170 13.19951 29.25730
-#> start:Working_50     11.749329    4.210917 16.12313 32.63340
-#> start:Non-working_50  7.154711    7.954416 16.33558 32.02490
-#> start:Retired_50      7.507443    5.196711 17.77937 31.03950
-#> AVERAGE              10.067164    5.381056 16.26299 32.37742
+#> start:Working_50     12.969634    2.905005 13.08109 29.36570
+#> start:Non-working_50  8.440648    6.280294 13.31904 28.45640
+#> start:Retired_50      8.442228    3.715713 14.67176 27.22329
+#> AVERAGE              12.080765    3.372078 13.21250 29.14234
+#> start:Working_50     11.692876    4.173665 16.16304 32.63385
+#> start:Non-working_50  7.076125    7.987561 16.39209 32.08113
+#> start:Retired_50      7.494364    5.330410 17.68818 31.07178
+#> AVERAGE              10.106904    5.407516 16.31443 32.39530
 #> 
 #> $`97.5%`
 #>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     13.633533    3.241788 14.04802 30.44382
-#> start:Non-working_50  9.128934    6.748745 14.25318 29.71789
-#> start:Retired_50      9.210906    4.056874 15.86068 28.65957
-#> AVERAGE              12.758225    3.754981 14.15919 30.22561
-#> start:Working_50     12.321908    4.543815 16.91763 33.30745
-#> start:Non-working_50  7.756951    8.407206 17.17833 32.80040
-#> start:Retired_50      8.260527    5.709906 18.74857 32.02949
-#> AVERAGE              10.777090    5.789486 17.09441 33.07881
+#> start:Working_50     13.667621    3.267628 13.98134 30.31361
+#> start:Non-working_50  9.247496    6.795179 14.23783 29.58137
+#> start:Retired_50      9.231518    4.204067 15.76150 28.68063
+#> AVERAGE              12.814577    3.821867 14.11616 30.11001
+#> start:Working_50     12.413035    4.590461 16.89370 33.40148
+#> start:Non-working_50  7.816710    8.498293 17.17031 32.90008
+#> start:Retired_50      8.223857    5.778872 18.78704 32.14072
+#> AVERAGE              10.853765    5.838731 17.06358 33.18733
 ```
 
 ## Using dtms with irregular intervals

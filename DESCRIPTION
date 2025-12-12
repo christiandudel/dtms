@@ -1,7 +1,7 @@
 Package: dtms
 Type: Package
 Title: Discrete-Time Multistate Models
-Version: 0.3.7
+Version: 0.3.8
 Author: Christian Dudel
 Maintainer: Christian Dudel <dudel@demogr.mpg.de>
 Description: Discrete-time multistate models with a user-friendly workflow. 
