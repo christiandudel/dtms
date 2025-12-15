@@ -1294,6 +1294,11 @@ https://doi.org/10.1186/s12963-020-00217-0
 
 Papers using `dtms` for substantive questions:
 
+- Abrams, L., Dudel, C., Feraldi, A. (2025): Who works while sick and who enjoys 
+the golden years? Changing disparities in time spent in health and work after 
+age 50 in the United States. Work, Aging and Retirement. 
+https://doi.org/10.1093/workar/waaf023
+
 - Moretti, M., Korhonen, K., van Raalte, A., Riffe, T., Martikainen, P. (2025):
 Evolution of widowhood lifespan and its gender and educational inequalities in 
 Finland over three decades. Demography 65(2): 1635-1660. 
@@ -1309,13 +1314,5 @@ Children's out-of-home care in Finland, 1993–2020: lifetime risks, expectancie
 exit routes, and number of placements for synthetic cohorts. Child Abuse & 
 Neglect 169(1): 107626. https://doi.org/10.1016/j.chiabu.2025.107626
 
-- Feraldi, A., Dudel, C. (2025): Smoking and the length of working life: an 
-examination using the U.S. Health and Retirement Study. MPIDR Working Paper 
-WP-2025-017. https://dx.doi.org/10.4054/MPIDR-WP-2025-017 
-
-- Lam, A. A., Keenan, K., Kulu, H., Myrskylä, M. (2024): Working longer despite 
-poorer health? Inequalities in working and health expectancies at older ages in 
-South Korea. MPIDR Working Paper WP-2024-022. 
-https://dx.doi.org/10.4054/MPIDR-WP-2024-022 
 
 

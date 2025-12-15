@@ -1566,25 +1566,25 @@ bootresults <- dtms_boot(data=estdata,
 summary(bootresults)
 #> $`2.5%`
 #>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     12.969634    2.905005 13.08109 29.36570
-#> start:Non-working_50  8.440648    6.280294 13.31904 28.45640
-#> start:Retired_50      8.442228    3.715713 14.67176 27.22329
-#> AVERAGE              12.080765    3.372078 13.21250 29.14234
-#> start:Working_50     11.692876    4.173665 16.16304 32.63385
-#> start:Non-working_50  7.076125    7.987561 16.39209 32.08113
-#> start:Retired_50      7.494364    5.330410 17.68818 31.07178
-#> AVERAGE              10.106904    5.407516 16.31443 32.39530
+#> start:Working_50     12.947950    2.933572 13.09750 29.27726
+#> start:Non-working_50  8.375019    6.252830 13.25213 28.27449
+#> start:Retired_50      8.350015    3.704200 14.55479 27.00205
+#> AVERAGE              12.072100    3.439775 13.20450 29.02822
+#> start:Working_50     11.681868    4.230759 16.10692 32.59976
+#> start:Non-working_50  7.023521    8.000047 16.30185 31.98196
+#> start:Retired_50      7.294255    5.193519 17.72591 31.04345
+#> AVERAGE              10.105757    5.412179 16.24488 32.33327
 #> 
 #> $`97.5%`
 #>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     13.667621    3.267628 13.98134 30.31361
-#> start:Non-working_50  9.247496    6.795179 14.23783 29.58137
-#> start:Retired_50      9.231518    4.204067 15.76150 28.68063
-#> AVERAGE              12.814577    3.821867 14.11616 30.11001
-#> start:Working_50     12.413035    4.590461 16.89370 33.40148
-#> start:Non-working_50  7.816710    8.498293 17.17031 32.90008
-#> start:Retired_50      8.223857    5.778872 18.78704 32.14072
-#> AVERAGE              10.853765    5.838731 17.06358 33.18733
+#> start:Working_50     13.618836    3.221488 13.97102 30.44811
+#> start:Non-working_50  9.137365    6.761957 14.21334 29.55912
+#> start:Retired_50      9.311475    4.151680 15.73623 28.64699
+#> AVERAGE              12.737961    3.799878 14.10908 30.20024
+#> start:Working_50     12.333585    4.574391 16.83991 33.40841
+#> start:Non-working_50  7.684124    8.416903 17.10363 32.91323
+#> start:Retired_50      8.108119    5.814816 18.70744 32.22846
+#> AVERAGE              10.769995    5.859220 17.01656 33.20421
 ```
 
 ## Using dtms with irregular intervals
@@ -1770,6 +1770,11 @@ Methodological papers:
 
 Papers using `dtms` for substantive questions:
 
+- Abrams, L., Dudel, C., Feraldi, A. (2025): Who works while sick and
+  who enjoys the golden years? Changing disparities in time spent in
+  health and work after age 50 in the United States. Work, Aging and
+  Retirement. <https://doi.org/10.1093/workar/waaf023>
+
 - Moretti, M., Korhonen, K., van Raalte, A., Riffe, T., Martikainen, P.
   (2025): Evolution of widowhood lifespan and its gender and educational
   inequalities in Finland over three decades. Demography 65(2):
@@ -1785,13 +1790,3 @@ Papers using `dtms` for substantive questions:
   risks, expectancies, exit routes, and number of placements for
   synthetic cohorts. Child Abuse & Neglect 169(1): 107626.
   <https://doi.org/10.1016/j.chiabu.2025.107626>
-
-- Feraldi, A., Dudel, C. (2025): Smoking and the length of working life:
-  an examination using the U.S. Health and Retirement Study. MPIDR
-  Working Paper WP-2025-017.
-  <https://dx.doi.org/10.4054/MPIDR-WP-2025-017>
-
-- Lam, A. A., Keenan, K., Kulu, H., Myrskylä, M. (2024): Working longer
-  despite poorer health? Inequalities in working and health expectancies
-  at older ages in South Korea. MPIDR Working Paper WP-2024-022.
-  <https://dx.doi.org/10.4054/MPIDR-WP-2024-022>
