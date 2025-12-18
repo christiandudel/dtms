@@ -129,6 +129,9 @@ dtms_boot <- function(data,
                       .packages=c("mclogit","VGAM","nnet","dtms"),
                       ...) {
 
+  # Check if dtms correctly specified
+  dtms_proper(dtms)
+
   # For resampling
   if(method=="simple") n <- dim(data)[1]
 
