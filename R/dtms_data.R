@@ -8,7 +8,7 @@
 #' \describe{
 #'   \item{id}{Identifier of the units}
 #'   \item{time}{Time scale}
-#'   \item{state}{The state occupied by an unit at a given age}
+#'   \item{state}{The state occupied by an unit at a given value of the time scale}
 #' }
 "simpledata"
 
