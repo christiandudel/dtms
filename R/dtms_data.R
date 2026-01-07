@@ -1,6 +1,6 @@
-#' simpledata: an artificial dataset with abstract trajectories
+#' simpledata: an artificial data set with abstract trajectories
 #'
-#' An artificial dataset with abstract states and time scale. The
+#' An artificial data set with abstract states and time scale. The
 #' state space consists of two transient states (A,B) and one absorbing state (X).
 #'
 #' @format `simpledata`
@@ -14,7 +14,7 @@
 
 #' workdata: simulated working trajectories
 #'
-#' A simulated dataset of individuals' working trajectories during late working life and retirement
+#' A simulated data set of individuals' working trajectories during late working life and retirement
 #' age. The state space consists of three transient states (working; retired; not working)
 #' and one absorbing state (dead). The age range covers ages 50 to 99. The data is
 #' simulated using transition probabilities published as part of Dudel & Myrskylä (2017).
