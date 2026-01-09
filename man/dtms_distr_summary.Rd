@@ -28,12 +28,10 @@ estdata <- dtms_format(data=simpledata,
 estdata <- dtms_clean(data=estdata,
                       dtms=simple)
 fit <- dtms_fit(data=estdata)
-probs    <- dtms_transitions(dtms=simple,
-                             model = fit)
-Tp <- dtms_matrix(dtms=simple,
-                  probs=probs)
+probs <- dtms_transitions(dtms=simple,
+                          model = fit)
 example <- dtms_visits(dtms=simple,
-                       matrix=Tp,
+                       probs=probs,
                        risk="A")
 summary(example)
 }

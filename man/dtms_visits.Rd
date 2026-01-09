@@ -5,7 +5,8 @@
 \title{Calculate the distribution of the time spent in a subset of states}
 \usage{
 dtms_visits(
-  matrix,
+  probs = NULL,
+  matrix = NULL,
   dtms,
   risk,
   start_time = NULL,
@@ -17,6 +18,8 @@ dtms_visits(
 )
 }
 \arguments{
+\item{probs}{Data frame with transition probabilities, as created with \code{dtms_transitions}.}
+
 \item{matrix}{Matrix with transition probabilities, as generated with \code{dtms_matrix}.}
 
 \item{dtms}{dtms object, as created with \code{dtms}.}
@@ -82,15 +85,12 @@ fit <- dtms_fit(data=estdata)
 ## Predict probabilities
 probs    <- dtms_transitions(dtms=simple,
                              model = fit)
-## Get transition matrix
-Tp <- dtms_matrix(dtms=simple,
-                  probs=probs)
 ## Get starting distribution
 S <- dtms_start(dtms=simple,
                 data=estdata)
 ## Distribution of visits
 dtms_visits(dtms=simple,
-            matrix=Tp,
+            probs=probs,
             risk="A",
             start_distr=S,
             total=TRUE)

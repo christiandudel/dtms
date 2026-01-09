@@ -31,6 +31,7 @@
 #' unconditional on the starting state. The other shows the distribution
 #' conditional on not starting in any state of the risk set.
 #'
+#' @param probs Data frame with transition probabilities, as created with \code{dtms_transitions}.
 #' @param matrix Matrix with transition probabilities, as generated with \code{dtms_matrix}.
 #' @param dtms dtms object, as created with \code{dtms}.
 #' @param risk Character, name of state(s) for which risk is of interest.
@@ -67,19 +68,17 @@
 #' ## Predict probabilities
 #' probs    <- dtms_transitions(dtms=simple,
 #'                              model = fit)
-#' ## Get transition matrix
-#' Tp <- dtms_matrix(dtms=simple,
-#'                   probs=probs)
 #' ## Get starting distribution
 #' S <- dtms_start(dtms=simple,
 #'                 data=estdata)
 #' ## First visit
 #' dtms_first(dtms=simple,
-#'            matrix=Tp,
+#'            probs=probs,
 #'            risk="A",
 #'            start_distr=S)
 
-dtms_first  <- function(matrix,
+dtms_first  <- function(probs=NULL,
+                        matrix=NULL,
                         dtms,
                         risk,
                         start_time=NULL,
@@ -92,6 +91,10 @@ dtms_first  <- function(matrix,
 
   # Check
   dtms_proper(dtms)
+
+  # Get matrix if not specified
+  if(is.null(matrix)) matrix <- dtms_matrix(probs=probs,
+                                            dtms=dtms)
 
   # Starting state and time
   if(is.null(start_state)) start_state <- dtms$transient

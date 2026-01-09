@@ -5,7 +5,8 @@
 \title{Calculate the distribution of the time until entering an absorbing state}
 \usage{
 dtms_absorbed(
-  matrix,
+  probs = NULL,
+  matrix = NULL,
   dtms,
   start_distr = NULL,
   start_state = NULL,
@@ -15,6 +16,8 @@ dtms_absorbed(
 )
 }
 \arguments{
+\item{probs}{Data frame with transition probabilities, as created with \code{dtms_transitions}.}
+
 \item{matrix}{Matrix with transition probabilities, as generated with \code{dtms_matrix}.}
 
 \item{dtms}{dtms object, as created with \code{dtms}.}
@@ -70,14 +73,11 @@ fit <- dtms_fit(data=estdata)
 ## Predict probabilities
 probs    <- dtms_transitions(dtms=simple,
                              model = fit)
-## Get transition matrix
-Tp <- dtms_matrix(dtms=simple,
-                  probs=probs)
 ## Get starting distribution
 S <- dtms_start(dtms=simple,
                 data=estdata)
 ## Distribution of visits
 dtms_absorbed(dtms=simple,
-              matrix=Tp,
+              probs=probs,
               start_distr=S)
 }

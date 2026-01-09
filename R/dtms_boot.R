@@ -71,12 +71,10 @@
 #'   fit <- dtms_fit(data=data)
 #'   probs    <- dtms_transitions(dtms=dtms,
 #'                                model = fit)
-#'   Tp <- dtms_matrix(dtms=dtms,
-#'                     probs=probs)
 #'   S <- dtms_start(dtms=dtms,
 #'                   data=data)
 #'   dtms_expectancy(dtms=dtms,
-#'                   matrix=Tp,
+#'                   probs=probs,
 #'                   start_distr=S)
 #' }
 #' # Run bootstrap
@@ -91,15 +89,13 @@
 #' # Bootstrap function
 #' bootfun <- function(data,dtms) {
 #'   fit <- dtms_fit(data=data,weights="count")
-#'   probs    <- dtms_transitions(dtms=dtms,
-#'                                model = fit)
-#'   Tp <- dtms_matrix(dtms=dtms,
-#'                     probs=probs)
+#'   probs <- dtms_transitions(dtms=dtms,
+#'                             model = fit)
 #'   S <- dtms_start(dtms=dtms,
 #'                   data=data,
 #'                   weights="count")
 #'   dtms_expectancy(dtms=dtms,
-#'                   matrix=Tp,
+#'                   probs=probs,
 #'                   start_distr=S)
 #' }
 #' # Bootstrap

@@ -4,6 +4,7 @@
 #' The function `dtms_risk` calculates the (partial) lifetime risk of ever
 #' reaching a state specified with the argument `risk`.
 #'
+#' @param probs Data frame with transition probabilities, as created with \code{dtms_transitions}.
 #' @param matrix Matrix with transition probabilities, as generated with \code{dtms_matrix}.
 #' @param risk Character, name of state(s) for which risk is of interest.
 #' @param dtms dtms object, as created with \code{dtms}.
@@ -34,18 +35,16 @@
 #' ## Predict probabilities
 #' probs    <- dtms_transitions(dtms=simple,
 #'                              model = fit)
-#' ## Get transition matrix
-#' Tp <- dtms_matrix(dtms=simple,
-#'                   probs=probs)
 #' ## Get starting distribution
 #' S <- dtms_start(dtms=simple,
 #'                 data=estdata)
 #' ## Lifetime risk
 #' dtms_risk(dtms=simple,
-#'           matrix=Tp,
+#'           probs=probs,
 #'           risk="A")
 
-dtms_risk <- function(matrix,
+dtms_risk <- function(probs=NULL,
+                      matrix=NULL,
                       risk,
                       dtms,
                       start_distr=NULL,
@@ -55,6 +54,10 @@ dtms_risk <- function(matrix,
 
   # Check
   dtms_proper(dtms)
+
+  # Get matrix if not specified
+  if(is.null(matrix)) matrix <- dtms_matrix(probs=probs,
+                                            dtms=dtms)
 
   # Starting state and time
   if(is.null(start_state)) start_state <- dtms$transient

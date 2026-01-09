@@ -30,8 +30,8 @@ comments, suggestions, and code snippets. All errors remain our own.
 If you use this package in your work, please use the following citation
 (or a variation):
 
-Dudel, C. (2025). dtms: discrete-time multistate models in R. R package
-version 0.3.7, available at <https://github.com/christiandudel/dtms>
+Dudel, C. (2026). dtms: discrete-time multistate models in R. R package
+version 0.4.0.0, available at <https://github.com/christiandudel/dtms>
 
 ## Overview
 
@@ -458,33 +458,17 @@ step. However, the package provides several tools to look at the
 transition probabilities (see the examples below), and putting the
 probabilities in a data frame makes them easily accessible to the user.
 
-Transition probabilities in a data frame have to be converted to a
-transition matrix before they can be used further. For this, we use the
-function `dtms_matrix()`. In most cases, this function will only require
-two arguments. First, a data frame with transition probabilities as
-created with `dtms_transitions()` and passed to the argument `probs`;
-and, second, a `dtms` object as created with `dtms()`. For instance, in
-the first example below, this function is used as follows:
-
-``` r
-Tp <- dtms_matrix(probs=probs,
-                  dtms=simple)
-```
-
-This transition matrix can then be used to apply Markov chain methods.
-The matrix itself often will not be of major interest, and it is easier
-to look at transition probabilities in the data frame generated with
-`dtms_transitions()`.
-
 ### Markov chain methods
 
 The dtms package provides several functions which implement Markov chain
-methods and which can be applied to a transition matrix generated with
-`dtms_matrix()`. Most of these functions require at least two arguments.
-First, a transition matrix; and, second, a `dtms` object. For instance,
-to calculate the lifetime spent in the different states, the function
-`dtms_expectancy()`. This and other functions are demonstrated in more
-detail in the two examples below.
+methods and which can be applied to transition probabilities generated
+with `dtms_transitions()`; moreover, they also work with transition
+matrices as generated with `dtms_matrix()`. Most of these functions
+require at least two arguments. First, a data frame with transition
+probabilities or a transition matrix; and, second, a `dtms` object. For
+instance, to calculate the lifetime spent in the different states, the
+function `dtms_expectancy()` is used. This and other functions are
+demonstrated in more detail in the two examples below.
 
 ## Example 1: Artificial data
 
@@ -663,27 +647,20 @@ fit <- dtms_fit(data=estdata,
                 controls="time")
 ```
 
-To predict transition probabilities and to arrange them in a matrix, the
-functions `dtms_transitions()` and `dtms_matrix()` are used. The
-function `dtms_transitions()` needs a ‘dtms’ object as well as a fitted
-model and values for the control variable, while the function
-`dtms_matrix()` requires a `dtms` object and predicted probabilities:
+To predict transition probabilities, the functions `dtms_transitions()`
+is used. It needs a ‘dtms’ object as well as a fitted model and values
+for the control variable:
 
 ``` r
 ## Predict probabilities
 probs    <- dtms_transitions(dtms=simple,
                              model = fit,
                              controls=list(time=simple$timescale))
-
-## Get transition matrix 
-Tp <- dtms_matrix(dtms=simple,
-                  probs=probs)
 ```
 
-In more complex examples, the previous functions would need more
-information. For instance, on which covariates to include in the
-estimation step, and which covariate values to use in the prediction
-step.
+In more complex examples, the previous call would need more information.
+For instance, on which covariates to include in the estimation step, and
+which covariate values to use in the prediction step.
 
 To get an overview of the transition probabilities, the function summary
 can be used:
@@ -721,7 +698,7 @@ probs |>  dtms_simplify() |>
           facet_wrap(~from)
 ```
 
-<img src="man/figures/README-example1-probsplot-1.png" width="100%" />
+<img src="man/figures/README-example1-probsplot-1.png" alt="" width="100%" />
 An even simpler way is available which builds on base-R and does not
 require ggplot2. However, this creates less nice figures and is mainly
 intended as a very quick way of checking results:
@@ -731,7 +708,7 @@ intended as a very quick way of checking results:
 plot(probs,dtms=simple)
 ```
 
-<img src="man/figures/README-example1-baseplot-1.png" width="100%" />
+<img src="man/figures/README-example1-baseplot-1.png" alt="" width="100%" />
 
 Before we generate more results, we calculate the starting distribution
 of the states; i.e., the distribution of states at the first value of
@@ -749,19 +726,19 @@ additional information.
 
 ### Markov chain methods
 
-Most functions used to calculate Markov chain methods need a transition
-matrix and a `dtms` object, and potentially further arguments. The two
-examples below calculate the expected time spent in a state
-(`dtms_expectancy()`) and the lifetime risk of ever reaching a state
-(`dtms_risk()`). In the first case, the starting distribution of states
-is passed to the function; this is optional. In the second case, one or
-several states need to be specified for which the lifetime risk will be
-calculated:
+Most functions used to calculate Markov chain methods need transition
+probabilities in a data frame (or a transition matrix) and a `dtms`
+object, and potentially further arguments. The two examples below
+calculate the expected time spent in a state (`dtms_expectancy()`) and
+the lifetime risk of ever reaching a state (`dtms_risk()`). In the first
+case, the starting distribution of states is passed to the function;
+this is optional. In the second case, one or several states need to be
+specified for which the lifetime risk will be calculated:
 
 ``` r
 ## State expectancies 
 dtms_expectancy(dtms=simple,
-                matrix=Tp,
+                probs=probs,
                 start_distr=S)
 #>                  A        B    TOTAL
 #> start:A_0 4.989071 8.686304 13.67538
@@ -770,7 +747,7 @@ dtms_expectancy(dtms=simple,
 
 ## Lifetime risk 
 dtms_risk(dtms=simple,
-          matrix=Tp,
+          probs=probs,
           risk="A")
 #>       A_0       B_0 
 #> 1.0000000 0.9754457
@@ -832,11 +809,8 @@ riskprobs <- dtms_transitions(dtms=simple,
                           controls=list(time=simple$timescale),
                           model = riskfit)
 
-riskTp <- dtms_matrix(dtms=simple,
-                  probs=riskprobs)
-
 dtms_risk(dtms=simple,
-          matrix=riskTp,
+          probs=riskprobs,
           risk="A")
 #>       A_0       B_0 
 #> 1.0000000 0.9742659
@@ -853,7 +827,7 @@ specified for which we want to know how long units spent in it:
 ``` r
 dtms_expectancy(dtms=simple,
                 risk="A",
-                matrix=Tp)
+                probs=probs)
 #>                  0        1        2        3        4        5        6
 #> start:A_0 4.989071 4.671601 4.360438 4.056333 3.760074 3.472470 3.194327
 #> start:B_0 4.761130 4.441133 4.127109 3.819781 3.519910 3.228284 2.945695
@@ -886,7 +860,7 @@ back to this state.
 ``` r
 ## Distribution of visits
 dtms_visits(dtms=simple,
-            matrix=Tp,
+            probs=probs,
             risk="A",
             start_distr=S)
 #>                         0           0.5             1        1.5          2
@@ -934,7 +908,7 @@ dtms_visits(dtms=simple,
 
 ## Distribution of waiting time to first visit
 dtms_first(dtms=simple,
-           matrix=Tp,
+           probs=probs,
            risk="A",
            start_distr=S)
 #>                        0       0.5       1.5       2.5        3.5        4.5
@@ -967,7 +941,7 @@ dtms_first(dtms=simple,
 
 ## Distribution of waiting time to last exit
 dtms_last(dtms=simple,
-          matrix=Tp,
+          probs=probs,
           risk="A",
           start_distr=S,
           rescale=T,
@@ -1003,7 +977,7 @@ set of such statistics can be generated using the function `summary()`:
 ``` r
 ## Distribution of visits
 example <- dtms_visits(dtms=simple,
-                       matrix=Tp,
+                       probs=probs,
                        risk="A",
                        start_distr=S)
 summary(example)
@@ -1024,7 +998,7 @@ some entries might not be defined. For instance:
 ``` r
 ## Distribution of waiting time to last exit
 example2 <- dtms_last(dtms=simple,
-                      matrix=Tp,
+                      probs=probs,
                       risk="A",
                       start_distr=S,
                       rescale=T,
@@ -1073,11 +1047,10 @@ simulated trajectories differ between men and women.
 The workflow is similar to the previous example. First, a ‘dtms’ model
 is defined using the function \`dtms’. Second, the data is brought into
 transition format and cleaned. Third, transition probabilities are
-estimated and put into a transition matrix. In this example,
-probabilities are estimated and predicted using time-constant and
-time-varying covariates, and the probabilities are plotted together with
-confidence intervals. Finally, the transition matrix is used to
-calculate state expectancies and similar measures.
+estimated. In this example, probabilities are estimated and predicted
+using time-constant and time-varying covariates, and the probabilities
+are plotted together with confidence intervals. Finally, the transition
+matrix is used to calculate state expectancies and similar measures.
 
 ``` r
 ## Load packages
@@ -1218,17 +1191,10 @@ probs_m |>  dtms_simplify() |>
             facet_wrap(~from)
 ```
 
-<img src="man/figures/README-example2-1.png" width="100%" />
+<img src="man/figures/README-example2-1.png" alt="" width="100%" />
 
 ``` r
  
-## Transition matrices
-Tm <- dtms_matrix(dtms=work,
-                  probs=probs_m)
-  
-Tw <- dtms_matrix(dtms=work,
-                  probs=probs_w)
-
 ## Starting distributions
 Sm <- dtms_start(dtms=work,
                  data=estdata,
@@ -1240,7 +1206,7 @@ Sw <- dtms_start(dtms=work,
   
 ## State expectancies
 dtms_expectancy(dtms=work,
-                matrix=Tm,
+                probs=probs_m,
                 start_distr=Sm)
 #>                        Working Non-working  Retired    TOTAL
 #> start:Working_50     13.307334    3.074605 13.53758 29.91952
@@ -1249,7 +1215,7 @@ dtms_expectancy(dtms=work,
 #> AVERAGE              12.445981    3.589228 13.65526 29.69047
     
 dtms_expectancy(dtms=work,
-                matrix=Tw,
+                probs=probs_w,
                 start_distr=Sw)
 #>                        Working Non-working  Retired    TOTAL
 #> start:Working_50     12.066485    4.386659 16.53253 32.98567
@@ -1266,7 +1232,7 @@ Smwr <- dtms_start(dtms=work,
                    variables=list(Gender=0))
 
 dtms_expectancy(dtms=work,
-                matrix=Tm,
+                probs=probs_m,
                 start_state=limited,
                 start_distr=Smwr)
 #>                        Working Non-working  Retired    TOTAL
@@ -1276,14 +1242,14 @@ dtms_expectancy(dtms=work,
 
 ## Lifetime risk of reaching retirement
 dtms_risk(dtms=work,
-          matrix=Tm,
+          probs=probs_m,
           risk="Retired",
           start_distr=Sm)
 #>     Working_50 Non-working_50     Retired_50        AVERAGE AVERAGE(COND.) 
 #>      0.8828701      0.8806115      1.0000000      0.8888186      0.8825422
   
 dtms_risk(dtms=work,
-          matrix=Tw,
+          probs=probs_w,
           risk="Retired",
           start_distr=Sw)
 #>     Working_50 Non-working_50     Retired_50        AVERAGE AVERAGE(COND.) 
@@ -1291,12 +1257,12 @@ dtms_risk(dtms=work,
   
 ## Distribution of visits
 visitsm <- dtms_visits(dtms=work,
-                       matrix=Tm,
+                       probs=probs_m,
                        risk="Retired",
                        start_distr=Sm)
   
 visitsw <- dtms_visits(dtms=work,
-                       matrix=Tw,
+                       probs=probs_w,
                        risk="Retired",
                        start_distr=Sw,
                        method="end")
@@ -1318,12 +1284,12 @@ summary(visitsw)
   
 ## First visit
 firstm <- dtms_first(dtms=work,
-                     matrix=Tm,
+                     probs=probs_m,
                      risk="Retired",
                      start_distr=Sm)  
   
 firstw <- dtms_first(dtms=work,
-                     matrix=Tw,
+                     probs=probs_w,
                      risk="Retired",
                      start_distr=Sw)  
 
@@ -1348,12 +1314,12 @@ summary(firstw)
   
 # Leaving work to any state
 last1m <- dtms_last(dtms=work,
-                    matrix=Tm,
+                    probs=probs_m,
                     risk="Working",
                     start_distr=Sm)  
   
 last1w <- dtms_last(dtms=work,
-                    matrix=Tw,
+                    probs=probs_w,
                     risk="Working",
                     start_distr=Sw) 
 
@@ -1376,13 +1342,13 @@ summary(last1w)
   
 # Leaving work for retirement
 last2m <- dtms_last(dtms=work,
-                    matrix=Tm,
+                    probs=probs_m,
                     risk="Working",
                     risk_to="Retired",
                     start_distr=Sm)  
   
 last2w <- dtms_last(dtms=work,
-                    matrix=Tw,
+                    probs=probs_w,
                     risk="Working",
                     risk_to="Retired",
                     start_distr=Sw)  
@@ -1464,11 +1430,8 @@ riskprobs <- dtms_transitions(dtms=work,
                             ci=TRUE)
 
 
-riskTp <- dtms_matrix(dtms=work,
-                      probs=riskprobs)
-
 dtms_risk(dtms=work,
-          matrix=riskTp,
+          probs=riskprobs,
           risk="Retired")
 #>     Working_50 Non-working_50     Retired_50 
 #>      0.8861793      0.8951606      1.0000000
@@ -1529,12 +1492,6 @@ bootfun <- function(data,dtms) {
                                                time  =50:98,
                                                time2 =(50:98)^2))
  
-   Tm <- dtms_matrix(dtms=dtms,
-                     probs=probs_m)
- 
-   Tw <- dtms_matrix(dtms=dtms,
-                     probs=probs_w)
- 
    Sm <- dtms_start(dtms=dtms,
                     data=data,
                     variables=list(Gender=0))
@@ -1544,11 +1501,11 @@ bootfun <- function(data,dtms) {
                     variables=list(Gender=1))
  
    res1 <- dtms_expectancy(dtms=dtms,
-                   matrix=Tm,
+                   probs=probs_m,
                    start_distr=Sm)
  
    res2 <- dtms_expectancy(dtms=dtms,
-                   matrix=Tw,
+                   probs=probs_w,
                    start_distr=Sw)
  
    rbind(res1,res2)
@@ -1566,25 +1523,25 @@ bootresults <- dtms_boot(data=estdata,
 summary(bootresults)
 #> $`2.5%`
 #>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     12.947950    2.933572 13.09750 29.27726
-#> start:Non-working_50  8.375019    6.252830 13.25213 28.27449
-#> start:Retired_50      8.350015    3.704200 14.55479 27.00205
-#> AVERAGE              12.072100    3.439775 13.20450 29.02822
-#> start:Working_50     11.681868    4.230759 16.10692 32.59976
-#> start:Non-working_50  7.023521    8.000047 16.30185 31.98196
-#> start:Retired_50      7.294255    5.193519 17.72591 31.04345
-#> AVERAGE              10.105757    5.412179 16.24488 32.33327
+#> start:Working_50     12.920503    2.933967 13.14232 29.49766
+#> start:Non-working_50  8.342364    6.309071 13.38575 28.52802
+#> start:Retired_50      8.288746    3.713153 14.66768 27.19858
+#> AVERAGE              12.037713    3.422289 13.25004 29.26663
+#> start:Working_50     11.742293    4.120276 16.14888 32.72328
+#> start:Non-working_50  7.041220    7.900763 16.38789 32.11435
+#> start:Retired_50      7.448160    5.169582 17.77335 31.06840
+#> AVERAGE              10.030633    5.284441 16.30025 32.46303
 #> 
 #> $`97.5%`
 #>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     13.618836    3.221488 13.97102 30.44811
-#> start:Non-working_50  9.137365    6.761957 14.21334 29.55912
-#> start:Retired_50      9.311475    4.151680 15.73623 28.64699
-#> AVERAGE              12.737961    3.799878 14.10908 30.20024
-#> start:Working_50     12.333585    4.574391 16.83991 33.40841
-#> start:Non-working_50  7.684124    8.416903 17.10363 32.91323
-#> start:Retired_50      8.108119    5.814816 18.70744 32.22846
-#> AVERAGE              10.769995    5.859220 17.01656 33.20421
+#> start:Working_50     13.647785    3.250775 14.11366 30.63536
+#> start:Non-working_50  9.226636    6.774704 14.33191 29.85031
+#> start:Retired_50      9.412258    4.116206 15.90830 29.03008
+#> AVERAGE              12.822619    3.763438 14.24088 30.41032
+#> start:Working_50     12.438943    4.544356 16.98954 33.43699
+#> start:Non-working_50  7.798765    8.433596 17.24451 32.91506
+#> start:Retired_50      8.333276    5.763470 18.79534 32.27542
+#> AVERAGE              10.888863    5.888779 17.15442 33.21973
 ```
 
 ## Using dtms with irregular intervals
@@ -1769,6 +1726,11 @@ Methodological papers:
   Health Metrics 18: 15. <https://doi.org/10.1186/s12963-020-00217-0>
 
 Papers using `dtms` for substantive questions:
+
+- Hiilamo, A., Hermansen, A. (2026): Financial strain in Norway: The
+  lifetime risk of and expected time spent in payment problems.
+  International Journal of Social Welfare 35(1): e70053.
+  <https://doi.org/10.1111/ijsw.70053>
 
 - Abrams, L., Dudel, C., Feraldi, A. (2025): Who works while sick and
   who enjoys the golden years? Changing disparities in time spent in

@@ -4,6 +4,7 @@
 #' This function simulates trajectories based on a Markov chain using the
 #' `markovchain` package.
 #'
+#' @param probs Data frame with transition probabilities, as created with \code{dtms_transitions}.
 #' @param matrix Matrix, a matrix of transition probabilities as created with \code{dtms_matrix()},
 #' @param dtms dtms object, as created with \code{dtms}.
 #' @param size Numeric, number of trajectories which will be simulated. Default is 100.
@@ -28,13 +29,10 @@
 #' fit <- dtms_fit(data=estdata,package="mclogit")
 #' probs    <- dtms_transitions(dtms=simple,
 #'                              model = fit)
-#' Tp <- dtms_matrix(dtms=simple,
-#'                   probs=probs)
-#' S <- dtms_start(dtms=simple,
-#'                 data=estdata)
-#' dtms_simulate(matrix=Tp,dtms=simple)
+#' dtms_simulate(probs=probs,dtms=simple)
 
-dtms_simulate <- function(matrix,
+dtms_simulate <- function(probs=NULL,
+                          matrix=NULL,
                           dtms,
                           size=100,
                           start_distr=NULL,
@@ -46,6 +44,10 @@ dtms_simulate <- function(matrix,
 
   # Check
   dtms_proper(dtms)
+
+  # Get matrix if not specified
+  if(is.null(matrix)) matrix <- dtms_matrix(probs=probs,
+                                            dtms=dtms)
 
   # Time
   start_time <- min(dtms$timescale)

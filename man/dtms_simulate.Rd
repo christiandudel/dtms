@@ -5,7 +5,8 @@
 \title{Simulation of Markov chains}
 \usage{
 dtms_simulate(
-  matrix,
+  probs = NULL,
+  matrix = NULL,
   dtms,
   size = 100,
   start_distr = NULL,
@@ -14,6 +15,8 @@ dtms_simulate(
 )
 }
 \arguments{
+\item{probs}{Data frame with transition probabilities, as created with \code{dtms_transitions}.}
+
 \item{matrix}{Matrix, a matrix of transition probabilities as created with \code{dtms_matrix()},}
 
 \item{dtms}{dtms object, as created with \code{dtms}.}
@@ -47,9 +50,5 @@ estdata <- dtms_clean(data=estdata,
 fit <- dtms_fit(data=estdata,package="mclogit")
 probs    <- dtms_transitions(dtms=simple,
                              model = fit)
-Tp <- dtms_matrix(dtms=simple,
-                  probs=probs)
-S <- dtms_start(dtms=simple,
-                data=estdata)
-dtms_simulate(matrix=Tp,dtms=simple)
+dtms_simulate(probs=probs,dtms=simple)
 }

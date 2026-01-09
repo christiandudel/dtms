@@ -5,7 +5,8 @@
 \title{Calculate the lifetime risk of ever reaching a state}
 \usage{
 dtms_risk(
-  matrix,
+  probs = NULL,
+  matrix = NULL,
   risk,
   dtms,
   start_distr = NULL,
@@ -15,6 +16,8 @@ dtms_risk(
 )
 }
 \arguments{
+\item{probs}{Data frame with transition probabilities, as created with \code{dtms_transitions}.}
+
 \item{matrix}{Matrix with transition probabilities, as generated with \code{dtms_matrix}.}
 
 \item{risk}{Character, name of state(s) for which risk is of interest.}
@@ -55,14 +58,11 @@ fit <- dtms_fit(data=estdata)
 ## Predict probabilities
 probs    <- dtms_transitions(dtms=simple,
                              model = fit)
-## Get transition matrix
-Tp <- dtms_matrix(dtms=simple,
-                  probs=probs)
 ## Get starting distribution
 S <- dtms_start(dtms=simple,
                 data=estdata)
 ## Lifetime risk
 dtms_risk(dtms=simple,
-          matrix=Tp,
+          probs=probs,
           risk="A")
 }

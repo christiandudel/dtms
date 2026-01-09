@@ -5,7 +5,8 @@
 \title{Time needed to reach a subset of states for the first time}
 \usage{
 dtms_first(
-  matrix,
+  probs = NULL,
+  matrix = NULL,
   dtms,
   risk,
   start_time = NULL,
@@ -18,6 +19,8 @@ dtms_first(
 )
 }
 \arguments{
+\item{probs}{Data frame with transition probabilities, as created with \code{dtms_transitions}.}
+
 \item{matrix}{Matrix with transition probabilities, as generated with \code{dtms_matrix}.}
 
 \item{dtms}{dtms object, as created with \code{dtms}.}
@@ -91,15 +94,12 @@ fit <- dtms_fit(data=estdata)
 ## Predict probabilities
 probs    <- dtms_transitions(dtms=simple,
                              model = fit)
-## Get transition matrix
-Tp <- dtms_matrix(dtms=simple,
-                  probs=probs)
 ## Get starting distribution
 S <- dtms_start(dtms=simple,
                 data=estdata)
 ## First visit
 dtms_first(dtms=simple,
-           matrix=Tp,
+           probs=probs,
            risk="A",
            start_distr=S)
 }

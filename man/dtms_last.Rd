@@ -6,7 +6,8 @@
 the last time.}
 \usage{
 dtms_last(
-  matrix,
+  probs = NULL,
+  matrix = NULL,
   dtms,
   risk,
   risk_to = NULL,
@@ -20,6 +21,8 @@ dtms_last(
 )
 }
 \arguments{
+\item{probs}{Data frame with transition probabilities, as created with \code{dtms_transitions}.}
+
 \item{matrix}{Matrix with transition probabilities, as generated with \code{dtms_matrix}.}
 
 \item{dtms}{dtms object, as created with \code{dtms}.}
@@ -100,19 +103,16 @@ estdata <- dtms_clean(data=estdata,
 # Fit model
 fit <- dtms_fit(data=estdata)
 ## Predict probabilities
-probs    <- dtms_transitions(dtms=simple,
-                             model = fit)
-## Get transition matrix
-Tp <- dtms_matrix(dtms=simple,
-                  probs=probs)
+probs <- dtms_transitions(dtms=simple,
+                          model = fit)
 ## Get starting distribution
 S <- dtms_start(dtms=simple,
                 data=estdata)
 ## First visit
 dtms_last(dtms=simple,
-           matrix=Tp,
-           risk="A",
-           start_distr=S)
+          probs=probs,
+          risk="A",
+          start_distr=S)
 }
 \seealso{
 \code{\link{dtms_distr_summary}} to help with summarizing the resulting distribution.

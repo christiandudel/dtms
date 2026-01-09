@@ -3,21 +3,21 @@
 \docType{data}
 \name{simpledata}
 \alias{simpledata}
-\title{simpledata: an artificial dataset with abstract trajectories}
+\title{simpledata: an artificial data set with abstract trajectories}
 \format{
 `simpledata`
 A data frame with 12,179 rows and 3 columns:
 \describe{
   \item{id}{Identifier of the units}
   \item{time}{Time scale}
-  \item{state}{The state occupied by an unit at a given age}
+  \item{state}{The state occupied by an unit at a given value of the time scale}
 }
 }
 \usage{
 simpledata
 }
 \description{
-An artificial dataset with abstract states and time scale. The
+An artificial data set with abstract states and time scale. The
 state space consists of two transient states (A,B) and one absorbing state (X).
 }
 \keyword{datasets}

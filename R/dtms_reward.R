@@ -4,8 +4,9 @@
 #' This function calculates the expected rewards by starting state in a
 #' Markov chain with rewards.
 #'
+#' @param probs Data frame with transition probabilities, as created with \code{dtms_transitions}.
 #' @param matrix Matrix with transition probabilities, as generated with \code{dtms_matrix}.
-#' @param reward Matrix with rewards, has to be of same dimensions as `matrix`.
+#' @param reward Matrix with rewards, has to be of same dimensions as `matrix` or the matrix which will result from `probs`.
 #' @param dtms dtms object, as created with \code{dtms}.
 #'
 #' @return A matrix with expected rewards.
@@ -42,12 +43,17 @@
 #'             matrix=Tp,
 #'             reward=Rw)
 
-dtms_reward <- function(matrix,
+dtms_reward <- function(probs=NULL,
+                        matrix=NULL,
                         reward,
                         dtms) {
 
   # Check
   dtms_proper(dtms)
+
+  # Get matrix if not specified
+  if(is.null(matrix)) matrix <- dtms_matrix(probs=probs,
+                                            dtms=dtms)
 
   # Starting states, long names
   starting <- dtms_combine(dtms$transient,

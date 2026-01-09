@@ -52,11 +52,6 @@ A data frame with transition probabilities.
 estimated with `dtms_fit()`.
 }
 \details{
-Predicted transition probabilities are returned as a data frame, and not
-as a transition matrix. While the latter is required for applying Markov
-chain methods, the data frame is more convenient for viewing and
-analyzing the transition probabilities themselves.
-
 Depending on the model specification, the prediction of transition
 probabilities will require values for predictor variables which can be
 specified with the argument `controls`. This is done using a named list

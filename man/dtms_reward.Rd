@@ -4,12 +4,14 @@
 \alias{dtms_reward}
 \title{Markov chain with rewards}
 \usage{
-dtms_reward(matrix, reward, dtms)
+dtms_reward(probs = NULL, matrix = NULL, reward, dtms)
 }
 \arguments{
+\item{probs}{Data frame with transition probabilities, as created with \code{dtms_transitions}.}
+
 \item{matrix}{Matrix with transition probabilities, as generated with \code{dtms_matrix}.}
 
-\item{reward}{Matrix with rewards, has to be of same dimensions as `matrix`.}
+\item{reward}{Matrix with rewards, has to be of same dimensions as `matrix` or the matrix which will result from `probs`.}
 
 \item{dtms}{dtms object, as created with \code{dtms}.}
 }

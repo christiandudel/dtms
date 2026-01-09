@@ -19,6 +19,7 @@
 #' output table has an additional row, showing the waiting time distribution
 #' unconditional on the starting state.
 #'
+#' @param probs Data frame with transition probabilities, as created with \code{dtms_transitions}.
 #' @param matrix Matrix with transition probabilities, as generated with \code{dtms_matrix}.
 #' @param dtms dtms object, as created with \code{dtms}.
 #' @param start_distr Numeric (optional), distribution of starting states. If specified, average distribution over all starting states will be calculated.
@@ -49,19 +50,17 @@
 #' ## Predict probabilities
 #' probs    <- dtms_transitions(dtms=simple,
 #'                              model = fit)
-#' ## Get transition matrix
-#' Tp <- dtms_matrix(dtms=simple,
-#'                   probs=probs)
 #' ## Get starting distribution
 #' S <- dtms_start(dtms=simple,
 #'                 data=estdata)
 #' ## Distribution of visits
 #' dtms_absorbed(dtms=simple,
-#'               matrix=Tp,
+#'               probs=probs,
 #'               start_distr=S)
 
 
-dtms_absorbed <- function(matrix,
+dtms_absorbed <- function(probs=NULL,
+                          matrix=NULL,
                           dtms,
                           start_distr=NULL,
                           start_state=NULL,
@@ -71,6 +70,10 @@ dtms_absorbed <- function(matrix,
 
   # Check
   dtms_proper(dtms)
+
+  # Get matrix if not specified
+  if(is.null(matrix)) matrix <- dtms_matrix(probs=probs,
+                                            dtms=dtms)
 
   # Starting state and time
   if(is.null(start_state)) start_state <- dtms$transient

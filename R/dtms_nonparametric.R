@@ -6,10 +6,7 @@
 #'
 #' @details
 #' The argument `data` takes a data set in transition format. Predicted
-#' transition probabilities are returned as a data frame, and not
-#' as a transition matrix. While the latter is required for applying Markov
-#' chain methods, the data frame is more convenient for viewing and
-#' analyzing the transition probabilities themselves. Standard errors are
+#' transition probabilities are returned as a data frame. Standard errors are
 #' approximated using binomial standard errors. In case of small cell counts
 #' this might be inaccurate.
 #'

@@ -100,7 +100,7 @@ S <- dtms_start(dtms=simple,
 
 ## State expectancies
 dtms_expectancy(dtms=simple,
-                matrix=Tp,
+                p=probs,
                 start_distr=S)
 
 dtms_expectancy(dtms=simple,

@@ -39,6 +39,7 @@
 #' The distribution of partial waiting times can be generated using the arguments
 #' `start_state` and `start_time` in combination with `end_time`.
 #'
+#' @param probs Data frame with transition probabilities, as created with \code{dtms_transitions}.
 #' @param matrix Matrix with transition probabilities, as generated with \code{dtms_matrix}.
 #' @param dtms dtms object, as created with \code{dtms}.
 #' @param risk Character, name of state(s) for which risk is of interest.
@@ -74,21 +75,19 @@
 #' # Fit model
 #' fit <- dtms_fit(data=estdata)
 #' ## Predict probabilities
-#' probs    <- dtms_transitions(dtms=simple,
-#'                              model = fit)
-#' ## Get transition matrix
-#' Tp <- dtms_matrix(dtms=simple,
-#'                   probs=probs)
+#' probs <- dtms_transitions(dtms=simple,
+#'                           model = fit)
 #' ## Get starting distribution
 #' S <- dtms_start(dtms=simple,
 #'                 data=estdata)
 #' ## First visit
 #' dtms_last(dtms=simple,
-#'            matrix=Tp,
-#'            risk="A",
-#'            start_distr=S)
+#'           probs=probs,
+#'           risk="A",
+#'           start_distr=S)
 
-dtms_last <- function(matrix,
+dtms_last <- function(probs=NULL,
+                      matrix=NULL,
                       dtms,
                       risk,
                       risk_to=NULL,
@@ -102,6 +101,10 @@ dtms_last <- function(matrix,
 
   # Check
   dtms_proper(dtms)
+
+  # Get matrix if not specified
+  if(is.null(matrix)) matrix <- dtms_matrix(probs=probs,
+                                            dtms=dtms)
 
   # Starting state and time
   if(is.null(start_state)) start_state <- dtms$transient
