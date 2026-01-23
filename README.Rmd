@@ -577,6 +577,19 @@ very quick way of checking results:
 plot(probs,dtms=simple)
 ```
 
+Nonparametric estimation of transition probabilities works slightly different
+compared to the parametric case and can be done using the function 
+`dtms_nonparametric()`:
+```{r example1-nonpara}
+nprobs <- dtms_nonparametric(data=estdata,
+                             dtms=simple)
+```
+The resulting object directly contains transition probabilities, and the 
+prediction step is not needed. Moreover, transition probabilities by default
+depend on the values of the time scale. In case transition probabilities should 
+depend on covariates, `dtms_nonparametric()` should be run with stratified 
+subsets of the data. 
+
 Before we generate more results, we calculate the starting distribution of
 the states; i.e., the distribution of states at the first value of the time
 scale. 

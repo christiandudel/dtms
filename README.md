@@ -711,6 +711,21 @@ plot(probs,dtms=simple)
 
 <img src="man/figures/README-example1-baseplot-1.png" alt="" width="100%" />
 
+Nonparametric estimation of transition probabilities works slightly
+different compared to the parametric case and can be done using the
+function `dtms_nonparametric()`:
+
+``` r
+nprobs <- dtms_nonparametric(data=estdata,
+                             dtms=simple)
+```
+
+The resulting object directly contains transition probabilities, and the
+prediction step is not needed. Moreover, transition probabilities by
+default depend on the values of the time scale. In case transition
+probabilities should depend on covariates, `dtms_nonparametric()` should
+be run with stratified subsets of the data.
+
 Before we generate more results, we calculate the starting distribution
 of the states; i.e., the distribution of states at the first value of
 the time scale.
@@ -1524,25 +1539,25 @@ bootresults <- dtms_boot(data=estdata,
 summary(bootresults)
 #> $`2.5%`
 #>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     12.946411    2.928179 13.05356 29.44379
-#> start:Non-working_50  8.390062    6.219320 13.21082 28.41200
-#> start:Retired_50      8.452339    3.638823 14.64400 27.14497
-#> AVERAGE              12.084677    3.380601 13.16194 29.19385
-#> start:Working_50     11.714219    4.231656 16.09106 32.54111
-#> start:Non-working_50  7.119866    8.007318 16.28229 31.92149
-#> start:Retired_50      7.433971    5.210899 17.64480 30.95623
-#> AVERAGE              10.101222    5.397212 16.23969 32.24840
+#> start:Working_50     12.973308    2.913260 13.16710 29.29792
+#> start:Non-working_50  8.458970    6.233562 13.35023 28.34689
+#> start:Retired_50      8.329063    3.706761 14.53773 27.01988
+#> AVERAGE              12.124530    3.421067 13.27033 29.06786
+#> start:Working_50     11.769782    4.190016 15.99854 32.46103
+#> start:Non-working_50  7.143074    7.952820 16.28196 31.89083
+#> start:Retired_50      7.404733    5.263864 17.76300 30.98594
+#> AVERAGE              10.132618    5.336996 16.17257 32.22873
 #> 
 #> $`97.5%`
 #>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     13.584686    3.214955 13.96198 30.27842
-#> start:Non-working_50  9.034328    6.722690 14.14067 29.44023
-#> start:Retired_50      9.166414    4.066585 15.71844 28.41162
-#> AVERAGE              12.817462    3.724578 14.08021 30.04595
-#> start:Working_50     12.422616    4.585659 16.94029 33.37978
-#> start:Non-working_50  7.830882    8.404424 17.21198 32.87402
-#> start:Retired_50      8.226916    5.679404 18.81655 32.11666
-#> AVERAGE              10.823106    5.802723 17.11365 33.16896
+#> start:Working_50     13.600096    3.194630 13.97602 30.36437
+#> start:Non-working_50  9.107072    6.677870 14.19120 29.51949
+#> start:Retired_50      9.240488    4.070264 15.73342 28.76517
+#> AVERAGE              12.733473    3.719830 14.09264 30.15867
+#> start:Working_50     12.395615    4.558339 16.95921 33.42775
+#> start:Non-working_50  7.785430    8.419686 17.18208 32.90252
+#> start:Retired_50      8.088081    5.727586 18.60781 32.02358
+#> AVERAGE              10.798338    5.844940 17.10242 33.20374
 ```
 
 ## Using dtms with irregular intervals

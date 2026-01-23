@@ -40,7 +40,7 @@ This function creates a variable which measures the number of occurrence
 of the states.
 }
 \details{
-Counting starts with 1 and the first occurrence iof a state. For instance,
+Counting starts with 1 and the first occurrence of a state. For instance,
 if for an unit the sequence of states A, A, A, B, B, A, C is observed,
 the occurrence variable would include 1, 1, 1, 1, 1, 2, 1.
 

@@ -10,11 +10,11 @@ User Matthew Plourde on Stackoverflow https://stackoverflow.com/questions/122149
 dtms_source(file, start, end, local = FALSE)
 }
 \arguments{
-\item{file}{Name of the file to read (character)}
+\item{file}{Name of the file to read (character).}
 
-\item{start}{First line to read (numeric)}
+\item{start}{First line to read (numeric).}
 
-\item{end}{Last line to read (numeric)}
+\item{end}{Last line to read (numeric).}
 
 \item{local}{Logical or an environment. Default is 'FALSE'. See function \code{source} for details.}
 }
