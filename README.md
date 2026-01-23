@@ -122,12 +122,13 @@ remotes::install_github("christiandudel/dtms")
 The basic workflow consists of four main steps. First, the multistate
 model is defined in a general way which describes the states included in
 the model and its timescale (model setup). Second, the input data has to
-be reshaped and cleaned. Third, a regression model is fitted to predict
-transition probabilities. Fourth, Markov chain methods are applied to
-calculate statistics to describe the model. These steps and the
-corresponding functions are described below. Note that not all arguments
-of each function are described, and the help files for the individual
-functions contain useful additional information.
+be reshaped and cleaned. Third, transition probabilities are estimated,
+either via multinomial logistic regression or nonparametrically. Fourth,
+Markov chain methods are applied to calculate statistics to describe the
+model. These steps and the corresponding functions are described below.
+Note that not all arguments of each function are described, and in many
+cases the help files for the individual functions contain useful
+additional information.
 
 ### Model setup
 
@@ -143,7 +144,7 @@ argument for each of the components, but only three are necessary: the
 names of the transient states, the names of the absorbing states, and
 the values of the time scale. The step length of the timescale is
 implicitly defined by the values of the timescale, and the separator
-uses a default value which users likely don’t want to change in a
+uses a default value which users likely do not want to change in a
 majority of applications. In the first example provided further below,
 the function `dtms()` is called like this:
 
@@ -158,16 +159,14 @@ simple <- dtms(transient=c("A","B"),
 
 The arguments `transient` and `absorbing` take the names of the
 transient and absorbing states, respectively, which are specified as
-character vectors. In this case, there are two transient states called
-`A` and `B`, and one absorbing state called `X`. Each model needs at
-least one transient state and one absorbing state. The argument
+character vectors. In example above, there are two transient states
+called `A` and `B`, and one absorbing state called `X`. Each model needs
+at least one transient state and one absorbing state. The argument
 `timescale` takes the values of the timescale which are specified with a
 numeric vector. In this example, the time scale starts at 0 and stops at
-19, with a step length of 1. The step length has to be consistent along
-the timescale. For instance, a timescale with values 0, 1, 2, 4, 5, 7 is
-not allowed. However, the step length does not need to equal 1; e.g., 0,
-2, 4, 6, … would be fine. Moreover, using the argument `timestep`,
-several values for the step length can be specified.
+19, with a step length of 1. The step length does not need to equal 1;
+e.g., 0, 2, 4, 6, … would be fine. Moreover, using the argument
+`timestep`, several values for the step length can be specified.
 
 The separator is a character string used to construct what we call long
 state names. Its default is `_`. Long state names consist of a
@@ -184,9 +183,9 @@ possible; e.g., it is not possible to transition from `A_2` to `B_0`.
 ### Preparing and handling data
 
 The input data has to be panel data in long format. If your data is not
-in this shape, there are many tools already available in R and its
-extensions which allow you to reshape it. An example of data in long
-format could look like this:
+in this shape, there are many tools already available in R which allow
+you to reshape it. An example of data in long format could look like
+this:
 
 | idvar | timevar | statevar | X   | Y    |
 |:------|:--------|:---------|:----|:-----|
@@ -202,7 +201,7 @@ The first variable, `idvar`, contains a unit identifier. The first four
 rows of the data belong to unit `1`. The variable `timevar` has the
 values of the timescale. `statevar` shows the state each unit is
 occupying at a given time. Ideally, the states are provided as character
-strings; numeric values will also work, factors are, however, currently
+strings; numeric values will also work. Factors are, however, currently
 not supported. `X` and `Z` are additional covariates.
 
 The `dtms` package provides tools to reshape this data into what we call
@@ -289,16 +288,16 @@ variable names do not need to be specified all the time, making the
 workflow easier. Specifically, the variable with the unit identifier
 gets the name `id`; the variable with the timescale gets the name
 `time`; and the variables with the starting and receiving state get the
-names `from` and `to`. Other names can of course be specified, but they
-have to be used consistently.
+names `from` and `to`. Other names can be specified, but they have to be
+used consistently.
 
-Second, the object returned by `dtms_format()` technically is a standard
-data frame. This comes with benefits and costs. On the upside this means
-that data in transition format can easily be viewed and modified using
-standard tools, making it very accessible to users. The main downside is
-that it does not contain general information on the model or the data,
-which could make the workflow slightly more convenient. We decided to
-keep intermediate steps as accessible as possible.
+Second, the object returned by `dtms_format()` is a standard data frame.
+This comes with benefits and costs. On the upside this means that data
+in transition format can easily be viewed and modified using standard
+tools, making it very accessible to users. The main downside is that it
+does not contain general information on the model or the data, which
+could make the workflow more convenient. We decided to keep intermediate
+steps as accessible as possible.
 
 Third, the data in long format contains an additional variable
 (`Gender`). All variables which are not `idvar`, `timevar`, or
@@ -306,10 +305,10 @@ Third, the data in long format contains an additional variable
 For any variables X, Y, Z, … the value at time $t$ is assigned to the
 transition starting in time $t$.
 
-A useful function for handling data in transition format is
-`dtms_clean()`. It can be used to remove, for instance, transitions
-starting and/or ending in a missing value. Depending on the data, these
-can occur quite frequently. For instance, in the example used above:
+A function for handling data in transition format is `dtms_clean()`. It
+can be used to remove, for instance, transitions starting and/or ending
+in a missing value. Depending on the data, these can occur quite
+frequently. For instance, in the example used above:
 
 ``` r
 estdata |> subset(id==1) |> head()
@@ -365,7 +364,8 @@ of `dtms_clean()`.
 Getting transition probabilities ready requires three steps. First,
 estimating a regression model for the transition probabilities. Second,
 predicting transition probabilities using this model. Third, putting the
-transition probabilities into a transition matrix.
+transition probabilities into a transition matrix. In case of
+nonparametric estimation, the first and second step are combined.
 
 Estimating a regression model is done using `dtms_fit()`. Currently,
 this function builds on several other packages to allow for, among other
@@ -390,8 +390,8 @@ fit <- dtms_fit(data=somedata,
 ```
 
 It is also possible to specify a formula, like is common practice for
-most regression functions. This way you have to specify the names of the
-state variables:
+most regression functions in R. This way you have to specify the names
+of the state variables:
 
 ``` r
 fit <- dtms_fit(data=somedata,
@@ -1524,25 +1524,25 @@ bootresults <- dtms_boot(data=estdata,
 summary(bootresults)
 #> $`2.5%`
 #>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     12.950387    2.907895 13.09421 29.42531
-#> start:Non-working_50  8.330831    6.276162 13.27896 28.38445
-#> start:Retired_50      8.297790    3.716626 14.53456 27.11775
-#> AVERAGE              12.059192    3.404355 13.21974 29.17764
-#> start:Working_50     11.720923    4.223522 16.17407 32.53821
-#> start:Non-working_50  7.028878    7.964662 16.33358 31.95736
-#> start:Retired_50      7.492858    5.224667 17.71475 31.06753
-#> AVERAGE              10.072862    5.390372 16.30556 32.30766
+#> start:Working_50     12.946411    2.928179 13.05356 29.44379
+#> start:Non-working_50  8.390062    6.219320 13.21082 28.41200
+#> start:Retired_50      8.452339    3.638823 14.64400 27.14497
+#> AVERAGE              12.084677    3.380601 13.16194 29.19385
+#> start:Working_50     11.714219    4.231656 16.09106 32.54111
+#> start:Non-working_50  7.119866    8.007318 16.28229 31.92149
+#> start:Retired_50      7.433971    5.210899 17.64480 30.95623
+#> AVERAGE              10.101222    5.397212 16.23969 32.24840
 #> 
 #> $`97.5%`
 #>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     13.541564    3.216545 13.98167 30.50187
-#> start:Non-working_50  9.115615    6.712030 14.22676 29.71468
-#> start:Retired_50      9.254611    4.063941 15.79806 28.72700
-#> AVERAGE              12.719381    3.752791 14.11896 30.29027
-#> start:Working_50     12.305947    4.546627 16.89257 33.28691
-#> start:Non-working_50  7.724306    8.395802 17.18753 32.72227
-#> start:Retired_50      8.179544    5.712727 18.68243 31.90762
-#> AVERAGE              10.697619    5.787884 17.06269 33.02434
+#> start:Working_50     13.584686    3.214955 13.96198 30.27842
+#> start:Non-working_50  9.034328    6.722690 14.14067 29.44023
+#> start:Retired_50      9.166414    4.066585 15.71844 28.41162
+#> AVERAGE              12.817462    3.724578 14.08021 30.04595
+#> start:Working_50     12.422616    4.585659 16.94029 33.37978
+#> start:Non-working_50  7.830882    8.404424 17.21198 32.87402
+#> start:Retired_50      8.226916    5.679404 18.81655 32.11666
+#> AVERAGE              10.823106    5.802723 17.11365 33.16896
 ```
 
 ## Using dtms with irregular intervals
