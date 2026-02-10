@@ -698,7 +698,7 @@ probs |>  dtms_simplify() |>
           facet_wrap(~from)
 ```
 
-<img src="man/figures/README-example1-probsplot-1.png" alt="" width="100%" />
+<img src="man/figures/README-example1-probsplot-1.png" width="100%" />
 An even simpler way is available which builds on base-R and does not
 require ggplot2. However, this creates less nice figures and is mainly
 intended as a very quick way of checking results:
@@ -708,7 +708,7 @@ intended as a very quick way of checking results:
 plot(probs,dtms=simple)
 ```
 
-<img src="man/figures/README-example1-baseplot-1.png" alt="" width="100%" />
+<img src="man/figures/README-example1-baseplot-1.png" width="100%" />
 
 Before we generate more results, we calculate the starting distribution
 of the states; i.e., the distribution of states at the first value of
@@ -1191,7 +1191,7 @@ probs_m |>  dtms_simplify() |>
             facet_wrap(~from)
 ```
 
-<img src="man/figures/README-example2-1.png" alt="" width="100%" />
+<img src="man/figures/README-example2-1.png" width="100%" />
 
 ``` r
  
@@ -1523,25 +1523,25 @@ bootresults <- dtms_boot(data=estdata,
 summary(bootresults)
 #> $`2.5%`
 #>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     12.920503    2.933967 13.14232 29.49766
-#> start:Non-working_50  8.342364    6.309071 13.38575 28.52802
-#> start:Retired_50      8.288746    3.713153 14.66768 27.19858
-#> AVERAGE              12.037713    3.422289 13.25004 29.26663
-#> start:Working_50     11.742293    4.120276 16.14888 32.72328
-#> start:Non-working_50  7.041220    7.900763 16.38789 32.11435
-#> start:Retired_50      7.448160    5.169582 17.77335 31.06840
-#> AVERAGE              10.030633    5.284441 16.30025 32.46303
+#> start:Working_50     13.004726    2.935297 13.11987 29.43749
+#> start:Non-working_50  8.451639    6.309589 13.19528 28.45535
+#> start:Retired_50      8.379926    3.755956 14.49515 27.13272
+#> AVERAGE              12.142632    3.456774 13.20597 29.15833
+#> start:Working_50     11.719459    4.193766 16.07434 32.41921
+#> start:Non-working_50  7.119684    7.937112 16.27129 31.86876
+#> start:Retired_50      7.435483    5.220898 17.55749 30.96055
+#> AVERAGE              10.087915    5.371479 16.21732 32.19020
 #> 
 #> $`97.5%`
 #>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     13.647785    3.250775 14.11366 30.63536
-#> start:Non-working_50  9.226636    6.774704 14.33191 29.85031
-#> start:Retired_50      9.412258    4.116206 15.90830 29.03008
-#> AVERAGE              12.822619    3.763438 14.24088 30.41032
-#> start:Working_50     12.438943    4.544356 16.98954 33.43699
-#> start:Non-working_50  7.798765    8.433596 17.24451 32.91506
-#> start:Retired_50      8.333276    5.763470 18.79534 32.27542
-#> AVERAGE              10.888863    5.888779 17.15442 33.21973
+#> start:Working_50     13.618272    3.266016 13.95459 30.33427
+#> start:Non-working_50  9.159772    6.729923 14.19975 29.56883
+#> start:Retired_50      9.279045    4.197173 15.68116 28.61210
+#> AVERAGE              12.754231    3.778937 14.07832 30.13688
+#> start:Working_50     12.307190    4.583399 16.98335 33.38585
+#> start:Non-working_50  7.713922    8.448206 17.19071 32.86555
+#> start:Retired_50      8.069835    5.803354 18.66976 32.04479
+#> AVERAGE              10.665730    5.844390 17.12317 33.16342
 ```
 
 ## Using dtms with irregular intervals
@@ -1692,12 +1692,13 @@ potentially further covariates. These counts can then be used with the
 
 Sometimes it is possible to import existing code to a secure data
 environment. In such a case, one of the two files in the folder
-`combined` on GitHub can be used. The file `all.R` is (almost) all code
-from `dtms`. Sourcing it should provide a lot of the functionality of
-the package; dependencies are still required, though. The file
-`selected.R` only includes a subset of the functions and removes most of
-the documentation, but is much smaller than `all.R`. Again dependencies
-might be required.
+`combined` in the GitHub repository
+<https://github.com/christiandudel/dtms_combined> can be used. The file
+`all.R` is (almost) all code from `dtms`. Sourcing it should provide a
+lot of the functionality of the package; dependencies are still
+required, though. The file `selected.R` only includes a subset of the
+functions and removes most of the documentation, but is much smaller
+than `all.R`. Again dependencies might be required.
 
 ## Using dtms with large data sets
 

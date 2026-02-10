@@ -1190,46 +1190,13 @@ the time scale, and potentially further covariates. These counts can then be
 used with the `weights` argument of functions such as `dtms_fit()`.
 
 Sometimes it is possible to import existing code to a secure data environment.
-In such a case, one of the two files in the folder `combined` on GitHub can
+In such a case, one of the two files in the folder `combined` in the GitHub 
+repository https://github.com/christiandudel/dtms_combined can
 be used. The file `all.R` is (almost) all code from `dtms`. Sourcing it should 
 provide a lot of the functionality of the package; dependencies are still 
 required, though. The file `selected.R` only includes a subset of the functions 
 and removes most of the documentation, but is much smaller than `all.R`. Again
 dependencies might be required.
-
-```{r, echo=FALSE, results=FALSE}
-# # Dump all code in one file
-# filenames <- dir("R")
-# filenames <- paste0("R/",filenames)
-# nfiles <- length(filenames)
-# outfile <- ("combined/all.R")
-#  
-# for(i in 1:nfiles) {
-#  
-#  dump <- scan(file=filenames[i],what="char",blank.lines.skip=FALSE, sep="\n", quiet=TRUE)
-#  
-#  if(i==1) write(dump,file=outfile,append=FALSE) else  write(dump,file=outfile,append=TRUE)
-#  
-# }
-#  
-# # Dump selected functions in one file, without comments
-# filenames <- c("dtms.R","dtms_format.R","dtms_clean.R","dtms_nonparametric.R",
-#               "dtms_aggregate.R","dtms_fit.R","dtms_transitions.R",
-#               "dtms_matrix.R","dtms_expectancy.R","dtms_helpers.R")
-# filenames <- paste0("R/",filenames)
-# nfiles <- length(filenames)
-# outfile <- ("combined/selected.R")
-#  
-# for(i in 1:nfiles) {
-#    
-#  dump <- scan(file=filenames[i],what="char",blank.lines.skip=TRUE, sep="\n", quiet=TRUE)
-#    
-#  dump <- dump[!startsWith(dump,"#")]
-#  
-#  if(i==1) write(dump,file=outfile,append=FALSE) else  write(dump,file=outfile,append=TRUE)
-#    
-# }
-```
 
 ## Using dtms with large data sets
 
