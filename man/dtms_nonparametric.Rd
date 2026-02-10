@@ -42,8 +42,8 @@ dtms_nonparametric(
 A data frame with transition probabilities.
 }
 \description{
-This function calculates nonparametric estimates of transition probabilities.
-Standard errors assume that all observations are independent.
+This function calculates nonparametric estimates of transition probabilities
+for each value of the time scale.
 }
 \details{
 The argument `data` takes a data set in transition format. Predicted
