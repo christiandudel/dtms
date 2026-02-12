@@ -114,7 +114,7 @@ Currently, the following topics are covered in this documentation
 
 ## Installation 
 
-You can install the development version of `dtms` like this:
+You can install the development version of `dtms` from GitHub like this:
 ``` r
 install.packages("remotes")
 remotes::install_github("christiandudel/dtms")

@@ -84,7 +84,7 @@ as potential covariates with `controls`. The argument `lags` sets which lags
 are included These are always including lower lags; e.g., a model including
 the state at t-3 also has the state at t-2, at t-1, and at t. All resulting
 models are compared to a model which does not control for the current or any
-past state. If `lags=NULL` the Markov model is comapred to this model not
+past state. If `lags=NULL` the Markov model is compared to this model not
 accounting for the current state or any past states.
 
 The argument `keepNA` controls how missing values are handled. These will

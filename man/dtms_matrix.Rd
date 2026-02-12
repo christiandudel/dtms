@@ -36,7 +36,7 @@ dtms_matrix(
 Returns a transition matrix.
 }
 \description{
-This function creates a transiton matrix based on transition probabilities
+This function creates a transition matrix based on transition probabilities
 predicted using the function `dtms_transitions`.
 }
 \examples{

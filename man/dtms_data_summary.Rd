@@ -21,7 +21,7 @@ dtms_data_summary(
 
 \item{tovar}{Character (optional), name of variable  in `data`with receiving state. Default is "to".}
 
-\item{weights}{Character (optional), name of variablein `data` with weights. Default is NULL.}
+\item{weights}{Character (optional), name of variable in `data` with weights. Default is NULL.}
 }
 \value{
 A data frame

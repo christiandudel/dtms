@@ -80,8 +80,8 @@ which variable in #' `data` contains information the unit/cluster identifier.
 In case the parametric bootstrap is used the argument `weights` is used to
 specify the name of the variable with the weights.
 
-For parallel computing the packages `foreach` and `doParallel` (and their
-dependcies are used). See the documentation of these packages for details.
+For parallel computing the packages `foreach` and `doParallel`
+are used. See the documentation of these packages for details.
 }
 \examples{
 ## Define model: Absorbing and transient states, time scale

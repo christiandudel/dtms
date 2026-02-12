@@ -16,7 +16,7 @@ dtms_rewardmatrix(
 \arguments{
 \item{dtms}{dtms object, as created with \code{dtms}.}
 
-\item{starting}{Character (optional), name or names of starting states. If NULL (default) any transition to the state or states specififed with \code{receiving} will get the reward.}
+\item{starting}{Character (optional), name or names of starting states. If NULL (default) any transition to the state or states specified with \code{receiving} will get the reward.}
 
 \item{receiving}{Character, name or names of states to which transitioning generates the reward. Can be both transient or absorbing states.}
 
