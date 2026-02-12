@@ -1,7 +1,7 @@
 #' Creates a transition matrix from transition probabilities
 #'
 #' @description
-#' This function creates a transiton matrix based on transition probabilities
+#' This function creates a transition matrix based on transition probabilities
 #' predicted using the function `dtms_transitions`.
 #'
 #' @param probs Data frame with transition probabilities, as created with \code{dtms_transitions}.

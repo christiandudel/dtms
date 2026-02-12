@@ -27,8 +27,8 @@
 #' In case the parametric bootstrap is used the argument `weights` is used to
 #' specify the name of the variable with the weights.
 #'
-#' For parallel computing the packages `foreach` and `doParallel` (and their
-#' dependcies are used). See the documentation of these packages for details.
+#' For parallel computing the packages `foreach` and `doParallel`
+#' are used. See the documentation of these packages for details.
 #'
 #' @param data Data frame in transition format as created with \code{dtms_format}.
 #' @param dtms dtms object, as created with \code{dtms}.

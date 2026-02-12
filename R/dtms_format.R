@@ -101,7 +101,7 @@
 #'
 #' @seealso
 #' \code{\link{dtms_data_summary}} to summarize data in transition format.
-#' \code{\link{dtms_censoring}} for descriptives on censoring.
+#' \code{\link{dtms_censoring}} for descriptive information on censoring.
 #' \code{\link{dtms_clean}} for fast data cleaning.
 #'
 #' @examples

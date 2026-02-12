@@ -9,7 +9,7 @@
 #' @param dtms dtms object, as created with \code{dtms}.
 #' @param fromvar Character (optional), name of variable in `data` with starting state. Default is "from".
 #' @param tovar Character (optional), name of variable  in `data`with receiving state. Default is "to".
-#' @param weights Character (optional), name of variablein `data` with weights. Default is NULL.
+#' @param weights Character (optional), name of variable in `data` with weights. Default is NULL.
 #'
 #' @return A data frame
 #' @export

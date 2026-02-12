@@ -123,16 +123,16 @@ The basic workflow consists of four main steps. First, the multistate
 model is defined in a general way which describes the states included in
 the model and its timescale (model setup). Second, the input data has to
 be reshaped and cleaned. Third, transition probabilities are estimated,
-either via multinomial logistic regression or nonparametrically. Fourth,
-Markov chain methods are applied to calculate statistics to describe the
-model. These steps and the corresponding functions are described below.
-Note that not all arguments of each function are described, and in many
-cases the help files for the individual functions contain useful
-additional information.
+either via multinomial logistic regression or with nonparametric
+methods. Fourth, Markov chain methods are applied to calculate
+statistics to describe the model. These steps and the corresponding
+functions are described below. Note that not all arguments of each
+function are described, and in many cases the help files for the
+individual functions contain useful additional information.
 
 ### Model setup
 
-To use the `dtms` package, in a first step disrete-time multistate
+To use the `dtms` package, in a first step discrete-time multistate
 models are defined in a abstract way using three components: the names
 of the transient states; the names of the absorbing states; and the
 values of the time scale. Moreover, there are two additional components
@@ -186,6 +186,8 @@ The input data has to be panel data in long format. If your data is not
 in this shape, there are many tools already available in R which allow
 you to reshape it. An example of data in long format could look like
 this:
+
+    #> Warning: package 'knitr' was built under R version 4.5.2
 
 | idvar | timevar | statevar | X   | Y    |
 |:------|:--------|:---------|:----|:-----|
@@ -646,6 +648,7 @@ scale as a control variable:
 ## Fit model 
 fit <- dtms_fit(data=estdata,
                 controls="time")
+#> Warning: package 'VGAM' was built under R version 4.5.2
 ```
 
 To predict transition probabilities, the functions `dtms_transitions()`
@@ -693,13 +696,14 @@ ggplot2, a simple plot could look like this:
 ``` r
 ## Simple plot
 library(ggplot2)
+#> Warning: package 'ggplot2' was built under R version 4.5.2
 probs |>  dtms_simplify() |> 
           ggplot(aes(x=time,y=P,color=to)) + 
           geom_line() + 
           facet_wrap(~from)
 ```
 
-<img src="man/figures/README-example1-probsplot-1.png" width="100%" />
+<img src="man/figures/README-example1-probsplot-1.png" alt="" width="100%" />
 An even simpler way is available which builds on base-R and does not
 require ggplot2. However, this creates less nice figures and is mainly
 intended as a very quick way of checking results:
@@ -709,7 +713,7 @@ intended as a very quick way of checking results:
 plot(probs,dtms=simple)
 ```
 
-<img src="man/figures/README-example1-baseplot-1.png" width="100%" />
+<img src="man/figures/README-example1-baseplot-1.png" alt="" width="100%" />
 
 Nonparametric estimation of transition probabilities works slightly
 different compared to the parametric case and can be done using the
@@ -799,6 +803,7 @@ riskdata <- dtms_forward(data=estdata,
 riskfit <- dtms_fit(data=riskdata,
                 controls="time",
                 package="mclogit")
+#> Warning: package 'mclogit' was built under R version 4.5.2
 #> 
 #> Iteration 1 - deviance = 6381.024 - criterion = 0.7477243
 #> Iteration 2 - deviance = 5222.033 - criterion = 0.2219381
@@ -1207,7 +1212,7 @@ probs_m |>  dtms_simplify() |>
             facet_wrap(~from)
 ```
 
-<img src="man/figures/README-example2-1.png" width="100%" />
+<img src="man/figures/README-example2-1.png" alt="" width="100%" />
 
 ``` r
  
@@ -1539,47 +1544,25 @@ bootresults <- dtms_boot(data=estdata,
 summary(bootresults)
 #> $`2.5%`
 #>                        Working Non-working  Retired    TOTAL
-<<<<<<< HEAD
-#> start:Working_50     13.004726    2.935297 13.11987 29.43749
-#> start:Non-working_50  8.451639    6.309589 13.19528 28.45535
-#> start:Retired_50      8.379926    3.755956 14.49515 27.13272
-#> AVERAGE              12.142632    3.456774 13.20597 29.15833
-#> start:Working_50     11.719459    4.193766 16.07434 32.41921
-#> start:Non-working_50  7.119684    7.937112 16.27129 31.86876
-#> start:Retired_50      7.435483    5.220898 17.55749 30.96055
-#> AVERAGE              10.087915    5.371479 16.21732 32.19020
+#> start:Working_50     13.027124    2.935011 13.13816 29.46185
+#> start:Non-working_50  8.455440    6.304011 13.31193 28.43532
+#> start:Retired_50      8.383646    3.656918 14.70414 27.12281
+#> AVERAGE              12.118862    3.447009 13.24284 29.19999
+#> start:Working_50     11.818266    4.273243 16.15572 32.54257
+#> start:Non-working_50  7.162980    8.042988 16.41246 31.96683
+#> start:Retired_50      7.523004    5.272985 17.77725 30.91713
+#> AVERAGE              10.159401    5.496431 16.30660 32.28632
 #> 
 #> $`97.5%`
 #>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     13.618272    3.266016 13.95459 30.33427
-#> start:Non-working_50  9.159772    6.729923 14.19975 29.56883
-#> start:Retired_50      9.279045    4.197173 15.68116 28.61210
-#> AVERAGE              12.754231    3.778937 14.07832 30.13688
-#> start:Working_50     12.307190    4.583399 16.98335 33.38585
-#> start:Non-working_50  7.713922    8.448206 17.19071 32.86555
-#> start:Retired_50      8.069835    5.803354 18.66976 32.04479
-#> AVERAGE              10.665730    5.844390 17.12317 33.16342
-=======
-#> start:Working_50     12.973308    2.913260 13.16710 29.29792
-#> start:Non-working_50  8.458970    6.233562 13.35023 28.34689
-#> start:Retired_50      8.329063    3.706761 14.53773 27.01988
-#> AVERAGE              12.124530    3.421067 13.27033 29.06786
-#> start:Working_50     11.769782    4.190016 15.99854 32.46103
-#> start:Non-working_50  7.143074    7.952820 16.28196 31.89083
-#> start:Retired_50      7.404733    5.263864 17.76300 30.98594
-#> AVERAGE              10.132618    5.336996 16.17257 32.22873
-#> 
-#> $`97.5%`
-#>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     13.600096    3.194630 13.97602 30.36437
-#> start:Non-working_50  9.107072    6.677870 14.19120 29.51949
-#> start:Retired_50      9.240488    4.070264 15.73342 28.76517
-#> AVERAGE              12.733473    3.719830 14.09264 30.15867
-#> start:Working_50     12.395615    4.558339 16.95921 33.42775
-#> start:Non-working_50  7.785430    8.419686 17.18208 32.90252
-#> start:Retired_50      8.088081    5.727586 18.60781 32.02358
-#> AVERAGE              10.798338    5.844940 17.10242 33.20374
->>>>>>> fb95e52625ff666c7d1797b3441f22d9ddf1903d
+#> start:Working_50     13.619454    3.203107 13.98606 30.41513
+#> start:Non-working_50  9.196129    6.740990 14.22921 29.62237
+#> start:Retired_50      9.316159    4.126108 15.80109 28.71628
+#> AVERAGE              12.783172    3.734760 14.10362 30.21910
+#> start:Working_50     12.352284    4.565481 16.90631 33.37738
+#> start:Non-working_50  7.723356    8.432731 17.17966 32.81452
+#> start:Retired_50      8.202551    5.786304 18.76572 32.11798
+#> AVERAGE              10.743956    5.818510 17.07661 33.13666
 ```
 
 ## Using dtms with irregular intervals

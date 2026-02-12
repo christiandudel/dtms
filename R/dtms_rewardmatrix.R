@@ -5,7 +5,7 @@
 #' \code{dtms_reward}.
 #'
 #' @param dtms dtms object, as created with \code{dtms}.
-#' @param starting Character (optional), name or names of starting states. If NULL (default) any transition to the state or states specififed with \code{receiving} will get the reward.
+#' @param starting Character (optional), name or names of starting states. If NULL (default) any transition to the state or states specified with \code{receiving} will get the reward.
 #' @param receiving Character, name or names of states to which transitioning generates the reward. Can be both transient or absorbing states.
 #' @param reward Numeric, reward value to be placed in matrix.
 #' @param start_time Numeric (optional), value of time scale for start. If NULL (default) first value of time scale will be used.

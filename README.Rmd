@@ -126,7 +126,7 @@ The basic workflow consists of four main steps. First, the multistate model is
 defined in a general way which describes the states included in the model and
 its timescale (model setup). Second, the input data has to be reshaped and 
 cleaned. Third, transition probabilities are estimated, either via 
-multinomial logistic regression or nonparametrically. Fourth, Markov chain 
+multinomial logistic regression or with nonparametric methods. Fourth, Markov chain 
 methods are applied to calculate statistics to describe the model. These steps 
 and the corresponding functions are described below. Note that not all arguments 
 of each function are described, and in many cases the help 
@@ -134,7 +134,7 @@ files for the individual functions contain useful additional information.
 
 ### Model setup
 
-To use the `dtms` package, in a first step disrete-time multistate models 
+To use the `dtms` package, in a first step discrete-time multistate models 
 are defined in a abstract way using three components: the names of the 
 transient states; the names of the absorbing states; and the values of the 
 time scale. Moreover, there are two additional components which the user not 
