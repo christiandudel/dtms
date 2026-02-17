@@ -41,7 +41,7 @@ If you use this package in your work, please use the following citation (or
 a variation):
 
 Dudel, C. (`r format(Sys.time(), "%Y")`). dtms: discrete-time multistate models 
-in R. R package version `r packageVersion("dtms")`, available at  https://github.com/christiandudel/dtms
+in R. R package version `r packageVersion("dtms")`, available at  https://github.com/christiandudel/dtms/
 
 ## Overview
 
@@ -57,10 +57,10 @@ editing states, generating indicators of duration and number of occurrences of
 a state, indicators of censoring, descriptive information on different types of 
 censoring, and other general descriptive statistics. 
 - Estimation of transition probabilities: nonparametric estimation;
-semiparametric estimation ([VGAM](https://cran.r-project.org/web/packages/VGAM)), 
+semiparametric estimation ([VGAM](https://CRAN.R-project.org/package=VGAM)), 
 random effects and random intercepts 
-([mclogit](https://cran.r-project.org/web/packages/mclogit)), 
-and neural networks ([nnet](https://cran.r-project.org/web/packages/nnet)); all
+([mclogit](https://CRAN.R-project.org/package=mclogit)), 
+and neural networks ([nnet](https://CRAN.R-project.org/package=nnet)); all
 possible for constrained and unconstrained/fully interacted models. Functions 
 for descriptive statistics on transition probabilities and for plotting them
 are also available.
@@ -76,7 +76,7 @@ transition probabilities; for all quantities inference using the resampling
 bootstrap, the block bootstrap, and a parametric bootstrap, supporting parallel 
 computing.
 - Other features: simulation of Markov chains using the package
-[markovchain](https://cran.r-project.org/web/packages/markovchain); survey 
+[markovchain](https://CRAN.R-project.org/package=markovchain); survey 
 weights (experimental); irregular time intervals (experimental).
 - Examples: the package comes with two simulated data sets which are used for
 examples. These are described further below. The input data and code for the 
@@ -1003,8 +1003,8 @@ bootstrap. In case the block bootstrap is used the argument `idvar` needs to be
 specified, which takes the name of the variable with the unit identifier. The 
 argument `rep` sets the number of bootstrap replications, and the argument
 `parallel` can be set to `TRUE` to enable parallel processing using the
-packages [foreach](https://cran.r-project.org/web/packages/foreach) and 
-[doParallel](https://cran.r-project.org/web/packages/doParallel).
+packages [foreach](https://CRAN.R-project.org/package=foreach) and 
+[doParallel](https://CRAN.R-project.org/package=doParallel).
 
 Further required is the argument `fun`. This is a function which should have two 
 arguments, one called `data` and one called `dtms`. These are used to pass the
@@ -1085,7 +1085,7 @@ years might have passed, or two and a half years, or something in between. This
 applies, for instance, to the U.S. Health and Retirement Study (HRS). 
 
 A complete application showing how to handle irregular intervals with `dtms` 
-using HRS data can be found online: https://github.com/christiandudel/hrs_hwle
+using HRS data can be found online: https://github.com/christiandudel/hrs_hwle/
 The basic steps are as follows, using the HRS code as an example. 
 First, the `dtms`object used for transforming the data using `dtms_format()` 
 needs to include not one, but several values for
@@ -1205,7 +1205,7 @@ used with the `weights` argument of functions such as `dtms_fit()`.
 
 Sometimes it is possible to import existing code to a secure data environment.
 In such a case, one of the two files in the folder `combined` in the GitHub 
-repository https://github.com/christiandudel/dtms_combined can
+repository https://github.com/christiandudel/dtms_combined/ can
 be used. The file `all.R` is (almost) all code from `dtms`. Sourcing it should 
 provide a lot of the functionality of the package; dependencies are still 
 required, though. The file `selected.R` only includes a subset of the functions 

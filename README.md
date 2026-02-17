@@ -31,7 +31,7 @@ If you use this package in your work, please use the following citation
 (or a variation):
 
 Dudel, C. (2026). dtms: discrete-time multistate models in R. R package
-version 0.4.1, available at <https://github.com/christiandudel/dtms>
+version 0.4.1, available at <https://github.com/christiandudel/dtms/>
 
 ## Overview
 
@@ -49,14 +49,13 @@ Currently, the following features are implemented:
   descriptive statistics.
 - Estimation of transition probabilities: nonparametric estimation;
   semiparametric estimation
-  ([VGAM](https://cran.r-project.org/web/packages/VGAM)), random effects
-  and random intercepts
-  ([mclogit](https://cran.r-project.org/web/packages/mclogit)), and
-  neural networks
-  ([nnet](https://cran.r-project.org/web/packages/nnet)); all possible
-  for constrained and unconstrained/fully interacted models. Functions
-  for descriptive statistics on transition probabilities and for
-  plotting them are also available.
+  ([VGAM](https://CRAN.R-project.org/package=VGAM)), random effects and
+  random intercepts
+  ([mclogit](https://CRAN.R-project.org/package=mclogit)), and neural
+  networks ([nnet](https://CRAN.R-project.org/package=nnet)); all
+  possible for constrained and unconstrained/fully interacted models.
+  Functions for descriptive statistics on transition probabilities and
+  for plotting them are also available.
 - Markov chain methods: survivorship function, (partial) state/life
   expectancy, (partial) lifetime risk, (partial) distribution of
   occupation time, (partial) distribution of waiting time to first
@@ -70,9 +69,8 @@ Currently, the following features are implemented:
   resampling bootstrap, the block bootstrap, and a parametric bootstrap,
   supporting parallel computing.
 - Other features: simulation of Markov chains using the package
-  [markovchain](https://cran.r-project.org/web/packages/markovchain);
-  survey weights (experimental); irregular time intervals
-  (experimental).
+  [markovchain](https://CRAN.R-project.org/package=markovchain); survey
+  weights (experimental); irregular time intervals (experimental).
 - Examples: the package comes with two simulated data sets which are
   used for examples. These are described further below. The input data
   and code for the simulated data is available at
@@ -1469,8 +1467,8 @@ used the argument `idvar` needs to be specified, which takes the name of
 the variable with the unit identifier. The argument `rep` sets the
 number of bootstrap replications, and the argument `parallel` can be set
 to `TRUE` to enable parallel processing using the packages
-[foreach](https://cran.r-project.org/web/packages/foreach) and
-[doParallel](https://cran.r-project.org/web/packages/doParallel).
+[foreach](https://CRAN.R-project.org/package=foreach) and
+[doParallel](https://CRAN.R-project.org/package=doParallel).
 
 Further required is the argument `fun`. This is a function which should
 have two arguments, one called `data` and one called `dtms`. These are
@@ -1544,25 +1542,25 @@ bootresults <- dtms_boot(data=estdata,
 summary(bootresults)
 #> $`2.5%`
 #>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     12.978419    2.964841 13.03492 29.42210
-#> start:Non-working_50  8.376499    6.292661 13.16001 28.44001
-#> start:Retired_50      8.355841    3.729698 14.55325 27.15956
-#> AVERAGE              12.168663    3.437052 13.11880 29.17219
-#> start:Working_50     11.800004    4.198010 16.05929 32.64782
-#> start:Non-working_50  7.236740    7.956017 16.30622 32.01056
-#> start:Retired_50      7.607067    5.234375 17.66341 31.01739
-#> AVERAGE              10.241566    5.382906 16.20478 32.39870
+#> start:Working_50     12.797005    2.953679 13.17844 29.49169
+#> start:Non-working_50  8.306935    6.293010 13.30397 28.50327
+#> start:Retired_50      8.240154    3.695595 14.50528 26.97259
+#> AVERAGE              11.893379    3.463800 13.26938 29.25219
+#> start:Working_50     11.751125    4.153478 16.14368 32.53870
+#> start:Non-working_50  7.159067    7.872329 16.37746 31.93384
+#> start:Retired_50      7.503777    5.183706 17.71052 30.83128
+#> AVERAGE              10.135127    5.379545 16.28922 32.27345
 #> 
 #> $`97.5%`
 #>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     13.664124    3.222659 13.96973 30.40220
-#> start:Non-working_50  9.248706    6.709359 14.29564 29.64190
-#> start:Retired_50      9.401216    4.104856 15.92022 28.75113
-#> AVERAGE              12.798029    3.747707 14.10673 30.21108
-#> start:Working_50     12.414839    4.550822 16.88405 33.42402
-#> start:Non-working_50  7.795836    8.361580 17.14877 32.86467
-#> start:Retired_50      8.208349    5.675665 18.69316 32.09030
-#> AVERAGE              10.804946    5.782126 17.04540 33.19889
+#> start:Working_50     13.681723    3.253459 14.01719 30.53646
+#> start:Non-working_50  9.163316    6.749869 14.27507 29.76703
+#> start:Retired_50      9.322830    4.195699 15.80582 28.82867
+#> AVERAGE              12.787435    3.743421 14.13892 30.34716
+#> start:Working_50     12.375573    4.511525 16.93636 33.41019
+#> start:Non-working_50  7.737198    8.370597 17.18060 32.88847
+#> start:Retired_50      8.259658    5.660685 18.67457 32.05602
+#> AVERAGE              10.740370    5.752884 17.08886 33.16413
 ```
 
 ## Using dtms with irregular intervals
@@ -1576,7 +1574,7 @@ Retirement Study (HRS).
 
 A complete application showing how to handle irregular intervals with
 `dtms` using HRS data can be found online:
-<https://github.com/christiandudel/hrs_hwle> The basic steps are as
+<https://github.com/christiandudel/hrs_hwle/> The basic steps are as
 follows, using the HRS code as an example. First, the `dtms`object used
 for transforming the data using `dtms_format()` needs to include not
 one, but several values for the steplength:
@@ -1714,7 +1712,7 @@ potentially further covariates. These counts can then be used with the
 Sometimes it is possible to import existing code to a secure data
 environment. In such a case, one of the two files in the folder
 `combined` in the GitHub repository
-<https://github.com/christiandudel/dtms_combined> can be used. The file
+<https://github.com/christiandudel/dtms_combined/> can be used. The file
 `all.R` is (almost) all code from `dtms`. Sourcing it should provide a
 lot of the functionality of the package; dependencies are still
 required, though. The file `selected.R` only includes a subset of the
