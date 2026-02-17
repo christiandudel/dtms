@@ -6,3 +6,4 @@ data-raw$
 ^\.github$
 dev$
 ^CRAN-SUBMISSION$
+^cran-comments\.md$
