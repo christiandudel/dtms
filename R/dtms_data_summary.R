@@ -43,7 +43,7 @@ dtms_data_summary <- function(data,
     # Aggregate
     formal <- paste0("COUNT~",fromvar,"+",tovar)
     formal <- stats::as.formula(formal)
-    result <- stats::aggregate(formal,data,FUN=sum,drop=F)
+    result <- stats::aggregate(formal,data,FUN=sum,drop=FALSE)
 
     # If there are unused combinations COUNT could be NA
     result[is.na(result$COUNT),"COUNT"] <- 0

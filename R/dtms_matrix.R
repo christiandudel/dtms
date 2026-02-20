@@ -43,8 +43,8 @@ dtms_matrix <- function(probs,
                         fromvar="from",
                         tovar="to",
                         Pvar="P",
-                        enforcedeath=T,
-                        rescale=T,
+                        enforcedeath=TRUE,
+                        rescale=TRUE,
                         reshapesep=":") {
 
   # Check
@@ -123,7 +123,7 @@ dtms_matrix <- function(probs,
   class(Tm) <- "numeric"
 
   # Make sure everyone dies at the end
-  if(enforcedeath==T) {
+  if(enforcedeath==TRUE) {
     last_states <- paste(dtms$transient,max(dtms$timescale),sep=dtms$sep)
     if(length(absorbing)==1) {
       Tm[last_states,] <- 0

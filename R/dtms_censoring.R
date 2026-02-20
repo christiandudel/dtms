@@ -30,7 +30,7 @@
 #' @param printlong Logical (optional), print cross-tabulation? Default is FALSE.
 #' @param add Logical (optional), add indicators to data set? Default is FALSE. If TRUE the data frame specified with \code{data} is returned with added columns.
 #' @param addtype Character (optional), what type of information should be added if add=TRUE. Either "id" or "obs", see details. Default is "id".
-#' @param varnames Character vector (optional), names of added variables if add=T. Default is "c("LEFT","GAP","RIGHT")".
+#' @param varnames Character vector (optional), names of added variables if add=TRUE. Default is "c("LEFT","GAP","RIGHT")".
 #'
 #' @return Table or data frame.
 #' @export

@@ -145,7 +145,7 @@ dtms_expectancy <- function(probs=NULL,
       if(!is.null(end_time)) {
         times <- dtms_gettime(allstates,dtms$sep)
         times <- times<=end_time
-        times[!is.logical(times)] <- F
+        times[!is.logical(times)] <- FALSE
         selector <- selector & times
       }
 
@@ -180,7 +180,7 @@ dtms_expectancy <- function(probs=NULL,
     tmp <- rowSums(Nmat[,selector])
 
     # Matrix with results
-    result <- matrix(data=tmp,ncol=ntimes,nrow=nstart,byrow=T)
+    result <- matrix(data=tmp,ncol=ntimes,nrow=nstart,byrow=TRUE)
     rownames(result) <- paste0("start:",starting)
     colnames(result) <- paste(times)
 

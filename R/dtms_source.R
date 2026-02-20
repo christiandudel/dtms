@@ -13,6 +13,7 @@
 #'
 #' @seealso [func(source)]
 #'
+#' @return No return value, called for side effects
 #' @export
 #'
 dtms_source <- function(file,start,end,local=FALSE) {

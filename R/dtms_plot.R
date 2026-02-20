@@ -13,6 +13,7 @@
 #' @param Pvar Character (optional), name of variable in `probs` with transition probabilities. Default is `P`.
 #' @param ... Further arguments passed to plot().
 #'
+#' @return No return value, called for side effects
 #' @export
 #'
 #' @examples

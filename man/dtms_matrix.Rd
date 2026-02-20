@@ -10,8 +10,8 @@ dtms_matrix(
   fromvar = "from",
   tovar = "to",
   Pvar = "P",
-  enforcedeath = T,
-  rescale = T,
+  enforcedeath = TRUE,
+  rescale = TRUE,
   reshapesep = ":"
 )
 }

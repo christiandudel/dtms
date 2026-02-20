@@ -29,6 +29,9 @@ dtms_plot(
 
 \item{...}{Further arguments passed to plot().}
 }
+\value{
+No return value, called for side effects
+}
 \description{
 A simple function for plotting transition probabilities with base R. This is
 fast, but it is much easier to produce nicer looking results with

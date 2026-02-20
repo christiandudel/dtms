@@ -14,7 +14,7 @@ dtms_visits(
   start_distr = NULL,
   end_time = NULL,
   method = "mid",
-  total = F
+  total = FALSE
 )
 }
 \arguments{

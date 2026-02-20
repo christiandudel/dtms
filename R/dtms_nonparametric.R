@@ -82,12 +82,12 @@ dtms_nonparametric <- function(data,
   # Aggregate (denominators)
   formal1 <- paste0("COUNT~",fromvar,"+",timevar)
   formal1 <- stats::as.formula(formal1)
-  denominators <- stats::aggregate(formal1,data,FUN=sum,drop=F)
+  denominators <- stats::aggregate(formal1,data,FUN=sum,drop=FALSE)
 
   # Aggregate (numerators)
   formal2 <- paste0("COUNT~",fromvar,"+",tovar,"+",timevar)
   formal2 <- stats::as.formula(formal2)
-  numerators <- stats::aggregate(formal2,data,FUN=sum,drop=F)
+  numerators <- stats::aggregate(formal2,data,FUN=sum,drop=FALSE)
 
   # Merge
   probs <- merge(numerators,denominators,by=c(fromvar,timevar))

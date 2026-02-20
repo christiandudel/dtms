@@ -156,14 +156,14 @@ dtms_transitions <- function(model,
       Cstates <- unique(Cstates)
       C <- matrix(data=C,
                   ncol=length(all_states)-1,
-                  byrow=T)
+                  byrow=TRUE)
     }
 
     if(inherits(model,"vgam")) {
       C <- stats::coef(model)
       C <- matrix(C,
                   ncol=length(all_states)-1,
-                  byrow=T)
+                  byrow=TRUE)
       Cstates <- model@extra$colnames.y[-model@extra$use.refLevel]
     }
 

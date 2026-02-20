@@ -18,6 +18,9 @@ dtms_source(file, start, end, local = FALSE)
 
 \item{local}{Logical or an environment. Default is 'FALSE'. See function \code{source} for details.}
 }
+\value{
+No return value, called for side effects
+}
 \description{
 This is a helper function which allows to source only specific lines from
 a file.

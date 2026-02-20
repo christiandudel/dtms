@@ -963,8 +963,8 @@ dtms_last(dtms=simple,
           probs=probs,
           risk="A",
           start_distr=S,
-          rescale=T,
-          total=F)
+          rescale=TRUE,
+          total=FALSE)
 #>                       0.5         1.5        2.5        3.5        4.5
 #> start:A_0      0.03243583 0.003913531 0.02214835 0.01825495 0.02599464
 #> start:B_0      0.00000000 0.020285002 0.01467573 0.02253729 0.02469664
@@ -1020,8 +1020,8 @@ example2 <- dtms_last(dtms=simple,
                       probs=probs,
                       risk="A",
                       start_distr=S,
-                      rescale=T,
-                      total=F)
+                      rescale=TRUE,
+                      total=FALSE)
 summary(example2)
 #>                    MEAN VARIANCE       SD MEDIAN RISK0
 #> start:A_0      12.07534 23.17287 4.813821   12.5    NA
@@ -1132,7 +1132,7 @@ dtms_censoring(data=estdata,
 ## More advanced censoring example
 estdata <- dtms_censoring(data=estdata,
                           dtms=work,
-                          add=T,
+                          add=TRUE,
                           addtype="obs")
 #> Units with left censoring:  2036 
 #> Units with gaps:  1720 
@@ -1542,25 +1542,25 @@ bootresults <- dtms_boot(data=estdata,
 summary(bootresults)
 #> $`2.5%`
 #>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     12.797005    2.953679 13.17844 29.49169
-#> start:Non-working_50  8.306935    6.293010 13.30397 28.50327
-#> start:Retired_50      8.240154    3.695595 14.50528 26.97259
-#> AVERAGE              11.893379    3.463800 13.26938 29.25219
-#> start:Working_50     11.751125    4.153478 16.14368 32.53870
-#> start:Non-working_50  7.159067    7.872329 16.37746 31.93384
-#> start:Retired_50      7.503777    5.183706 17.71052 30.83128
-#> AVERAGE              10.135127    5.379545 16.28922 32.27345
+#> start:Working_50     12.950263    2.932840 13.04893 29.45542
+#> start:Non-working_50  8.386391    6.327012 13.18212 28.41604
+#> start:Retired_50      8.389730    3.689741 14.59331 27.12249
+#> AVERAGE              12.069485    3.399886 13.15790 29.20787
+#> start:Working_50     11.845231    4.212138 16.20327 32.73890
+#> start:Non-working_50  7.176800    7.999112 16.41877 32.11731
+#> start:Retired_50      7.549301    5.272189 17.75003 31.12351
+#> AVERAGE              10.234280    5.447222 16.35247 32.47059
 #> 
 #> $`97.5%`
 #>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     13.681723    3.253459 14.01719 30.53646
-#> start:Non-working_50  9.163316    6.749869 14.27507 29.76703
-#> start:Retired_50      9.322830    4.195699 15.80582 28.82867
-#> AVERAGE              12.787435    3.743421 14.13892 30.34716
-#> start:Working_50     12.375573    4.511525 16.93636 33.41019
-#> start:Non-working_50  7.737198    8.370597 17.18060 32.88847
-#> start:Retired_50      8.259658    5.660685 18.67457 32.05602
-#> AVERAGE              10.740370    5.752884 17.08886 33.16413
+#> start:Working_50     13.579779    3.239810 13.92944 30.40619
+#> start:Non-working_50  9.064330    6.700254 14.18736 29.61583
+#> start:Retired_50      9.179519    4.077710 15.68334 28.63790
+#> AVERAGE              12.762542    3.753204 14.05268 30.20859
+#> start:Working_50     12.371900    4.548001 16.90262 33.46156
+#> start:Non-working_50  7.741088    8.419181 17.15871 32.92139
+#> start:Retired_50      8.202370    5.754858 18.69343 32.15266
+#> AVERAGE              10.817611    5.805913 17.06805 33.23426
 ```
 
 ## Using dtms with irregular intervals

@@ -80,7 +80,7 @@ dtms_visits <- function(probs=NULL,
                         start_distr=NULL,
                         end_time=NULL,
                         method="mid",
-                        total=F) {
+                        total=FALSE) {
 
   # Check
   dtms_proper(dtms)

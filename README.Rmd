@@ -703,8 +703,8 @@ dtms_last(dtms=simple,
           probs=probs,
           risk="A",
           start_distr=S,
-          rescale=T,
-          total=F)
+          rescale=TRUE,
+          total=FALSE)
 ```
 The output from these functions tends to be difficult to read, and often 
 results on the distribution are used to calculate other statistics. A 
@@ -729,8 +729,8 @@ example2 <- dtms_last(dtms=simple,
                       probs=probs,
                       risk="A",
                       start_distr=S,
-                      rescale=T,
-                      total=F)
+                      rescale=TRUE,
+                      total=FALSE)
 summary(example2)
 ```
 In this case, the distribution is conditional on ever experiencing the exit
@@ -807,7 +807,7 @@ dtms_censoring(data=estdata,
 ## More advanced censoring example
 estdata <- dtms_censoring(data=estdata,
                           dtms=work,
-                          add=T,
+                          add=TRUE,
                           addtype="obs")
 
 estdata |>

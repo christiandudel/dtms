@@ -39,7 +39,7 @@ dtms_censoring(
 
 \item{addtype}{Character (optional), what type of information should be added if add=TRUE. Either "id" or "obs", see details. Default is "id".}
 
-\item{varnames}{Character vector (optional), names of added variables if add=T. Default is "c("LEFT","GAP","RIGHT")".}
+\item{varnames}{Character vector (optional), names of added variables if add=TRUE. Default is "c("LEFT","GAP","RIGHT")".}
 }
 \value{
 Table or data frame.

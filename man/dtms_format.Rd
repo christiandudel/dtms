@@ -115,7 +115,7 @@ id \tab time \tab from \tab to \cr
 1 \tab 2 \tab B \tab A \cr
 }
 
-If `fill=T`, then `dtms_format` will return the following:
+If `fill=TRUE`, then `dtms_format` will return the following:
 
  \tabular{llll}{
 id \tab time \tab from \tab to \cr

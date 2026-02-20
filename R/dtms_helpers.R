@@ -180,7 +180,7 @@ dtms_lag <- function(data,
   # Merge with data
   fulldata <- merge(fulldata,data,
                     by=c(idvar,timevar),
-                    all=T)
+                    all=TRUE)
 
   # shift state
   stateshift <- by(fulldata[,fromvar],

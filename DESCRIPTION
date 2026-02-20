@@ -1,12 +1,12 @@
 Package: dtms
 Type: Package
 Title: Discrete-Time Multistate Models
-Version: 0.4.1
+Version: 0.4.2
 Authors@R: person(given = "Christian",
                     family = "Dudel",
                     role = c("aut", "cre"),
                     email = "dudel@demogr.mpg.de")
-Description: Discrete-time multistate models with a user-friendly workflow. 
+Description: Discrete-time multistate models with a user-friendly workflow. The package provides tools for processing data, several ways of estimating parametric and nonparametric multistate models, and an extensive set of Markov chain methods which use transition probabilities derived from the multistate model. Some of the implemented methods are described in Schneider et al. (2024) <doi:10.1080/00324728.2023.2176535>, Dudel (2021) <doi:10.1177/0049124118782541>, Dudel & Myrskylä (2020) <doi:10.1186/s12963-020-00217-0>, van den Hout (2017) <doi:10.1201/9781315374321>. 
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true

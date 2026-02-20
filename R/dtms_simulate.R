@@ -88,7 +88,7 @@ dtms_simulate <- function(probs=NULL,
     simseq <- markovchain::rmarkovchain(n = ntime-as.numeric(droplast),
                                         object = sim,
                                         t0 = initial_state,
-                                        include.t0=T)
+                                        include.t0=TRUE)
 
     # Put in data frame
     simdata <- rbind(simdata,simseq)
