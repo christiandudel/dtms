@@ -31,7 +31,7 @@ If you use this package in your work, please use the following citation
 (or a variation):
 
 Dudel, C. (2026). dtms: discrete-time multistate models in R. R package
-version 0.4.1, available at <https://github.com/christiandudel/dtms/>
+version 0.4.2, available at <https://CRAN.R-project.org/package=dtms>
 
 ## Overview
 
@@ -108,12 +108,22 @@ Currently, the following topics are covered in this documentation
 
 ## Installation
 
-You can install the development version of `dtms` from GitHub like this:
+You can install `dtms` from CRAN:
+
+``` r
+install.packages("dtms")
+```
+
+As an alternative, you can also install the development version of
+`dtms` from GitHub like this:
 
 ``` r
 install.packages("remotes")
 remotes::install_github("christiandudel/dtms")
 ```
+
+The development version from GitHub might include fixes and changes
+which are not on CRAN yet, in particular if they are relatively minor.
 
 ## General workflow and basic principles
 
@@ -1542,25 +1552,25 @@ bootresults <- dtms_boot(data=estdata,
 summary(bootresults)
 #> $`2.5%`
 #>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     12.950263    2.932840 13.04893 29.45542
-#> start:Non-working_50  8.386391    6.327012 13.18212 28.41604
-#> start:Retired_50      8.389730    3.689741 14.59331 27.12249
-#> AVERAGE              12.069485    3.399886 13.15790 29.20787
-#> start:Working_50     11.845231    4.212138 16.20327 32.73890
-#> start:Non-working_50  7.176800    7.999112 16.41877 32.11731
-#> start:Retired_50      7.549301    5.272189 17.75003 31.12351
-#> AVERAGE              10.234280    5.447222 16.35247 32.47059
+#> start:Working_50     12.988833    2.936698 13.01675 29.35698
+#> start:Non-working_50  8.420601    6.286157 13.20301 28.48965
+#> start:Retired_50      8.338910    3.711693 14.58812 27.18709
+#> AVERAGE              12.112993    3.447622 13.13820 29.11840
+#> start:Working_50     11.648371    4.252976 16.17973 32.58012
+#> start:Non-working_50  7.119280    8.004188 16.33185 31.91123
+#> start:Retired_50      7.495035    5.271559 17.58009 30.70391
+#> AVERAGE              10.029559    5.473189 16.28706 32.30932
 #> 
 #> $`97.5%`
 #>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     13.579779    3.239810 13.92944 30.40619
-#> start:Non-working_50  9.064330    6.700254 14.18736 29.61583
-#> start:Retired_50      9.179519    4.077710 15.68334 28.63790
-#> AVERAGE              12.762542    3.753204 14.05268 30.20859
-#> start:Working_50     12.371900    4.548001 16.90262 33.46156
-#> start:Non-working_50  7.741088    8.419181 17.15871 32.92139
-#> start:Retired_50      8.202370    5.754858 18.69343 32.15266
-#> AVERAGE              10.817611    5.805913 17.06805 33.23426
+#> start:Working_50     13.554706    3.238745 13.97550 30.32689
+#> start:Non-working_50  9.061846    6.691053 14.12117 29.43826
+#> start:Retired_50      9.202924    4.177850 15.65633 28.54101
+#> AVERAGE              12.719981    3.783299 14.07075 30.09875
+#> start:Working_50     12.346046    4.558577 16.98722 33.51897
+#> start:Non-working_50  7.716126    8.419378 17.28290 33.02063
+#> start:Retired_50      8.167843    5.716154 18.93623 32.33226
+#> AVERAGE              10.769496    5.804960 17.16545 33.31027
 ```
 
 ## Using dtms with irregular intervals
