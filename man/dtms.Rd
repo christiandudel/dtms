@@ -31,7 +31,8 @@ values the time scale can take, and the step length of the time scale.
 
 The names of the absorbing and transient states should be provided as
 character strings. However, numeric values also work. Factors are not
-supported
+supported. All states should appear in the data, otherwise error messages
+might occur.
 
 The step length of the time scale can be a vector with several values, which
 allows for unevenly spaced observations. Note, however, that some functions

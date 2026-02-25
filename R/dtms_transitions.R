@@ -122,13 +122,33 @@ dtms_transitions <- function(model,
 
   }
 
-  # Predict
+  # Predict for vgam/mclogit
   if(inherits(model,c("vgam","mclogit"))) {
-    model_frame[,all_states] <- stats::predict(model,model_frame,"response")[,all_states]
+
+    # Actual prediction
+    predicted <- stats::predict(model,model_frame,"response")
+    predicted_states <- colnames(predicted)
+
+    # Check if all states are there, if not place 0
+    if(!all(all_states%in%predicted_states)) {
+      warning("Some states defined via dtms do not appear in data, might cause issues with SEs")
+      which_states <- all_states[which(!all_states%in%predicted_states)]
+      n_states <- length(which_states)
+      tmp <- matrix(data=0,ncol=n_states,nrow=dim(predicted)[1])
+      colnames(tmp) <- which_states
+      predicted <- cbind(predicted,tmp)
+      model_frame[,all_states] <- predicted[,all_states]
+    } else model_frame[,all_states] <- predicted[,all_states]
   }
 
+  # Predict for nnet
   if(inherits(model,"nnet")) {
-    model_frame[,all_states] <- stats::predict(model,model_frame,"probs")[,all_states]
+    predicted <- stats::predict(model,model_frame,"probs")
+    predicted_states <- colnames(predicted)
+    if(!all(all_states%in%predicted_states)) {
+      warning("Some states defined via dtms do not appear in data, not supported with nnet")
+    }
+    model_frame[,all_states] <- predicted[,all_states]
   }
 
   # Values of starting state
