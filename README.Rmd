@@ -781,6 +781,7 @@ and predicted using time-constant and time-varying covariates, and the
 probabilities are plotted together with confidence intervals. Finally, the 
 transition matrix is used to calculate state expectancies and similar measures. 
 
+Basic data editing and handling works very similar to the first example:
 ```{r example2}
 ## Load packages
 library(dtms)
@@ -807,7 +808,15 @@ estdata <- dtms_clean(data=estdata,
 
 ## Overview
 summary(estdata)
+```
 
+The data shows three types of censoring: left truncation, gaps, and right 
+censoring. In addition to providing a descriptive overview of these types of 
+censoring, the function `dtms_censoring()` is used to add indicator variables
+to the data which allow to select units or observations with certain types of 
+censoring. This is then used to show the distribution of the last state units 
+occupy before being right-censored:
+```{r censoring2}
 ## Basic censoring
 dtms_censoring(data=estdata,
                dtms=work)
@@ -822,14 +831,23 @@ estdata |>
   subset(subset=to!="Dead",select=c(RIGHT,to)) |>
   table() |>
   prop.table(margin=1)
+```
 
+For the multistate model, three predictors are included: the value of the time
+scale, which measures age; the value of the time scale squared, i.e., age 
+squared, and gender as a binary predictor:
+```{r regressionsetup}
 ## Add age squared
 estdata$time2 <- estdata$time^2
   
 ## Fit model
 fit <- dtms_fit(data=estdata,
                 controls=c("Gender","time","time2"))
+```
 
+The multistate model is used two times to predict transition probabilities.
+One time for women and the other time for men. 
+```{r regressionpredict}
 ## Transition probabilities by gender
   
 # Men
@@ -858,7 +876,13 @@ probs_m |>  dtms_simplify() |>
             geom_ribbon(aes(ymin = cilow, ymax = ciup,fill=to),alpha=0.5) +
             geom_line() + 
             facet_wrap(~from)
- 
+```
+
+Given that there are two sets of transition probabilities in this example, 
+all statistics such as state expectancies can be predicted for each of them.
+To prepare doing so, we calculate the starting distribution for both men and 
+women, and then use the resulting distributions for the state expectancies:
+```{r starting2} 
 ## Starting distributions
 Sm <- dtms_start(dtms=work,
                  data=estdata,
@@ -876,7 +900,14 @@ dtms_expectancy(dtms=work,
 dtms_expectancy(dtms=work,
                 probs=probs_w,
                 start_distr=Sw)
+```
+The results indicate that, for instance, men on average spent 12.4 years 
+working, while for women working life expectancy is 10.5 years. 
 
+The results above include the average lifetime spent working for individuals
+who start in the state retired. While there is few of these, we might want to 
+exclude them, shown here only for men:
+```{r expectancyvariant}
 ## Variant: ignoring retirement as a starting state (shown only for men)
 limited <- c("Working","Non-working")
 
@@ -889,7 +920,11 @@ dtms_expectancy(dtms=work,
                 probs=probs_m,
                 start_state=limited,
                 start_distr=Smwr)
+```
+This does change results only slightly. 
 
+Further, we calculate the lifetime risk of ever reaching retirement:
+```{r lifetime2}
 ## Lifetime risk of reaching retirement
 dtms_risk(dtms=work,
           probs=probs_m,
@@ -900,6 +935,48 @@ dtms_risk(dtms=work,
           probs=probs_w,
           risk="Retired",
           start_distr=Sw)
+```
+As already noted in the first example, consistent estimation of the lifetime
+risk of reaching a state requires a different setup:
+```{r example2lifetime}
+riskdata <- dtms_forward(data=workdata,
+                         state="Retired",
+                         dtms=work,
+                         idvar="ID",
+                         timevar="Age",
+                         statevar="State")
+
+riskdata <- dtms_format(data=riskdata,
+                       dtms=work,
+                       idvar="ID",
+                       timevar="Age",
+                       statevar="State")
+
+riskdata <- dtms_clean(data=riskdata,
+                       dtms=work)
+
+riskdata$time2 <- riskdata$time^2
+
+riskfit <- dtms_fit(data=riskdata,
+                controls=c("Gender","time","time2"),
+                package="mclogit")
+
+riskprobs <- dtms_transitions(dtms=work,
+                            model = riskfit,
+                            controls = list(Gender=0,
+                                            time  =50:98,
+                                            time2 =(50:98)^2),
+                            ci=TRUE)
+
+
+dtms_risk(dtms=work,
+          probs=riskprobs,
+          risk="Retired")
+```
+Also in this example the results are only change slightly.
+
+Some further statistics which can be calculated:
+```{r furthernumbers}
   
 ## Distribution of visits
 visitsm <- dtms_visits(dtms=work,
@@ -961,44 +1038,6 @@ last2w <- dtms_last(dtms=work,
 
 summary(last2m)
 summary(last2w)
-```
-
-As already noted in the first example, consistent estimation of the lifetime
-risk of reaching a state requires a different setup:
-```{r example2lifetime}
-riskdata <- dtms_forward(data=workdata,
-                         state="Retired",
-                         dtms=work,
-                         idvar="ID",
-                         timevar="Age",
-                         statevar="State")
-
-riskdata <- dtms_format(data=riskdata,
-                       dtms=work,
-                       idvar="ID",
-                       timevar="Age",
-                       statevar="State")
-
-riskdata <- dtms_clean(data=riskdata,
-                       dtms=work)
-
-riskdata$time2 <- riskdata$time^2
-
-riskfit <- dtms_fit(data=riskdata,
-                controls=c("Gender","time","time2"),
-                package="mclogit")
-
-riskprobs <- dtms_transitions(dtms=work,
-                            model = riskfit,
-                            controls = list(Gender=0,
-                                            time  =50:98,
-                                            time2 =(50:98)^2),
-                            ci=TRUE)
-
-
-dtms_risk(dtms=work,
-          probs=riskprobs,
-          risk="Retired")
 ```
 
 ### Variance estimation

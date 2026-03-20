@@ -196,8 +196,6 @@ in this shape, there are many tools already available in R which allow
 you to reshape it. An example of data in long format could look like
 this:
 
-    #> Warning: package 'knitr' was built under R version 4.5.2
-
 | idvar | timevar | statevar | X   | Y    |
 |:------|:--------|:---------|:----|:-----|
 | 1     | 0       | A        | 2   | 1020 |
@@ -657,7 +655,6 @@ scale as a control variable:
 ## Fit model 
 fit <- dtms_fit(data=estdata,
                 controls="time")
-#> Warning: package 'VGAM' was built under R version 4.5.2
 ```
 
 To predict transition probabilities, the functions `dtms_transitions()`
@@ -705,7 +702,6 @@ ggplot2, a simple plot could look like this:
 ``` r
 ## Simple plot
 library(ggplot2)
-#> Warning: package 'ggplot2' was built under R version 4.5.2
 probs |>  dtms_simplify() |> 
           ggplot(aes(x=time,y=P,color=to)) + 
           geom_line() + 
@@ -812,7 +808,6 @@ riskdata <- dtms_forward(data=estdata,
 riskfit <- dtms_fit(data=riskdata,
                 controls="time",
                 package="mclogit")
-#> Warning: package 'mclogit' was built under R version 4.5.2
 #> 
 #> Iteration 1 - deviance = 6381.024 - criterion = 0.7477243
 #> Iteration 2 - deviance = 5222.033 - criterion = 0.2219381
@@ -1082,6 +1077,8 @@ using time-constant and time-varying covariates, and the probabilities
 are plotted together with confidence intervals. Finally, the transition
 matrix is used to calculate state expectancies and similar measures.
 
+Basic data editing and handling works very similar to the first example:
+
 ``` r
 ## Load packages
 library(dtms)
@@ -1132,7 +1129,17 @@ summary(estdata)
 #> 10     Working Non-working  2066 0.020705967 0.058738237
 #> 11     Working     Retired  2178 0.021828459 0.061922497
 #> 12     Working     Working 30623 0.306911343 0.870639411
+```
 
+The data shows three types of censoring: left truncation, gaps, and
+right censoring. In addition to providing a descriptive overview of
+these types of censoring, the function `dtms_censoring()` is used to add
+indicator variables to the data which allow to select units or
+observations with certain types of censoring. This is then used to show
+the distribution of the last state units occupy before being
+right-censored:
+
+``` r
 ## Basic censoring
 dtms_censoring(data=estdata,
                dtms=work)
@@ -1157,14 +1164,25 @@ estdata |>
 #> RIGHT   Non-working    Retired    Working
 #>   FALSE  0.13846880 0.51950708 0.34202412
 #>   TRUE   0.07860922 0.73015873 0.19123205
+```
 
+For the multistate model, three predictors are included: the value of
+the time scale, which measures age; the value of the time scale squared,
+i.e., age squared, and gender as a binary predictor:
+
+``` r
 ## Add age squared
 estdata$time2 <- estdata$time^2
   
 ## Fit model
 fit <- dtms_fit(data=estdata,
                 controls=c("Gender","time","time2"))
+```
 
+The multistate model is used two times to predict transition
+probabilities. One time for women and the other time for men.
+
+``` r
 ## Transition probabilities by gender
   
 # Men
@@ -1221,10 +1239,15 @@ probs_m |>  dtms_simplify() |>
             facet_wrap(~from)
 ```
 
-<img src="man/figures/README-example2-1.png" alt="" width="100%" />
+<img src="man/figures/README-regressionpredict-1.png" alt="" width="100%" />
+
+Given that there are two sets of transition probabilities in this
+example, all statistics such as state expectancies can be predicted for
+each of them. To prepare doing so, we calculate the starting
+distribution for both men and women, and then use the resulting
+distributions for the state expectancies:
 
 ``` r
- 
 ## Starting distributions
 Sm <- dtms_start(dtms=work,
                  data=estdata,
@@ -1252,7 +1275,16 @@ dtms_expectancy(dtms=work,
 #> start:Non-working_50  7.445512    8.199122 16.77896 32.42359
 #> start:Retired_50      7.836675    5.486704 18.24103 31.56440
 #> AVERAGE              10.450573    5.607548 16.68838 32.74651
+```
 
+The results indicate that, for instance, men on average spent 12.4 years
+working, while for women working life expectancy is 10.5 years.
+
+The results above include the average lifetime spent working for
+individuals who start in the state retired. While there is few of these,
+we might want to exclude them, shown here only for men:
+
+``` r
 ## Variant: ignoring retirement as a starting state (shown only for men)
 limited <- c("Working","Non-working")
 
@@ -1269,7 +1301,13 @@ dtms_expectancy(dtms=work,
 #> start:Working_50     13.307334    3.074605 13.53758 29.91952
 #> start:Non-working_50  8.782989    6.496935 13.75116 29.03108
 #> AVERAGE              12.650574    3.571394 13.56859 29.79056
+```
 
+This does change results only slightly.
+
+Further, we calculate the lifetime risk of ever reaching retirement:
+
+``` r
 ## Lifetime risk of reaching retirement
 dtms_risk(dtms=work,
           probs=probs_m,
@@ -1284,6 +1322,79 @@ dtms_risk(dtms=work,
           start_distr=Sw)
 #>     Working_50 Non-working_50     Retired_50        AVERAGE AVERAGE(COND.) 
 #>      0.9172407      0.9159547      1.0000000      0.9207352      0.9168268
+```
+
+As already noted in the first example, consistent estimation of the
+lifetime risk of reaching a state requires a different setup:
+
+``` r
+riskdata <- dtms_forward(data=workdata,
+                         state="Retired",
+                         dtms=work,
+                         idvar="ID",
+                         timevar="Age",
+                         statevar="State")
+
+riskdata <- dtms_format(data=riskdata,
+                       dtms=work,
+                       idvar="ID",
+                       timevar="Age",
+                       statevar="State")
+
+riskdata <- dtms_clean(data=riskdata,
+                       dtms=work)
+#> Dropping  0  rows not in state space
+#> Dropping  0  rows not in time range
+#> Dropping  59719  rows starting or ending in NA
+#> Dropping  68319  rows starting in absorbing state
+
+riskdata$time2 <- riskdata$time^2
+
+riskfit <- dtms_fit(data=riskdata,
+                controls=c("Gender","time","time2"),
+                package="mclogit")
+#> 
+#> Iteration 1 - deviance = 85313.14 - criterion = 0.9818182
+#> Iteration 2 - deviance = 73020.05 - criterion = 0.168352
+#> Iteration 3 - deviance = 69050.83 - criterion = 0.05748246
+#> Iteration 4 - deviance = 67662.88 - criterion = 0.02051277
+#> Iteration 5 - deviance = 67164.12 - criterion = 0.007425986
+#> Iteration 6 - deviance = 66917.11 - criterion = 0.003691294
+#> Iteration 7 - deviance = 66805.61 - criterion = 0.001668999
+#> Iteration 8 - deviance = 66778.81 - criterion = 0.0004012381
+#> Iteration 9 - deviance = 66769.97 - criterion = 0.0001324614
+#> Iteration 10 - deviance = 66766.72 - criterion = 4.865712e-05
+#> Iteration 11 - deviance = 66765.53 - criterion = 1.789762e-05
+#> Iteration 12 - deviance = 66765.09 - criterion = 6.583857e-06
+#> Iteration 13 - deviance = 66764.93 - criterion = 2.422023e-06
+#> Iteration 14 - deviance = 66764.87 - criterion = 8.910069e-07
+#> Iteration 15 - deviance = 66764.84 - criterion = 3.277824e-07
+#> Iteration 16 - deviance = 66764.84 - criterion = 1.205843e-07
+#> Iteration 17 - deviance = 66764.83 - criterion = 4.436046e-08
+#> Iteration 18 - deviance = 66764.83 - criterion = 1.63193e-08
+#> Iteration 19 - deviance = 66764.83 - criterion = 6.003535e-09
+#> converged
+
+riskprobs <- dtms_transitions(dtms=work,
+                            model = riskfit,
+                            controls = list(Gender=0,
+                                            time  =50:98,
+                                            time2 =(50:98)^2),
+                            ci=TRUE)
+
+
+dtms_risk(dtms=work,
+          probs=riskprobs,
+          risk="Retired")
+#>     Working_50 Non-working_50     Retired_50 
+#>      0.8861793      0.8951606      1.0000000
+```
+
+Also in this example the results are only change slightly.
+
+Some further statistics which can be calculated:
+
+``` r
   
 ## Distribution of visits
 visitsm <- dtms_visits(dtms=work,
@@ -1401,72 +1512,6 @@ summary(last2w)
 #> AVERAGE(COND.)       20.59143 63.49278 7.968235   20.5    NA
 ```
 
-As already noted in the first example, consistent estimation of the
-lifetime risk of reaching a state requires a different setup:
-
-``` r
-riskdata <- dtms_forward(data=workdata,
-                         state="Retired",
-                         dtms=work,
-                         idvar="ID",
-                         timevar="Age",
-                         statevar="State")
-
-riskdata <- dtms_format(data=riskdata,
-                       dtms=work,
-                       idvar="ID",
-                       timevar="Age",
-                       statevar="State")
-
-riskdata <- dtms_clean(data=riskdata,
-                       dtms=work)
-#> Dropping  0  rows not in state space
-#> Dropping  0  rows not in time range
-#> Dropping  59719  rows starting or ending in NA
-#> Dropping  68319  rows starting in absorbing state
-
-riskdata$time2 <- riskdata$time^2
-
-riskfit <- dtms_fit(data=riskdata,
-                controls=c("Gender","time","time2"),
-                package="mclogit")
-#> 
-#> Iteration 1 - deviance = 85313.14 - criterion = 0.9818182
-#> Iteration 2 - deviance = 73020.05 - criterion = 0.168352
-#> Iteration 3 - deviance = 69050.83 - criterion = 0.05748246
-#> Iteration 4 - deviance = 67662.88 - criterion = 0.02051277
-#> Iteration 5 - deviance = 67164.12 - criterion = 0.007425986
-#> Iteration 6 - deviance = 66917.11 - criterion = 0.003691294
-#> Iteration 7 - deviance = 66805.61 - criterion = 0.001668999
-#> Iteration 8 - deviance = 66778.81 - criterion = 0.0004012381
-#> Iteration 9 - deviance = 66769.97 - criterion = 0.0001324614
-#> Iteration 10 - deviance = 66766.72 - criterion = 4.865712e-05
-#> Iteration 11 - deviance = 66765.53 - criterion = 1.789762e-05
-#> Iteration 12 - deviance = 66765.09 - criterion = 6.583857e-06
-#> Iteration 13 - deviance = 66764.93 - criterion = 2.422023e-06
-#> Iteration 14 - deviance = 66764.87 - criterion = 8.910069e-07
-#> Iteration 15 - deviance = 66764.84 - criterion = 3.277824e-07
-#> Iteration 16 - deviance = 66764.84 - criterion = 1.205843e-07
-#> Iteration 17 - deviance = 66764.83 - criterion = 4.436046e-08
-#> Iteration 18 - deviance = 66764.83 - criterion = 1.63193e-08
-#> Iteration 19 - deviance = 66764.83 - criterion = 6.003535e-09
-#> converged
-
-riskprobs <- dtms_transitions(dtms=work,
-                            model = riskfit,
-                            controls = list(Gender=0,
-                                            time  =50:98,
-                                            time2 =(50:98)^2),
-                            ci=TRUE)
-
-
-dtms_risk(dtms=work,
-          probs=riskprobs,
-          risk="Retired")
-#>     Working_50 Non-working_50     Retired_50 
-#>      0.8861793      0.8951606      1.0000000
-```
-
 ### Variance estimation
 
 To use bootstrap methods, the function `dtms_boot()` is called, and
@@ -1553,25 +1598,25 @@ bootresults <- dtms_boot(data=estdata,
 summary(bootresults)
 #> $`2.5%`
 #>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     13.000324    2.932746 13.14023 29.46295
-#> start:Non-working_50  8.405229    6.277716 13.36748 28.53081
-#> start:Retired_50      8.404152    3.714273 14.70891 27.02384
-#> AVERAGE              12.075854    3.447852 13.25594 29.24701
-#> start:Working_50     11.814636    4.161812 15.95683 32.58606
-#> start:Non-working_50  7.201540    7.923130 16.16669 32.05575
-#> start:Retired_50      7.499214    5.235212 17.52855 30.82060
-#> AVERAGE              10.198003    5.362971 16.09793 32.34996
+#> start:Working_50     13.055922    2.952927 13.13890 29.34265
+#> start:Non-working_50  8.435240    6.282515 13.26868 28.32569
+#> start:Retired_50      8.532655    3.731176 14.63249 26.91795
+#> AVERAGE              12.212384    3.426952 13.21903 29.06120
+#> start:Working_50     11.737646    4.243500 16.07124 32.55549
+#> start:Non-working_50  7.124361    7.982460 16.31468 31.93661
+#> start:Retired_50      7.473138    5.201970 17.74073 30.98675
+#> AVERAGE              10.076564    5.410450 16.22955 32.28078
 #> 
 #> $`97.5%`
 #>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     13.600132    3.243403 14.03877 30.47661
-#> start:Non-working_50  9.205257    6.743438 14.27428 29.70847
-#> start:Retired_50      9.289429    4.140174 15.76366 28.67633
-#> AVERAGE              12.811027    3.769304 14.16594 30.29289
-#> start:Working_50     12.401379    4.537441 16.91605 33.39709
-#> start:Non-working_50  7.848069    8.421233 17.18577 32.86175
-#> start:Retired_50      8.269477    5.745057 18.78081 32.05981
-#> AVERAGE              10.782900    5.814115 17.06544 33.16239
+#> start:Working_50     13.620627    3.232820 13.99816 30.36282
+#> start:Non-working_50  9.185256    6.710907 14.26867 29.55819
+#> start:Retired_50      9.321370    4.093563 15.90095 28.65750
+#> AVERAGE              12.741064    3.742285 14.15228 30.14572
+#> start:Working_50     12.327168    4.611942 17.14617 33.61738
+#> start:Non-working_50  7.731921    8.479196 17.49201 33.18215
+#> start:Retired_50      8.234757    5.829230 18.98348 32.27556
+#> AVERAGE              10.794304    5.832634 17.34771 33.43225
 ```
 
 ## Using dtms with irregular intervals
