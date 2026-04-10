@@ -1285,6 +1285,11 @@ https://doi.org/10.1186/s12963-020-00217-0
 
 Papers using `dtms` for substantive questions:
 
+- Murata, S., Ebeling, M., Ono, R., Maeda, M., Schmidt-Mende, K., Fukuda, H.,
+Modig, K. (2026): Understanding Japan’s mortality advantage: a comparison of 
+mortality in independent and dependent older adults in Japan and Sweden. 
+BMC Medicine 24: 160 . https://doi.org/10.1186/s12916-026-04786-z
+
 - Hiilamo, A., Hermansen, A. (2026): Financial strain in Norway: The lifetime
 risk of and expected time spent in payment problems. International Journal of
 Social Welfare 35(1): e70053. https://doi.org/10.1111/ijsw.70053

@@ -32,7 +32,7 @@ If you use this package in your work, please use the following citation
 (or a variation):
 
 Dudel, C. (2026). dtms: discrete-time multistate models in R. R package
-version 0.4.2, available at <https://CRAN.R-project.org/package=dtms>
+version 0.4.3, available at <https://CRAN.R-project.org/package=dtms>
 
 ## Overview
 
@@ -195,6 +195,8 @@ The input data has to be panel data in long format. If your data is not
 in this shape, there are many tools already available in R which allow
 you to reshape it. An example of data in long format could look like
 this:
+
+    #> Warning: package 'knitr' was built under R version 4.5.2
 
 | idvar | timevar | statevar | X   | Y    |
 |:------|:--------|:---------|:----|:-----|
@@ -655,6 +657,7 @@ scale as a control variable:
 ## Fit model 
 fit <- dtms_fit(data=estdata,
                 controls="time")
+#> Warning: package 'VGAM' was built under R version 4.5.2
 ```
 
 To predict transition probabilities, the functions `dtms_transitions()`
@@ -702,6 +705,7 @@ ggplot2, a simple plot could look like this:
 ``` r
 ## Simple plot
 library(ggplot2)
+#> Warning: package 'ggplot2' was built under R version 4.5.2
 probs |>  dtms_simplify() |> 
           ggplot(aes(x=time,y=P,color=to)) + 
           geom_line() + 
@@ -808,6 +812,7 @@ riskdata <- dtms_forward(data=estdata,
 riskfit <- dtms_fit(data=riskdata,
                 controls="time",
                 package="mclogit")
+#> Warning: package 'mclogit' was built under R version 4.5.2
 #> 
 #> Iteration 1 - deviance = 6381.024 - criterion = 0.7477243
 #> Iteration 2 - deviance = 5222.033 - criterion = 0.2219381
@@ -1598,25 +1603,25 @@ bootresults <- dtms_boot(data=estdata,
 summary(bootresults)
 #> $`2.5%`
 #>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     13.055922    2.952927 13.13890 29.34265
-#> start:Non-working_50  8.435240    6.282515 13.26868 28.32569
-#> start:Retired_50      8.532655    3.731176 14.63249 26.91795
-#> AVERAGE              12.212384    3.426952 13.21903 29.06120
-#> start:Working_50     11.737646    4.243500 16.07124 32.55549
-#> start:Non-working_50  7.124361    7.982460 16.31468 31.93661
-#> start:Retired_50      7.473138    5.201970 17.74073 30.98675
-#> AVERAGE              10.076564    5.410450 16.22955 32.28078
+#> start:Working_50     13.038505    2.933706 13.20791 29.52405
+#> start:Non-working_50  8.428784    6.248844 13.38248 28.54502
+#> start:Retired_50      8.433561    3.719091 14.77862 27.37830
+#> AVERAGE              12.187776    3.432048 13.33213 29.25940
+#> start:Working_50     11.774483    4.174003 16.10303 32.62255
+#> start:Non-working_50  7.174588    7.898512 16.29961 31.95075
+#> start:Retired_50      7.468434    5.173561 17.66809 30.96167
+#> AVERAGE              10.183329    5.335064 16.23550 32.36366
 #> 
 #> $`97.5%`
 #>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     13.620627    3.232820 13.99816 30.36282
-#> start:Non-working_50  9.185256    6.710907 14.26867 29.55819
-#> start:Retired_50      9.321370    4.093563 15.90095 28.65750
-#> AVERAGE              12.741064    3.742285 14.15228 30.14572
-#> start:Working_50     12.327168    4.611942 17.14617 33.61738
-#> start:Non-working_50  7.731921    8.479196 17.49201 33.18215
-#> start:Retired_50      8.234757    5.829230 18.98348 32.27556
-#> AVERAGE              10.794304    5.832634 17.34771 33.43225
+#> start:Working_50     13.492759    3.235119 14.05370 30.35326
+#> start:Non-working_50  9.153764    6.744638 14.28289 29.50308
+#> start:Retired_50      9.260707    4.115135 15.77267 28.48303
+#> AVERAGE              12.679800    3.770007 14.18415 30.15079
+#> start:Working_50     12.353036    4.562575 17.01163 33.45389
+#> start:Non-working_50  7.738697    8.398472 17.27149 32.95534
+#> start:Retired_50      8.172480    5.718638 18.74830 32.15387
+#> AVERAGE              10.767955    5.836947 17.16792 33.23887
 ```
 
 ## Using dtms with irregular intervals
@@ -1802,6 +1807,12 @@ Methodological papers:
   Health Metrics 18: 15. <https://doi.org/10.1186/s12963-020-00217-0>
 
 Papers using `dtms` for substantive questions:
+
+- Murata, S., Ebeling, M., Ono, R., Maeda, M., Schmidt-Mende, K.,
+  Fukuda, H., Modig, K. (2026): Understanding Japan’s mortality
+  advantage: a comparison of mortality in independent and dependent
+  older adults in Japan and Sweden. BMC Medicine 24: 160 .
+  <https://doi.org/10.1186/s12916-026-04786-z>
 
 - Hiilamo, A., Hermansen, A. (2026): Financial strain in Norway: The
   lifetime risk of and expected time spent in payment problems.
