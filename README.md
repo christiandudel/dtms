@@ -32,7 +32,7 @@ If you use this package in your work, please use the following citation
 (or a variation):
 
 Dudel, C. (2026). dtms: discrete-time multistate models in R. R package
-version 0.4.3, available at <https://CRAN.R-project.org/package=dtms>
+version 0.4.4, available at <https://CRAN.R-project.org/package=dtms>
 
 ## Overview
 
@@ -642,7 +642,7 @@ number of units with right censoring:
 dtms_censoring(data=estdata,
                dtms=simple)
 #> Units with left censoring:  242 
-#> Units with gaps:  196 
+#> Units with gaps:  30 
 #> Units with right censoring:  325
 ```
 
@@ -1149,7 +1149,7 @@ right-censored:
 dtms_censoring(data=estdata,
                dtms=work)
 #> Units with left censoring:  2036 
-#> Units with gaps:  1720 
+#> Units with gaps:  93 
 #> Units with right censoring:  1323
 
 ## More advanced censoring example
@@ -1158,7 +1158,7 @@ estdata <- dtms_censoring(data=estdata,
                           add=TRUE,
                           addtype="obs")
 #> Units with left censoring:  2036 
-#> Units with gaps:  1720 
+#> Units with gaps:  93 
 #> Units with right censoring:  1323
 
 estdata |>
@@ -1603,25 +1603,25 @@ bootresults <- dtms_boot(data=estdata,
 summary(bootresults)
 #> $`2.5%`
 #>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     13.038505    2.933706 13.20791 29.52405
-#> start:Non-working_50  8.428784    6.248844 13.38248 28.54502
-#> start:Retired_50      8.433561    3.719091 14.77862 27.37830
-#> AVERAGE              12.187776    3.432048 13.33213 29.25940
-#> start:Working_50     11.774483    4.174003 16.10303 32.62255
-#> start:Non-working_50  7.174588    7.898512 16.29961 31.95075
-#> start:Retired_50      7.468434    5.173561 17.66809 30.96167
-#> AVERAGE              10.183329    5.335064 16.23550 32.36366
+#> start:Working_50     13.072259    2.938360 13.11234 29.36529
+#> start:Non-working_50  8.497198    6.270247 13.27793 28.39367
+#> start:Retired_50      8.408970    3.705670 14.60286 27.10539
+#> AVERAGE              12.226900    3.439973 13.21536 29.11143
+#> start:Working_50     11.672485    4.229545 16.20602 32.62371
+#> start:Non-working_50  7.046492    7.960528 16.46683 32.01989
+#> start:Retired_50      7.446438    5.228206 17.79683 30.99821
+#> AVERAGE              10.061092    5.422133 16.35932 32.36383
 #> 
 #> $`97.5%`
 #>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     13.492759    3.235119 14.05370 30.35326
-#> start:Non-working_50  9.153764    6.744638 14.28289 29.50308
-#> start:Retired_50      9.260707    4.115135 15.77267 28.48303
-#> AVERAGE              12.679800    3.770007 14.18415 30.15079
-#> start:Working_50     12.353036    4.562575 17.01163 33.45389
-#> start:Non-working_50  7.738697    8.398472 17.27149 32.95534
-#> start:Retired_50      8.172480    5.718638 18.74830 32.15387
-#> AVERAGE              10.767955    5.836947 17.16792 33.23887
+#> start:Working_50     13.595938    3.165286 14.02838 30.37175
+#> start:Non-working_50  9.100973    6.617815 14.27787 29.53194
+#> start:Retired_50      9.185850    4.064242 15.80937 28.70400
+#> AVERAGE              12.729003    3.720703 14.16234 30.16162
+#> start:Working_50     12.405403    4.649069 16.92542 33.40701
+#> start:Non-working_50  7.778372    8.526437 17.21372 32.91966
+#> start:Retired_50      8.103578    5.811997 18.80339 32.15908
+#> AVERAGE              10.707864    5.890394 17.09666 33.18848
 ```
 
 ## Using dtms with irregular intervals

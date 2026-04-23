@@ -81,7 +81,7 @@ dtms_censoring <- function(data,
   # Check for gaps
   gap <- by(data[,timevar],
             data[,idvar],
-            FUN=function(x) any(diff(x)!=dtms$timestep))
+            FUN=function(x) !any(diff(x)%in%dtms$timestep))
 
   # Check for right censoring
   right1 <- by(data[,tovar],
@@ -139,10 +139,10 @@ dtms_censoring <- function(data,
                  return(c(first,rest))
                  })
 
-    # GGaps
+    # Gaps
     gap <- by(data[,timevar],
               data[,idvar],
-              FUN=function(x) c(diff(x)!=dtms$timestep,FALSE))
+              FUN=function(x) c(!diff(x)%in%dtms$timestep,FALSE))
 
     # Right censoring: Last state is not absorbing
     right1 <- by(data[,tovar],
