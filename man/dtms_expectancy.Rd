@@ -71,7 +71,7 @@ and visits are only equal under certain conditions; in particular, only if
 transitions between states happen mid-interval and the step length of the
 time scale is equal to one. The first correction will remove a certain amount
 of time spent in a certain state if its equal to the starting state. This is
-controlled with the argument `correction` which is applied multiplicative.
+controlled with the argument `correction` which is subtracted.
 For instance, its default value 0.5 means that the state expectancy in some
 state X starting from state X is reduced by 0.5 time steps. The second
 correction uses the entry `timestep` of `dtms`, and multiplies results with its value.
