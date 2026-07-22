@@ -1,3 +1,8 @@
+# Version 0.5.0, 22 July 2026
+
+* Added function dtms_impute
+* Minor fix in the help for dtms_matrix
+
 # Version 0.4.4, 23 April 2026
 
 * Fixed bug in dtms_censoring which occured when the argument 'addtype' was set to 'obs' and the timescale had variable steplength

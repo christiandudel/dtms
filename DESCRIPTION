@@ -1,7 +1,7 @@
 Package: dtms
 Type: Package
 Title: Discrete-Time Multistate Models
-Version: 0.4.4
+Version: 0.5.0
 Authors@R: person(given = "Christian",
                     family = "Dudel",
                     role = c("aut", "cre"),

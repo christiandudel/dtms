@@ -4,7 +4,7 @@
 #' This function creates a transition matrix based on transition probabilities
 #' predicted using the function `dtms_transitions`.
 #'
-#' @param probs Data frame with transition probabilities, as created with \code{dtms_transitions}.
+#' @param probs Data frame with transition probabilities, as created with \code{dtms_transitions} or \code{dtms_nonparametric}.
 #' @param dtms dtms object, as created with \code{dtms}.
 #' @param fromvar Character (optional), name of variable in `probs` with starting state. Default is "from".
 #' @param tovar Character (optional), name of variable in `probs` with receiving state. Default is "to".

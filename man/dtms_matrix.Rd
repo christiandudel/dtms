@@ -16,7 +16,7 @@ dtms_matrix(
 )
 }
 \arguments{
-\item{probs}{Data frame with transition probabilities, as created with \code{dtms_transitions}.}
+\item{probs}{Data frame with transition probabilities, as created with \code{dtms_transitions} or \code{dtms_nonparametric}.}
 
 \item{dtms}{dtms object, as created with \code{dtms}.}
 
