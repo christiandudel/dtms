@@ -13,6 +13,7 @@ dtms_nonparametric(
   Pvar = "P",
   weights = NULL,
   se = TRUE,
+  vcov = FALSE,
   ci = FALSE,
   alpha = 0.05
 )
@@ -33,6 +34,8 @@ dtms_nonparametric(
 \item{weights}{Character (optional). Name of variable with survey weights.}
 
 \item{se}{Logical (optional), return standard errors of predicted probabilities. Default is `TRUE`.}
+
+\item{vcov}{Logical (optional), return variance-covariance matrix of predicted probabilities. Default is `FALSE`.}
 
 \item{ci}{Logical (optional), return confidence intervals? See details. Default is FALSE.}
 
