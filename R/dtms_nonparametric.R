@@ -18,6 +18,7 @@
 #' @param Pvar Character (optional), name of variable with transition probabilities in the returned data frame. Default is `P`.
 #' @param weights Character (optional). Name of variable with survey weights.
 #' @param se Logical (optional), return standard errors of predicted probabilities. Default is `TRUE`.
+#' @param vcov Logical (optional), return variance-covariance matrix of predicted probabilities. Default is `FALSE`.
 #' @param ci Logical (optional), return confidence intervals? See details. Default is FALSE.
 #' @param alpha Numeric (optional), if ci=TRUE, what confidence level is used? Default is 0.05.
 #'
@@ -50,6 +51,7 @@ dtms_nonparametric <- function(data,
                                Pvar="P",
                                weights=NULL,
                                se=TRUE,
+                               vcov=FALSE,
                                ci=FALSE,
                                alpha=0.05) {
 
@@ -100,18 +102,37 @@ dtms_nonparametric <- function(data,
   model_frame[,Pvar] <- model_frame$COUNT.x/model_frame$COUNT.y
 
   # Standard error/confidence interval/vcov?
-  if(se|ci) {
+  if(se|ci|vcov) {
 
     P <- model_frame$P
     N <- model_frame$COUNT.y
     error <- sqrt( (P*(1-P))/N)
 
+    # Standard errors
     if(se) model_frame$se <- error
+
+    # Confidence intervals
     if(ci) {
       z <- (1-alpha/2)
       z <- stats::qnorm(z)
       model_frame$cilow <- model_frame[,Pvar]-z*error
       model_frame$ciup <- model_frame[,Pvar]+z*error
+    }
+
+    # Variance matrix
+    if(vcov) {
+
+      # Matrix
+      covmat <- diag(error)
+
+      # Names
+      rowcols <- paste(model_frame[,fromvar],model_frame[,timevar],sep=dtms$sep)
+      rowcols <- paste(rowcols,model_frame[,tovar],sep=".")
+      rownames(covmat) <- rowcols
+      colnames(covmat) <- rowcols
+
+      # Return
+      return(covmat)
 
     }
 
