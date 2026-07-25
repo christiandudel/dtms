@@ -81,7 +81,7 @@ dtms_censoring <- function(data,
   # Check for gaps
   gap <- by(data[,timevar],
             data[,idvar],
-            FUN=function(x) !any(diff(x)%in%dtms$timestep))
+            FUN=function(x) any(!diff(x)%in%dtms$timestep))
 
   # Check for right censoring
   right1 <- by(data[,tovar],

@@ -1,3 +1,7 @@
+# Version 0.5.1, 25 July 2026
+
+* Fixed bug in dtms_censoring which led to gaps being not flagged correctly. Thanks to Andreas Ljungström (https://github.com/andreasljungstrm) for finding and fixing. 
+
 # Version 0.5.0, 22 July 2026
 
 * Added function dtms_impute
