@@ -31,9 +31,10 @@ changed without warning.
 
 ## Acknowledgements
 
-We thank Peng Li,  Alessandro Feraldi, Aapo Hiilamo, Daniel Schneider, 
-Donata Stonkute, Marcus Ebeling, Flavia Mazzeo, and Angelo Lorenti for helpful 
-comments, suggestions, and code snippets. All errors remain our own.
+We thank Peng Li, Andreas Ljungström, Alessandro Feraldi, Aapo Hiilamo, 
+Daniel Schneider, Donata Stonkute, Marcus Ebeling, Flavia Mazzeo, and Angelo 
+Lorenti for helpful comments, suggestions, and code snippets. 
+All errors remain our own.
 
 ## Citation
 
