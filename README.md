@@ -8,7 +8,7 @@
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 <!-- badges: end -->
 
-## Authors
+## Author
 
 Christian Dudel, <dudel@demogr.mpg.de>
 
@@ -21,10 +21,10 @@ be removed or changed without warning.
 
 ## Acknowledgements
 
-We thank Peng Li, Alessandro Feraldi, Aapo Hiilamo, Daniel Schneider,
-Donata Stonkute, Marcus Ebeling, Flavia Mazzeo, and Angelo Lorenti for
-helpful comments, suggestions, and code snippets. All errors remain our
-own.
+We thank Peng Li, Andreas Ljungström, Alessandro Feraldi, Aapo Hiilamo,
+Daniel Schneider, Donata Stonkute, Marcus Ebeling, Flavia Mazzeo, and
+Angelo Lorenti for helpful comments, suggestions, and code snippets. All
+errors remain our own.
 
 ## Citation
 
@@ -32,7 +32,7 @@ If you use this package in your work, please use the following citation
 (or a variation):
 
 Dudel, C. (2026). dtms: discrete-time multistate models in R. R package
-version 0.4.4, available at <https://CRAN.R-project.org/package=dtms>
+version 0.5.1, available at <https://CRAN.R-project.org/package=dtms>
 
 ## Overview
 
@@ -195,8 +195,6 @@ The input data has to be panel data in long format. If your data is not
 in this shape, there are many tools already available in R which allow
 you to reshape it. An example of data in long format could look like
 this:
-
-    #> Warning: package 'knitr' was built under R version 4.5.2
 
 | idvar | timevar | statevar | X   | Y    |
 |:------|:--------|:---------|:----|:-----|
@@ -642,7 +640,7 @@ number of units with right censoring:
 dtms_censoring(data=estdata,
                dtms=simple)
 #> Units with left censoring:  242 
-#> Units with gaps:  30 
+#> Units with gaps:  196 
 #> Units with right censoring:  325
 ```
 
@@ -657,7 +655,6 @@ scale as a control variable:
 ## Fit model 
 fit <- dtms_fit(data=estdata,
                 controls="time")
-#> Warning: package 'VGAM' was built under R version 4.5.2
 ```
 
 To predict transition probabilities, the functions `dtms_transitions()`
@@ -705,7 +702,6 @@ ggplot2, a simple plot could look like this:
 ``` r
 ## Simple plot
 library(ggplot2)
-#> Warning: package 'ggplot2' was built under R version 4.5.2
 probs |>  dtms_simplify() |> 
           ggplot(aes(x=time,y=P,color=to)) + 
           geom_line() + 
@@ -812,7 +808,6 @@ riskdata <- dtms_forward(data=estdata,
 riskfit <- dtms_fit(data=riskdata,
                 controls="time",
                 package="mclogit")
-#> Warning: package 'mclogit' was built under R version 4.5.2
 #> 
 #> Iteration 1 - deviance = 6381.024 - criterion = 0.7477243
 #> Iteration 2 - deviance = 5222.033 - criterion = 0.2219381
@@ -1149,7 +1144,7 @@ right-censored:
 dtms_censoring(data=estdata,
                dtms=work)
 #> Units with left censoring:  2036 
-#> Units with gaps:  93 
+#> Units with gaps:  1720 
 #> Units with right censoring:  1323
 
 ## More advanced censoring example
@@ -1158,7 +1153,7 @@ estdata <- dtms_censoring(data=estdata,
                           add=TRUE,
                           addtype="obs")
 #> Units with left censoring:  2036 
-#> Units with gaps:  93 
+#> Units with gaps:  1720 
 #> Units with right censoring:  1323
 
 estdata |>
@@ -1603,25 +1598,25 @@ bootresults <- dtms_boot(data=estdata,
 summary(bootresults)
 #> $`2.5%`
 #>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     13.072259    2.938360 13.11234 29.36529
-#> start:Non-working_50  8.497198    6.270247 13.27793 28.39367
-#> start:Retired_50      8.408970    3.705670 14.60286 27.10539
-#> AVERAGE              12.226900    3.439973 13.21536 29.11143
-#> start:Working_50     11.672485    4.229545 16.20602 32.62371
-#> start:Non-working_50  7.046492    7.960528 16.46683 32.01989
-#> start:Retired_50      7.446438    5.228206 17.79683 30.99821
-#> AVERAGE              10.061092    5.422133 16.35932 32.36383
+#> start:Working_50     12.927013    2.926815 13.12499 29.50005
+#> start:Non-working_50  8.379997    6.249839 13.31758 28.50869
+#> start:Retired_50      8.309908    3.661585 14.71665 27.36089
+#> AVERAGE              12.085675    3.396751 13.22121 29.26318
+#> start:Working_50     11.746423    4.242409 16.02331 32.41594
+#> start:Non-working_50  7.089458    7.958505 16.24319 31.85635
+#> start:Retired_50      7.493167    5.295304 17.65727 30.92006
+#> AVERAGE              10.129570    5.410960 16.16395 32.18303
 #> 
 #> $`97.5%`
 #>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     13.595938    3.165286 14.02838 30.37175
-#> start:Non-working_50  9.100973    6.617815 14.27787 29.53194
-#> start:Retired_50      9.185850    4.064242 15.80937 28.70400
-#> AVERAGE              12.729003    3.720703 14.16234 30.16162
-#> start:Working_50     12.405403    4.649069 16.92542 33.40701
-#> start:Non-working_50  7.778372    8.526437 17.21372 32.91966
-#> start:Retired_50      8.103578    5.811997 18.80339 32.15908
-#> AVERAGE              10.707864    5.890394 17.09666 33.18848
+#> start:Working_50     13.691408    3.209433 14.07321 30.59426
+#> start:Non-working_50  9.267138    6.706393 14.34195 29.69719
+#> start:Retired_50      9.222991    4.075414 15.80977 28.64644
+#> AVERAGE              12.873418    3.716480 14.22033 30.36201
+#> start:Working_50     12.343113    4.587753 17.01501 33.45482
+#> start:Non-working_50  7.702124    8.415045 17.29195 32.87833
+#> start:Retired_50      8.197339    5.728919 18.87319 32.09575
+#> AVERAGE              10.739118    5.807206 17.18755 33.20594
 ```
 
 ## Using dtms with irregular intervals
