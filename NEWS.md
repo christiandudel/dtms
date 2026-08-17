@@ -14,7 +14,7 @@
 
 # Version 0.4.4, 23 April 2026
 
-* Fixed bug in dtms_censoring which occured when the argument 'addtype' was set to 'obs' and the timescale had variable steplength
+* Fixed bug in dtms_censoring which occurred when the argument 'addtype' was set to 'obs' and the timescale had variable steplength
 
 # Version 0.4.3, 25 Feb 2026
 
