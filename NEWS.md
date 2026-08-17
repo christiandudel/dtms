@@ -1,4 +1,4 @@
-# Version 0.5.1, 17 August 2026
+# Version 0.5.2, 17 August 2026
 
 * Fixed help page of data set 'workdata'
 
