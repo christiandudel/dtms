@@ -1286,6 +1286,17 @@ https://doi.org/10.1186/s12963-020-00217-0
 
 Papers using `dtms` for substantive questions:
 
+- Hiilamo, A., Fugletveit, R., Pitkänen, J., Moretti, M., Martikainen, P., 
+Hermansen, A., Myrskylä, M. (2026): Children´s out-of-home care across Finnish 
+and Norwegian regions: lifetime risks, expected length, and care leaving routes 
+for synthetic cohorts. MPIDR Working Paper 2026-001. 
+https://doi.org/10.4054/MPIDR-WP-2026-001
+
+- Bramajo, O., Chakraborty, M., Lisabeth, L., Mehta, N. (2026): Changes in Life 
+Expectancy After Stroke Among Americans Aged 50 and Above by Sex, 1996–2018.
+Journal of the American Geriatrics Society 74: 2583-2594. 
+https://doi.org/10.1111/jgs.70585
+
 - Murata, S., Ebeling, M., Ono, R., Maeda, M., Schmidt-Mende, K., Fukuda, H.,
 Modig, K. (2026): Understanding Japan’s mortality advantage: a comparison of 
 mortality in independent and dependent older adults in Japan and Sweden. 

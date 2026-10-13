@@ -32,7 +32,7 @@ If you use this package in your work, please use the following citation
 (or a variation):
 
 Dudel, C. (2026). dtms: discrete-time multistate models in R. R package
-version 0.5.1, available at <https://CRAN.R-project.org/package=dtms>
+version 0.4.4, available at <https://CRAN.R-project.org/package=dtms>
 
 ## Overview
 
@@ -195,6 +195,8 @@ The input data has to be panel data in long format. If your data is not
 in this shape, there are many tools already available in R which allow
 you to reshape it. An example of data in long format could look like
 this:
+
+    #> Warning: package 'knitr' was built under R version 4.5.2
 
 | idvar | timevar | statevar | X   | Y    |
 |:------|:--------|:---------|:----|:-----|
@@ -640,7 +642,7 @@ number of units with right censoring:
 dtms_censoring(data=estdata,
                dtms=simple)
 #> Units with left censoring:  242 
-#> Units with gaps:  196 
+#> Units with gaps:  30 
 #> Units with right censoring:  325
 ```
 
@@ -655,6 +657,7 @@ scale as a control variable:
 ## Fit model 
 fit <- dtms_fit(data=estdata,
                 controls="time")
+#> Warning: package 'VGAM' was built under R version 4.5.2
 ```
 
 To predict transition probabilities, the functions `dtms_transitions()`
@@ -702,6 +705,7 @@ ggplot2, a simple plot could look like this:
 ``` r
 ## Simple plot
 library(ggplot2)
+#> Warning: package 'ggplot2' was built under R version 4.5.2
 probs |>  dtms_simplify() |> 
           ggplot(aes(x=time,y=P,color=to)) + 
           geom_line() + 
@@ -808,6 +812,7 @@ riskdata <- dtms_forward(data=estdata,
 riskfit <- dtms_fit(data=riskdata,
                 controls="time",
                 package="mclogit")
+#> Warning: package 'mclogit' was built under R version 4.5.2
 #> 
 #> Iteration 1 - deviance = 6381.024 - criterion = 0.7477243
 #> Iteration 2 - deviance = 5222.033 - criterion = 0.2219381
@@ -1144,7 +1149,7 @@ right-censored:
 dtms_censoring(data=estdata,
                dtms=work)
 #> Units with left censoring:  2036 
-#> Units with gaps:  1720 
+#> Units with gaps:  93 
 #> Units with right censoring:  1323
 
 ## More advanced censoring example
@@ -1153,7 +1158,7 @@ estdata <- dtms_censoring(data=estdata,
                           add=TRUE,
                           addtype="obs")
 #> Units with left censoring:  2036 
-#> Units with gaps:  1720 
+#> Units with gaps:  93 
 #> Units with right censoring:  1323
 
 estdata |>
@@ -1598,25 +1603,25 @@ bootresults <- dtms_boot(data=estdata,
 summary(bootresults)
 #> $`2.5%`
 #>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     12.927013    2.926815 13.12499 29.50005
-#> start:Non-working_50  8.379997    6.249839 13.31758 28.50869
-#> start:Retired_50      8.309908    3.661585 14.71665 27.36089
-#> AVERAGE              12.085675    3.396751 13.22121 29.26318
-#> start:Working_50     11.746423    4.242409 16.02331 32.41594
-#> start:Non-working_50  7.089458    7.958505 16.24319 31.85635
-#> start:Retired_50      7.493167    5.295304 17.65727 30.92006
-#> AVERAGE              10.129570    5.410960 16.16395 32.18303
+#> start:Working_50     13.085384    2.929678 13.13742 29.47445
+#> start:Non-working_50  8.505089    6.247470 13.27658 28.38360
+#> start:Retired_50      8.471386    3.660066 14.63505 26.93967
+#> AVERAGE              12.161989    3.442988 13.23906 29.17375
+#> start:Working_50     11.760404    4.208327 16.12476 32.48265
+#> start:Non-working_50  7.175245    7.953921 16.29830 31.83425
+#> start:Retired_50      7.447429    5.226869 17.71743 30.79245
+#> AVERAGE              10.149853    5.384558 16.25315 32.20291
 #> 
 #> $`97.5%`
 #>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     13.691408    3.209433 14.07321 30.59426
-#> start:Non-working_50  9.267138    6.706393 14.34195 29.69719
-#> start:Retired_50      9.222991    4.075414 15.80977 28.64644
-#> AVERAGE              12.873418    3.716480 14.22033 30.36201
-#> start:Working_50     12.343113    4.587753 17.01501 33.45482
-#> start:Non-working_50  7.702124    8.415045 17.29195 32.87833
-#> start:Retired_50      8.197339    5.728919 18.87319 32.09575
-#> AVERAGE              10.739118    5.807206 17.18755 33.20594
+#> start:Working_50     13.618401    3.238217 13.91723 30.52349
+#> start:Non-working_50  9.184928    6.755361 14.24023 29.70910
+#> start:Retired_50      9.263717    4.123826 15.93744 28.81617
+#> AVERAGE              12.785645    3.799853 14.07501 30.31841
+#> start:Working_50     12.302272    4.582055 16.85688 33.40146
+#> start:Non-working_50  7.696658    8.445585 17.12666 32.90033
+#> start:Retired_50      8.154865    5.728443 18.72122 32.06785
+#> AVERAGE              10.772009    5.826577 17.02615 33.19207
 ```
 
 ## Using dtms with irregular intervals
@@ -1802,6 +1807,17 @@ Methodological papers:
   Health Metrics 18: 15. <https://doi.org/10.1186/s12963-020-00217-0>
 
 Papers using `dtms` for substantive questions:
+
+- Hiilamo, A., Fugletveit, R., Pitkänen, J., Moretti, M., Martikainen,
+  P., Hermansen, A., Myrskylä, M. (2026): Children´s out-of-home care
+  across Finnish and Norwegian regions: lifetime risks, expected length,
+  and care leaving routes for synthetic cohorts. MPIDR Working Paper
+  2026-001. <https://doi.org/10.4054/MPIDR-WP-2026-001>
+
+- Bramajo, O., Chakraborty, M., Lisabeth, L., Mehta, N. (2026): Changes
+  in Life Expectancy After Stroke Among Americans Aged 50 and Above by
+  Sex, 1996–2018. Journal of the American Geriatrics Society 74:
+  2583-2594. <https://doi.org/10.1111/jgs.70585>
 
 - Murata, S., Ebeling, M., Ono, R., Maeda, M., Schmidt-Mende, K.,
   Fukuda, H., Modig, K. (2026): Understanding Japan’s mortality
