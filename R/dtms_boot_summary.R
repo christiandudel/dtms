@@ -17,6 +17,7 @@
 #' @param boot Object created with \code{dtms_boot()}.
 #' @param probs Numeric (optional), vector of percentiles. Default is NULL.
 #' @param alpha Numeric (optional), confidence level. Default is 0.05.
+#' @param na.rm Logical (optional) if true, any NA and NaN's are removed from boot before the quantiles are computed.	Default is FALSE.
 #'
 #' @return Either a vector or a matrix.
 #' @export
@@ -55,7 +56,10 @@
 #' summary(bootstrap,
 #'         probs=c(0.025,0.5,0.975))
 
-dtms_boot_summary <- function(boot,probs=NULL,alpha=0.05) {
+dtms_boot_summary <- function(boot,
+                              probs=NULL,
+                              alpha=0.05,
+                              na.rm=FALSE) {
 
   # Get class
   what <- class(boot[[1]] )[1]
@@ -93,7 +97,7 @@ dtms_boot_summary <- function(boot,probs=NULL,alpha=0.05) {
     for(row in 1:dimwhat[1]) {
       for(col in 1:dimwhat[2]) {
         values <- unlist(lapply(boot,function(x) x[row,col]))
-        values <- stats::quantile(values,probs=probs)
+        values <- stats::quantile(values,probs=probs,na.rm=na.rm)
         for(val in names(values)) result[[val]][row,col] <- values[val]
       }
     }

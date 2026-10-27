@@ -4,7 +4,7 @@
 \alias{dtms_boot_summary}
 \title{Summary function for bootstrap results}
 \usage{
-dtms_boot_summary(boot, probs = NULL, alpha = 0.05)
+dtms_boot_summary(boot, probs = NULL, alpha = 0.05, na.rm = FALSE)
 }
 \arguments{
 \item{boot}{Object created with \code{dtms_boot()}.}
@@ -12,6 +12,8 @@ dtms_boot_summary(boot, probs = NULL, alpha = 0.05)
 \item{probs}{Numeric (optional), vector of percentiles. Default is NULL.}
 
 \item{alpha}{Numeric (optional), confidence level. Default is 0.05.}
+
+\item{na.rm}{Logical (optional) if true, any NA and NaN's are removed from boot before the quantiles are computed.    Default is FALSE.}
 }
 \value{
 Either a vector or a matrix.

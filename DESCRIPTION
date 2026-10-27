@@ -1,7 +1,7 @@
 Package: dtms
 Type: Package
 Title: Discrete-Time Multistate Models
-Version: 0.5.1
+Version: 0.5.2
 Authors@R: person(given = "Christian",
                     family = "Dudel",
                     role = c("aut", "cre"),
@@ -23,3 +23,4 @@ Imports:
     markovchain,
     methods
 Config/roxygen2/version: 8.0.0
+RoxygenNote: 7.3.3
