@@ -1286,6 +1286,11 @@ https://doi.org/10.1186/s12963-020-00217-0
 
 Papers using `dtms` for substantive questions:
 
+- Jeglinsky-Kankainen, I., Hiilamo, A., Keski-Säntti, M., Gissler, M., 
+Ahonen, M. (2026): Working-life expectancy in people with cerebral palsy in 
+Finland. Developmental Medicine & Child Neurolology, 1–10. 
+https://doi.org/10.1111/dmcn.70582
+
 - Hiilamo, A., Fugletveit, R., Pitkänen, J., Moretti, M., Martikainen, P., 
 Hermansen, A., Myrskylä, M. (2026): Children´s out-of-home care across Finnish 
 and Norwegian regions: lifetime risks, expected length, and care leaving routes 

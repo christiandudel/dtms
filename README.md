@@ -32,7 +32,7 @@ If you use this package in your work, please use the following citation
 (or a variation):
 
 Dudel, C. (2026). dtms: discrete-time multistate models in R. R package
-version 0.4.4, available at <https://CRAN.R-project.org/package=dtms>
+version 0.5.2, available at <https://CRAN.R-project.org/package=dtms>
 
 ## Overview
 
@@ -642,7 +642,7 @@ number of units with right censoring:
 dtms_censoring(data=estdata,
                dtms=simple)
 #> Units with left censoring:  242 
-#> Units with gaps:  30 
+#> Units with gaps:  196 
 #> Units with right censoring:  325
 ```
 
@@ -1149,7 +1149,7 @@ right-censored:
 dtms_censoring(data=estdata,
                dtms=work)
 #> Units with left censoring:  2036 
-#> Units with gaps:  93 
+#> Units with gaps:  1720 
 #> Units with right censoring:  1323
 
 ## More advanced censoring example
@@ -1158,7 +1158,7 @@ estdata <- dtms_censoring(data=estdata,
                           add=TRUE,
                           addtype="obs")
 #> Units with left censoring:  2036 
-#> Units with gaps:  93 
+#> Units with gaps:  1720 
 #> Units with right censoring:  1323
 
 estdata |>
@@ -1603,25 +1603,25 @@ bootresults <- dtms_boot(data=estdata,
 summary(bootresults)
 #> $`2.5%`
 #>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     13.085384    2.929678 13.13742 29.47445
-#> start:Non-working_50  8.505089    6.247470 13.27658 28.38360
-#> start:Retired_50      8.471386    3.660066 14.63505 26.93967
-#> AVERAGE              12.161989    3.442988 13.23906 29.17375
-#> start:Working_50     11.760404    4.208327 16.12476 32.48265
-#> start:Non-working_50  7.175245    7.953921 16.29830 31.83425
-#> start:Retired_50      7.447429    5.226869 17.71743 30.79245
-#> AVERAGE              10.149853    5.384558 16.25315 32.20291
+#> start:Working_50     12.991696    2.947960 13.11973 29.43866
+#> start:Non-working_50  8.390525    6.301673 13.28155 28.46120
+#> start:Retired_50      8.436058    3.740455 14.65783 27.16441
+#> AVERAGE              12.122367    3.406498 13.22795 29.15035
+#> start:Working_50     11.702156    4.207913 16.14505 32.59949
+#> start:Non-working_50  7.077855    7.998301 16.42499 31.99126
+#> start:Retired_50      7.406300    5.196819 17.86288 30.94380
+#> AVERAGE              10.073727    5.395278 16.31453 32.33222
 #> 
 #> $`97.5%`
 #>                        Working Non-working  Retired    TOTAL
-#> start:Working_50     13.618401    3.238217 13.91723 30.52349
-#> start:Non-working_50  9.184928    6.755361 14.24023 29.70910
-#> start:Retired_50      9.263717    4.123826 15.93744 28.81617
-#> AVERAGE              12.785645    3.799853 14.07501 30.31841
-#> start:Working_50     12.302272    4.582055 16.85688 33.40146
-#> start:Non-working_50  7.696658    8.445585 17.12666 32.90033
-#> start:Retired_50      8.154865    5.728443 18.72122 32.06785
-#> AVERAGE              10.772009    5.826577 17.02615 33.19207
+#> start:Working_50     13.651947    3.177929 14.03103 30.33904
+#> start:Non-working_50  9.142931    6.672604 14.25927 29.51100
+#> start:Retired_50      9.270929    4.043946 15.76586 28.52213
+#> AVERAGE              12.774619    3.722457 14.16173 30.12115
+#> start:Working_50     12.416311    4.555825 16.99316 33.43100
+#> start:Non-working_50  7.737342    8.428292 17.26265 32.86937
+#> start:Retired_50      8.209908    5.775806 18.82255 32.10447
+#> AVERAGE              10.785935    5.828853 17.15709 33.19980
 ```
 
 ## Using dtms with irregular intervals
@@ -1807,6 +1807,11 @@ Methodological papers:
   Health Metrics 18: 15. <https://doi.org/10.1186/s12963-020-00217-0>
 
 Papers using `dtms` for substantive questions:
+
+- Jeglinsky-Kankainen, I., Hiilamo, A., Keski-Säntti, M., Gissler, M.,
+  Ahonen, M. (2026): Working-life expectancy in people with cerebral
+  palsy in Finland. Dev Med Child Neurol. 2026; 1–10.
+  <https://doi.org/10.1111/dmcn.70582>
 
 - Hiilamo, A., Fugletveit, R., Pitkänen, J., Moretti, M., Martikainen,
   P., Hermansen, A., Myrskylä, M. (2026): Children´s out-of-home care
