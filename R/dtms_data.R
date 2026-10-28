@@ -25,7 +25,7 @@
 #'   \item{ID}{Person identifier}
 #'   \item{Gender}{Individuals' gender (0=men, 1=women)}
 #'   \item{Age}{Age, the time scale of this example}
-#'   \item{State}{The state occupied by an unit at a given age}
+#'   \item{State}{The state occupied by an unit at a given age, either `Working`, `Retired`, `Non-working`, or `Dead`.}
 #' }
 #' @source <https://doi.org/10.1007/s13524-017-0619-6>
 "workdata"

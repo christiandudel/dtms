@@ -21,10 +21,10 @@ be removed or changed without warning.
 
 ## Acknowledgements
 
-We thank Peng Li, Andreas Ljungström, Alessandro Feraldi, Aapo Hiilamo,
-Daniel Schneider, Donata Stonkute, Marcus Ebeling, Flavia Mazzeo, and
-Angelo Lorenti for helpful comments, suggestions, and code snippets. All
-errors remain our own.
+Peng Li, Andreas Ljungström, Alessandro Feraldi, Aapo Hiilamo, Daniel
+Schneider, Donata Stonkute, Marcus Ebeling, Flavia Mazzeo, and Angelo
+Lorenti provided helpful comments, suggestions, and code. They are not
+responsible for any errors.
 
 ## Citation
 
@@ -1603,6 +1603,7 @@ bootresults <- dtms_boot(data=estdata,
 summary(bootresults)
 #> $`2.5%`
 #>                        Working Non-working  Retired    TOTAL
+<<<<<<< HEAD
 #> start:Working_50     12.991696    2.947960 13.11973 29.43866
 #> start:Non-working_50  8.390525    6.301673 13.28155 28.46120
 #> start:Retired_50      8.436058    3.740455 14.65783 27.16441
@@ -1622,6 +1623,27 @@ summary(bootresults)
 #> start:Non-working_50  7.737342    8.428292 17.26265 32.86937
 #> start:Retired_50      8.209908    5.775806 18.82255 32.10447
 #> AVERAGE              10.785935    5.828853 17.15709 33.19980
+=======
+#> start:Working_50     12.992826    2.921824 13.16365 29.45935
+#> start:Non-working_50  8.379662    6.222999 13.31977 28.49152
+#> start:Retired_50      8.516233    3.706245 14.72466 27.19863
+#> AVERAGE              12.069167    3.446334 13.27117 29.21074
+#> start:Working_50     11.709166    4.219004 16.12182 32.63596
+#> start:Non-working_50  7.131912    7.980680 16.38561 31.91687
+#> start:Retired_50      7.450431    5.214869 17.94225 31.06520
+#> AVERAGE              10.099683    5.403798 16.28336 32.34265
+#> 
+#> $`97.5%`
+#>                        Working Non-working  Retired    TOTAL
+#> start:Working_50     13.575040    3.256457 14.19580 30.54598
+#> start:Non-working_50  9.185647    6.802947 14.46677 29.75933
+#> start:Retired_50      9.275025    4.142512 16.06974 28.69493
+#> AVERAGE              12.748345    3.816012 14.33539 30.34893
+#> start:Working_50     12.443877    4.563330 17.08900 33.49433
+#> start:Non-working_50  7.816087    8.442520 17.37931 33.01174
+#> start:Retired_50      8.235319    5.729466 18.95052 32.29663
+#> AVERAGE              10.905087    5.828764 17.26890 33.29460
+>>>>>>> 26ff02792799c5aff8f12a5ee986f87d27cce163
 ```
 
 ## Using dtms with irregular intervals

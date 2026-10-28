@@ -1,6 +1,11 @@
-# Version 0.5.2, 27 October 2026
+# Version 0.5.3, 27 October 2026
 
 * Added argument na.rm to dtms_boot_summary
+
+# Version 0.5.2, 17 August 2026
+
+* Fixed help page of data set 'workdata'
+
 
 # Version 0.5.1, 25 July 2026
 
